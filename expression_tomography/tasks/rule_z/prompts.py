@@ -18,7 +18,8 @@ def make_baseline_prompt(case_id: str, public: dict[str, Any]) -> str:
             "You do not receive the rule system or facts.",
             f"Question: {query['question']}",
             f"Answer options: {', '.join(query['answer_options'])}",
-            'Return JSON only: {"answer": "yes|no", "confidence": 0.0}',
+            "Return exactly one line of JSON and no prose.",
+            'Schema: {"answer": "yes|no|conflict", "confidence": 0.0}',
         ]
     )
 
@@ -30,7 +31,8 @@ def make_structured_prompt(case_id: str, public: dict[str, Any], condition: str)
             f"CONDITION: {condition}",
             f"CASE_ID: {case_id}",
             _json_block("RULE_Z_PUBLIC_JSON", public),
-            'Return JSON only: {"answer": "yes|no", "confidence": 0.0}',
+            "Return exactly one line of JSON and no prose.",
+            'Schema: {"answer": "yes|no|conflict", "confidence": 0.0}',
         ]
     )
 
@@ -63,6 +65,7 @@ def make_transmission_receiver_prompt(case_id: str, public: dict[str, Any], mess
             f"Question: {query['question']}",
             f"Answer options: {', '.join(query['answer_options'])}",
             _json_block("RULE_Z_FROM_MESSAGE_JSON", public),
-            'Return JSON only: {"answer": "yes|no", "confidence": 0.0}',
+            "Return exactly one line of JSON and no prose.",
+            'Schema: {"answer": "yes|no|conflict", "confidence": 0.0}',
         ]
     )

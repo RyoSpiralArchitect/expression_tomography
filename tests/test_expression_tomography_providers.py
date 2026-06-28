@@ -16,6 +16,7 @@ from expression_tomography.core.providers import (
     ProviderSpec,
     build_provider,
     build_providers_from_config,
+    parse_json_lenient,
 )
 
 
@@ -91,6 +92,18 @@ class ProviderTests(unittest.TestCase):
         self.assertIsInstance(provider, HFLocalProvider)
         self.assertEqual(provider.name, "local")
         self.assertIsNone(provider._model_obj)
+
+    def test_parse_json_lenient_uses_last_json_object(self) -> None:
+        raw = (
+            '{"answer": "conflict", "confidence": 0.1}\n'
+            "Wait, revising after reasoning.\n"
+            '{"answer": "no", "confidence": 0.7}'
+        )
+        self.assertEqual(parse_json_lenient(raw), {"answer": "no", "confidence": 0.7})
+
+    def test_parse_json_lenient_handles_fenced_json_after_prose(self) -> None:
+        raw = "Facts look like `{is_employee}`.\n```json\n{\"answer\": \"no\", \"confidence\": 0.85}\n```"
+        self.assertEqual(parse_json_lenient(raw), {"answer": "no", "confidence": 0.85})
 
 
 if __name__ == "__main__":

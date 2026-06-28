@@ -34,7 +34,7 @@ def public_payload_from_facts(facts: list[str]) -> dict[str, Any]:
         "priority": BASE_PRIORITY,
         "query": {
             "question": "eligible?",
-            "answer_options": ["yes", "no"],
+            "answer_options": ["yes", "no", "conflict"],
         },
     }
 

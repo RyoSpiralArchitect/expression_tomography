@@ -93,6 +93,25 @@ def parse_json_lenient(raw: str) -> dict | None:
         parsed = json.loads(text)
         return parsed if isinstance(parsed, dict) else None
     except json.JSONDecodeError:
+        fenced_blocks = re.findall(r"```(?:json)?\s*(\{.*?\})\s*```", text, flags=re.S | re.I)
+        for block in reversed(fenced_blocks):
+            try:
+                parsed = json.loads(block)
+                if isinstance(parsed, dict):
+                    return parsed
+            except json.JSONDecodeError:
+                pass
+        decoder = json.JSONDecoder()
+        decoded_objects = []
+        for match in re.finditer(r"\{", text):
+            try:
+                parsed, _end = decoder.raw_decode(text[match.start() :])
+                if isinstance(parsed, dict):
+                    decoded_objects.append(parsed)
+            except json.JSONDecodeError:
+                pass
+        if decoded_objects:
+            return decoded_objects[-1]
         start = text.find("{")
         end = text.rfind("}")
         if start >= 0 and end > start:

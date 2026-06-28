@@ -31,6 +31,16 @@ python3 -m expression_tomography.tasks.rule_z.task \
   --provider-config expression_tomography/config/providers.mock.json
 ```
 
+Live provider configs are also available for environment-backed keys:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.task \
+  --provider-config expression_tomography/config/providers.openai.json
+
+python3 -m expression_tomography.tasks.rule_z.task \
+  --provider-config expression_tomography/config/providers.anthropic.json
+```
+
 Provider types:
 
 - `mock`
