@@ -29,6 +29,7 @@ FACT_POOL = [
 
 def public_payload_from_facts(facts: list[str]) -> dict[str, Any]:
     return {
+        "available_predicates": FACT_POOL,
         "facts": facts,
         "rules": BASE_RULES,
         "priority": BASE_PRIORITY,
@@ -56,7 +57,10 @@ def make_rule_z_cases(n: int = 20, seed: int = 7) -> list[Case]:
             "oracle_private": {
                 "answer": oracle.answer,
                 "fired_rules": oracle.fired_rules,
+                "fired_priority_edges": oracle.fired_priority_edges,
                 "suppressed_rules": oracle.suppressed_rules,
+                "active_rules": oracle.active_rules,
+                "active_conclusions": oracle.active_conclusions,
             },
         }
         cases.append(Case(case_id=f"rule_{len(cases):04d}", task_type="rule_z", payload=payload, seed=seed))

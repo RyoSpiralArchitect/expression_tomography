@@ -9,6 +9,7 @@ class OracleAnswer:
     answer: str
     fired_rules: list[str]
     suppressed_rules: list[str]
+    fired_priority_edges: list[tuple[str, str]]
     active_rules: list[str]
     active_conclusions: list[str]
 
@@ -26,10 +27,12 @@ def answer_rule_z(public_payload: dict[str, Any]) -> OracleAnswer:
             conclusions_by_rule[rule_id] = str(rule["then"])
 
     suppressed: set[str] = set()
+    fired_priority_edges = []
     fired_set = set(fired)
     for winner, loser in public_payload.get("priority", []):
         if winner in fired_set and loser in fired_set:
             suppressed.add(loser)
+            fired_priority_edges.append((winner, loser))
 
     active_rules = [rule_id for rule_id in fired if rule_id not in suppressed]
     active_conclusions = {
@@ -47,6 +50,7 @@ def answer_rule_z(public_payload: dict[str, Any]) -> OracleAnswer:
         answer=answer,
         fired_rules=fired,
         suppressed_rules=sorted(suppressed),
+        fired_priority_edges=fired_priority_edges,
         active_rules=active_rules,
         active_conclusions=sorted(active_conclusions),
     )

@@ -89,7 +89,7 @@ Deterministic mock smoke:
 python3 -m expression_tomography.tasks.rule_z.task \
   --cases 30 \
   --seed 29 \
-  --transmission-modes free,factlocked,oracle_text \
+  --transmission-modes free,factlocked,oracle_text,oracle_no_final,oracle_no_final_no_active,oracle_corrupt_final \
   --prompt-style strict_conflict \
   --db results/rule_z_diagnostics_mock.sqlite \
   --report-dir results/rule_z_diagnostics_mock_reports
@@ -101,7 +101,7 @@ Live provider pass:
 python3 -m expression_tomography.tasks.rule_z.task \
   --cases 30 \
   --seed 29 \
-  --transmission-modes free,factlocked,oracle_text \
+  --transmission-modes free,factlocked,oracle_text,oracle_no_final,oracle_no_final_no_active,oracle_corrupt_final \
   --prompt-style strict_conflict \
   --db results/rule_z_diagnostics_openai.sqlite \
   --report-dir results/rule_z_diagnostics_openai_reports \
@@ -110,7 +110,7 @@ python3 -m expression_tomography.tasks.rule_z.task \
 python3 -m expression_tomography.tasks.rule_z.task \
   --cases 30 \
   --seed 29 \
-  --transmission-modes free,factlocked,oracle_text \
+  --transmission-modes free,factlocked,oracle_text,oracle_no_final,oracle_no_final_no_active,oracle_corrupt_final \
   --prompt-style strict_conflict \
   --db results/rule_z_diagnostics_anthropic.sqlite \
   --report-dir results/rule_z_diagnostics_anthropic_reports \
@@ -129,3 +129,36 @@ T_factlocked vs T_oracle_text:
 strict_conflict vs default:
   Is the model missing the conflict semantics, or merely underusing the label?
 ```
+
+## Ear Red Team
+
+The first live diagnostic run showed `T_oracle_text = 1.000`, but that condition
+included `final_category`. Treat it as an Ear-0 sanity check rather than proof
+that the receiver reconstructs the derivation from natural language.
+
+The receiver-side ladder is:
+
+```text
+Ear-0 / T_oracle_text:
+  final_category remains present; receiver may be extracting a label
+
+Ear-1 / T_oracle_no_final:
+  final_category is removed; receiver must infer from active conclusions
+
+Ear-2 / T_oracle_no_final_no_active:
+  final_category and remaining active conclusions are removed; receiver must
+  reconstruct active conclusions from fired rules and fired priority edges
+
+Label red team / T_oracle_corrupt_final:
+  derivation is correct but final_category is deliberately wrong; receiver is
+  told not to trust the label
+```
+
+For corrupted-label runs, the report adds:
+
+```text
+label_dependence = P(answer == corrupted_final_label)
+derivation_dependence = P(answer == oracle_answer)
+```
+
+This separates label extraction from derivation reading.
