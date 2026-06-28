@@ -15,15 +15,22 @@ from expression_tomography.core.schema import Case, TrialResult
 from expression_tomography.core.store import ExperimentStore
 
 from .generator import make_rule_z_cases
+from .oracle import answer_rule_z
 from .prompts import (
     make_baseline_prompt,
     make_message_prompt,
+    make_oracle_text_message,
     make_structured_prompt,
     make_transmission_receiver_prompt,
 )
 
 
 CONDITIONS = ("B", "O", "D", "T")
+TRANSMISSION_MODE_TO_CONDITION = {
+    "free": "T",
+    "factlocked": "T_factlocked",
+    "oracle_text": "T_oracle_text",
+}
 
 
 def _score(parsed: dict | None, expected: str) -> dict:
@@ -36,16 +43,39 @@ def _score(parsed: dict | None, expected: str) -> dict:
     }
 
 
-def run_rule_z_case(case: Case, provider: Provider) -> list[TrialResult]:
+def _parse_transmission_modes(raw: str) -> tuple[str, ...]:
+    modes = tuple(item.strip() for item in raw.split(",") if item.strip())
+    unknown = sorted(set(modes) - set(TRANSMISSION_MODE_TO_CONDITION))
+    if unknown:
+        allowed = ", ".join(sorted(TRANSMISSION_MODE_TO_CONDITION))
+        raise ValueError(f"Unknown transmission mode(s): {', '.join(unknown)}. Allowed: {allowed}")
+    return modes or ("free",)
+
+
+def _uses_strict_conflict(prompt_style: str) -> bool:
+    return prompt_style == "strict_conflict"
+
+
+def _include_structured_hint(provider: Provider) -> bool:
+    return isinstance(provider, MockProvider)
+
+
+def run_rule_z_case(
+    case: Case,
+    provider: Provider,
+    transmission_modes: tuple[str, ...] = ("free",),
+    prompt_style: str = "default",
+) -> list[TrialResult]:
     public = case.payload["public"]
     expected = case.payload["oracle_private"]["answer"]
+    strict_conflict = _uses_strict_conflict(prompt_style)
     trials: list[TrialResult] = []
 
     for condition in ("B", "O", "D"):
         prompt = (
-            make_baseline_prompt(case.case_id, public)
+            make_baseline_prompt(case.case_id, public, strict_conflict=strict_conflict)
             if condition == "B"
-            else make_structured_prompt(case.case_id, public, condition)
+            else make_structured_prompt(case.case_id, public, condition, strict_conflict=strict_conflict)
         )
         raw = provider.complete(prompt)
         parsed = parse_json_lenient(raw)
@@ -60,35 +90,67 @@ def run_rule_z_case(case: Case, provider: Provider) -> list[TrialResult]:
                 raw_response=raw,
                 parsed_response=parsed,
                 score=_score(parsed, expected),
+                metadata={"prompt_style": prompt_style},
             )
         )
 
-    message_prompt = make_message_prompt(case.case_id, public)
-    message = provider.complete(message_prompt)
-    prompt = make_transmission_receiver_prompt(case.case_id, public, message)
-    raw = provider.complete(prompt)
-    parsed = parse_json_lenient(raw)
-    trials.append(
-        TrialResult(
-            case_id=case.case_id,
-            case_hash=case.case_hash,
-            task_type=case.task_type,
-            condition="T",
-            provider=provider.name,
-            prompt=prompt,
-            raw_response=raw,
-            parsed_response=parsed,
-            score=_score(parsed, expected),
-            metadata={"message_prompt": message_prompt, "transmission_message": message},
+    for mode in transmission_modes:
+        condition = TRANSMISSION_MODE_TO_CONDITION[mode]
+        if mode == "oracle_text":
+            message_prompt = ""
+            message = make_oracle_text_message(public, answer_rule_z(public))
+        else:
+            message_prompt = make_message_prompt(case.case_id, public, mode=mode)
+            message = provider.complete(message_prompt)
+        structured_hint = _include_structured_hint(provider)
+        prompt = make_transmission_receiver_prompt(
+            case.case_id,
+            public,
+            message,
+            condition=condition,
+            strict_conflict=strict_conflict,
+            include_structured_hint=structured_hint,
         )
-    )
+        raw = provider.complete(prompt)
+        parsed = parse_json_lenient(raw)
+        trials.append(
+            TrialResult(
+                case_id=case.case_id,
+                case_hash=case.case_hash,
+                task_type=case.task_type,
+                condition=condition,
+                provider=provider.name,
+                prompt=prompt,
+                raw_response=raw,
+                parsed_response=parsed,
+                score=_score(parsed, expected),
+                metadata={
+                    "message_prompt": message_prompt,
+                    "prompt_style": prompt_style,
+                    "structured_hint_included": structured_hint,
+                    "transmission_message": message,
+                    "transmission_mode": mode,
+                },
+            )
+        )
     return trials
 
 
-def run_rule_z_experiment(cases: Iterable[Case], provider: Provider, store: ExperimentStore) -> None:
+def run_rule_z_experiment(
+    cases: Iterable[Case],
+    provider: Provider,
+    store: ExperimentStore,
+    transmission_modes: tuple[str, ...] = ("free",),
+    prompt_style: str = "default",
+) -> None:
     for case in cases:
         store.upsert_case(case)
-        for trial in run_rule_z_case(case, provider):
+        for trial in run_rule_z_case(
+            case,
+            provider,
+            transmission_modes=transmission_modes,
+            prompt_style=prompt_style,
+        ):
             store.insert_trial(trial)
 
 
@@ -98,6 +160,17 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=7)
     parser.add_argument("--db", default="results/expression_tomography/rule_z.sqlite")
     parser.add_argument("--report-dir", default="results/expression_tomography/reports")
+    parser.add_argument(
+        "--prompt-style",
+        choices=("default", "strict_conflict"),
+        default="default",
+        help="Answer prompt style. strict_conflict adds an explicit unresolved-conflict rubric.",
+    )
+    parser.add_argument(
+        "--transmission-modes",
+        default="free",
+        help="Comma-separated T modes: free, factlocked, oracle_text.",
+    )
     parser.add_argument(
         "--provider-config",
         default=None,
@@ -109,8 +182,15 @@ def main() -> None:
     try:
         cases = make_rule_z_cases(args.cases, args.seed)
         providers = build_providers_from_config(args.provider_config) if args.provider_config else [MockProvider()]
+        transmission_modes = _parse_transmission_modes(args.transmission_modes)
         for provider in providers:
-            run_rule_z_experiment(cases, provider, store)
+            run_rule_z_experiment(
+                cases,
+                provider,
+                store,
+                transmission_modes=transmission_modes,
+                prompt_style=args.prompt_style,
+            )
         summary = write_rule_z_report(store, Path(args.report_dir))
         print(summary)
     finally:

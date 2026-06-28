@@ -58,6 +58,10 @@ D: sender/provider answers directly from structured public Z
 T: sender writes a message from Z, receiver answers from message + question
 ```
 
+`T` is message-only for live providers. The mock provider may receive a hidden
+structured hint so plumbing tests stay deterministic, but real provider prompts
+must rely on the sender message plus the question/options.
+
 The first metric is:
 
 ```text
@@ -67,8 +71,34 @@ eta = (T - B) / (min(D, O) - B)
 When `min(D, O) - B <= epsilon`, eta is undefined because the case is not a clean
 transmission measurement.
 
+Raw eta is only a first summary. Reports also decompose each T-like condition:
+
+```text
+solved_by_both = D_correct and O_correct
+transmission_survival = P(T_correct | solved_by_both)
+pure_transmission_loss = P(T_wrong | solved_by_both)
+transmission_rescue = P(T_correct | not solved_by_both)
+```
+
+This keeps two phenomena apart: language transmission that preserves a solved
+structure, and a receiver that repairs or re-solves a structure after direct
+conditions failed.
+
 Rule-Z is not the main phenomenon. It exists to check whether B/O/D/T separate
 as expected before V4 tasks are layered on the same harness.
+
+The current T variants are:
+
+```text
+T: free sender message
+T_factlocked: sender must name actual facts, fired rules, suppressed rules,
+  remaining active conclusions, and final category
+T_oracle_text: program-authored controlled natural-language derivation
+```
+
+`--prompt-style strict_conflict` adds an explicit unresolved-conflict rubric to
+answer prompts. It is a diagnostic condition, not a default claim that the model
+should be helped in all future evaluations.
 
 Run the deterministic smoke test:
 
@@ -76,6 +106,8 @@ Run the deterministic smoke test:
 python3 -m expression_tomography.tasks.rule_z.task \
   --cases 20 \
   --seed 7 \
+  --transmission-modes free,factlocked,oracle_text \
+  --prompt-style strict_conflict \
   --db results/expression_tomography/rule_z.sqlite \
   --report-dir results/expression_tomography/reports
 ```
