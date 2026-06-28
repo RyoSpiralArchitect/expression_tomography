@@ -86,12 +86,17 @@ def rule_z_case_level_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         for condition in sorted(key for key in condition_rows if key.startswith("T")):
             t_row = condition_rows[condition]
             t_correct = _correct(t_row)
+            corrupted_final_label = str(t_row["metadata"].get("corrupted_final_label", ""))
+            t_answer = _answer(t_row)
             case_rows.append(
                 {
                     **baseline,
                     "T_condition": condition,
-                    "T_answer": _answer(t_row),
+                    "T_answer": t_answer,
                     "T_correct": t_correct,
+                    "corrupted_final_label": corrupted_final_label,
+                    "label_dependence_case": bool(corrupted_final_label) and t_answer == corrupted_final_label,
+                    "derivation_dependence_case": bool(corrupted_final_label) and t_correct is True,
                     "transmission_survival_case": solved_by_both and t_correct is True,
                     "pure_transmission_loss_case": solved_by_both and t_correct is False,
                     "transmission_rescue_case": (not solved_by_both) and t_correct is True,
@@ -113,6 +118,9 @@ def _decompose_transmission(case_rows: list[dict[str, Any]]) -> dict[str, dict[s
         survived = [row for row in solved if row["T_correct"] is True]
         pure_loss = [row for row in solved if row["T_correct"] is False]
         rescued = [row for row in unsolved if row["T_correct"] is True]
+        corrupted = [row for row in items if row["corrupted_final_label"]]
+        label_following = [row for row in corrupted if row["label_dependence_case"] is True]
+        derivation_following = [row for row in corrupted if row["derivation_dependence_case"] is True]
         out[condition] = {
             "n_cases": len(items),
             "solved_by_both_count": len(solved),
@@ -120,6 +128,9 @@ def _decompose_transmission(case_rows: list[dict[str, Any]]) -> dict[str, dict[s
             "transmission_survival": len(survived) / len(solved) if solved else None,
             "pure_transmission_loss": len(pure_loss) / len(solved) if solved else None,
             "transmission_rescue": len(rescued) / len(unsolved) if unsolved else None,
+            "corrupted_label_count": len(corrupted),
+            "label_dependence": len(label_following) / len(corrupted) if corrupted else None,
+            "derivation_dependence": len(derivation_following) / len(corrupted) if corrupted else None,
             "survived_count": len(survived),
             "pure_loss_count": len(pure_loss),
             "rescued_count": len(rescued),
@@ -208,6 +219,9 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
             "transmission_survival",
             "pure_transmission_loss",
             "transmission_rescue",
+            "corrupted_label_count",
+            "label_dependence",
+            "derivation_dependence",
             "survived_count",
             "pure_loss_count",
             "rescued_count",
@@ -238,6 +252,9 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
             "T_condition",
             "T_answer",
             "T_correct",
+            "corrupted_final_label",
+            "label_dependence_case",
+            "derivation_dependence_case",
             "transmission_survival_case",
             "pure_transmission_loss_case",
             "transmission_rescue_case",
@@ -312,6 +329,38 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
                 + " |"
             )
     lines.append("")
+
+    corrupt_rows = []
+    for provider, condition_values in decomposition_by_scope.items():
+        for condition, values in condition_values.items():
+            if values["corrupted_label_count"]:
+                corrupt_rows.append((provider, condition, values))
+    if corrupt_rows:
+        lines.extend(
+            [
+                "## Corrupted Label Diagnostics",
+                "",
+                "| Provider | T condition | n | label dependence | derivation dependence |",
+                "| --- | --- | ---: | ---: | ---: |",
+            ]
+        )
+        for provider, condition, values in corrupt_rows:
+            label_dependence = values["label_dependence"]
+            derivation_dependence = values["derivation_dependence"]
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        provider,
+                        condition,
+                        str(values["corrupted_label_count"]),
+                        "NA" if label_dependence is None else f"{label_dependence:.3f}",
+                        "NA" if derivation_dependence is None else f"{derivation_dependence:.3f}",
+                    ]
+                )
+                + " |"
+            )
+        lines.append("")
     md_path.write_text("\n".join(lines), encoding="utf-8")
     return summary
 

@@ -30,6 +30,9 @@ TRANSMISSION_MODE_TO_CONDITION = {
     "free": "T",
     "factlocked": "T_factlocked",
     "oracle_text": "T_oracle_text",
+    "oracle_no_final": "T_oracle_no_final",
+    "oracle_no_final_no_active": "T_oracle_no_final_no_active",
+    "oracle_corrupt_final": "T_oracle_corrupt_final",
 }
 
 
@@ -58,6 +61,42 @@ def _uses_strict_conflict(prompt_style: str) -> bool:
 
 def _include_structured_hint(provider: Provider) -> bool:
     return isinstance(provider, MockProvider)
+
+
+def _corrupted_final_label(answer: str) -> str:
+    return {
+        "yes": "no",
+        "no": "conflict",
+        "conflict": "yes",
+    }[answer]
+
+
+def _make_oracle_message(public: dict, mode: str) -> tuple[str, dict]:
+    oracle = answer_rule_z(public)
+    metadata = {
+        "corrupted_final_label": "",
+        "field_presence": {
+            "final_category": True,
+            "remaining_active_conclusions": True,
+            "remaining_active_rules": True,
+            "fired_priority_edges": True,
+        },
+        "oracle_answer": oracle.answer,
+    }
+    if mode == "oracle_no_final":
+        metadata["field_presence"]["final_category"] = False
+        return make_oracle_text_message(public, oracle, include_final=False), metadata
+    if mode == "oracle_no_final_no_active":
+        metadata["field_presence"]["final_category"] = False
+        metadata["field_presence"]["remaining_active_conclusions"] = False
+        metadata["field_presence"]["remaining_active_rules"] = False
+        return make_oracle_text_message(public, oracle, include_final=False, include_active=False), metadata
+    if mode == "oracle_corrupt_final":
+        corrupted = _corrupted_final_label(oracle.answer)
+        metadata["corrupted_final_label"] = corrupted
+        metadata["field_presence"]["final_category"] = "corrupted"
+        return make_oracle_text_message(public, oracle, corrupted_final_label=corrupted), metadata
+    return make_oracle_text_message(public, oracle), metadata
 
 
 def run_rule_z_case(
@@ -96,9 +135,10 @@ def run_rule_z_case(
 
     for mode in transmission_modes:
         condition = TRANSMISSION_MODE_TO_CONDITION[mode]
-        if mode == "oracle_text":
+        message_metadata = {}
+        if mode.startswith("oracle_"):
             message_prompt = ""
-            message = make_oracle_text_message(public, answer_rule_z(public))
+            message, message_metadata = _make_oracle_message(public, mode)
         else:
             message_prompt = make_message_prompt(case.case_id, public, mode=mode)
             message = provider.complete(message_prompt)
@@ -130,6 +170,7 @@ def run_rule_z_case(
                     "structured_hint_included": structured_hint,
                     "transmission_message": message,
                     "transmission_mode": mode,
+                    **message_metadata,
                 },
             )
         )
@@ -169,7 +210,10 @@ def main() -> None:
     parser.add_argument(
         "--transmission-modes",
         default="free",
-        help="Comma-separated T modes: free, factlocked, oracle_text.",
+        help=(
+            "Comma-separated T modes: free, factlocked, oracle_text, "
+            "oracle_no_final, oracle_no_final_no_active, oracle_corrupt_final."
+        ),
     )
     parser.add_argument(
         "--provider-config",

@@ -10,7 +10,12 @@ from expression_tomography.core.providers import MockProvider
 from expression_tomography.core.report import summarize_rule_z, write_rule_z_report
 from expression_tomography.core.store import ExperimentStore
 from expression_tomography.tasks.rule_z.generator import make_rule_z_cases
-from expression_tomography.tasks.rule_z.prompts import make_structured_prompt, make_transmission_receiver_prompt
+from expression_tomography.tasks.rule_z.oracle import answer_rule_z
+from expression_tomography.tasks.rule_z.prompts import (
+    make_oracle_text_message,
+    make_structured_prompt,
+    make_transmission_receiver_prompt,
+)
 from expression_tomography.tasks.rule_z.task import run_rule_z_case, run_rule_z_experiment
 
 
@@ -57,20 +62,54 @@ class RuleZSmokeTests(unittest.TestCase):
                     cases,
                     MockProvider(),
                     store,
-                    transmission_modes=("free", "factlocked", "oracle_text"),
+                    transmission_modes=(
+                        "free",
+                        "factlocked",
+                        "oracle_text",
+                        "oracle_no_final",
+                        "oracle_no_final_no_active",
+                        "oracle_corrupt_final",
+                    ),
                     prompt_style="strict_conflict",
                 )
                 summary = summarize_rule_z(store)
-                self.assertEqual(summary["n_trials"], 36)
+                self.assertEqual(summary["n_trials"], 54)
                 self.assertEqual(summary["accuracy_by_condition"]["T"], 1.0)
                 self.assertEqual(summary["accuracy_by_condition"]["T_factlocked"], 1.0)
                 self.assertEqual(summary["accuracy_by_condition"]["T_oracle_text"], 1.0)
                 self.assertEqual(
                     set(summary["transmission_decomposition"]),
-                    {"T", "T_factlocked", "T_oracle_text"},
+                    {
+                        "T",
+                        "T_factlocked",
+                        "T_oracle_corrupt_final",
+                        "T_oracle_no_final",
+                        "T_oracle_no_final_no_active",
+                        "T_oracle_text",
+                    },
                 )
+                corrupt = summary["transmission_decomposition"]["T_oracle_corrupt_final"]
+                self.assertEqual(corrupt["corrupted_label_count"], 6)
+                self.assertEqual(corrupt["derivation_dependence"], 1.0)
             finally:
                 store.close()
+
+    def test_oracle_message_variants_remove_answer_adjacent_fields(self) -> None:
+        case = make_rule_z_cases(1, seed=5)[0]
+        public = case.payload["public"]
+        oracle = answer_rule_z(public)
+        labelled = make_oracle_text_message(public, oracle)
+        no_final = make_oracle_text_message(public, oracle, include_final=False)
+        no_active = make_oracle_text_message(public, oracle, include_final=False, include_active=False)
+        corrupt = make_oracle_text_message(public, oracle, corrupted_final_label="conflict")
+
+        self.assertIn("Final category:", labelled)
+        self.assertNotIn("Final category:", no_final)
+        self.assertIn("Remaining active conclusions:", no_final)
+        self.assertNotIn("Remaining active conclusions:", no_active)
+        self.assertIn("Fired priority edges:", no_active)
+        self.assertIn("deliberately corrupted", corrupt)
+        self.assertIn("Final category: conflict.", corrupt)
 
     def test_transmission_receiver_prompt_omits_structured_hint_by_default(self) -> None:
         case = make_rule_z_cases(1, seed=5)[0]
