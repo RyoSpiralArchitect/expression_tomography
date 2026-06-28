@@ -1,0 +1,31 @@
+{
+  "providers": [
+    {
+      "name": "openai_compatible_example",
+      "type": "openai_compatible",
+      "model": "gpt-4.1-mini",
+      "base_url": "https://api.openai.com/v1",
+      "api_key_env": "OPENAI_API_KEY",
+      "max_tokens": 700,
+      "temperature": 0.0
+    },
+    {
+      "name": "anthropic_example",
+      "type": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "base_url": "https://api.anthropic.com/v1",
+      "api_key_env": "ANTHROPIC_API_KEY",
+      "max_tokens": 700,
+      "temperature": 0.0
+    },
+    {
+      "name": "hf_local_example",
+      "type": "hf_local",
+      "model": "./model/local-causal-lm",
+      "device": "auto",
+      "dtype": "float16",
+      "max_tokens": 256,
+      "temperature": 0.0
+    }
+  ]
+}

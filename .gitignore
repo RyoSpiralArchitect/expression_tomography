@@ -216,3 +216,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Expression Tomography generated artifacts
+results/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+model/
+models/

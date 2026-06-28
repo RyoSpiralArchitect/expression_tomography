@@ -1,0 +1,9 @@
+{
+  "providers": [
+    {
+      "name": "mock",
+      "type": "mock",
+      "model": "mock"
+    }
+  ]
+}

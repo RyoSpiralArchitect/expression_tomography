@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "expression-tomography"
+version = "0.1.0"
+description = "Experimental harness for bidirectional expression tomography."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "SpiralReality" }]
+license = "Apache-2.0"
+keywords = [
+  "llm-evaluation",
+  "expression",
+  "semantic-debt",
+  "metaphor",
+  "research-harness",
+]
+
+[project.optional-dependencies]
+hf = ["torch", "transformers"]
+
+[project.scripts]
+et-rule-z = "expression_tomography.tasks.rule_z.task:main"
+et-metaphor-transfer = "expression_tomography.tasks.metaphor_transfer.task:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["expression_tomography*"]
