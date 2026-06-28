@@ -9,6 +9,8 @@ class OracleAnswer:
     answer: str
     fired_rules: list[str]
     suppressed_rules: list[str]
+    active_rules: list[str]
+    active_conclusions: list[str]
 
 
 def answer_rule_z(public_payload: dict[str, Any]) -> OracleAnswer:
@@ -29,6 +31,7 @@ def answer_rule_z(public_payload: dict[str, Any]) -> OracleAnswer:
         if winner in fired_set and loser in fired_set:
             suppressed.add(loser)
 
+    active_rules = [rule_id for rule_id in fired if rule_id not in suppressed]
     active_conclusions = {
         conclusion for rule_id, conclusion in conclusions_by_rule.items() if rule_id not in suppressed
     }
@@ -40,4 +43,10 @@ def answer_rule_z(public_payload: dict[str, Any]) -> OracleAnswer:
         answer = "conflict"
     else:
         answer = "no"
-    return OracleAnswer(answer=answer, fired_rules=fired, suppressed_rules=sorted(suppressed))
+    return OracleAnswer(
+        answer=answer,
+        fired_rules=fired,
+        suppressed_rules=sorted(suppressed),
+        active_rules=active_rules,
+        active_conclusions=sorted(active_conclusions),
+    )
