@@ -93,12 +93,24 @@ The current T variants are:
 T: free sender message
 T_factlocked: sender must name actual facts, fired rules, suppressed rules,
   remaining active conclusions, and final category
-T_oracle_text: program-authored controlled natural-language derivation
+T_oracle_text: program-authored controlled natural-language derivation with
+  answer-adjacent fields
+T_oracle_no_final: oracle text without final_category
+T_oracle_no_final_no_active: oracle text without final_category or remaining
+  active conclusions/rules
+T_oracle_corrupt_final: oracle text with a deliberately wrong final_category
 ```
 
 `--prompt-style strict_conflict` adds an explicit unresolved-conflict rubric to
 answer prompts. It is a diagnostic condition, not a default claim that the model
 should be helped in all future evaluations.
+
+The oracle variants form an Ear Red Team ladder. `T_oracle_text` is an Ear-0
+sanity check because the final label is present. `T_oracle_no_final` asks whether
+the receiver can infer from active conclusions. `T_oracle_no_final_no_active`
+asks whether it can reconstruct active conclusions from fired rules and fired
+priority edges. `T_oracle_corrupt_final` measures whether the receiver follows a
+wrong label despite a correct derivation.
 
 Run the deterministic smoke test:
 
@@ -106,7 +118,7 @@ Run the deterministic smoke test:
 python3 -m expression_tomography.tasks.rule_z.task \
   --cases 20 \
   --seed 7 \
-  --transmission-modes free,factlocked,oracle_text \
+  --transmission-modes free,factlocked,oracle_text,oracle_no_final,oracle_no_final_no_active,oracle_corrupt_final \
   --prompt-style strict_conflict \
   --db results/expression_tomography/rule_z.sqlite \
   --report-dir results/expression_tomography/reports

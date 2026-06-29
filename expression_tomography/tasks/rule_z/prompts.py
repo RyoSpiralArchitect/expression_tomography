@@ -26,6 +26,10 @@ def _answer_schema() -> str:
     return 'Schema: {"answer": "yes|no|conflict", "confidence": 0.0}'
 
 
+def _format_priority_edges(edges: list[tuple[str, str]]) -> str:
+    return ", ".join(f"{winner}>{loser}" for winner, loser in edges) or "none"
+
+
 def make_baseline_prompt(case_id: str, public: dict[str, Any], strict_conflict: bool = False) -> str:
     query = public["query"]
     return "\n".join(
@@ -87,25 +91,46 @@ def make_message_prompt(case_id: str, public: dict[str, Any], mode: str = "free"
     return "\n".join(lines)
 
 
-def make_oracle_text_message(public: dict[str, Any], oracle: OracleAnswer) -> str:
+def make_oracle_text_message(
+    public: dict[str, Any],
+    oracle: OracleAnswer,
+    include_final: bool = True,
+    include_active: bool = True,
+    corrupted_final_label: str | None = None,
+) -> str:
     rules = []
     for rule in public.get("rules", []):
         antecedents = " and ".join(rule.get("if", [])) or "always"
         rules.append(f"{rule.get('id')}: if {antecedents} then {rule.get('then')}")
     priorities = [f"{winner} outranks {loser}" for winner, loser in public.get("priority", [])]
-    return "\n".join(
-        [
-            "Controlled Rule-Z case description.",
-            f"Actual facts: {', '.join(public.get('facts', [])) or 'none'}.",
-            "Rules: " + "; ".join(rules) + ".",
-            "Priority: " + ("; ".join(priorities) if priorities else "none") + ".",
-            f"Fired rules: {', '.join(oracle.fired_rules) or 'none'}.",
-            f"Suppressed fired rules: {', '.join(oracle.suppressed_rules) or 'none'}.",
-            f"Remaining active rules: {', '.join(oracle.active_rules) or 'none'}.",
-            f"Remaining active conclusions: {', '.join(oracle.active_conclusions) or 'none'}.",
-            f"Final category: {oracle.answer}.",
-        ]
-    )
+    lines = [
+        "Controlled Rule-Z case description.",
+        f"Available predicates: {', '.join(public.get('available_predicates', [])) or 'none'}.",
+        f"Actual facts: {', '.join(public.get('facts', [])) or 'none'}.",
+        "Rules: " + "; ".join(rules) + ".",
+        "Priority: " + ("; ".join(priorities) if priorities else "none") + ".",
+        f"Fired rules: {', '.join(oracle.fired_rules) or 'none'}.",
+        f"Fired priority edges: {_format_priority_edges(oracle.fired_priority_edges)}.",
+        f"Suppressed fired rules: {', '.join(oracle.suppressed_rules) or 'none'}.",
+    ]
+    if include_active:
+        lines.extend(
+            [
+                f"Remaining active rules: {', '.join(oracle.active_rules) or 'none'}.",
+                f"Remaining active conclusions: {', '.join(oracle.active_conclusions) or 'none'}.",
+            ]
+        )
+    if corrupted_final_label is not None:
+        lines.extend(
+            [
+                "The next field is deliberately corrupted for a diagnostic test.",
+                f"Final category: {corrupted_final_label}.",
+                "Do not trust the final category field; derive the answer from the derivation above.",
+            ]
+        )
+    elif include_final:
+        lines.append(f"Final category: {oracle.answer}.")
+    return "\n".join(lines)
 
 
 def make_transmission_receiver_prompt(
