@@ -23,6 +23,8 @@ committed assets: assets/runs/rule_z_ear_redteam_openai_seed29_30/
 
 ## Aggregate Results
 
+OpenAI:
+
 | Condition | Accuracy |
 | --- | ---: |
 | B | 0.533 |
@@ -39,6 +41,47 @@ For the corrupted-label condition:
 | --- | ---: |
 | label_dependence | 0.067 |
 | derivation_dependence | 0.867 |
+
+Anthropic companion run:
+
+```text
+cases: 30
+seed: 29
+provider: anthropic_sonnet_4_6
+prompt_style: strict_conflict
+transmission_modes:
+  oracle_text
+  oracle_no_final
+  oracle_no_final_no_active
+  oracle_corrupt_final
+local db: results/live_rule_z_ear_redteam_anthropic_seed29_30.sqlite
+local report: results/live_rule_z_ear_redteam_anthropic_seed29_30_reports/
+committed assets: assets/runs/rule_z_ear_redteam_anthropic_seed29_30/
+```
+
+| Condition | Accuracy |
+| --- | ---: |
+| B | 0.267 |
+| D | 1.000 |
+| O | 1.000 |
+| T_oracle_text | 1.000 |
+| T_oracle_no_final | 1.000 |
+| T_oracle_no_final_no_active | 1.000 |
+| T_oracle_corrupt_final | 1.000 |
+
+For the corrupted-label condition:
+
+| Metric | Value |
+| --- | ---: |
+| label_dependence | 0.000 |
+| derivation_dependence | 1.000 |
+
+Provider comparison:
+
+| Provider | labelled | no final | no final / no active | corrupt final | label dependence |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| openai_gpt_4_1_mini | 1.000 | 0.867 | 0.800 | 0.867 | 0.067 |
+| anthropic_sonnet_4_6 | 1.000 | 1.000 | 1.000 | 1.000 | 0.000 |
 
 ## Reading
 
@@ -101,6 +144,13 @@ remaining active conclusions: eligible, not_eligible
 
 This is not simple label copying. It is closer to conflict collapse or a
 negative-rule bias once the final label is absent.
+
+The Anthropic run is a stronger receiver-side result under this ladder. It
+solved D/O and every oracle-text variant for all 30 cases, including
+`T_oracle_corrupt_final`. Within the current case distribution, Claude did not
+show the conflict brittleness that appeared in OpenAI. The next meaningful
+receiver-side test is therefore not another labelled oracle pass, but a harder
+conflict-focused set and less fielded prose.
 
 ## Next Controls
 

@@ -41,6 +41,11 @@ rule_z_ear_redteam_openai_seed29_30
   oracle_text, oracle_no_final, oracle_no_final_no_active,
   oracle_corrupt_final.
 
+rule_z_ear_redteam_anthropic_seed29_30
+  Anthropic 30-case Ear Red Team:
+  oracle_text, oracle_no_final, oracle_no_final_no_active,
+  oracle_corrupt_final.
+
 metaphor_transfer_openai_live
   First OpenAI live metaphor-transfer smoke run.
 
