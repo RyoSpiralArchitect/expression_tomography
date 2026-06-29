@@ -1,0 +1,4 @@
+case_id,provider,condition,generated_text,intended_rate,collateral_rate,mtp,detect_score,avoid_score,fbg_lite
+metaphor_0001,anthropic_sonnet_4_6,F,冷蔵庫のモーター音のような沈黙だった。,,,,,,
+metaphor_0001,anthropic_sonnet_4_6,R,冷蔵庫のモーター音のような沈黙だった。,0.75,0.3333333333333333,0.4166666666666667,,,
+metaphor_0001,anthropic_sonnet_4_6,B,冷蔵庫のモーター音のような沈黙だった。,,,,0.5,0.6666666666666667,-0.16666666666666674

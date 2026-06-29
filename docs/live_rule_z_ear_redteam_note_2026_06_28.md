@@ -18,6 +18,7 @@ transmission_modes:
   oracle_corrupt_final
 local db: results/live_rule_z_ear_redteam_openai_seed29_30.sqlite
 local report: results/live_rule_z_ear_redteam_openai_seed29_30_reports/
+committed assets: assets/runs/rule_z_ear_redteam_openai_seed29_30/
 ```
 
 ## Aggregate Results

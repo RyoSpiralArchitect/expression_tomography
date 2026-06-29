@@ -1,0 +1,4 @@
+case_id,provider,condition,generated_text,intended_rate,collateral_rate,mtp,detect_score,avoid_score,fbg_lite
+metaphor_0001,openai_gpt_4_1_mini,F,部屋の隅、凍った空気がじんわりと広がり、誰も踏み込めない境界線を作っている。,,,,,,
+metaphor_0001,openai_gpt_4_1_mini,R,部屋の隅、凍った空気がじんわりと広がり、誰も踏み込めない境界線を作っている。,1.0,0.3333333333333333,0.6666666666666667,,,
+metaphor_0001,openai_gpt_4_1_mini,B,部屋の隅、凍った空気がじんわりと広がり、誰も踏み込めない境界線を作っている。,,,,0.3333333333333333,0.6666666666666667,-0.3333333333333334
