@@ -7,7 +7,8 @@ import re
 from pathlib import Path
 
 from expression_tomography.core.providers import MockProvider
-from expression_tomography.core.report import summarize_rule_z, write_rule_z_report
+from expression_tomography.core.report import rule_z_case_level_rows, summarize_rule_z, write_rule_z_report
+from expression_tomography.core.schema import TrialResult
 from expression_tomography.core.store import ExperimentStore
 from expression_tomography.tasks.rule_z.generator import make_rule_z_cases
 from expression_tomography.tasks.rule_z.oracle import answer_rule_z
@@ -134,6 +135,109 @@ class RuleZSmokeTests(unittest.TestCase):
         t_trial = [trial for trial in trials if trial.condition == "T_oracle_text"][0]
         self.assertTrue(t_trial.metadata["structured_hint_included"])
         self.assertEqual(t_trial.metadata["transmission_mode"], "oracle_text")
+
+    def test_rule_z_conflict_metrics_and_failure_taxonomy(self) -> None:
+        def trial(
+            case_id: str,
+            case_hash: str,
+            condition: str,
+            expected: str,
+            answer: str,
+            metadata: dict | None = None,
+        ) -> TrialResult:
+            return TrialResult(
+                case_id=case_id,
+                case_hash=case_hash,
+                task_type="rule_z",
+                condition=condition,
+                provider="synthetic",
+                prompt="",
+                raw_response="{}",
+                parsed_response={"answer": answer},
+                score={
+                    "answer": answer,
+                    "expected": expected,
+                    "correct": answer == expected,
+                    "parse_ok": True,
+                },
+                metadata=metadata or {},
+            )
+
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "rule_z.sqlite")
+            try:
+                for case_id, case_hash, expected in [
+                    ("rule_conflict", "hash_conflict", "conflict"),
+                    ("rule_no", "hash_no", "no"),
+                ]:
+                    for condition in ("B", "D", "O"):
+                        store.insert_trial(trial(case_id, case_hash, condition, expected, expected))
+
+                store.insert_trial(
+                    trial("rule_conflict", "hash_conflict", "T_oracle_no_final", "conflict", "conflict")
+                )
+                store.insert_trial(
+                    trial("rule_no", "hash_no", "T_oracle_no_final", "no", "no")
+                )
+                store.insert_trial(
+                    trial("rule_conflict", "hash_conflict", "T_oracle_no_final_no_active", "conflict", "no")
+                )
+                store.insert_trial(
+                    trial("rule_no", "hash_no", "T_oracle_no_final_no_active", "no", "no")
+                )
+                store.insert_trial(
+                    trial(
+                        "rule_conflict",
+                        "hash_conflict",
+                        "T_oracle_corrupt_final",
+                        "conflict",
+                        "yes",
+                        {"corrupted_final_label": "yes"},
+                    )
+                )
+                store.insert_trial(
+                    trial(
+                        "rule_no",
+                        "hash_no",
+                        "T_oracle_corrupt_final",
+                        "no",
+                        "no",
+                        {"corrupted_final_label": "conflict"},
+                    )
+                )
+
+                summary = summarize_rule_z(store)
+                no_final = summary["transmission_decomposition"]["T_oracle_no_final"]
+                no_active = summary["transmission_decomposition"]["T_oracle_no_final_no_active"]
+                corrupt = summary["transmission_decomposition"]["T_oracle_corrupt_final"]
+
+                self.assertEqual(no_final["conflict_reconstruction_accuracy"], 1.0)
+                self.assertEqual(no_active["conflict_reconstruction_accuracy"], 0.0)
+                self.assertEqual(no_active["conflict_collapse_negative_rate"], 1.0)
+                self.assertEqual(corrupt["label_dependence"], 0.5)
+                self.assertEqual(corrupt["label_resistance"], 0.5)
+                self.assertEqual(summary["ear_dependence"]["active_conclusion_dependence"], 0.5)
+                self.assertEqual(summary["ear_dependence"]["conflict_active_conclusion_dependence"], 1.0)
+
+                case_rows = rule_z_case_level_rows(store.fetch_trials(task_type="rule_z"))
+                failure_by_condition = {
+                    row["T_condition"]: row["failure_family"]
+                    for row in case_rows
+                    if row["case_id"] == "rule_conflict" and row["failure_family"]
+                }
+                self.assertEqual(
+                    failure_by_condition["T_oracle_no_final_no_active"],
+                    "conflict_collapse_negative",
+                )
+                self.assertEqual(
+                    failure_by_condition["T_oracle_corrupt_final"],
+                    "label_following_under_corruption",
+                )
+
+                write_rule_z_report(store, Path(td) / "reports")
+                self.assertTrue((Path(td) / "reports" / "rule_z_ear_dependence.csv").exists())
+            finally:
+                store.close()
 
 
 if __name__ == "__main__":

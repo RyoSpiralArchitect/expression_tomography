@@ -52,8 +52,13 @@ def _failure_family(t_row: dict[str, Any] | None) -> str:
         return "parse_or_format_failure"
     expected = str(score.get("expected", ""))
     answer = str(score.get("answer", ""))
-    if expected == "conflict" and answer in {"yes", "no"}:
-        return "conflict_collapse"
+    corrupted_final_label = str(t_row["metadata"].get("corrupted_final_label", ""))
+    if corrupted_final_label and answer == corrupted_final_label:
+        return "label_following_under_corruption"
+    if expected == "conflict" and answer == "no":
+        return "conflict_collapse_negative"
+    if expected == "conflict" and answer == "yes":
+        return "conflict_collapse_positive"
     if expected in {"yes", "no"} and answer == "conflict":
         return "conflict_overgeneration"
     return "answer_mismatch"
@@ -121,6 +126,11 @@ def _decompose_transmission(case_rows: list[dict[str, Any]]) -> dict[str, dict[s
         corrupted = [row for row in items if row["corrupted_final_label"]]
         label_following = [row for row in corrupted if row["label_dependence_case"] is True]
         derivation_following = [row for row in corrupted if row["derivation_dependence_case"] is True]
+        conflict = [row for row in items if row["expected"] == "conflict"]
+        conflict_correct = [row for row in conflict if row["T_correct"] is True]
+        conflict_negative = [row for row in conflict if row["T_answer"] == "no"]
+        conflict_positive = [row for row in conflict if row["T_answer"] == "yes"]
+        label_dependence = len(label_following) / len(corrupted) if corrupted else None
         out[condition] = {
             "n_cases": len(items),
             "solved_by_both_count": len(solved),
@@ -128,14 +138,45 @@ def _decompose_transmission(case_rows: list[dict[str, Any]]) -> dict[str, dict[s
             "transmission_survival": len(survived) / len(solved) if solved else None,
             "pure_transmission_loss": len(pure_loss) / len(solved) if solved else None,
             "transmission_rescue": len(rescued) / len(unsolved) if unsolved else None,
+            "expected_conflict_count": len(conflict),
+            "conflict_reconstruction_accuracy": len(conflict_correct) / len(conflict) if conflict else None,
+            "conflict_collapse_negative_rate": len(conflict_negative) / len(conflict) if conflict else None,
+            "conflict_collapse_positive_rate": len(conflict_positive) / len(conflict) if conflict else None,
             "corrupted_label_count": len(corrupted),
-            "label_dependence": len(label_following) / len(corrupted) if corrupted else None,
+            "label_dependence": label_dependence,
+            "label_resistance": 1.0 - label_dependence if label_dependence is not None else None,
             "derivation_dependence": len(derivation_following) / len(corrupted) if corrupted else None,
             "survived_count": len(survived),
             "pure_loss_count": len(pure_loss),
             "rescued_count": len(rescued),
         }
     return out
+
+
+def _active_conclusion_dependence(decomposition: dict[str, dict[str, Any]]) -> dict[str, float | None]:
+    no_final = decomposition.get("T_oracle_no_final", {})
+    no_active = decomposition.get("T_oracle_no_final_no_active", {})
+
+    def acc(values: dict[str, Any]) -> float | None:
+        n_cases = values.get("n_cases")
+        if not n_cases:
+            return None
+        return (values.get("survived_count", 0) + values.get("rescued_count", 0)) / n_cases
+
+    no_final_acc = acc(no_final)
+    no_active_acc = acc(no_active)
+    no_final_cra = no_final.get("conflict_reconstruction_accuracy")
+    no_active_cra = no_active.get("conflict_reconstruction_accuracy")
+    return {
+        "active_conclusion_dependence": (
+            no_final_acc - no_active_acc if no_final_acc is not None and no_active_acc is not None else None
+        ),
+        "conflict_active_conclusion_dependence": (
+            no_final_cra - no_active_cra
+            if no_final_cra is not None and no_active_cra is not None
+            else None
+        ),
+    }
 
 
 def _accuracy_by_provider_condition(rows: list[dict[str, Any]]) -> dict[str, dict[str, float | None]]:
@@ -166,6 +207,10 @@ def summarize_rule_z(store: ExperimentStore) -> dict[str, Any]:
     by_provider_cases: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for row in case_rows:
         by_provider_cases[row["provider"]].append(row)
+    transmission_decomposition = _decompose_transmission(case_rows)
+    transmission_decomposition_by_provider = {
+        provider: _decompose_transmission(items) for provider, items in sorted(by_provider_cases.items())
+    }
     return {
         "task_type": "rule_z",
         "n_trials": len(rows),
@@ -178,9 +223,12 @@ def summarize_rule_z(store: ExperimentStore) -> dict[str, Any]:
             accuracies.get("T"),
         ),
         "eta_by_provider": _eta_by_provider(provider_accuracies),
-        "transmission_decomposition": _decompose_transmission(case_rows),
-        "transmission_decomposition_by_provider": {
-            provider: _decompose_transmission(items) for provider, items in sorted(by_provider_cases.items())
+        "transmission_decomposition": transmission_decomposition,
+        "transmission_decomposition_by_provider": transmission_decomposition_by_provider,
+        "ear_dependence": _active_conclusion_dependence(transmission_decomposition),
+        "ear_dependence_by_provider": {
+            provider: _active_conclusion_dependence(values)
+            for provider, values in transmission_decomposition_by_provider.items()
         },
     }
 
@@ -219,8 +267,13 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
             "transmission_survival",
             "pure_transmission_loss",
             "transmission_rescue",
+            "expected_conflict_count",
+            "conflict_reconstruction_accuracy",
+            "conflict_collapse_negative_rate",
+            "conflict_collapse_positive_rate",
             "corrupted_label_count",
             "label_dependence",
+            "label_resistance",
             "derivation_dependence",
             "survived_count",
             "pure_loss_count",
@@ -233,6 +286,19 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
         for provider, condition_values in summary["transmission_decomposition_by_provider"].items():
             for condition, values in condition_values.items():
                 writer.writerow({"provider": provider, "T_condition": condition, **values})
+
+    ear_path = out / "rule_z_ear_dependence.csv"
+    with ear_path.open("w", encoding="utf-8", newline="") as f:
+        fieldnames = [
+            "provider",
+            "active_conclusion_dependence",
+            "conflict_active_conclusion_dependence",
+        ]
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerow({"provider": "ALL", **summary["ear_dependence"]})
+        for provider, values in summary["ear_dependence_by_provider"].items():
+            writer.writerow({"provider": provider, **values})
 
     case_rows = rule_z_case_level_rows(store.fetch_trials(task_type="rule_z"))
     case_path = out / "rule_z_case_level.csv"
@@ -340,12 +406,13 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
             [
                 "## Corrupted Label Diagnostics",
                 "",
-                "| Provider | T condition | n | label dependence | derivation dependence |",
-                "| --- | --- | ---: | ---: | ---: |",
+                "| Provider | T condition | n | label dependence | label resistance | derivation dependence |",
+                "| --- | --- | ---: | ---: | ---: | ---: |",
             ]
         )
         for provider, condition, values in corrupt_rows:
             label_dependence = values["label_dependence"]
+            label_resistance = values["label_resistance"]
             derivation_dependence = values["derivation_dependence"]
             lines.append(
                 "| "
@@ -355,7 +422,69 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
                         condition,
                         str(values["corrupted_label_count"]),
                         "NA" if label_dependence is None else f"{label_dependence:.3f}",
+                        "NA" if label_resistance is None else f"{label_resistance:.3f}",
                         "NA" if derivation_dependence is None else f"{derivation_dependence:.3f}",
+                    ]
+                )
+                + " |"
+            )
+        lines.append("")
+
+    conflict_rows = []
+    for provider, condition_values in decomposition_by_scope.items():
+        for condition, values in condition_values.items():
+            if values["expected_conflict_count"]:
+                conflict_rows.append((provider, condition, values))
+    if conflict_rows:
+        lines.extend(
+            [
+                "## Conflict Reconstruction",
+                "",
+                "| Provider | T condition | conflict n | CRA | collapse to no | collapse to yes |",
+                "| --- | --- | ---: | ---: | ---: | ---: |",
+            ]
+        )
+        for provider, condition, values in conflict_rows:
+            cra = values["conflict_reconstruction_accuracy"]
+            collapse_no = values["conflict_collapse_negative_rate"]
+            collapse_yes = values["conflict_collapse_positive_rate"]
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        provider,
+                        condition,
+                        str(values["expected_conflict_count"]),
+                        "NA" if cra is None else f"{cra:.3f}",
+                        "NA" if collapse_no is None else f"{collapse_no:.3f}",
+                        "NA" if collapse_yes is None else f"{collapse_yes:.3f}",
+                    ]
+                )
+                + " |"
+            )
+        lines.append("")
+
+    ear_rows = [("ALL", summary["ear_dependence"])]
+    ear_rows.extend(sorted(summary["ear_dependence_by_provider"].items()))
+    if any(values["active_conclusion_dependence"] is not None for _label, values in ear_rows):
+        lines.extend(
+            [
+                "## Ear Dependence",
+                "",
+                "| Provider | ACD | conflict ACD |",
+                "| --- | ---: | ---: |",
+            ]
+        )
+        for provider, values in ear_rows:
+            acd = values["active_conclusion_dependence"]
+            conflict_acd = values["conflict_active_conclusion_dependence"]
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        provider,
+                        "NA" if acd is None else f"{acd:.3f}",
+                        "NA" if conflict_acd is None else f"{conflict_acd:.3f}",
                     ]
                 )
                 + " |"

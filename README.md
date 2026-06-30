@@ -51,6 +51,13 @@ python3 -m expression_tomography.tasks.rule_z.task \
   --provider-config expression_tomography/config/providers.anthropic.json
 ```
 
+A stronger OpenAI config is available for model-equalized ear red-team runs:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.task \
+  --provider-config expression_tomography/config/providers.openai_gpt_5_5.json
+```
+
 Provider types:
 
 - `mock`
