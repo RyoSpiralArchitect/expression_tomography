@@ -1,0 +1,7 @@
+provider,T_condition,n_cases,solved_by_both_count,unsolved_by_direct_count,transmission_survival,pure_transmission_loss,transmission_rescue,survived_count,pure_loss_count,rescued_count
+ALL,T,30,21,9,0.2857142857142857,0.7142857142857143,0.5555555555555556,6,15,5
+ALL,T_factlocked,30,21,9,0.9523809523809523,0.047619047619047616,1.0,20,1,9
+ALL,T_oracle_text,30,21,9,1.0,0.0,1.0,21,0,9
+openai_gpt_4_1_mini,T,30,21,9,0.2857142857142857,0.7142857142857143,0.5555555555555556,6,15,5
+openai_gpt_4_1_mini,T_factlocked,30,21,9,0.9523809523809523,0.047619047619047616,1.0,20,1,9
+openai_gpt_4_1_mini,T_oracle_text,30,21,9,1.0,0.0,1.0,21,0,9

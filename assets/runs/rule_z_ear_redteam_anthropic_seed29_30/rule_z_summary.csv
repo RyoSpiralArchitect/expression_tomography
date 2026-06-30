@@ -1,0 +1,17 @@
+provider,condition,accuracy
+ALL,B,0.26666666666666666
+ALL,D,1.0
+ALL,O,1.0
+ALL,T_oracle_corrupt_final,1.0
+ALL,T_oracle_no_final,1.0
+ALL,T_oracle_no_final_no_active,1.0
+ALL,T_oracle_text,1.0
+ALL,eta,
+anthropic_sonnet_4_6,B,0.26666666666666666
+anthropic_sonnet_4_6,D,1.0
+anthropic_sonnet_4_6,O,1.0
+anthropic_sonnet_4_6,T_oracle_corrupt_final,1.0
+anthropic_sonnet_4_6,T_oracle_no_final,1.0
+anthropic_sonnet_4_6,T_oracle_no_final_no_active,1.0
+anthropic_sonnet_4_6,T_oracle_text,1.0
+anthropic_sonnet_4_6,eta,

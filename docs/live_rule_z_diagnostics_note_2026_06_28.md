@@ -13,6 +13,7 @@ prompt_style: strict_conflict
 transmission_modes: free, factlocked, oracle_text
 local db: results/live_rule_z_diagnostics_seed29_30.sqlite
 local report: results/live_rule_z_diagnostics_seed29_30_reports/
+committed assets: assets/runs/rule_z_transmission_openai_seed29_30/
 ```
 
 The Anthropic companion run was not included in this note because the local
