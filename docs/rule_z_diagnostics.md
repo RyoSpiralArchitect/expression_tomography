@@ -27,6 +27,12 @@ solved_by_both = D_correct and O_correct
 transmission_survival = P(T_correct | solved_by_both)
 pure_transmission_loss = P(T_wrong | solved_by_both)
 transmission_rescue = P(T_correct | not solved_by_both)
+conflict_reconstruction_accuracy = P(T_correct | expected = conflict)
+label_resistance = 1 - P(answer == corrupted_final_label)
+active_conclusion_dependence = Acc(T_oracle_no_final) -
+  Acc(T_oracle_no_final_no_active)
+conflict_active_conclusion_dependence = CRA(T_oracle_no_final) -
+  CRA(T_oracle_no_final_no_active)
 ```
 
 Interpretation:
@@ -40,6 +46,15 @@ high pure loss:
 
 high rescue:
   T is not just transmission; it is acting as a regularizer or re-solver
+
+high conflict_reconstruction_accuracy:
+  unresolved eligible/not_eligible conclusions survive as conflict
+
+high label_resistance:
+  corrupted final labels do not override the derivation
+
+high active_conclusion_dependence:
+  the receiver depends on explicit active-conclusion fields
 ```
 
 ## Failure Taxonomy
@@ -51,8 +66,14 @@ review scaffold, not a final automatic diagnosis.
 parse_or_format_failure:
   answer JSON could not be parsed
 
-conflict_collapse:
-  expected conflict, but answer was yes or no
+conflict_collapse_negative:
+  expected conflict, but answer was no
+
+conflict_collapse_positive:
+  expected conflict, but answer was yes
+
+label_following_under_corruption:
+  final_category was deliberately wrong and the receiver followed it
 
 conflict_overgeneration:
   expected yes or no, but answer was conflict
@@ -158,7 +179,18 @@ For corrupted-label runs, the report adds:
 
 ```text
 label_dependence = P(answer == corrupted_final_label)
+label_resistance = 1 - label_dependence
 derivation_dependence = P(answer == oracle_answer)
 ```
 
 This separates label extraction from derivation reading.
+
+Reports also include conflict-specific diagnostics:
+
+```text
+CRA = conflict_reconstruction_accuracy
+ACD = active_conclusion_dependence
+conflict ACD = conflict_active_conclusion_dependence
+```
+
+These keep yes/no cases from hiding conflict brittleness in the aggregate.
