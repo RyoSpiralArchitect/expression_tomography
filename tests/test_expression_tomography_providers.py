@@ -59,6 +59,28 @@ class ProviderTests(unittest.TestCase):
         self.assertEqual(captured["payload"]["messages"][0]["content"], "hello")
         self.assertEqual(captured["payload"]["max_tokens"], 123)
 
+    def test_openai_gpt5_uses_max_completion_tokens(self) -> None:
+        spec = ProviderSpec(
+            name="oa",
+            type="openai_compatible",
+            model="gpt-5.5",
+            base_url="https://example.test/v1",
+            api_key_env="ET_TEST_OPENAI_KEY",
+            max_tokens=321,
+        )
+        captured = {}
+
+        def fake_post(url, headers, payload, timeout_s):
+            captured.update({"payload": payload})
+            return {"choices": [{"message": {"content": "{\"answer\":\"yes\"}"}}]}
+
+        with mock.patch.dict(os.environ, {"ET_TEST_OPENAI_KEY": "sk-test"}):
+            with mock.patch.object(providers, "_post_json", side_effect=fake_post):
+                OpenAICompatibleProvider(spec).complete("hello")
+
+        self.assertNotIn("max_tokens", captured["payload"])
+        self.assertEqual(captured["payload"]["max_completion_tokens"], 321)
+
     def test_anthropic_payload_and_response_extraction(self) -> None:
         spec = ProviderSpec(
             name="claude",

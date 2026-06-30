@@ -1,0 +1,17 @@
+provider,condition,accuracy
+ALL,B,0.5333333333333333
+ALL,D,1.0
+ALL,O,1.0
+ALL,T_oracle_corrupt_final,1.0
+ALL,T_oracle_no_final,1.0
+ALL,T_oracle_no_final_no_active,1.0
+ALL,T_oracle_text,1.0
+ALL,eta,
+openai_gpt_5_5,B,0.5333333333333333
+openai_gpt_5_5,D,1.0
+openai_gpt_5_5,O,1.0
+openai_gpt_5_5,T_oracle_corrupt_final,1.0
+openai_gpt_5_5,T_oracle_no_final,1.0
+openai_gpt_5_5,T_oracle_no_final_no_active,1.0
+openai_gpt_5_5,T_oracle_text,1.0
+openai_gpt_5_5,eta,

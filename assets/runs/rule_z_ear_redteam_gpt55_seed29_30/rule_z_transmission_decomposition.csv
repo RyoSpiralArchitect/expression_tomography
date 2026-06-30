@@ -1,0 +1,9 @@
+provider,T_condition,n_cases,solved_by_both_count,unsolved_by_direct_count,transmission_survival,pure_transmission_loss,transmission_rescue,expected_conflict_count,conflict_reconstruction_accuracy,conflict_collapse_negative_rate,conflict_collapse_positive_rate,corrupted_label_count,label_dependence,label_resistance,derivation_dependence,survived_count,pure_loss_count,rescued_count
+ALL,T_oracle_corrupt_final,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,30,0.0,1.0,1.0,30,0,0
+ALL,T_oracle_no_final,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,0,,,,30,0,0
+ALL,T_oracle_no_final_no_active,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,0,,,,30,0,0
+ALL,T_oracle_text,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,0,,,,30,0,0
+openai_gpt_5_5,T_oracle_corrupt_final,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,30,0.0,1.0,1.0,30,0,0
+openai_gpt_5_5,T_oracle_no_final,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,0,,,,30,0,0
+openai_gpt_5_5,T_oracle_no_final_no_active,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,0,,,,30,0,0
+openai_gpt_5_5,T_oracle_text,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,0,,,,30,0,0

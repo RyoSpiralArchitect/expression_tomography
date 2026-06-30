@@ -158,6 +158,12 @@ def _post_json(url: str, headers: dict[str, str], payload: dict, timeout_s: floa
     return parsed
 
 
+def _openai_token_limit_key(model: str) -> str:
+    if model.startswith("gpt-5") and not model.endswith("chat-latest"):
+        return "max_completion_tokens"
+    return "max_tokens"
+
+
 def _extract_json_block(prompt: str, marker: str) -> dict:
     pattern = rf"{re.escape(marker)}\n(.*?)\nEND_{re.escape(marker)}"
     match = re.search(pattern, prompt, flags=re.S)
@@ -274,7 +280,7 @@ class OpenAICompatibleProvider:
         payload = {
             "model": self.model,
             "messages": [{"role": "user", "content": prompt}],
-            "max_tokens": self.spec.max_tokens,
+            _openai_token_limit_key(self.model): self.spec.max_tokens,
         }
         if self.spec.temperature > 0:
             payload["temperature"] = self.spec.temperature
