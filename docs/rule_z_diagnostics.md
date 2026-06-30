@@ -33,6 +33,10 @@ active_conclusion_dependence = Acc(T_oracle_no_final) -
   Acc(T_oracle_no_final_no_active)
 conflict_active_conclusion_dependence = CRA(T_oracle_no_final) -
   CRA(T_oracle_no_final_no_active)
+free_gap = Acc(T_oracle_text) - Acc(T)
+factlock_recovery = Acc(T_factlocked) - Acc(T)
+priority_recovery = Acc(T_factlocked_plus_priority) - Acc(T_factlocked)
+residual_factlock_gap = Acc(T_oracle_text) - Acc(T_factlocked_plus_priority)
 ```
 
 Interpretation:
@@ -55,6 +59,18 @@ high label_resistance:
 
 high active_conclusion_dependence:
   the receiver depends on explicit active-conclusion fields
+
+high free_gap:
+  free prose loses distinctions that oracle-authored text preserves
+
+high factlock_recovery:
+  explicit typed sections repair free-prose message loss
+
+high priority_recovery:
+  explicit fired priority edges repair priority/suppression loss
+
+high residual_factlock_gap:
+  even priority-explicit factlocking remains weaker than oracle text
 ```
 
 ## Failure Taxonomy
@@ -110,7 +126,7 @@ Deterministic mock smoke:
 python3 -m expression_tomography.tasks.rule_z.task \
   --cases 30 \
   --seed 29 \
-  --transmission-modes free,factlocked,oracle_text,oracle_no_final,oracle_no_final_no_active,oracle_corrupt_final \
+  --transmission-modes free,factlocked,factlocked_plus_priority,oracle_text,oracle_no_final,oracle_no_final_no_active,oracle_corrupt_final \
   --prompt-style strict_conflict \
   --db results/rule_z_diagnostics_mock.sqlite \
   --report-dir results/rule_z_diagnostics_mock_reports
@@ -122,7 +138,7 @@ Live provider pass:
 python3 -m expression_tomography.tasks.rule_z.task \
   --cases 30 \
   --seed 29 \
-  --transmission-modes free,factlocked,oracle_text,oracle_no_final,oracle_no_final_no_active,oracle_corrupt_final \
+  --transmission-modes free,factlocked,factlocked_plus_priority,oracle_text,oracle_no_final,oracle_no_final_no_active,oracle_corrupt_final \
   --prompt-style strict_conflict \
   --db results/rule_z_diagnostics_openai.sqlite \
   --report-dir results/rule_z_diagnostics_openai_reports \
@@ -131,7 +147,7 @@ python3 -m expression_tomography.tasks.rule_z.task \
 python3 -m expression_tomography.tasks.rule_z.task \
   --cases 30 \
   --seed 29 \
-  --transmission-modes free,factlocked,oracle_text,oracle_no_final,oracle_no_final_no_active,oracle_corrupt_final \
+  --transmission-modes free,factlocked,factlocked_plus_priority,oracle_text,oracle_no_final,oracle_no_final_no_active,oracle_corrupt_final \
   --prompt-style strict_conflict \
   --db results/rule_z_diagnostics_anthropic.sqlite \
   --report-dir results/rule_z_diagnostics_anthropic_reports \
@@ -143,6 +159,9 @@ After this pass, the most informative comparison is usually:
 ```text
 T vs T_factlocked:
   Did explicit derivation fields prevent message loss?
+
+T_factlocked vs T_factlocked_plus_priority:
+  Did explicit fired priority edges prevent priority/suppression loss?
 
 T_factlocked vs T_oracle_text:
   Is the remaining error in sender expression or receiver interpretation?

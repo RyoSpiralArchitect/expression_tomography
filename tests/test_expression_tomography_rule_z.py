@@ -13,6 +13,7 @@ from expression_tomography.core.store import ExperimentStore
 from expression_tomography.tasks.rule_z.generator import make_rule_z_cases
 from expression_tomography.tasks.rule_z.oracle import answer_rule_z
 from expression_tomography.tasks.rule_z.prompts import (
+    make_message_prompt,
     make_oracle_text_message,
     make_structured_prompt,
     make_transmission_receiver_prompt,
@@ -66,6 +67,7 @@ class RuleZSmokeTests(unittest.TestCase):
                     transmission_modes=(
                         "free",
                         "factlocked",
+                        "factlocked_plus_priority",
                         "oracle_text",
                         "oracle_no_final",
                         "oracle_no_final_no_active",
@@ -74,15 +76,21 @@ class RuleZSmokeTests(unittest.TestCase):
                     prompt_style="strict_conflict",
                 )
                 summary = summarize_rule_z(store)
-                self.assertEqual(summary["n_trials"], 54)
+                self.assertEqual(summary["n_trials"], 60)
                 self.assertEqual(summary["accuracy_by_condition"]["T"], 1.0)
                 self.assertEqual(summary["accuracy_by_condition"]["T_factlocked"], 1.0)
+                self.assertEqual(summary["accuracy_by_condition"]["T_factlocked_plus_priority"], 1.0)
                 self.assertEqual(summary["accuracy_by_condition"]["T_oracle_text"], 1.0)
+                self.assertEqual(summary["sender_contrasts"]["free_gap"], 0.0)
+                self.assertEqual(summary["sender_contrasts"]["factlock_recovery"], 0.0)
+                self.assertEqual(summary["sender_contrasts"]["priority_recovery"], 0.0)
+                self.assertEqual(summary["sender_contrasts"]["residual_factlock_gap"], 0.0)
                 self.assertEqual(
                     set(summary["transmission_decomposition"]),
                     {
                         "T",
                         "T_factlocked",
+                        "T_factlocked_plus_priority",
                         "T_oracle_corrupt_final",
                         "T_oracle_no_final",
                         "T_oracle_no_final_no_active",
@@ -92,8 +100,23 @@ class RuleZSmokeTests(unittest.TestCase):
                 corrupt = summary["transmission_decomposition"]["T_oracle_corrupt_final"]
                 self.assertEqual(corrupt["corrupted_label_count"], 6)
                 self.assertEqual(corrupt["derivation_dependence"], 1.0)
+
+                write_rule_z_report(store, tmp / "reports")
+                self.assertTrue((tmp / "reports" / "rule_z_sender_contrasts.csv").exists())
             finally:
                 store.close()
+
+    def test_factlocked_plus_priority_sender_prompt_requires_fired_edges(self) -> None:
+        case = make_rule_z_cases(1, seed=5)[0]
+        prompt = make_message_prompt(
+            case.case_id,
+            case.payload["public"],
+            mode="factlocked_plus_priority",
+        )
+        self.assertIn("fired_priority_edges", prompt)
+        self.assertIn("only priority edges where both winner and loser fired", prompt)
+        self.assertIn("actual_facts", prompt)
+        self.assertIn("remaining_active_conclusions", prompt)
 
     def test_oracle_message_variants_remove_answer_adjacent_fields(self) -> None:
         case = make_rule_z_cases(1, seed=5)[0]
