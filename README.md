@@ -12,19 +12,20 @@ the same provider/store/report plumbing.
 python3 -m expression_tomography.tasks.rule_z.task \
   --cases 20 \
   --seed 7 \
-  --transmission-modes free,factlocked,oracle_text \
+  --transmission-modes free,factlocked,factlocked_plus_priority,oracle_text \
   --prompt-style strict_conflict \
   --db results/expression_tomography/rule_z.sqlite \
   --report-dir results/expression_tomography/reports
 ```
 
 The default run keeps the original compact `T` condition only. Add
-`--transmission-modes free,factlocked,oracle_text` to split natural-language
-transmission into free, fact-locked, and oracle-authored message channels.
+`--transmission-modes free,factlocked,factlocked_plus_priority,oracle_text` to
+split natural-language transmission into free, fact-locked, priority-explicit,
+and oracle-authored message channels.
 Ear red-team variants are also available: `oracle_no_final`,
 `oracle_no_final_no_active`, and `oracle_corrupt_final`.
 Reports include aggregate accuracy, provider-level accuracy, transmission
-survival/loss/rescue, and a case-level CSV for failure review.
+survival/loss/rescue, sender contrasts, and a case-level CSV for failure review.
 
 ## Metaphor Transfer Smoke
 

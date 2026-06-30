@@ -29,6 +29,8 @@ CONDITIONS = ("B", "O", "D", "T")
 TRANSMISSION_MODE_TO_CONDITION = {
     "free": "T",
     "factlocked": "T_factlocked",
+    "factlocked_plus_priority": "T_factlocked_plus_priority",
+    "factlocked_plus_priority_edges": "T_factlocked_plus_priority",
     "oracle_text": "T_oracle_text",
     "oracle_no_final": "T_oracle_no_final",
     "oracle_no_final_no_active": "T_oracle_no_final_no_active",
@@ -211,7 +213,7 @@ def main() -> None:
         "--transmission-modes",
         default="free",
         help=(
-            "Comma-separated T modes: free, factlocked, oracle_text, "
+            "Comma-separated T modes: free, factlocked, factlocked_plus_priority, oracle_text, "
             "oracle_no_final, oracle_no_final_no_active, oracle_corrupt_final."
         ),
     )
