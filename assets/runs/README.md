@@ -16,6 +16,12 @@ rule_z_summary.csv
 rule_z_transmission_decomposition.csv
   Survival, pure loss, rescue, and corrupted-label diagnostics by T condition.
 
+rule_z_sender_contrasts.csv
+  Free/factlocked/oracle sender-side contrasts for distinction-preservation runs.
+
+rule_z_ear_dependence.csv
+  Active-conclusion dependence and conflict active-conclusion dependence rows.
+
 rule_z_case_level.csv
   Case-level answers, correctness flags, and failure-family scaffolding.
 
@@ -45,6 +51,24 @@ rule_z_ear_redteam_anthropic_seed29_30
   Anthropic 30-case Ear Red Team:
   oracle_text, oracle_no_final, oracle_no_final_no_active,
   oracle_corrupt_final.
+
+rule_z_ear_redteam_gpt55_seed29_30
+  Equalized OpenAI GPT-5.5 30-case Ear Red Team:
+  oracle_text, oracle_no_final, oracle_no_final_no_active,
+  oracle_corrupt_final.
+
+rule_z_ear_redteam_anthropic_rerun_seed29_30
+  Equalized Anthropic 30-case Ear Red Team rerun:
+  oracle_text, oracle_no_final, oracle_no_final_no_active,
+  oracle_corrupt_final.
+
+rule_z_sender_gpt55_seed29_30
+  OpenAI GPT-5.5 30-case sender transmission run:
+  free, factlocked, factlocked_plus_priority, oracle_text.
+
+rule_z_sender_anthropic_seed29_30
+  Anthropic Sonnet 4.6 30-case sender transmission run:
+  free, factlocked, factlocked_plus_priority, oracle_text.
 
 metaphor_transfer_openai_live
   First OpenAI live metaphor-transfer smoke run.

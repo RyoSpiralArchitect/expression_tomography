@@ -1,0 +1,17 @@
+provider,condition,accuracy
+ALL,B,0.26666666666666666
+ALL,D,1.0
+ALL,O,1.0
+ALL,T,0.7666666666666667
+ALL,T_factlocked,1.0
+ALL,T_factlocked_plus_priority,1.0
+ALL,T_oracle_text,1.0
+ALL,eta,0.6818181818181818
+anthropic_sonnet_4_6,B,0.26666666666666666
+anthropic_sonnet_4_6,D,1.0
+anthropic_sonnet_4_6,O,1.0
+anthropic_sonnet_4_6,T,0.7666666666666667
+anthropic_sonnet_4_6,T_factlocked,1.0
+anthropic_sonnet_4_6,T_factlocked_plus_priority,1.0
+anthropic_sonnet_4_6,T_oracle_text,1.0
+anthropic_sonnet_4_6,eta,0.6818181818181818
