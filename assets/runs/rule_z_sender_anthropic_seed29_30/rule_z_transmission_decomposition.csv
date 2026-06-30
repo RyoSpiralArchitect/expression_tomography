@@ -1,0 +1,9 @@
+provider,T_condition,n_cases,solved_by_both_count,unsolved_by_direct_count,transmission_survival,pure_transmission_loss,transmission_rescue,expected_conflict_count,conflict_reconstruction_accuracy,conflict_collapse_negative_rate,conflict_collapse_positive_rate,corrupted_label_count,label_dependence,label_resistance,derivation_dependence,survived_count,pure_loss_count,rescued_count
+ALL,T,30,30,0,0.7666666666666667,0.23333333333333334,,6,0.3333333333333333,0.6666666666666666,0.0,0,,,,23,7,0
+ALL,T_factlocked,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,0,,,,30,0,0
+ALL,T_factlocked_plus_priority,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,0,,,,30,0,0
+ALL,T_oracle_text,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,0,,,,30,0,0
+anthropic_sonnet_4_6,T,30,30,0,0.7666666666666667,0.23333333333333334,,6,0.3333333333333333,0.6666666666666666,0.0,0,,,,23,7,0
+anthropic_sonnet_4_6,T_factlocked,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,0,,,,30,0,0
+anthropic_sonnet_4_6,T_factlocked_plus_priority,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,0,,,,30,0,0
+anthropic_sonnet_4_6,T_oracle_text,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,0,,,,30,0,0

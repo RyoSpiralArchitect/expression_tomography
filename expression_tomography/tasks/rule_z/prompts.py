@@ -73,13 +73,26 @@ def make_message_prompt(case_id: str, public: dict[str, Any], mode: str = "free"
         f"CASE_ID: {case_id}",
         "Describe the rule system for a future receiver.",
     ]
-    if mode == "factlocked":
+    if mode in {"factlocked", "factlocked_plus_priority", "factlocked_plus_priority_edges"}:
         lines.extend(
             [
                 "Use these exact sections in prose or compact bullets:",
                 "- actual_facts: only facts true in this case, not the whole possible schema.",
                 "- fired_rules: rule IDs whose antecedents are fully satisfied.",
-                "- suppressed_rules: fired rule IDs defeated by priority.",
+            ]
+        )
+        if mode in {"factlocked_plus_priority", "factlocked_plus_priority_edges"}:
+            lines.extend(
+                [
+                    "- fired_priority_edges: only priority edges where both winner and loser fired.",
+                    "- suppressed_rules: fired rule IDs defeated by fired_priority_edges.",
+                    "Mention priority edges only when both affected rules fired in this case.",
+                ]
+            )
+        else:
+            lines.append("- suppressed_rules: fired rule IDs defeated by priority.")
+        lines.extend(
+            [
                 "- remaining_active_conclusions: conclusions from fired rules that survive priority.",
                 "- final_category: yes, no, or conflict.",
                 "Keep actual facts distinct from checkable predicates that are merely mentioned in rules.",

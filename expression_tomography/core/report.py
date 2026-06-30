@@ -196,6 +196,23 @@ def _eta_by_provider(accuracies: dict[str, dict[str, float | None]]) -> dict[str
     }
 
 
+def _sender_transmission_contrasts(accuracies: dict[str, float | None]) -> dict[str, float | None]:
+    free = accuracies.get("T")
+    factlocked = accuracies.get("T_factlocked")
+    priority = accuracies.get("T_factlocked_plus_priority")
+    oracle = accuracies.get("T_oracle_text")
+
+    def diff(high: float | None, low: float | None) -> float | None:
+        return high - low if high is not None and low is not None else None
+
+    return {
+        "free_gap": diff(oracle, free),
+        "factlock_recovery": diff(factlocked, free),
+        "priority_recovery": diff(priority, factlocked),
+        "residual_factlock_gap": diff(oracle, priority),
+    }
+
+
 def summarize_rule_z(store: ExperimentStore) -> dict[str, Any]:
     rows = store.fetch_trials(task_type="rule_z")
     by_condition: dict[str, list[dict[str, Any]]] = defaultdict(list)
@@ -223,6 +240,11 @@ def summarize_rule_z(store: ExperimentStore) -> dict[str, Any]:
             accuracies.get("T"),
         ),
         "eta_by_provider": _eta_by_provider(provider_accuracies),
+        "sender_contrasts": _sender_transmission_contrasts(accuracies),
+        "sender_contrasts_by_provider": {
+            provider: _sender_transmission_contrasts(values)
+            for provider, values in provider_accuracies.items()
+        },
         "transmission_decomposition": transmission_decomposition,
         "transmission_decomposition_by_provider": transmission_decomposition_by_provider,
         "ear_dependence": _active_conclusion_dependence(transmission_decomposition),
@@ -255,6 +277,21 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
                     "accuracy": summary["eta_by_provider"].get(provider),
                 }
             )
+
+    sender_path = out / "rule_z_sender_contrasts.csv"
+    with sender_path.open("w", encoding="utf-8", newline="") as f:
+        fieldnames = [
+            "provider",
+            "free_gap",
+            "factlock_recovery",
+            "priority_recovery",
+            "residual_factlock_gap",
+        ]
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerow({"provider": "ALL", **summary["sender_contrasts"]})
+        for provider, values in summary["sender_contrasts_by_provider"].items():
+            writer.writerow({"provider": provider, **values})
 
     decomposition_path = out / "rule_z_transmission_decomposition.csv"
     with decomposition_path.open("w", encoding="utf-8", newline="") as f:
@@ -360,6 +397,39 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
         provider_eta = summary["eta_by_provider"].get(provider)
         eta_text = "NA" if provider_eta is None else f"{provider_eta:.3f}"
         lines.append(f"| {provider} | eta | {eta_text} |")
+
+    sender_rows = [("ALL", summary["sender_contrasts"])]
+    sender_rows.extend(sorted(summary["sender_contrasts_by_provider"].items()))
+    if any(any(value is not None for value in values.values()) for _provider, values in sender_rows):
+        lines.extend(
+            [
+                "",
+                "## Sender Contrasts",
+                "",
+                "| Provider | Free gap | Factlock recovery | Priority recovery | Residual factlock gap |",
+                "| --- | ---: | ---: | ---: | ---: |",
+            ]
+        )
+        for provider, values in sender_rows:
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        provider,
+                        "NA" if values["free_gap"] is None else f"{values['free_gap']:.3f}",
+                        "NA"
+                        if values["factlock_recovery"] is None
+                        else f"{values['factlock_recovery']:.3f}",
+                        "NA"
+                        if values["priority_recovery"] is None
+                        else f"{values['priority_recovery']:.3f}",
+                        "NA"
+                        if values["residual_factlock_gap"] is None
+                        else f"{values['residual_factlock_gap']:.3f}",
+                    ]
+                )
+                + " |"
+            )
 
     lines.extend(
         [
