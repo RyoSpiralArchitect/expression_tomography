@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import re
 from collections import defaultdict
 from pathlib import Path
 from statistics import mean
@@ -62,6 +63,185 @@ def _failure_family(t_row: dict[str, Any] | None) -> str:
     if expected in {"yes", "no"} and answer == "conflict":
         return "conflict_overgeneration"
     return "answer_mismatch"
+
+
+_CASE_BINDING_CUES = (
+    "actual fact",
+    "actual facts",
+    "actual_facts",
+    "true fact",
+    "true facts",
+    "current case",
+    "this case",
+    "specific case",
+    "known fact",
+    "known facts",
+    "given fact",
+    "given facts",
+    "asserted",
+    "currently asserted",
+    "facts are",
+    "facts:",
+)
+
+_SCHEMA_CUES = (
+    "available predicate",
+    "available predicates",
+    "possible condition",
+    "possible conditions",
+    "possible fact",
+    "possible facts",
+    "can recognize",
+    "can use",
+    "may work with",
+    "may or may not",
+    "schema",
+)
+
+_CASE_INSTANCE_CUES = (
+    "current case",
+    "this case",
+    "specific case",
+    "for this case",
+    "in this case",
+)
+
+_FACT_ASSERTION_PATTERNS = (
+    r"\bactual[_ ]facts?\s*[:=]",
+    r"\bactual facts?\s+(?:are|is|include|includes|consist|consists)\b",
+    r"\btrue facts?\s+(?:are|is|include|includes|consist|consists)\b",
+    r"\bknown facts?\s+(?:are|is|include|includes|consist|consists)\b",
+    r"\bgiven facts?\s+(?:are|is|include|includes|consist|consists)\b",
+    r"\bfacts are\b",
+)
+
+
+def _contains_token(text: str, token: str) -> bool:
+    pattern = rf"(?<![A-Za-z0-9_]){re.escape(token.lower())}(?![A-Za-z0-9_])"
+    return re.search(pattern, text.lower()) is not None
+
+
+def _message_units(message: str) -> list[str]:
+    return [unit.strip().lower() for unit in re.split(r"[\n.;!?]+", message) if unit.strip()]
+
+
+def _predicate_bound_as_fact(message: str, predicate: str) -> bool:
+    units = _message_units(message)
+    predicate_l = predicate.lower()
+    for unit in units:
+        if not _contains_token(unit, predicate_l):
+            continue
+        window = unit
+        has_case_binding = any(cue in window for cue in _CASE_BINDING_CUES)
+        has_schema_only = any(cue in window for cue in _SCHEMA_CUES)
+        if has_case_binding and not (has_schema_only and "actual" not in window and "true" not in window):
+            return True
+    return False
+
+
+def _mentioned_count(message: str, predicates: list[str]) -> int:
+    return sum(1 for predicate in predicates if _contains_token(message, predicate))
+
+
+def _bound_count(message: str, predicates: list[str]) -> int:
+    return sum(1 for predicate in predicates if _predicate_bound_as_fact(message, predicate))
+
+
+def _ratio(numerator: int, denominator: int) -> float | None:
+    return numerator / denominator if denominator else None
+
+
+def _mentions_any(message: str, needles: tuple[str, ...]) -> bool:
+    text = message.lower()
+    return any(needle in text for needle in needles)
+
+
+def _has_case_binding(message: str, actual_bound: int) -> bool:
+    if actual_bound > 0:
+        return True
+    text = message.lower()
+    if any(cue in text for cue in _CASE_INSTANCE_CUES):
+        return True
+    return any(re.search(pattern, text) for pattern in _FACT_ASSERTION_PATTERNS)
+
+
+def rule_z_message_diagnostic_rows(
+    rows: list[dict[str, Any]],
+    cases: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    public_by_hash = {case["case_hash"]: case["payload"]["public"] for case in cases}
+    out = []
+    for row in rows:
+        if not row["condition"].startswith("T"):
+            continue
+        message = str(row["metadata"].get("transmission_message", ""))
+        if not message:
+            continue
+        public = public_by_hash.get(row["case_hash"], {})
+        actual_facts = list(public.get("facts", []))
+        available_predicates = list(public.get("available_predicates", []))
+        non_actual = [predicate for predicate in available_predicates if predicate not in set(actual_facts)]
+
+        actual_literal = _mentioned_count(message, actual_facts)
+        actual_bound = _bound_count(message, actual_facts)
+        non_actual_literal = _mentioned_count(message, non_actual)
+        non_actual_bound = _bound_count(message, non_actual)
+        bound_case_fact_recall = _ratio(actual_bound, len(actual_facts))
+        predicate_intrusion_rate = _ratio(non_actual_bound, len(non_actual))
+        mentions_rules = _mentions_any(message, ("r1", "r2", "r3", "r4", "r5", "rule"))
+        mentions_priority = _mentions_any(message, ("priority", "outrank", "override", "overrides", "beats"))
+        mentions_suppression = _mentions_any(message, ("suppress", "suppressed", "defeat", "defeated", "override"))
+        mentions_conflict = _mentions_any(message, ("conflict", "opposing", "contradict"))
+        case_binding_score = 1.0 if _has_case_binding(message, actual_bound) else 0.0
+        schema_or_procedure = _mentions_any(
+            message,
+            (
+                "available predicate",
+                "available predicates",
+                "possible condition",
+                "possible facts",
+                "how to",
+                "procedure",
+                "steps",
+                "identify which rules",
+                "check which rules",
+            ),
+        )
+        actual_recall_for_drift = bound_case_fact_recall if bound_case_fact_recall is not None else 1.0
+        genericization_drift = 1.0 if schema_or_procedure and actual_recall_for_drift < 1.0 else 0.0
+        transmission_sufficiency = (
+            1.0 if actual_recall_for_drift == 1.0 and mentions_rules and mentions_priority else 0.0
+        )
+        out.append(
+            {
+                "provider": row["provider"],
+                "case_id": row["case_id"],
+                "case_hash": row["case_hash"],
+                "mode": row["metadata"].get("transmission_mode", ""),
+                "T_condition": row["condition"],
+                "expected_answer": _expected(row),
+                "receiver_answer": _answer(row),
+                "receiver_correct": _correct(row),
+                "actual_facts_total": len(actual_facts),
+                "actual_facts_literal_mentioned": actual_literal,
+                "actual_facts_bound_mentioned": actual_bound,
+                "bound_case_fact_recall": bound_case_fact_recall,
+                "non_actual_predicates_total": len(non_actual),
+                "non_actual_predicates_mentioned": non_actual_literal,
+                "non_actual_predicates_bound_as_facts": non_actual_bound,
+                "predicate_intrusion_rate": predicate_intrusion_rate,
+                "case_binding_score": case_binding_score,
+                "genericization_drift": genericization_drift,
+                "transmission_sufficiency": transmission_sufficiency,
+                "mentions_rules": mentions_rules,
+                "mentions_priority": mentions_priority,
+                "mentions_suppression": mentions_suppression,
+                "mentions_conflict_semantics": mentions_conflict,
+                "message_token_count": len(message.split()),
+                "failure_taxonomy": _failure_family(row),
+            }
+        )
+    return out
 
 
 def rule_z_case_level_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -210,6 +390,28 @@ def _sender_transmission_contrasts(accuracies: dict[str, float | None]) -> dict[
         "factlock_recovery": diff(factlocked, free),
         "priority_recovery": diff(priority, factlocked),
         "residual_factlock_gap": diff(oracle, priority),
+    }
+
+
+def _message_diagnostic_summary(rows: list[dict[str, Any]]) -> dict[tuple[str, str], dict[str, Any]]:
+    grouped: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        grouped[(row["provider"], row["T_condition"])].append(row)
+
+    def metric_mean(items: list[dict[str, Any]], key: str) -> float | None:
+        vals = [float(item[key]) for item in items if item.get(key) is not None]
+        return mean(vals) if vals else None
+
+    return {
+        key: {
+            "n": len(items),
+            "bound_case_fact_recall": metric_mean(items, "bound_case_fact_recall"),
+            "case_binding_score": metric_mean(items, "case_binding_score"),
+            "genericization_drift": metric_mean(items, "genericization_drift"),
+            "transmission_sufficiency": metric_mean(items, "transmission_sufficiency"),
+            "predicate_intrusion_rate": metric_mean(items, "predicate_intrusion_rate"),
+        }
+        for key, items in sorted(grouped.items())
     }
 
 
@@ -367,6 +569,43 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
         writer.writeheader()
         writer.writerows(case_rows)
 
+    message_rows = rule_z_message_diagnostic_rows(
+        store.fetch_trials(task_type="rule_z"),
+        store.fetch_cases(task_type="rule_z"),
+    )
+    message_path = out / "rule_z_message_diagnostics.csv"
+    with message_path.open("w", encoding="utf-8", newline="") as f:
+        fieldnames = [
+            "provider",
+            "case_id",
+            "case_hash",
+            "mode",
+            "T_condition",
+            "expected_answer",
+            "receiver_answer",
+            "receiver_correct",
+            "actual_facts_total",
+            "actual_facts_literal_mentioned",
+            "actual_facts_bound_mentioned",
+            "bound_case_fact_recall",
+            "non_actual_predicates_total",
+            "non_actual_predicates_mentioned",
+            "non_actual_predicates_bound_as_facts",
+            "predicate_intrusion_rate",
+            "case_binding_score",
+            "genericization_drift",
+            "transmission_sufficiency",
+            "mentions_rules",
+            "mentions_priority",
+            "mentions_suppression",
+            "mentions_conflict_semantics",
+            "message_token_count",
+            "failure_taxonomy",
+        ]
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(message_rows)
+
     md_path = out / "rule_z_report.md"
     lines = [
         "# Rule-Z Smoke Report",
@@ -426,6 +665,43 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
                         "NA"
                         if values["residual_factlock_gap"] is None
                         else f"{values['residual_factlock_gap']:.3f}",
+                    ]
+                )
+                + " |"
+            )
+
+    message_summary = _message_diagnostic_summary(message_rows)
+    if message_summary:
+        lines.extend(
+            [
+                "",
+                "## Message Diagnostics",
+                "",
+                "| Provider | T condition | n | BCFR | CBS | GDR | Sufficiency | Predicate intrusion |",
+                "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+            ]
+        )
+        for (provider, condition), values in message_summary.items():
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        provider,
+                        condition,
+                        str(values["n"]),
+                        "NA"
+                        if values["bound_case_fact_recall"] is None
+                        else f"{values['bound_case_fact_recall']:.3f}",
+                        "NA" if values["case_binding_score"] is None else f"{values['case_binding_score']:.3f}",
+                        "NA"
+                        if values["genericization_drift"] is None
+                        else f"{values['genericization_drift']:.3f}",
+                        "NA"
+                        if values["transmission_sufficiency"] is None
+                        else f"{values['transmission_sufficiency']:.3f}",
+                        "NA"
+                        if values["predicate_intrusion_rate"] is None
+                        else f"{values['predicate_intrusion_rate']:.3f}",
                     ]
                 )
                 + " |"

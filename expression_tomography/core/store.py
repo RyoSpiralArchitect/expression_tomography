@@ -112,3 +112,15 @@ class ExperimentStore:
             item["metadata"] = json.loads(item.pop("metadata_json"))
             out.append(item)
         return out
+
+    def fetch_cases(self, task_type: str | None = None) -> list[dict]:
+        if task_type:
+            rows = self.conn.execute("SELECT * FROM cases WHERE task_type=? ORDER BY case_id", (task_type,)).fetchall()
+        else:
+            rows = self.conn.execute("SELECT * FROM cases ORDER BY case_id").fetchall()
+        out = []
+        for row in rows:
+            item = dict(row)
+            item["payload"] = json.loads(item.pop("payload_json"))
+            out.append(item)
+        return out

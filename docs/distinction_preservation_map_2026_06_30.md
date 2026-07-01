@@ -276,6 +276,14 @@ Transmission Sufficiency:
 Start with manual annotation of failures, then add heuristic or structured
 extraction metrics only after the labels stabilize.
 
+Implementation note:
+
+```text
+rule_z_message_diagnostics.csv:
+  writes first-pass heuristic versions of these message-side metrics for every
+  T-like message with a stored sender message
+```
+
 ## Test-Time Expression Compensation
 
 Working hypothesis:

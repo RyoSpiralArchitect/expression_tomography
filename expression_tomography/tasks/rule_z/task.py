@@ -28,6 +28,9 @@ from .prompts import (
 CONDITIONS = ("B", "O", "D", "T")
 TRANSMISSION_MODE_TO_CONDITION = {
     "free": "T",
+    "free_schema_prompt": "T_free_schema_prompt",
+    "free_case_hint": "T_free_case_hint",
+    "free_case_hint_no_sections": "T_free_case_hint_no_sections",
     "factlocked": "T_factlocked",
     "factlocked_plus_priority": "T_factlocked_plus_priority",
     "factlocked_plus_priority_edges": "T_factlocked_plus_priority",
@@ -213,8 +216,9 @@ def main() -> None:
         "--transmission-modes",
         default="free",
         help=(
-            "Comma-separated T modes: free, factlocked, factlocked_plus_priority, oracle_text, "
-            "oracle_no_final, oracle_no_final_no_active, oracle_corrupt_final."
+            "Comma-separated T modes: free, free_schema_prompt, free_case_hint, "
+            "free_case_hint_no_sections, factlocked, factlocked_plus_priority, "
+            "oracle_text, oracle_no_final, oracle_no_final_no_active, oracle_corrupt_final."
         ),
     )
     parser.add_argument(

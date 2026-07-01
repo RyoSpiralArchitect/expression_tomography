@@ -37,6 +37,10 @@ free_gap = Acc(T_oracle_text) - Acc(T)
 factlock_recovery = Acc(T_factlocked) - Acc(T)
 priority_recovery = Acc(T_factlocked_plus_priority) - Acc(T_factlocked)
 residual_factlock_gap = Acc(T_oracle_text) - Acc(T_factlocked_plus_priority)
+bound_case_fact_recall = P(actual facts mentioned as true/current case facts)
+case_binding_score = P(message binds itself to the specific case)
+genericization_drift = P(message drifts toward schema/procedure without case data)
+transmission_sufficiency = P(message contains enough information for the query)
 ```
 
 Interpretation:
@@ -71,6 +75,18 @@ high priority_recovery:
 
 high residual_factlock_gap:
   even priority-explicit factlocking remains weaker than oracle text
+
+high bound_case_fact_recall:
+  actual facts are transmitted as case facts, not merely listed as vocabulary
+
+high case_binding_score:
+  the sender binds the message to this specific case instance
+
+high genericization_drift:
+  messages describe schema/procedure instead of the case instance
+
+high transmission_sufficiency:
+  message-side information is likely enough for the receiver to answer
 ```
 
 ## Failure Taxonomy
@@ -140,7 +156,7 @@ Deterministic mock smoke:
 python3 -m expression_tomography.tasks.rule_z.task \
   --cases 30 \
   --seed 29 \
-  --transmission-modes free,factlocked,factlocked_plus_priority,oracle_text,oracle_no_final,oracle_no_final_no_active,oracle_corrupt_final \
+  --transmission-modes free_schema_prompt,free_case_hint,free_case_hint_no_sections,factlocked,factlocked_plus_priority,oracle_text,oracle_no_final,oracle_no_final_no_active,oracle_corrupt_final \
   --prompt-style strict_conflict \
   --db results/rule_z_diagnostics_mock.sqlite \
   --report-dir results/rule_z_diagnostics_mock_reports
@@ -152,7 +168,7 @@ Live provider pass:
 python3 -m expression_tomography.tasks.rule_z.task \
   --cases 30 \
   --seed 29 \
-  --transmission-modes free,factlocked,factlocked_plus_priority,oracle_text,oracle_no_final,oracle_no_final_no_active,oracle_corrupt_final \
+  --transmission-modes free_schema_prompt,free_case_hint,free_case_hint_no_sections,factlocked,factlocked_plus_priority,oracle_text,oracle_no_final,oracle_no_final_no_active,oracle_corrupt_final \
   --prompt-style strict_conflict \
   --db results/rule_z_diagnostics_openai.sqlite \
   --report-dir results/rule_z_diagnostics_openai_reports \
@@ -161,7 +177,7 @@ python3 -m expression_tomography.tasks.rule_z.task \
 python3 -m expression_tomography.tasks.rule_z.task \
   --cases 30 \
   --seed 29 \
-  --transmission-modes free,factlocked,factlocked_plus_priority,oracle_text,oracle_no_final,oracle_no_final_no_active,oracle_corrupt_final \
+  --transmission-modes free_schema_prompt,free_case_hint,free_case_hint_no_sections,factlocked,factlocked_plus_priority,oracle_text,oracle_no_final,oracle_no_final_no_active,oracle_corrupt_final \
   --prompt-style strict_conflict \
   --db results/rule_z_diagnostics_anthropic.sqlite \
   --report-dir results/rule_z_diagnostics_anthropic_reports \
@@ -173,6 +189,12 @@ After this pass, the most informative comparison is usually:
 ```text
 T vs T_factlocked:
   Did explicit derivation fields prevent message loss?
+
+T_free_schema_prompt vs T_free_case_hint:
+  Did binding the communication target to this case prevent schema drift?
+
+T_free_case_hint vs T_free_case_hint_no_sections:
+  Do labelled sections stabilize typed distinctions beyond case binding?
 
 T_factlocked vs T_factlocked_plus_priority:
   Did explicit fired priority edges prevent priority/suppression loss?
