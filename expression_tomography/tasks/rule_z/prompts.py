@@ -132,6 +132,38 @@ def make_message_prompt(case_id: str, public: dict[str, Any], mode: str = "free"
     return "\n".join(lines)
 
 
+def make_message_repair_prompt(
+    case_id: str,
+    public: dict[str, Any],
+    previous_message: str,
+    mode: str,
+) -> str:
+    return "\n".join(
+        [
+            "TASK: rule_z_repair_message",
+            f"CONDITION: T_REPAIR_{mode.upper()}",
+            f"CASE_ID: {case_id}",
+            "Read the previous sender message and revise it for a future receiver.",
+            "Check whether it transmits the actual true facts for this specific case, not just the general rule schema.",
+            "Check whether it keeps these distinctions clear:",
+            "- actual facts vs available predicates",
+            "- fired rules vs possible rules",
+            "- priority/suppression relations that matter in this case",
+            "- unresolved active conclusions when both eligible and not_eligible remain active",
+            "Write only the revised message.",
+            "Use ordinary prose, not labelled sections, bullets, tables, or a fielded template.",
+            "Do not include your critique.",
+            "Do not answer any future query directly.",
+            "Do not use the final answer label yes, no, or conflict.",
+            "You may use exact predicate names such as is_student and has_debt.",
+            "PREVIOUS_MESSAGE:",
+            previous_message,
+            "END_PREVIOUS_MESSAGE",
+            _json_block("RULE_Z_PUBLIC_JSON", public),
+        ]
+    )
+
+
 def make_oracle_text_message(
     public: dict[str, Any],
     oracle: OracleAnswer,

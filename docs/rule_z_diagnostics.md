@@ -242,6 +242,10 @@ T vs T_factlocked:
 T_free_schema_prompt vs T_free_case_hint:
   Did binding the communication target to this case prevent schema drift?
 
+T_free_schema_prompt vs T_free_schema_prompt_self_repair_no_sections:
+  Can a backward self-critique repair schema/procedure drift without labelled
+  sections?
+
 T_free_case_hint vs T_free_case_hint_no_sections:
   Do labelled sections stabilize typed distinctions beyond case binding?
 
@@ -253,6 +257,38 @@ T_factlocked vs T_oracle_text:
 
 strict_conflict vs default:
   Is the model missing the conflict semantics, or merely underusing the label?
+```
+
+## Iterative Repair Pass
+
+After the Free Prompt Binding Ladder and Diagnostics v2 are stable, test
+whether the sender can repair its own schema/procedure drift.
+
+Recommended first pass:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.task \
+  --cases 30 \
+  --seed 29 \
+  --transmission-modes free_schema_prompt,free_schema_prompt_self_repair_no_sections,free_case_hint_no_sections,factlocked,oracle_text \
+  --prompt-style strict_conflict \
+  --db results/rule_z_iterative_repair_anthropic.sqlite \
+  --report-dir results/rule_z_iterative_repair_anthropic_reports \
+  --provider-config expression_tomography/config/providers.anthropic.json
+```
+
+Interpretation:
+
+```text
+free_schema_prompt -> self_repair_no_sections improves:
+  backward critique can repair case-binding loss without typed sections
+
+self_repair_no_sections approaches free_case_hint_no_sections:
+  repair can recover the effect of explicit case-binding instructions
+
+self_repair_no_sections remains below factlocked:
+  typed layout still carries distinction-preservation work that prose repair
+  does not recover
 ```
 
 ## Ear Red Team

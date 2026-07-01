@@ -225,6 +225,11 @@ _DIAGNOSTIC_EXPECTED_FIELDS = {
         "mentions_rules",
         "mentions_priority_edges",
     ),
+    "free_schema_prompt_self_repair_no_sections": (
+        "mentions_actual_facts",
+        "mentions_rules",
+        "mentions_priority_edges",
+    ),
     "free_case_hint": (
         "mentions_actual_facts",
         "mentions_rules",

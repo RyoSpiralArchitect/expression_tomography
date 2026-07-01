@@ -206,6 +206,8 @@ class MockProvider:
             return self._detect_metaphor_debt(prompt)
         if "TASK: rule_z_write_message" in prompt:
             return self._write_rule_z_message(prompt)
+        if "TASK: rule_z_repair_message" in prompt:
+            return self._write_rule_z_message(prompt)
         if "TASK: rule_z_answer" in prompt:
             return self._answer_rule_z(prompt)
         return json.dumps({"answer": "yes", "confidence": 0.5}, ensure_ascii=False)
