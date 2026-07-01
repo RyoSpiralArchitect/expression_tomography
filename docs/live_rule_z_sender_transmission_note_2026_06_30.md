@@ -104,6 +104,48 @@ The zero `priority_recovery` means the base factlock was already sufficient on
 this run. The missing piece was not an extra explicit priority-edge section; it
 was the broader typed case ledger.
 
+## Hypothesis Update
+
+This result is more specific than generic expression loss. The failure appears
+one level upstream:
+
+```text
+pragmatic binding failure:
+  the free sender does not reliably bind the communication target to this
+  specific case instance
+```
+
+In this run, the main failure family is:
+
+```text
+case_to_schema_drift:
+  a message that should transmit the case instance drifts into a schema or
+  procedure explanation
+```
+
+Useful manual review labels:
+
+```text
+case_binding_loss:
+  actual facts are omitted or not bound as true facts for this case
+
+procedure_over_case_drift:
+  the message prioritizes the evaluation procedure over the case data needed to
+  run that procedure
+
+schema_only_message:
+  the message describes predicates, rules, and priorities but not the current
+  case instance
+
+message_under_specification:
+  the receiver lacks enough case facts to reconstruct the oracle answer
+```
+
+Under this reading, the `T_free` conflict collapses are downstream symptoms.
+The receiver is not necessarily failing to preserve conflict; it may be solving
+from a message that never transmitted the facts needed to reconstruct the
+conflict.
+
 ## Caveat
 
 The free sender prompt says "Describe the rule system for a future receiver" and
@@ -115,12 +157,15 @@ the model could not preserve facts under a more explicit free-prose prompt.
 Recommended next control:
 
 ```text
+free_no_answer:
+  current free prompt
+
 free_case_hint:
   free prose, still not factlocked, but explicitly says the receiver needs the
   true case facts as well as the rule system
 
-free_no_answer:
-  current free prompt
+free_case_hint_no_sections:
+  ordinary prose only; no labelled sections or fixed field template
 
 factlocked:
   typed ledger
@@ -128,3 +173,26 @@ factlocked:
 
 This separates "free prose cannot preserve typed distinctions" from "the sender
 interpreted the task as schema-only description."
+
+## Message-Side Metrics
+
+The next report layer should score the message before receiver answering:
+
+```text
+Bound Case Fact Recall:
+  fraction of actual facts mentioned as true facts for this case, not merely as
+  available predicates
+
+Case Binding Score:
+  whether the message explicitly binds itself to the current case instance
+
+Genericization Drift Rate:
+  whether the message is mostly schema/procedure description and lacks case
+  instance binding
+
+Transmission Sufficiency:
+  whether the message contains enough information to answer the future query
+```
+
+These can start as manual annotations on `rule_z_case_level.csv` failures before
+becoming automatic metrics.

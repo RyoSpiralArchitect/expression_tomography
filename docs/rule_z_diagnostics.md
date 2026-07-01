@@ -104,6 +104,20 @@ Manual review can refine these into more specific research labels:
 fact_schema_collapse:
   actual facts are blurred with possible/checkable predicates
 
+case_binding_loss:
+  actual facts are omitted or not marked as true for this specific case
+
+case_to_schema_drift:
+  the sender describes the general schema/procedure rather than the case
+  instance the receiver must solve
+
+procedure_over_case_drift:
+  the message prioritizes reasoning procedure over the case data needed to run
+  that procedure
+
+message_under_specification:
+  the message lacks enough case facts to reconstruct the oracle answer
+
 priority_loss:
   a priority edge is omitted or applied to the wrong fired pair
 
