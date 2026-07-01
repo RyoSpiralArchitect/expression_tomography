@@ -195,10 +195,78 @@ class RuleZSmokeTests(unittest.TestCase):
         self.assertEqual(bound["bound_case_fact_recall"], 1.0)
         self.assertEqual(bound["case_binding_score"], 1.0)
         self.assertEqual(bound["genericization_drift"], 0.0)
+        self.assertEqual(bound["transmission_sufficiency"], 1.0)
+        self.assertEqual(bound["transmission_sufficiency_path"], "actual_facts_rules_priority")
+        self.assertTrue(bound["mentions_actual_facts"])
+        self.assertTrue(bound["mentions_rules"])
+        self.assertTrue(bound["mentions_priority_edges"])
         self.assertEqual(schema["actual_facts_literal_mentioned"], 2)
         self.assertEqual(schema["actual_facts_bound_mentioned"], 0)
+        self.assertEqual(schema["available_predicates_bound_mentioned"], 6)
         self.assertEqual(schema["case_binding_score"], 0.0)
         self.assertEqual(schema["genericization_drift"], 1.0)
+        self.assertEqual(schema["transmission_sufficiency"], 0.0)
+        self.assertEqual(schema["transmission_sufficiency_path"], "insufficient")
+        self.assertTrue(schema["mentions_available_predicates"])
+
+    def test_rule_z_message_diagnostics_parse_fielded_sufficiency(self) -> None:
+        public = public_payload_from_facts(["has_debt", "is_student"])
+        oracle = answer_rule_z(public)
+        case = Case(
+            case_id="rule_diag_fielded",
+            task_type="rule_z",
+            payload={"public": public, "oracle_private": {"answer": oracle.answer}},
+            seed=0,
+        )
+
+        message = "\n".join(
+            [
+                "actual_facts:",
+                "- has_debt",
+                "- is_student",
+                "fired_rules:",
+                "- r1: is_student -> eligible",
+                "- r2: has_debt -> not_eligible",
+                "suppressed_rules: none",
+                "remaining_active_conclusions: eligible and not_eligible",
+                "final_category: conflict",
+            ]
+        )
+        diagnostics = rule_z_message_diagnostic_rows(
+            [
+                {
+                    "case_id": case.case_id,
+                    "case_hash": case.case_hash,
+                    "task_type": "rule_z",
+                    "condition": "T_factlocked",
+                    "provider": "synthetic",
+                    "score": {
+                        "answer": oracle.answer,
+                        "expected": oracle.answer,
+                        "correct": True,
+                        "parse_ok": True,
+                    },
+                    "metadata": {
+                        "transmission_message": message,
+                        "transmission_mode": "factlocked",
+                    },
+                }
+            ],
+            [{"case_hash": case.case_hash, "payload": case.payload}],
+        )
+
+        row = diagnostics[0]
+        self.assertEqual(row["actual_facts_bound_mentioned"], 2)
+        self.assertEqual(row["non_actual_predicates_bound_as_facts"], 0)
+        self.assertTrue(row["mentions_actual_facts"])
+        self.assertTrue(row["mentions_fired_rules"])
+        self.assertTrue(row["mentions_suppressed_rules"])
+        self.assertTrue(row["mentions_active_conclusions"])
+        self.assertTrue(row["mentions_final_category"])
+        self.assertEqual(row["transmission_sufficiency"], 1.0)
+        self.assertEqual(row["transmission_sufficiency_path"], "active_conclusions")
+        self.assertEqual(row["diagnostic_parse_coverage"], 1.0)
+        self.assertEqual(row["diagnostic_unparsed_fields"], "")
 
     def test_oracle_message_variants_remove_answer_adjacent_fields(self) -> None:
         case = make_rule_z_cases(1, seed=5)[0]

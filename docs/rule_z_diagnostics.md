@@ -40,7 +40,9 @@ residual_factlock_gap = Acc(T_oracle_text) - Acc(T_factlocked_plus_priority)
 bound_case_fact_recall = P(actual facts mentioned as true/current case facts)
 case_binding_score = P(message binds itself to the specific case)
 genericization_drift = P(message drifts toward schema/procedure without case data)
-transmission_sufficiency = P(message contains enough information for the query)
+transmission_sufficiency = P(message contains enough derivation information under
+  a mode-aware sufficiency parser)
+diagnostic_parse_coverage = P(expected message fields detected for this mode)
 ```
 
 Interpretation:
@@ -87,7 +89,54 @@ high genericization_drift:
 
 high transmission_sufficiency:
   message-side information is likely enough for the receiver to answer
+
+high diagnostic_parse_coverage:
+  the diagnostic parser found the fields expected for that transmission mode
 ```
+
+## Message Diagnostics v2
+
+`rule_z_message_diagnostics.csv` is a first-pass deterministic parser. Treat it
+as measurement support, not as the judge of correctness. Accuracy, transmission
+decomposition, and conflict reconstruction remain the primary experimental
+signals.
+
+The v2 columns split the message-side read into four groups:
+
+```text
+field presence:
+  mentions_actual_facts
+  mentions_available_predicates
+  mentions_rules
+  mentions_fired_rules
+  mentions_priority_edges
+  mentions_suppressed_rules
+  mentions_active_conclusions
+  mentions_final_category
+
+role binding:
+  actual_facts_bound_mentioned
+  available_predicates_bound_mentioned
+  non_actual_predicates_bound_as_facts
+
+mode-aware sufficiency:
+  active_conclusions
+  fired_rules_priority
+  actual_facts_rules_priority
+  final_category
+  insufficient
+
+parser coverage:
+  diagnostic_parse_coverage
+  diagnostic_confidence
+  diagnostic_unparsed_fields
+```
+
+The important v2 change is that `transmission_sufficiency` is no longer just
+"all actual facts + rules + priority." A factlocked or oracle-style message can
+be sufficient through active conclusions, or through fired rules plus
+priority/suppression information, even when the exact actual-fact section is
+hard for the simple parser to bind.
 
 ## Failure Taxonomy
 

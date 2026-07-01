@@ -281,7 +281,8 @@ Implementation note:
 ```text
 rule_z_message_diagnostics.csv:
   writes first-pass heuristic versions of these message-side metrics for every
-  T-like message with a stored sender message
+  T-like message with a stored sender message. Diagnostics v2 separates field
+  presence, role binding, mode-aware sufficiency, and parser coverage.
 ```
 
 ## Test-Time Expression Compensation
