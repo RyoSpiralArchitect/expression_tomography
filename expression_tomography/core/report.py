@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import re
 from collections import defaultdict
 from pathlib import Path
 from statistics import mean
@@ -62,6 +63,498 @@ def _failure_family(t_row: dict[str, Any] | None) -> str:
     if expected in {"yes", "no"} and answer == "conflict":
         return "conflict_overgeneration"
     return "answer_mismatch"
+
+
+_CASE_BINDING_CUES = (
+    "actual fact",
+    "actual facts",
+    "actual_facts",
+    "true fact",
+    "true facts",
+    "current case",
+    "this case",
+    "specific case",
+    "known fact",
+    "known facts",
+    "given fact",
+    "given facts",
+    "asserted",
+    "currently asserted",
+    "facts are",
+    "facts:",
+)
+
+_SCHEMA_CUES = (
+    "available predicate",
+    "available predicates",
+    "possible condition",
+    "possible conditions",
+    "possible fact",
+    "possible facts",
+    "can recognize",
+    "can use",
+    "may work with",
+    "may or may not",
+    "schema",
+)
+
+_CASE_INSTANCE_CUES = (
+    "current case",
+    "this case",
+    "specific case",
+    "for this case",
+    "in this case",
+)
+
+_FACT_ASSERTION_PATTERNS = (
+    r"\bactual[_ ]facts?\s*[:=]",
+    r"\bactual facts?\s+(?:are|is|include|includes|consist|consists)\b",
+    r"\btrue facts?\s+(?:are|is|include|includes|consist|consists)\b",
+    r"\bknown facts?\s+(?:are|is|include|includes|consist|consists)\b",
+    r"\bgiven facts?\s+(?:are|is|include|includes|consist|consists)\b",
+    r"\bfacts are\b",
+)
+
+
+def _contains_token(text: str, token: str) -> bool:
+    pattern = rf"(?<![A-Za-z0-9_]){re.escape(token.lower())}(?![A-Za-z0-9_])"
+    return re.search(pattern, text.lower()) is not None
+
+
+def _message_units(message: str) -> list[str]:
+    return [unit.strip().lower() for unit in re.split(r"[\n.;!?]+", message) if unit.strip()]
+
+
+def _predicate_bound_as_fact(message: str, predicate: str) -> bool:
+    units = _message_units(message)
+    predicate_l = predicate.lower()
+    for unit in units:
+        if not _contains_token(unit, predicate_l):
+            continue
+        window = unit
+        has_case_binding = any(cue in window for cue in _CASE_BINDING_CUES)
+        has_schema_only = any(cue in window for cue in _SCHEMA_CUES)
+        if has_case_binding and not (has_schema_only and "actual" not in window and "true" not in window):
+            return True
+    return False
+
+
+_SECTION_PATTERNS = (
+    ("actual_facts", (r"\bactual[_ ]facts?\b", r"\btrue facts?\b", r"\bknown facts?\b", r"\bgiven facts?\b")),
+    ("available_predicates", (r"\bavailable predicates?\b", r"\bpossible predicates?\b", r"\bpredicates?\b")),
+    ("fired_rules", (r"\bfired[_ ]rules?\b", r"\bwhich rules fire\b", r"\brules? fire\b")),
+    ("suppressed_rules", (r"\bsuppressed[_ ]rules?\b", r"\bsuppressed fired rules?\b")),
+    (
+        "active_conclusions",
+        (r"\bactive[_ ]conclusions?\b", r"\bremaining[_ ]active[_ ]conclusions?\b"),
+    ),
+    ("final_category", (r"\bfinal category\b", r"\bfinal answer\b", r"\bfinal_category\b")),
+    (
+        "priority_edges",
+        (r"\bfired[_ ]priority[_ ]edges?\b", r"\bpriority relationships?\b", r"\bpriority\b"),
+    ),
+    ("rules", (r"\brules?\b", r"\brule system\b")),
+)
+
+_FIELD_PRESENCE_PATTERNS = {
+    "mentions_actual_facts": (
+        r"\bactual[_ ]facts?\b",
+        r"\btrue facts?\b",
+        r"\bknown facts?\b",
+        r"\bgiven facts?\b",
+        r"\bfacts are\b",
+        r"\bfacts established\b",
+    ),
+    "mentions_available_predicates": (
+        r"\bavailable predicates?\b",
+        r"\bpossible predicates?\b",
+        r"\bpredicates include\b",
+    ),
+    "mentions_fired_rules": (
+        r"\bfired[_ ]rules?\b",
+        r"\brules? whose .* antecedents? .* satisfied\b",
+        r"\bwhich rules fire\b",
+        r"\br[1-9]\d*\s+fires\b",
+        r"\brules? fire\b",
+    ),
+    "mentions_priority_edges": (
+        r"\bfired[_ ]priority[_ ]edges?\b",
+        r"\bpriority relationships?\b",
+        r"\bpriorities\b",
+        r"\bpriority\b",
+        r"\boutranks?\b",
+        r"\bbeats?\b",
+        r"\boverrides?\b",
+    ),
+    "mentions_suppressed_rules": (
+        r"\bsuppressed[_ ]rules?\b",
+        r"\bsuppressed fired rules?\b",
+        r"\bsuppress(?:ed|ion)?\b",
+        r"\bdefeat(?:ed)?\b",
+    ),
+    "mentions_active_conclusions": (
+        r"\bremaining[_ ]active[_ ]conclusions?\b",
+        r"\bactive[_ ]conclusions?\b",
+        r"\bactive rules?\b",
+        r"\bsurviving conclusions?\b",
+        r"\bsurvive priority\b",
+    ),
+    "mentions_final_category": (
+        r"\bfinal category\b",
+        r"\bfinal answer\b",
+        r"\bfinal_category\b",
+        r"\bcorrect determination\b",
+    ),
+}
+
+_ABSENT_FACT_CUES = (
+    "not present",
+    "false",
+    "absent",
+    "do not have",
+    "does not have",
+    "neither",
+    "not recorded",
+    "not true",
+)
+
+_DIAGNOSTIC_EXPECTED_FIELDS = {
+    "free": ("mentions_rules", "mentions_priority_edges"),
+    "free_schema_prompt": (
+        "mentions_available_predicates",
+        "mentions_rules",
+        "mentions_priority_edges",
+    ),
+    "free_case_hint": (
+        "mentions_actual_facts",
+        "mentions_rules",
+        "mentions_priority_edges",
+    ),
+    "free_case_hint_no_sections": (
+        "mentions_actual_facts",
+        "mentions_rules",
+        "mentions_priority_edges",
+    ),
+    "factlocked": (
+        "mentions_actual_facts",
+        "mentions_fired_rules",
+        "mentions_suppressed_rules",
+        "mentions_active_conclusions",
+        "mentions_final_category",
+    ),
+    "factlocked_plus_priority": (
+        "mentions_actual_facts",
+        "mentions_fired_rules",
+        "mentions_priority_edges",
+        "mentions_suppressed_rules",
+        "mentions_active_conclusions",
+        "mentions_final_category",
+    ),
+    "factlocked_plus_priority_edges": (
+        "mentions_actual_facts",
+        "mentions_fired_rules",
+        "mentions_priority_edges",
+        "mentions_suppressed_rules",
+        "mentions_active_conclusions",
+        "mentions_final_category",
+    ),
+    "oracle_text": (
+        "mentions_actual_facts",
+        "mentions_rules",
+        "mentions_priority_edges",
+        "mentions_fired_rules",
+        "mentions_suppressed_rules",
+        "mentions_active_conclusions",
+        "mentions_final_category",
+    ),
+    "oracle_no_final": (
+        "mentions_actual_facts",
+        "mentions_rules",
+        "mentions_priority_edges",
+        "mentions_fired_rules",
+        "mentions_suppressed_rules",
+        "mentions_active_conclusions",
+    ),
+    "oracle_no_final_no_active": (
+        "mentions_actual_facts",
+        "mentions_rules",
+        "mentions_priority_edges",
+        "mentions_fired_rules",
+        "mentions_suppressed_rules",
+    ),
+    "oracle_corrupt_final": (
+        "mentions_actual_facts",
+        "mentions_rules",
+        "mentions_priority_edges",
+        "mentions_fired_rules",
+        "mentions_suppressed_rules",
+        "mentions_active_conclusions",
+        "mentions_final_category",
+    ),
+}
+
+
+def _clean_section_line(line: str) -> str:
+    cleaned = line.strip().lower()
+    cleaned = re.sub(r"^[#>*\-\s0-9.)]+", "", cleaned)
+    return cleaned.strip("`*_:- \t")
+
+
+def _looks_like_section_heading(line: str) -> bool:
+    stripped = line.strip()
+    cleaned = _clean_section_line(line)
+    return (
+        stripped.startswith("#")
+        or stripped.endswith(":")
+        or (len(cleaned.split()) <= 5 and not stripped.endswith("."))
+        or bool(re.match(r"^\s*\*\*[^*]+:\*\*", stripped))
+    )
+
+
+def _line_section(line: str) -> str | None:
+    if not _looks_like_section_heading(line):
+        return None
+    cleaned = _clean_section_line(line)
+    if not cleaned:
+        return None
+    for section, patterns in _SECTION_PATTERNS:
+        if any(re.search(pattern, cleaned) for pattern in patterns):
+            return section
+    return None
+
+
+def _line_marks_absence(line: str) -> bool:
+    lowered = line.lower()
+    return any(cue in lowered for cue in _ABSENT_FACT_CUES)
+
+
+def _section_scoped_predicates(
+    message: str,
+    predicates: list[str],
+    sections: set[str],
+    *,
+    skip_absent_lines: bool = False,
+) -> set[str]:
+    found = set()
+    current_section = None
+    for line in message.splitlines():
+        section = _line_section(line)
+        if section:
+            current_section = section
+        if current_section not in sections:
+            continue
+        if skip_absent_lines and _line_marks_absence(line):
+            continue
+        for predicate in predicates:
+            if _contains_token(line, predicate):
+                found.add(predicate)
+    return found
+
+
+def _predicate_bound_as_available(message: str, predicate: str) -> bool:
+    for unit in _message_units(message):
+        if _contains_token(unit, predicate) and any(cue in unit for cue in _SCHEMA_CUES):
+            return True
+    return False
+
+
+def _available_bound_count(message: str, predicates: list[str]) -> int:
+    section_bound = _section_scoped_predicates(message, predicates, {"available_predicates"})
+    unit_bound = {predicate for predicate in predicates if _predicate_bound_as_available(message, predicate)}
+    return len(section_bound | unit_bound)
+
+
+def _actual_bound_count(message: str, predicates: list[str]) -> int:
+    section_bound = _section_scoped_predicates(
+        message,
+        predicates,
+        {"actual_facts"},
+        skip_absent_lines=True,
+    )
+    unit_bound = {predicate for predicate in predicates if _predicate_bound_as_fact(message, predicate)}
+    return len(section_bound | unit_bound)
+
+
+def _field_presence(message: str) -> dict[str, bool]:
+    text = message.lower()
+    sections = {_line_section(line) for line in message.splitlines()}
+    sections.discard(None)
+    presence = {
+        key: any(re.search(pattern, text) for pattern in patterns)
+        for key, patterns in _FIELD_PRESENCE_PATTERNS.items()
+    }
+    presence["mentions_actual_facts"] = presence["mentions_actual_facts"] or "actual_facts" in sections
+    presence["mentions_available_predicates"] = (
+        presence["mentions_available_predicates"] or "available_predicates" in sections
+    )
+    presence["mentions_rules"] = _mentions_any(message, ("r1", "r2", "r3", "r4", "r5", "rule")) or "rules" in sections
+    presence["mentions_priority_edges"] = presence["mentions_priority_edges"] or "priority_edges" in sections
+    presence["mentions_fired_rules"] = presence["mentions_fired_rules"] or "fired_rules" in sections
+    presence["mentions_suppressed_rules"] = presence["mentions_suppressed_rules"] or "suppressed_rules" in sections
+    presence["mentions_active_conclusions"] = (
+        presence["mentions_active_conclusions"] or "active_conclusions" in sections
+    )
+    presence["mentions_final_category"] = presence["mentions_final_category"] or "final_category" in sections
+    return presence
+
+
+def _mode_expected_fields(mode: str) -> tuple[str, ...]:
+    return _DIAGNOSTIC_EXPECTED_FIELDS.get(mode, ("mentions_rules", "mentions_priority_edges"))
+
+
+def _diagnostic_parse(mode: str, presence: dict[str, bool]) -> tuple[float | None, float | None, str]:
+    expected = _mode_expected_fields(mode)
+    if not expected:
+        return None, None, ""
+    missing = [field for field in expected if not presence.get(field)]
+    coverage = (len(expected) - len(missing)) / len(expected)
+    return coverage, coverage, ";".join(missing)
+
+
+def _mode_aware_sufficiency(
+    presence: dict[str, bool],
+    actual_bound: int,
+    actual_facts_total: int,
+) -> tuple[float, str]:
+    actual_complete = actual_facts_total == 0 or actual_bound == actual_facts_total
+    if presence["mentions_active_conclusions"]:
+        return 1.0, "active_conclusions"
+    if presence["mentions_fired_rules"] and (
+        presence["mentions_suppressed_rules"] or presence["mentions_priority_edges"]
+    ):
+        return 1.0, "fired_rules_priority"
+    if actual_complete and presence["mentions_rules"] and presence["mentions_priority_edges"]:
+        return 1.0, "actual_facts_rules_priority"
+    if presence["mentions_final_category"]:
+        return 1.0, "final_category"
+    return 0.0, "insufficient"
+
+
+def _mentioned_count(message: str, predicates: list[str]) -> int:
+    return sum(1 for predicate in predicates if _contains_token(message, predicate))
+
+
+def _bound_count(message: str, predicates: list[str]) -> int:
+    return sum(1 for predicate in predicates if _predicate_bound_as_fact(message, predicate))
+
+
+def _ratio(numerator: int, denominator: int) -> float | None:
+    return numerator / denominator if denominator else None
+
+
+def _mentions_any(message: str, needles: tuple[str, ...]) -> bool:
+    text = message.lower()
+    return any(needle in text for needle in needles)
+
+
+def _has_case_binding(message: str, actual_bound: int) -> bool:
+    if actual_bound > 0:
+        return True
+    text = message.lower()
+    if any(cue in text for cue in _CASE_INSTANCE_CUES):
+        return True
+    return any(re.search(pattern, text) for pattern in _FACT_ASSERTION_PATTERNS)
+
+
+def rule_z_message_diagnostic_rows(
+    rows: list[dict[str, Any]],
+    cases: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    public_by_hash = {case["case_hash"]: case["payload"]["public"] for case in cases}
+    out = []
+    for row in rows:
+        if not row["condition"].startswith("T"):
+            continue
+        message = str(row["metadata"].get("transmission_message", ""))
+        if not message:
+            continue
+        public = public_by_hash.get(row["case_hash"], {})
+        actual_facts = list(public.get("facts", []))
+        available_predicates = list(public.get("available_predicates", []))
+        non_actual = [predicate for predicate in available_predicates if predicate not in set(actual_facts)]
+
+        mode = str(row["metadata"].get("transmission_mode", ""))
+        field_presence = _field_presence(message)
+        actual_literal = _mentioned_count(message, actual_facts)
+        actual_bound = _actual_bound_count(message, actual_facts)
+        non_actual_literal = _mentioned_count(message, non_actual)
+        non_actual_bound = _actual_bound_count(message, non_actual)
+        available_bound = _available_bound_count(message, available_predicates)
+        if actual_bound > 0:
+            field_presence["mentions_actual_facts"] = True
+        if available_bound > 0:
+            field_presence["mentions_available_predicates"] = True
+        bound_case_fact_recall = _ratio(actual_bound, len(actual_facts))
+        available_predicate_binding_rate = _ratio(available_bound, len(available_predicates))
+        predicate_intrusion_rate = _ratio(non_actual_bound, len(non_actual))
+        mentions_rules = field_presence["mentions_rules"]
+        mentions_priority = field_presence["mentions_priority_edges"]
+        mentions_suppression = field_presence["mentions_suppressed_rules"]
+        mentions_conflict = _mentions_any(message, ("conflict", "opposing", "contradict"))
+        case_binding_score = 1.0 if _has_case_binding(message, actual_bound) else 0.0
+        schema_or_procedure = _mentions_any(
+            message,
+            (
+                "available predicate",
+                "available predicates",
+                "possible condition",
+                "possible facts",
+                "how to",
+                "procedure",
+                "steps",
+                "identify which rules",
+                "check which rules",
+            ),
+        )
+        actual_recall_for_drift = bound_case_fact_recall if bound_case_fact_recall is not None else 1.0
+        genericization_drift = 1.0 if schema_or_procedure and actual_recall_for_drift < 1.0 else 0.0
+        transmission_sufficiency, transmission_sufficiency_path = _mode_aware_sufficiency(
+            field_presence,
+            actual_bound,
+            len(actual_facts),
+        )
+        diagnostic_parse_coverage, diagnostic_confidence, diagnostic_unparsed_fields = _diagnostic_parse(
+            mode,
+            field_presence,
+        )
+        out.append(
+            {
+                "provider": row["provider"],
+                "case_id": row["case_id"],
+                "case_hash": row["case_hash"],
+                "mode": mode,
+                "T_condition": row["condition"],
+                "expected_answer": _expected(row),
+                "receiver_answer": _answer(row),
+                "receiver_correct": _correct(row),
+                "actual_facts_total": len(actual_facts),
+                "actual_facts_literal_mentioned": actual_literal,
+                "actual_facts_bound_mentioned": actual_bound,
+                "bound_case_fact_recall": bound_case_fact_recall,
+                "available_predicates_total": len(available_predicates),
+                "available_predicates_bound_mentioned": available_bound,
+                "available_predicate_binding_rate": available_predicate_binding_rate,
+                "non_actual_predicates_total": len(non_actual),
+                "non_actual_predicates_mentioned": non_actual_literal,
+                "non_actual_predicates_bound_as_facts": non_actual_bound,
+                "predicate_intrusion_rate": predicate_intrusion_rate,
+                "case_binding_score": case_binding_score,
+                "genericization_drift": genericization_drift,
+                "transmission_sufficiency": transmission_sufficiency,
+                "transmission_sufficiency_path": transmission_sufficiency_path,
+                "diagnostic_parse_coverage": diagnostic_parse_coverage,
+                "diagnostic_confidence": diagnostic_confidence,
+                "diagnostic_unparsed_fields": diagnostic_unparsed_fields,
+                **field_presence,
+                "mentions_rules": mentions_rules,
+                "mentions_priority": mentions_priority,
+                "mentions_suppression": mentions_suppression,
+                "mentions_conflict_semantics": mentions_conflict,
+                "message_token_count": len(message.split()),
+                "failure_taxonomy": _failure_family(row),
+            }
+        )
+    return out
 
 
 def rule_z_case_level_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -210,6 +703,29 @@ def _sender_transmission_contrasts(accuracies: dict[str, float | None]) -> dict[
         "factlock_recovery": diff(factlocked, free),
         "priority_recovery": diff(priority, factlocked),
         "residual_factlock_gap": diff(oracle, priority),
+    }
+
+
+def _message_diagnostic_summary(rows: list[dict[str, Any]]) -> dict[tuple[str, str], dict[str, Any]]:
+    grouped: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        grouped[(row["provider"], row["T_condition"])].append(row)
+
+    def metric_mean(items: list[dict[str, Any]], key: str) -> float | None:
+        vals = [float(item[key]) for item in items if item.get(key) is not None]
+        return mean(vals) if vals else None
+
+    return {
+        key: {
+            "n": len(items),
+            "bound_case_fact_recall": metric_mean(items, "bound_case_fact_recall"),
+            "case_binding_score": metric_mean(items, "case_binding_score"),
+            "genericization_drift": metric_mean(items, "genericization_drift"),
+            "transmission_sufficiency": metric_mean(items, "transmission_sufficiency"),
+            "diagnostic_parse_coverage": metric_mean(items, "diagnostic_parse_coverage"),
+            "predicate_intrusion_rate": metric_mean(items, "predicate_intrusion_rate"),
+        }
+        for key, items in sorted(grouped.items())
     }
 
 
@@ -367,6 +883,57 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
         writer.writeheader()
         writer.writerows(case_rows)
 
+    message_rows = rule_z_message_diagnostic_rows(
+        store.fetch_trials(task_type="rule_z"),
+        store.fetch_cases(task_type="rule_z"),
+    )
+    message_path = out / "rule_z_message_diagnostics.csv"
+    with message_path.open("w", encoding="utf-8", newline="") as f:
+        fieldnames = [
+            "provider",
+            "case_id",
+            "case_hash",
+            "mode",
+            "T_condition",
+            "expected_answer",
+            "receiver_answer",
+            "receiver_correct",
+            "actual_facts_total",
+            "actual_facts_literal_mentioned",
+            "actual_facts_bound_mentioned",
+            "bound_case_fact_recall",
+            "available_predicates_total",
+            "available_predicates_bound_mentioned",
+            "available_predicate_binding_rate",
+            "non_actual_predicates_total",
+            "non_actual_predicates_mentioned",
+            "non_actual_predicates_bound_as_facts",
+            "predicate_intrusion_rate",
+            "case_binding_score",
+            "genericization_drift",
+            "transmission_sufficiency",
+            "transmission_sufficiency_path",
+            "diagnostic_parse_coverage",
+            "diagnostic_confidence",
+            "diagnostic_unparsed_fields",
+            "mentions_actual_facts",
+            "mentions_available_predicates",
+            "mentions_fired_rules",
+            "mentions_priority_edges",
+            "mentions_suppressed_rules",
+            "mentions_active_conclusions",
+            "mentions_final_category",
+            "mentions_rules",
+            "mentions_priority",
+            "mentions_suppression",
+            "mentions_conflict_semantics",
+            "message_token_count",
+            "failure_taxonomy",
+        ]
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(message_rows)
+
     md_path = out / "rule_z_report.md"
     lines = [
         "# Rule-Z Smoke Report",
@@ -426,6 +993,46 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
                         "NA"
                         if values["residual_factlock_gap"] is None
                         else f"{values['residual_factlock_gap']:.3f}",
+                    ]
+                )
+                + " |"
+            )
+
+    message_summary = _message_diagnostic_summary(message_rows)
+    if message_summary:
+        lines.extend(
+            [
+                "",
+                "## Message Diagnostics",
+                "",
+                "| Provider | T condition | n | BCFR | CBS | GDR | Sufficiency | Coverage | Predicate intrusion |",
+                "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+            ]
+        )
+        for (provider, condition), values in message_summary.items():
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        provider,
+                        condition,
+                        str(values["n"]),
+                        "NA"
+                        if values["bound_case_fact_recall"] is None
+                        else f"{values['bound_case_fact_recall']:.3f}",
+                        "NA" if values["case_binding_score"] is None else f"{values['case_binding_score']:.3f}",
+                        "NA"
+                        if values["genericization_drift"] is None
+                        else f"{values['genericization_drift']:.3f}",
+                        "NA"
+                        if values["transmission_sufficiency"] is None
+                        else f"{values['transmission_sufficiency']:.3f}",
+                        "NA"
+                        if values["diagnostic_parse_coverage"] is None
+                        else f"{values['diagnostic_parse_coverage']:.3f}",
+                        "NA"
+                        if values["predicate_intrusion_rate"] is None
+                        else f"{values['predicate_intrusion_rate']:.3f}",
                     ]
                 )
                 + " |"

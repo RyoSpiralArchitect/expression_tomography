@@ -37,6 +37,12 @@ free_gap = Acc(T_oracle_text) - Acc(T)
 factlock_recovery = Acc(T_factlocked) - Acc(T)
 priority_recovery = Acc(T_factlocked_plus_priority) - Acc(T_factlocked)
 residual_factlock_gap = Acc(T_oracle_text) - Acc(T_factlocked_plus_priority)
+bound_case_fact_recall = P(actual facts mentioned as true/current case facts)
+case_binding_score = P(message binds itself to the specific case)
+genericization_drift = P(message drifts toward schema/procedure without case data)
+transmission_sufficiency = P(message contains enough derivation information under
+  a mode-aware sufficiency parser)
+diagnostic_parse_coverage = P(expected message fields detected for this mode)
 ```
 
 Interpretation:
@@ -71,7 +77,66 @@ high priority_recovery:
 
 high residual_factlock_gap:
   even priority-explicit factlocking remains weaker than oracle text
+
+high bound_case_fact_recall:
+  actual facts are transmitted as case facts, not merely listed as vocabulary
+
+high case_binding_score:
+  the sender binds the message to this specific case instance
+
+high genericization_drift:
+  messages describe schema/procedure instead of the case instance
+
+high transmission_sufficiency:
+  message-side information is likely enough for the receiver to answer
+
+high diagnostic_parse_coverage:
+  the diagnostic parser found the fields expected for that transmission mode
 ```
+
+## Message Diagnostics v2
+
+`rule_z_message_diagnostics.csv` is a first-pass deterministic parser. Treat it
+as measurement support, not as the judge of correctness. Accuracy, transmission
+decomposition, and conflict reconstruction remain the primary experimental
+signals.
+
+The v2 columns split the message-side read into four groups:
+
+```text
+field presence:
+  mentions_actual_facts
+  mentions_available_predicates
+  mentions_rules
+  mentions_fired_rules
+  mentions_priority_edges
+  mentions_suppressed_rules
+  mentions_active_conclusions
+  mentions_final_category
+
+role binding:
+  actual_facts_bound_mentioned
+  available_predicates_bound_mentioned
+  non_actual_predicates_bound_as_facts
+
+mode-aware sufficiency:
+  active_conclusions
+  fired_rules_priority
+  actual_facts_rules_priority
+  final_category
+  insufficient
+
+parser coverage:
+  diagnostic_parse_coverage
+  diagnostic_confidence
+  diagnostic_unparsed_fields
+```
+
+The important v2 change is that `transmission_sufficiency` is no longer just
+"all actual facts + rules + priority." A factlocked or oracle-style message can
+be sufficient through active conclusions, or through fired rules plus
+priority/suppression information, even when the exact actual-fact section is
+hard for the simple parser to bind.
 
 ## Failure Taxonomy
 
@@ -140,7 +205,7 @@ Deterministic mock smoke:
 python3 -m expression_tomography.tasks.rule_z.task \
   --cases 30 \
   --seed 29 \
-  --transmission-modes free,factlocked,factlocked_plus_priority,oracle_text,oracle_no_final,oracle_no_final_no_active,oracle_corrupt_final \
+  --transmission-modes free_schema_prompt,free_case_hint,free_case_hint_no_sections,factlocked,factlocked_plus_priority,oracle_text,oracle_no_final,oracle_no_final_no_active,oracle_corrupt_final \
   --prompt-style strict_conflict \
   --db results/rule_z_diagnostics_mock.sqlite \
   --report-dir results/rule_z_diagnostics_mock_reports
@@ -152,7 +217,7 @@ Live provider pass:
 python3 -m expression_tomography.tasks.rule_z.task \
   --cases 30 \
   --seed 29 \
-  --transmission-modes free,factlocked,factlocked_plus_priority,oracle_text,oracle_no_final,oracle_no_final_no_active,oracle_corrupt_final \
+  --transmission-modes free_schema_prompt,free_case_hint,free_case_hint_no_sections,factlocked,factlocked_plus_priority,oracle_text,oracle_no_final,oracle_no_final_no_active,oracle_corrupt_final \
   --prompt-style strict_conflict \
   --db results/rule_z_diagnostics_openai.sqlite \
   --report-dir results/rule_z_diagnostics_openai_reports \
@@ -161,7 +226,7 @@ python3 -m expression_tomography.tasks.rule_z.task \
 python3 -m expression_tomography.tasks.rule_z.task \
   --cases 30 \
   --seed 29 \
-  --transmission-modes free,factlocked,factlocked_plus_priority,oracle_text,oracle_no_final,oracle_no_final_no_active,oracle_corrupt_final \
+  --transmission-modes free_schema_prompt,free_case_hint,free_case_hint_no_sections,factlocked,factlocked_plus_priority,oracle_text,oracle_no_final,oracle_no_final_no_active,oracle_corrupt_final \
   --prompt-style strict_conflict \
   --db results/rule_z_diagnostics_anthropic.sqlite \
   --report-dir results/rule_z_diagnostics_anthropic_reports \
@@ -173,6 +238,12 @@ After this pass, the most informative comparison is usually:
 ```text
 T vs T_factlocked:
   Did explicit derivation fields prevent message loss?
+
+T_free_schema_prompt vs T_free_case_hint:
+  Did binding the communication target to this case prevent schema drift?
+
+T_free_case_hint vs T_free_case_hint_no_sections:
+  Do labelled sections stabilize typed distinctions beyond case binding?
 
 T_factlocked vs T_factlocked_plus_priority:
   Did explicit fired priority edges prevent priority/suppression loss?

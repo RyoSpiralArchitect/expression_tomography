@@ -71,9 +71,39 @@ def make_message_prompt(case_id: str, public: dict[str, Any], mode: str = "free"
         "TASK: rule_z_write_message",
         f"CONDITION: T_WRITE_{mode.upper()}",
         f"CASE_ID: {case_id}",
-        "Describe the rule system for a future receiver.",
     ]
+    if mode in {"free", "free_schema_prompt"}:
+        lines.extend(
+            [
+                "Describe the rule system for a future receiver.",
+                "Do not answer any future query directly.",
+            ]
+        )
+    elif mode == "free_case_hint":
+        lines.extend(
+            [
+                "Write a natural-language message that will help a future receiver answer questions about this specific case.",
+                "Include the actual true facts for this case, the rules, and any relevant priority or suppression behavior.",
+                "Do not answer any future query directly.",
+                "Do not use the final answer label.",
+                "You may use labelled sections or compact bullets if helpful.",
+                "You may use exact predicate names such as is_student and has_debt.",
+            ]
+        )
+    elif mode == "free_case_hint_no_sections":
+        lines.extend(
+            [
+                "Write an ordinary prose message, not a labelled list or fielded template.",
+                "The receiver must be able to answer questions about this specific case from your message.",
+                "Include the actual true facts for this case and the relevant rule behavior.",
+                "Do not use labelled sections such as actual facts, fired rules, priority, or final category.",
+                "Do not answer any future query directly.",
+                "Do not use the final answer label.",
+                "You may use exact predicate names such as is_student and has_debt.",
+            ]
+        )
     if mode in {"factlocked", "factlocked_plus_priority", "factlocked_plus_priority_edges"}:
+        lines.append("Describe the rule system and this case for a future receiver.")
         lines.extend(
             [
                 "Use these exact sections in prose or compact bullets:",
@@ -98,8 +128,6 @@ def make_message_prompt(case_id: str, public: dict[str, Any], mode: str = "free"
                 "Keep actual facts distinct from checkable predicates that are merely mentioned in rules.",
             ]
         )
-    else:
-        lines.append("Do not answer any future query directly.")
     lines.append(_json_block("RULE_Z_PUBLIC_JSON", public))
     return "\n".join(lines)
 
