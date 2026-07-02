@@ -230,6 +230,16 @@ _DIAGNOSTIC_EXPECTED_FIELDS = {
         "mentions_rules",
         "mentions_priority_edges",
     ),
+    "self_contract_private_prose": (
+        "mentions_actual_facts",
+        "mentions_rules",
+        "mentions_priority_edges",
+    ),
+    "oracle_contract_private_prose": (
+        "mentions_actual_facts",
+        "mentions_rules",
+        "mentions_priority_edges",
+    ),
     "free_case_hint": (
         "mentions_actual_facts",
         "mentions_rules",

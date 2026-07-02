@@ -164,6 +164,70 @@ def make_message_repair_prompt(
     )
 
 
+def make_message_contract_prompt(case_id: str, public: dict[str, Any], mode: str) -> str:
+    return "\n".join(
+        [
+            "TASK: rule_z_write_contract",
+            f"CONDITION: T_CONTRACT_{mode.upper()}",
+            f"CASE_ID: {case_id}",
+            "Write a private communication contract for a later sender message.",
+            "The contract should say what distinctions the later message must preserve for this specific case.",
+            "Do not write the later message yet.",
+            "Do not answer the future query directly.",
+            "Do not use the final answer label yes, no, or conflict.",
+            "The contract should cover:",
+            "- actual facts vs available predicates",
+            "- fired rules vs possible rules",
+            "- priority and suppression relations that matter in this case",
+            "- active conclusions and unresolved opposing conclusions when relevant",
+            "Return only the private contract text.",
+            _json_block("RULE_Z_PUBLIC_JSON", public),
+        ]
+    )
+
+
+def make_oracle_contract() -> str:
+    return "\n".join(
+        [
+            "Private Rule-Z communication contract.",
+            "The later sender message must preserve actual facts as facts of the current case, not as merely available predicates.",
+            "It must distinguish fired rules from possible rules in the rule system.",
+            "It must distinguish priority edges in the rule system from suppressions that actually occur in this case.",
+            "It must preserve which conclusions remain active after suppression.",
+            "If eligible and not_eligible both remain active, it must preserve that unresolved opposition rather than collapsing it.",
+            "The final message should be ordinary prose rather than a labelled section, bullet list, table, or fielded ledger.",
+            "The final message should not provide the final answer label yes, no, or conflict directly.",
+        ]
+    )
+
+
+def make_contract_bound_message_prompt(
+    case_id: str,
+    public: dict[str, Any],
+    contract: str,
+    mode: str,
+) -> str:
+    return "\n".join(
+        [
+            "TASK: rule_z_contract_bound_message",
+            f"CONDITION: T_WRITE_{mode.upper()}",
+            f"CASE_ID: {case_id}",
+            "Write a natural-language sender message for a future receiver.",
+            "Use the private contract below to decide what distinctions must be preserved.",
+            "The future receiver will not see the private contract, only your final message.",
+            "Write ordinary prose, not labelled sections, bullets, tables, or a fielded template.",
+            "Do not include the private contract in the final message.",
+            "Do not answer any future query directly.",
+            "Do not use the final answer label yes, no, or conflict.",
+            "You may use exact predicate names such as is_student and has_debt.",
+            "PRIVATE_CONTRACT:",
+            contract,
+            "END_PRIVATE_CONTRACT",
+            _json_block("RULE_Z_PUBLIC_JSON", public),
+        ]
+    )
+
+
 def make_oracle_text_message(
     public: dict[str, Any],
     oracle: OracleAnswer,

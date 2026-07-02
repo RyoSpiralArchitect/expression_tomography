@@ -12,17 +12,18 @@ the same provider/store/report plumbing.
 python3 -m expression_tomography.tasks.rule_z.task \
   --cases 20 \
   --seed 7 \
-  --transmission-modes free_schema_prompt,free_schema_prompt_self_repair_no_sections,free_case_hint_no_sections,factlocked,oracle_text \
+  --transmission-modes free_schema_prompt,self_contract_private_prose,oracle_contract_private_prose,free_case_hint_no_sections,factlocked,oracle_text \
   --prompt-style strict_conflict \
   --db results/expression_tomography/rule_z.sqlite \
   --report-dir results/expression_tomography/reports
 ```
 
 The default run keeps the original compact `T` condition only. Add
-`--transmission-modes free_schema_prompt,free_schema_prompt_self_repair_no_sections,free_case_hint_no_sections,factlocked,oracle_text`
+`--transmission-modes free_schema_prompt,self_contract_private_prose,oracle_contract_private_prose,free_case_hint_no_sections,factlocked,oracle_text`
 to split natural-language transmission into schema-framed free prose,
-self-repaired schema prose without labelled sections, case-hinted prose without
-labelled sections, fact-locked, and oracle-authored message channels.
+self-generated private-contract prose, oracle-provided private-contract prose,
+case-hinted prose without labelled sections, fact-locked, and oracle-authored
+message channels.
 Ear red-team variants are also available: `oracle_no_final`,
 `oracle_no_final_no_active`, and `oracle_corrupt_final`.
 Reports include aggregate accuracy, provider-level accuracy, transmission
