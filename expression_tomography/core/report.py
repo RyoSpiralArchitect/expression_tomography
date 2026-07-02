@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import json
 import re
 from collections import defaultdict
 from pathlib import Path
@@ -225,6 +226,41 @@ _DIAGNOSTIC_EXPECTED_FIELDS = {
         "mentions_rules",
         "mentions_priority_edges",
     ),
+    "free_schema_prompt_self_repair_no_sections": (
+        "mentions_actual_facts",
+        "mentions_rules",
+        "mentions_priority_edges",
+    ),
+    "self_contract_private_prose": (
+        "mentions_actual_facts",
+        "mentions_rules",
+        "mentions_priority_edges",
+    ),
+    "oracle_contract_private_prose": (
+        "mentions_actual_facts",
+        "mentions_rules",
+        "mentions_priority_edges",
+    ),
+    "generic_contract_private_prose": (
+        "mentions_actual_facts",
+        "mentions_rules",
+        "mentions_priority_edges",
+    ),
+    "wrong_contract_private_prose": (
+        "mentions_actual_facts",
+        "mentions_rules",
+        "mentions_priority_edges",
+    ),
+    "scrambled_contract_private_prose": (
+        "mentions_actual_facts",
+        "mentions_rules",
+        "mentions_priority_edges",
+    ),
+    "contract_only_private_prose": (
+        "mentions_actual_facts",
+        "mentions_rules",
+        "mentions_priority_edges",
+    ),
     "free_case_hint": (
         "mentions_actual_facts",
         "mentions_rules",
@@ -375,6 +411,57 @@ def _actual_bound_count(message: str, predicates: list[str]) -> int:
     return len(section_bound | unit_bound)
 
 
+def _rule_scoped_predicates(message: str, predicates: list[str]) -> set[str]:
+    found = _section_scoped_predicates(message, predicates, {"rules", "fired_rules"})
+    rule_cues = (
+        "rule",
+        "rules",
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5",
+        "if ",
+        "then ",
+        "antecedent",
+        "requires",
+        "fires",
+        "fire",
+    )
+    for unit in _message_units(message):
+        if not any(cue in unit for cue in rule_cues):
+            continue
+        for predicate in predicates:
+            if _contains_token(unit, predicate):
+                found.add(predicate)
+    return found
+
+
+def _vocabulary_scoped_predicates(message: str, predicates: list[str]) -> set[str]:
+    found = _section_scoped_predicates(message, predicates, {"available_predicates"})
+    for predicate in predicates:
+        if _predicate_bound_as_available(message, predicate):
+            found.add(predicate)
+    return found
+
+
+def _raw_sufficiency(
+    presence: dict[str, bool],
+    actual_bound: int,
+    actual_facts_total: int,
+) -> tuple[float, str]:
+    actual_complete = actual_facts_total == 0 or actual_bound == actual_facts_total
+    if presence["mentions_active_conclusions"] or presence["mentions_final_category"]:
+        return 1.0, "answer_adjacent_fields"
+    if presence["mentions_fired_rules"] or presence["mentions_suppressed_rules"]:
+        return 1.0, "derivation_fields"
+    if actual_complete and presence["mentions_rules"]:
+        return 1.0, "actual_facts_rules"
+    if presence["mentions_rules"] or presence["mentions_priority_edges"]:
+        return 0.5, "partial_rule_context"
+    return 0.0, "insufficient"
+
+
 def _field_presence(message: str) -> dict[str, bool]:
     text = message.lower()
     sections = {_line_section(line) for line in message.splitlines()}
@@ -411,7 +498,7 @@ def _diagnostic_parse(mode: str, presence: dict[str, bool]) -> tuple[float | Non
     return coverage, coverage, ";".join(missing)
 
 
-def _mode_aware_sufficiency(
+def _derivation_sufficiency(
     presence: dict[str, bool],
     actual_bound: int,
     actual_facts_total: int,
@@ -428,6 +515,49 @@ def _mode_aware_sufficiency(
     if presence["mentions_final_category"]:
         return 1.0, "final_category"
     return 0.0, "insufficient"
+
+
+def _message_mentions_conclusion_pair(message: str) -> bool:
+    return _contains_token(message, "eligible") and _contains_token(message, "not_eligible")
+
+
+def _answer_specific_sufficiency(
+    expected: str,
+    message: str,
+    presence: dict[str, bool],
+    derivation_sufficiency: float,
+) -> tuple[float, str]:
+    if presence["mentions_final_category"]:
+        return 1.0, "final_category"
+    if derivation_sufficiency <= 0:
+        return 0.0, "missing_derivation"
+    if expected == "conflict":
+        if presence["mentions_active_conclusions"] and _message_mentions_conclusion_pair(message):
+            return 1.0, "active_conclusion_pair"
+        if _mentions_any(message, ("conflict", "opposing", "contradict")) and _message_mentions_conclusion_pair(message):
+            return 1.0, "conflict_semantics"
+        return 0.0, "missing_conflict_resolution"
+    if expected == "yes":
+        if presence["mentions_active_conclusions"] and _contains_token(message, "eligible"):
+            return 1.0, "active_eligible"
+        if derivation_sufficiency and _contains_token(message, "eligible"):
+            return 1.0, "derivation_mentions_eligible"
+        return 0.0, "missing_yes_support"
+    if expected == "no":
+        if presence["mentions_active_conclusions"] and _contains_token(message, "not_eligible"):
+            return 1.0, "active_not_eligible"
+        if derivation_sufficiency and _contains_token(message, "not_eligible"):
+            return 1.0, "derivation_mentions_not_eligible"
+        return 0.0, "missing_no_support"
+    return 0.0, "unknown_expected_answer"
+
+
+def _mode_aware_sufficiency(
+    presence: dict[str, bool],
+    actual_bound: int,
+    actual_facts_total: int,
+) -> tuple[float, str]:
+    return _derivation_sufficiency(presence, actual_bound, actual_facts_total)
 
 
 def _mentioned_count(message: str, predicates: list[str]) -> int:
@@ -479,6 +609,8 @@ def rule_z_message_diagnostic_rows(
         actual_bound = _actual_bound_count(message, actual_facts)
         non_actual_literal = _mentioned_count(message, non_actual)
         non_actual_bound = _actual_bound_count(message, non_actual)
+        non_actual_vocab = len(_vocabulary_scoped_predicates(message, non_actual))
+        non_actual_rule = len(_rule_scoped_predicates(message, non_actual))
         available_bound = _available_bound_count(message, available_predicates)
         if actual_bound > 0:
             field_presence["mentions_actual_facts"] = True
@@ -508,11 +640,24 @@ def rule_z_message_diagnostic_rows(
         )
         actual_recall_for_drift = bound_case_fact_recall if bound_case_fact_recall is not None else 1.0
         genericization_drift = 1.0 if schema_or_procedure and actual_recall_for_drift < 1.0 else 0.0
-        transmission_sufficiency, transmission_sufficiency_path = _mode_aware_sufficiency(
+        raw_sufficiency, raw_sufficiency_path = _raw_sufficiency(
             field_presence,
             actual_bound,
             len(actual_facts),
         )
+        derivation_sufficiency, derivation_sufficiency_path = _derivation_sufficiency(
+            field_presence,
+            actual_bound,
+            len(actual_facts),
+        )
+        answer_specific_sufficiency, answer_specific_sufficiency_path = _answer_specific_sufficiency(
+            _expected(row),
+            message,
+            field_presence,
+            derivation_sufficiency,
+        )
+        transmission_sufficiency = derivation_sufficiency
+        transmission_sufficiency_path = derivation_sufficiency_path
         diagnostic_parse_coverage, diagnostic_confidence, diagnostic_unparsed_fields = _diagnostic_parse(
             mode,
             field_presence,
@@ -536,10 +681,18 @@ def rule_z_message_diagnostic_rows(
                 "available_predicate_binding_rate": available_predicate_binding_rate,
                 "non_actual_predicates_total": len(non_actual),
                 "non_actual_predicates_mentioned": non_actual_literal,
+                "non_actual_predicates_mentioned_as_vocab": non_actual_vocab,
+                "non_actual_predicates_mentioned_in_rules": non_actual_rule,
                 "non_actual_predicates_bound_as_facts": non_actual_bound,
                 "predicate_intrusion_rate": predicate_intrusion_rate,
                 "case_binding_score": case_binding_score,
                 "genericization_drift": genericization_drift,
+                "raw_sufficiency": raw_sufficiency,
+                "raw_sufficiency_path": raw_sufficiency_path,
+                "derivation_sufficiency": derivation_sufficiency,
+                "derivation_sufficiency_path": derivation_sufficiency_path,
+                "answer_specific_sufficiency": answer_specific_sufficiency,
+                "answer_specific_sufficiency_path": answer_specific_sufficiency_path,
                 "transmission_sufficiency": transmission_sufficiency,
                 "transmission_sufficiency_path": transmission_sufficiency_path,
                 "diagnostic_parse_coverage": diagnostic_parse_coverage,
@@ -602,6 +755,200 @@ def rule_z_case_level_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 }
             )
     return case_rows
+
+
+def _format_rule(rule: dict[str, Any]) -> str:
+    antecedents = " and ".join(rule.get("if", [])) or "always"
+    return f"{rule.get('id')}: if {antecedents} then {rule.get('then')}"
+
+
+def rule_z_contrast_packet_rows(
+    rows: list[dict[str, Any]],
+    cases: list[dict[str, Any]],
+    contrast_condition: str = "T_free_schema_prompt",
+    recovery_conditions: tuple[str, ...] = (
+        "T_self_contract_private_prose",
+        "T_oracle_contract_private_prose",
+        "T_free_case_hint_no_sections",
+        "T_factlocked",
+        "T_oracle_text",
+    ),
+) -> list[dict[str, Any]]:
+    cases_by_hash = {case["case_hash"]: case for case in cases}
+    by_case: dict[tuple[str, str], dict[str, dict[str, Any]]] = defaultdict(dict)
+    for row in rows:
+        by_case[(row["provider"], row["case_hash"])][row["condition"]] = row
+
+    packets: list[dict[str, Any]] = []
+    for (provider, case_hash), condition_rows in sorted(by_case.items()):
+        contrast = condition_rows.get(contrast_condition)
+        d_row = condition_rows.get("D")
+        o_row = condition_rows.get("O")
+        if not contrast or _correct(d_row) is not True or _correct(o_row) is not True:
+            continue
+        if _correct(contrast) is not False:
+            continue
+        available_recoveries = [condition for condition in recovery_conditions if condition in condition_rows]
+        if not available_recoveries:
+            continue
+        if any(_correct(condition_rows[condition]) is not True for condition in available_recoveries):
+            continue
+
+        case = cases_by_hash.get(case_hash, {})
+        payload = case.get("payload", {})
+        public = payload.get("public", {})
+        recoveries = {}
+        for condition in available_recoveries:
+            row = condition_rows[condition]
+            recoveries[condition] = {
+                "answer": _answer(row),
+                "correct": _correct(row),
+                "failure_family": _failure_family(row),
+                "message": row["metadata"].get("transmission_message", ""),
+                "contract_source": row["metadata"].get("contract_source", ""),
+                "private_contract": row["metadata"].get("transmission_contract", ""),
+            }
+        packets.append(
+            {
+                "provider": provider,
+                "case_id": contrast["case_id"],
+                "case_hash": case_hash,
+                "expected": _expected(contrast),
+                "facts": list(public.get("facts", [])),
+                "available_predicates": list(public.get("available_predicates", [])),
+                "rules": [_format_rule(rule) for rule in public.get("rules", [])],
+                "priority": [f"{winner}>{loser}" for winner, loser in public.get("priority", [])],
+                "baseline": {
+                    "B_answer": _answer(condition_rows.get("B")),
+                    "B_correct": _correct(condition_rows.get("B")),
+                    "D_answer": _answer(d_row),
+                    "D_correct": _correct(d_row),
+                    "O_answer": _answer(o_row),
+                    "O_correct": _correct(o_row),
+                },
+                "contrast": {
+                    "condition": contrast_condition,
+                    "answer": _answer(contrast),
+                    "correct": _correct(contrast),
+                    "failure_family": _failure_family(contrast),
+                    "message": contrast["metadata"].get("transmission_message", ""),
+                },
+                "recoveries": recoveries,
+                "human_annotation": {
+                    "missing_actual_facts": "",
+                    "schema_or_procedure_drift": "",
+                    "priority_omitted_or_misstated": "",
+                    "conflict_semantics_omitted": "",
+                    "conclusion_implied_incorrectly": "",
+                    "notes": "",
+                },
+            }
+        )
+    return packets
+
+
+def _write_rule_z_contrast_packets(out: Path, packets: list[dict[str, Any]]) -> None:
+    jsonl_path = out / "rule_z_contrast_packets.jsonl"
+    with jsonl_path.open("w", encoding="utf-8") as f:
+        for packet in packets:
+            f.write(json.dumps(packet, ensure_ascii=False, sort_keys=True) + "\n")
+
+    md_lines = [
+        "# Rule-Z Contrast Packets",
+        "",
+        "Packets are selected when D and O are correct, the contrast condition fails,",
+        "and every available recovery condition succeeds for the same provider/case.",
+        "",
+        f"Packets: {len(packets)}",
+        "",
+    ]
+    for packet in packets:
+        md_lines.extend(
+            [
+                f"## {packet['case_id']} - expected `{packet['expected']}`",
+                "",
+                f"Provider: `{packet['provider']}`",
+                "",
+                f"Facts: `{', '.join(packet['facts']) or 'none'}`",
+                "",
+                "Rules:",
+                "",
+            ]
+        )
+        md_lines.extend(f"- `{rule}`" for rule in packet["rules"])
+        md_lines.extend(
+            [
+                "",
+                f"Priority: `{', '.join(packet['priority']) or 'none'}`",
+                "",
+                "Baseline:",
+                "",
+                "| Condition | Answer | Correct |",
+                "| --- | --- | ---: |",
+            ]
+        )
+        for condition in ("B", "D", "O"):
+            md_lines.append(
+                f"| {condition} | {packet['baseline'][condition + '_answer']} | {packet['baseline'][condition + '_correct']} |"
+            )
+        contrast = packet["contrast"]
+        md_lines.extend(
+            [
+                "",
+                f"### Contrast: `{contrast['condition']}`",
+                "",
+                f"Receiver answer: `{contrast['answer']}`",
+                "",
+                f"Failure family: `{contrast['failure_family']}`",
+                "",
+                "```text",
+                str(contrast["message"]),
+                "```",
+                "",
+            ]
+        )
+        for condition, recovery in packet["recoveries"].items():
+            md_lines.extend(
+                [
+                    f"### Recovery: `{condition}`",
+                    "",
+                    f"Receiver answer: `{recovery['answer']}`",
+                    "",
+                ]
+            )
+            if recovery["private_contract"]:
+                md_lines.extend(
+                    [
+                        f"Private contract source: `{recovery['contract_source']}`",
+                        "",
+                        "```text",
+                        str(recovery["private_contract"]),
+                        "```",
+                        "",
+                    ]
+                )
+            md_lines.extend(
+                [
+                    "```text",
+                    str(recovery["message"]),
+                    "```",
+                    "",
+                ]
+            )
+        md_lines.extend(
+            [
+                "### Human Annotation",
+                "",
+                "- missing_actual_facts:",
+                "- schema_or_procedure_drift:",
+                "- priority_omitted_or_misstated:",
+                "- conflict_semantics_omitted:",
+                "- conclusion_implied_incorrectly:",
+                "- notes:",
+                "",
+            ]
+        )
+    (out / "rule_z_contrast_packets.md").write_text("\n".join(md_lines), encoding="utf-8")
 
 
 def _decompose_transmission(case_rows: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
@@ -721,8 +1068,23 @@ def _message_diagnostic_summary(rows: list[dict[str, Any]]) -> dict[tuple[str, s
             "bound_case_fact_recall": metric_mean(items, "bound_case_fact_recall"),
             "case_binding_score": metric_mean(items, "case_binding_score"),
             "genericization_drift": metric_mean(items, "genericization_drift"),
+            "raw_sufficiency": metric_mean(items, "raw_sufficiency"),
+            "derivation_sufficiency": metric_mean(items, "derivation_sufficiency"),
+            "answer_specific_sufficiency": metric_mean(items, "answer_specific_sufficiency"),
             "transmission_sufficiency": metric_mean(items, "transmission_sufficiency"),
             "diagnostic_parse_coverage": metric_mean(items, "diagnostic_parse_coverage"),
+            "non_actual_predicates_mentioned_as_vocab": metric_mean(
+                items,
+                "non_actual_predicates_mentioned_as_vocab",
+            ),
+            "non_actual_predicates_mentioned_in_rules": metric_mean(
+                items,
+                "non_actual_predicates_mentioned_in_rules",
+            ),
+            "non_actual_predicates_bound_as_facts": metric_mean(
+                items,
+                "non_actual_predicates_bound_as_facts",
+            ),
             "predicate_intrusion_rate": metric_mean(items, "predicate_intrusion_rate"),
         }
         for key, items in sorted(grouped.items())
@@ -778,7 +1140,7 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
 
     csv_path = out / "rule_z_summary.csv"
     with csv_path.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=["provider", "condition", "accuracy"])
+        writer = csv.DictWriter(f, fieldnames=["provider", "condition", "accuracy"], lineterminator="\n")
         writer.writeheader()
         for condition, accuracy in summary["accuracy_by_condition"].items():
             writer.writerow({"provider": "ALL", "condition": condition, "accuracy": accuracy})
@@ -803,7 +1165,7 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
             "priority_recovery",
             "residual_factlock_gap",
         ]
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         writer.writerow({"provider": "ALL", **summary["sender_contrasts"]})
         for provider, values in summary["sender_contrasts_by_provider"].items():
@@ -832,7 +1194,7 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
             "pure_loss_count",
             "rescued_count",
         ]
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         for condition, values in summary["transmission_decomposition"].items():
             writer.writerow({"provider": "ALL", "T_condition": condition, **values})
@@ -847,13 +1209,15 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
             "active_conclusion_dependence",
             "conflict_active_conclusion_dependence",
         ]
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         writer.writerow({"provider": "ALL", **summary["ear_dependence"]})
         for provider, values in summary["ear_dependence_by_provider"].items():
             writer.writerow({"provider": provider, **values})
 
-    case_rows = rule_z_case_level_rows(store.fetch_trials(task_type="rule_z"))
+    trial_rows = store.fetch_trials(task_type="rule_z")
+    case_records = store.fetch_cases(task_type="rule_z")
+    case_rows = rule_z_case_level_rows(trial_rows)
     case_path = out / "rule_z_case_level.csv"
     with case_path.open("w", encoding="utf-8", newline="") as f:
         fieldnames = [
@@ -879,14 +1243,11 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
             "transmission_rescue_case",
             "failure_family",
         ]
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         writer.writerows(case_rows)
 
-    message_rows = rule_z_message_diagnostic_rows(
-        store.fetch_trials(task_type="rule_z"),
-        store.fetch_cases(task_type="rule_z"),
-    )
+    message_rows = rule_z_message_diagnostic_rows(trial_rows, case_records)
     message_path = out / "rule_z_message_diagnostics.csv"
     with message_path.open("w", encoding="utf-8", newline="") as f:
         fieldnames = [
@@ -907,10 +1268,18 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
             "available_predicate_binding_rate",
             "non_actual_predicates_total",
             "non_actual_predicates_mentioned",
+            "non_actual_predicates_mentioned_as_vocab",
+            "non_actual_predicates_mentioned_in_rules",
             "non_actual_predicates_bound_as_facts",
             "predicate_intrusion_rate",
             "case_binding_score",
             "genericization_drift",
+            "raw_sufficiency",
+            "raw_sufficiency_path",
+            "derivation_sufficiency",
+            "derivation_sufficiency_path",
+            "answer_specific_sufficiency",
+            "answer_specific_sufficiency_path",
             "transmission_sufficiency",
             "transmission_sufficiency_path",
             "diagnostic_parse_coverage",
@@ -930,9 +1299,12 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
             "message_token_count",
             "failure_taxonomy",
         ]
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         writer.writerows(message_rows)
+
+    contrast_packets = rule_z_contrast_packet_rows(trial_rows, case_records)
+    _write_rule_z_contrast_packets(out, contrast_packets)
 
     md_path = out / "rule_z_report.md"
     lines = [
@@ -1005,8 +1377,8 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
                 "",
                 "## Message Diagnostics",
                 "",
-                "| Provider | T condition | n | BCFR | CBS | GDR | Sufficiency | Coverage | Predicate intrusion |",
-                "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+                "| Provider | T condition | n | BCFR | CBS | GDR | Raw suff | Deriv suff | Answer suff | Coverage | Vocab mentions | Rule mentions | Fact intrusion |",
+                "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
             ]
         )
         for (provider, condition), values in message_summary.items():
@@ -1025,11 +1397,23 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
                         if values["genericization_drift"] is None
                         else f"{values['genericization_drift']:.3f}",
                         "NA"
-                        if values["transmission_sufficiency"] is None
-                        else f"{values['transmission_sufficiency']:.3f}",
+                        if values["raw_sufficiency"] is None
+                        else f"{values['raw_sufficiency']:.3f}",
+                        "NA"
+                        if values["derivation_sufficiency"] is None
+                        else f"{values['derivation_sufficiency']:.3f}",
+                        "NA"
+                        if values["answer_specific_sufficiency"] is None
+                        else f"{values['answer_specific_sufficiency']:.3f}",
                         "NA"
                         if values["diagnostic_parse_coverage"] is None
                         else f"{values['diagnostic_parse_coverage']:.3f}",
+                        "NA"
+                        if values["non_actual_predicates_mentioned_as_vocab"] is None
+                        else f"{values['non_actual_predicates_mentioned_as_vocab']:.3f}",
+                        "NA"
+                        if values["non_actual_predicates_mentioned_in_rules"] is None
+                        else f"{values['non_actual_predicates_mentioned_in_rules']:.3f}",
                         "NA"
                         if values["predicate_intrusion_rate"] is None
                         else f"{values['predicate_intrusion_rate']:.3f}",
@@ -1213,7 +1597,7 @@ def write_metaphor_transfer_report(store: ExperimentStore, out_dir: str | Path) 
             "avoid_score",
             "fbg_lite",
         ]
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         for row in rows:
             score = row["score"]

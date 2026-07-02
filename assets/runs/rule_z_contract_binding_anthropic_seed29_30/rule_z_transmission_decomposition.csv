@@ -1,0 +1,13 @@
+provider,T_condition,n_cases,solved_by_both_count,unsolved_by_direct_count,transmission_survival,pure_transmission_loss,transmission_rescue,expected_conflict_count,conflict_reconstruction_accuracy,conflict_collapse_negative_rate,conflict_collapse_positive_rate,corrupted_label_count,label_dependence,label_resistance,derivation_dependence,survived_count,pure_loss_count,rescued_count
+ALL,T_factlocked,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,0,,,,30,0,0
+ALL,T_free_case_hint_no_sections,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,0,,,,30,0,0
+ALL,T_free_schema_prompt,30,30,0,0.8333333333333334,0.16666666666666666,,6,0.6666666666666666,0.3333333333333333,0.0,0,,,,25,5,0
+ALL,T_oracle_contract_private_prose,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,0,,,,30,0,0
+ALL,T_oracle_text,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,0,,,,30,0,0
+ALL,T_self_contract_private_prose,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,0,,,,30,0,0
+anthropic_sonnet_4_6,T_factlocked,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,0,,,,30,0,0
+anthropic_sonnet_4_6,T_free_case_hint_no_sections,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,0,,,,30,0,0
+anthropic_sonnet_4_6,T_free_schema_prompt,30,30,0,0.8333333333333334,0.16666666666666666,,6,0.6666666666666666,0.3333333333333333,0.0,0,,,,25,5,0
+anthropic_sonnet_4_6,T_oracle_contract_private_prose,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,0,,,,30,0,0
+anthropic_sonnet_4_6,T_oracle_text,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,0,,,,30,0,0
+anthropic_sonnet_4_6,T_self_contract_private_prose,30,30,0,1.0,0.0,,6,1.0,0.0,0.0,0,,,,30,0,0

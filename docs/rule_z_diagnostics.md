@@ -43,6 +43,10 @@ genericization_drift = P(message drifts toward schema/procedure without case dat
 transmission_sufficiency = P(message contains enough derivation information under
   a mode-aware sufficiency parser)
 diagnostic_parse_coverage = P(expected message fields detected for this mode)
+raw_sufficiency = P(message contains broad case or derivation cues)
+derivation_sufficiency = P(message contains enough derivation structure)
+answer_specific_sufficiency = P(message contains enough answer-specific
+  support for the expected category)
 ```
 
 Interpretation:
@@ -92,6 +96,10 @@ high transmission_sufficiency:
 
 high diagnostic_parse_coverage:
   the diagnostic parser found the fields expected for that transmission mode
+
+high answer_specific_sufficiency:
+  the parser can see not only derivation context, but the category-specific
+  support needed for the expected answer
 ```
 
 ## Message Diagnostics v2
@@ -137,6 +145,79 @@ The important v2 change is that `transmission_sufficiency` is no longer just
 be sufficient through active conclusions, or through fired rules plus
 priority/suppression information, even when the exact actual-fact section is
 hard for the simple parser to bind.
+
+## Message Diagnostics v3
+
+The v3 columns make two earlier broad measurements more conservative.
+
+Predicate mentions are split by role:
+
+```text
+non_actual_predicates_mentioned:
+  any mention of a predicate that is not an actual fact in this case
+
+non_actual_predicates_mentioned_as_vocab:
+  non-actual predicate appears as available/checkable vocabulary
+
+non_actual_predicates_mentioned_in_rules:
+  non-actual predicate appears inside rule or antecedent text
+
+non_actual_predicates_bound_as_facts:
+  non-actual predicate appears bound as an actual/current/true case fact
+
+predicate_intrusion_rate:
+  non_actual_predicates_bound_as_facts / non_actual_predicates_total
+```
+
+Only the last two fields should be read as dangerous. Vocabulary and rule
+mentions are often legitimate because Rule-Z messages must describe predicates
+that are possible in the schema but false in the case.
+
+Sufficiency is split into three layers:
+
+```text
+raw_sufficiency:
+  broad surface information exists; useful for parser health, not decisive
+
+derivation_sufficiency:
+  message carries active conclusions, fired rules plus priority/suppression, or
+  complete actual facts plus rules and priority
+
+answer_specific_sufficiency:
+  message appears to carry enough category-specific support for the expected
+  yes/no/conflict answer
+```
+
+The legacy `transmission_sufficiency` column remains as an alias for
+`derivation_sufficiency` for compatibility with earlier notes.
+
+## Contrast Packets
+
+Reports write `rule_z_contrast_packets.md` and
+`rule_z_contrast_packets.jsonl` when paired pure transmission losses exist.
+
+Packet selection:
+
+```text
+D_correct and O_correct
+T_free_schema_prompt wrong
+all available recovery conditions correct
+```
+
+The default recovery conditions are:
+
+```text
+T_self_contract_private_prose
+T_oracle_contract_private_prose
+T_free_case_hint_no_sections
+T_factlocked
+T_oracle_text
+```
+
+Each packet includes public facts/rules/priority, baseline answers, the failed
+free-schema message, recovery messages, private contracts when present, and a
+blank human annotation scaffold. These packets are the preferred artifact for
+manual failure analysis before adding more automated labels.
 
 ## Failure Taxonomy
 
@@ -242,6 +323,22 @@ T vs T_factlocked:
 T_free_schema_prompt vs T_free_case_hint:
   Did binding the communication target to this case prevent schema drift?
 
+T_free_schema_prompt vs T_free_schema_prompt_self_repair_no_sections:
+  Can a backward self-critique repair schema/procedure drift without labelled
+  sections?
+
+T_free_schema_prompt vs self_contract_private_prose:
+  Can the sender generate its own private binding contract before prose
+  encoding?
+
+self_contract_private_prose vs oracle_contract_private_prose:
+  Is the bottleneck in generating the binding contract, or in prose encoding
+  after a contract is available?
+
+oracle_contract_private_prose vs factlocked:
+  Does ordinary prose remain weaker than a typed ledger even when the sender
+  receives an oracle-provided private contract?
+
 T_free_case_hint vs T_free_case_hint_no_sections:
   Do labelled sections stabilize typed distinctions beyond case binding?
 
@@ -253,6 +350,117 @@ T_factlocked vs T_oracle_text:
 
 strict_conflict vs default:
   Is the model missing the conflict semantics, or merely underusing the label?
+```
+
+## Iterative Repair Pass
+
+After the Free Prompt Binding Ladder and Diagnostics v2 are stable, test
+whether the sender can repair its own schema/procedure drift.
+
+Recommended first pass:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.task \
+  --cases 30 \
+  --seed 29 \
+  --transmission-modes free_schema_prompt,free_schema_prompt_self_repair_no_sections,free_case_hint_no_sections,factlocked,oracle_text \
+  --prompt-style strict_conflict \
+  --db results/rule_z_iterative_repair_anthropic.sqlite \
+  --report-dir results/rule_z_iterative_repair_anthropic_reports \
+  --provider-config expression_tomography/config/providers.anthropic.json
+```
+
+Interpretation:
+
+```text
+free_schema_prompt -> self_repair_no_sections improves:
+  backward critique can repair case-binding loss without typed sections
+
+self_repair_no_sections approaches free_case_hint_no_sections:
+  repair can recover the effect of explicit case-binding instructions
+
+self_repair_no_sections remains below factlocked:
+  typed layout still carries distinction-preservation work that prose repair
+  does not recover
+```
+
+## Contract Binding Ladder
+
+The contract ladder separates whether binding unlocks ordinary prose encoding
+or substitutes for it. Contract modes are private by default: the sender sees
+the contract while composing, but the receiver only sees the final ordinary
+prose message.
+
+Recommended pass:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.task \
+  --cases 30 \
+  --seed 29 \
+  --transmission-modes free_schema_prompt,self_contract_private_prose,oracle_contract_private_prose,free_case_hint_no_sections,factlocked,oracle_text \
+  --prompt-style strict_conflict \
+  --db results/rule_z_contract_binding_anthropic.sqlite \
+  --report-dir results/rule_z_contract_binding_anthropic_reports \
+  --provider-config expression_tomography/config/providers.anthropic.json
+```
+
+Interpretation:
+
+```text
+self_contract_private_prose succeeds:
+  the model can generate its own binding contract and use it to stabilize prose
+
+self_contract_private_prose fails, oracle_contract_private_prose succeeds:
+  prose encoding is available, but self-binding is weak
+
+oracle_contract_private_prose fails, factlocked succeeds:
+  a private contract is not enough; typed ledger scaffolding is carrying the
+  distinction-preservation work
+
+contract modes succeed, free_schema_prompt fails:
+  the free-schema loss is primarily binding failure rather than ordinary prose
+  encoding failure
+```
+
+## Contract Perturbation Pass
+
+After a clean contract-binding run, test whether the private contract is
+causally steering prose generation or merely co-occurring with a stronger
+sender prompt.
+
+Recommended pass:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.task \
+  --cases 30 \
+  --seed 29 \
+  --transmission-modes free_schema_prompt,self_contract_private_prose,oracle_contract_private_prose,generic_contract_private_prose,wrong_contract_private_prose,scrambled_contract_private_prose,contract_only_private_prose,free_case_hint_no_sections,factlocked,oracle_text \
+  --prompt-style strict_conflict \
+  --db results/rule_z_contract_perturbation_anthropic.sqlite \
+  --report-dir results/rule_z_contract_perturbation_anthropic_reports \
+  --provider-config expression_tomography/config/providers.anthropic.json
+```
+
+Interpretation:
+
+```text
+generic_contract_private_prose succeeds:
+  generic binding may be enough; case-specific contract content is not required
+
+wrong_contract_private_prose drops:
+  the contract is causally steering the prose trajectory
+
+scrambled_contract_private_prose drops:
+  role assignments inside the contract matter, not only the presence of a
+  contract-like preface
+
+contract_only_private_prose succeeds:
+  the self-generated contract is a sufficient intermediate representation for
+  later prose, even without re-reading the original Rule-Z JSON
+
+contract_only_private_prose fails while self_contract_private_prose succeeds:
+  the contract works as a coordinate system, but the later prose still needs to
+  re-reference the original case structure
 ```
 
 ## Ear Red Team

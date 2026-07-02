@@ -25,6 +25,12 @@ rule_z_ear_dependence.csv
 rule_z_case_level.csv
   Case-level answers, correctness flags, and failure-family scaffolding.
 
+rule_z_contrast_packets.md
+rule_z_contrast_packets.jsonl
+  Paired pure-transmission-loss packets containing failed free-schema messages,
+  recovered binding messages, private contracts when present, and blank human
+  annotation fields.
+
 rule_z_report.md
   Generated report from the run.
 ```
@@ -69,6 +75,12 @@ rule_z_sender_gpt55_seed29_30
 rule_z_sender_anthropic_seed29_30
   Anthropic Sonnet 4.6 30-case sender transmission run:
   free, factlocked, factlocked_plus_priority, oracle_text.
+
+rule_z_contract_binding_anthropic_seed29_30
+  Anthropic Sonnet 4.6 30-case contract binding run:
+  free_schema_prompt, self_contract_private_prose,
+  oracle_contract_private_prose, free_case_hint_no_sections,
+  factlocked, oracle_text.
 
 metaphor_transfer_openai_live
   First OpenAI live metaphor-transfer smoke run.
