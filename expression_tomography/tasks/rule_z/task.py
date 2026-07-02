@@ -46,6 +46,12 @@ TRANSMISSION_MODE_TO_CONDITION = {
     "oracle_no_final_no_active": "T_oracle_no_final_no_active",
     "oracle_corrupt_final": "T_oracle_corrupt_final",
 }
+ORACLE_MESSAGE_MODES = {
+    "oracle_text",
+    "oracle_no_final",
+    "oracle_no_final_no_active",
+    "oracle_corrupt_final",
+}
 
 
 def _score(parsed: dict | None, expected: str) -> dict:
@@ -148,7 +154,7 @@ def run_rule_z_case(
     for mode in transmission_modes:
         condition = TRANSMISSION_MODE_TO_CONDITION[mode]
         message_metadata = {}
-        if mode.startswith("oracle_"):
+        if mode in ORACLE_MESSAGE_MODES:
             message_prompt = ""
             message, message_metadata = _make_oracle_message(public, mode)
         elif mode == "free_schema_prompt_self_repair_no_sections":

@@ -150,6 +150,20 @@ class RuleZSmokeTests(unittest.TestCase):
                     contract_rows[0]["prompt"],
                     "receiver prompt should not expose the private contract",
                 )
+                oracle_contract_rows = [
+                    row
+                    for row in store.fetch_trials(task_type="rule_z")
+                    if row["condition"] == "T_oracle_contract_private_prose"
+                ]
+                self.assertEqual(len(oracle_contract_rows), 6)
+                self.assertEqual(oracle_contract_rows[0]["metadata"]["contract_source"], "oracle")
+                self.assertEqual(oracle_contract_rows[0]["metadata"]["contract_visibility"], "private")
+                self.assertIn("transmission_contract", oracle_contract_rows[0]["metadata"])
+                self.assertNotIn(
+                    "PRIVATE_CONTRACT",
+                    oracle_contract_rows[0]["prompt"],
+                    "receiver prompt should not expose the private oracle contract",
+                )
 
                 write_rule_z_report(store, tmp / "reports")
                 self.assertTrue((tmp / "reports" / "rule_z_sender_contrasts.csv").exists())
