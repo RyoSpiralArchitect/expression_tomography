@@ -18,7 +18,11 @@ from expression_tomography.core.store import ExperimentStore
 from expression_tomography.tasks.rule_z.generator import make_rule_z_cases, public_payload_from_facts
 from expression_tomography.tasks.rule_z.oracle import answer_rule_z
 from expression_tomography.tasks.rule_z.prompts import (
+    make_contract_bound_message_prompt,
     make_message_prompt,
+    make_message_contract_prompt,
+    make_message_repair_prompt,
+    make_oracle_contract,
     make_oracle_text_message,
     make_structured_prompt,
     make_transmission_receiver_prompt,
@@ -72,6 +76,9 @@ class RuleZSmokeTests(unittest.TestCase):
                     transmission_modes=(
                         "free",
                         "free_schema_prompt",
+                        "free_schema_prompt_self_repair_no_sections",
+                        "self_contract_private_prose",
+                        "oracle_contract_private_prose",
                         "free_case_hint",
                         "free_case_hint_no_sections",
                         "factlocked",
@@ -84,9 +91,12 @@ class RuleZSmokeTests(unittest.TestCase):
                     prompt_style="strict_conflict",
                 )
                 summary = summarize_rule_z(store)
-                self.assertEqual(summary["n_trials"], 78)
+                self.assertEqual(summary["n_trials"], 96)
                 self.assertEqual(summary["accuracy_by_condition"]["T"], 1.0)
                 self.assertEqual(summary["accuracy_by_condition"]["T_free_schema_prompt"], 1.0)
+                self.assertEqual(summary["accuracy_by_condition"]["T_free_schema_prompt_self_repair_no_sections"], 1.0)
+                self.assertEqual(summary["accuracy_by_condition"]["T_self_contract_private_prose"], 1.0)
+                self.assertEqual(summary["accuracy_by_condition"]["T_oracle_contract_private_prose"], 1.0)
                 self.assertEqual(summary["accuracy_by_condition"]["T_free_case_hint"], 1.0)
                 self.assertEqual(summary["accuracy_by_condition"]["T_free_case_hint_no_sections"], 1.0)
                 self.assertEqual(summary["accuracy_by_condition"]["T_factlocked"], 1.0)
@@ -103,6 +113,9 @@ class RuleZSmokeTests(unittest.TestCase):
                         "T_free_case_hint",
                         "T_free_case_hint_no_sections",
                         "T_free_schema_prompt",
+                        "T_free_schema_prompt_self_repair_no_sections",
+                        "T_self_contract_private_prose",
+                        "T_oracle_contract_private_prose",
                         "T_factlocked",
                         "T_factlocked_plus_priority",
                         "T_oracle_corrupt_final",
@@ -114,6 +127,43 @@ class RuleZSmokeTests(unittest.TestCase):
                 corrupt = summary["transmission_decomposition"]["T_oracle_corrupt_final"]
                 self.assertEqual(corrupt["corrupted_label_count"], 6)
                 self.assertEqual(corrupt["derivation_dependence"], 1.0)
+                repair_rows = [
+                    row
+                    for row in store.fetch_trials(task_type="rule_z")
+                    if row["condition"] == "T_free_schema_prompt_self_repair_no_sections"
+                ]
+                self.assertEqual(len(repair_rows), 6)
+                self.assertEqual(repair_rows[0]["metadata"]["repair_mode"], "self")
+                self.assertEqual(repair_rows[0]["metadata"]["repair_source_mode"], "free_schema_prompt")
+                self.assertIn("initial_transmission_message", repair_rows[0]["metadata"])
+                contract_rows = [
+                    row
+                    for row in store.fetch_trials(task_type="rule_z")
+                    if row["condition"] == "T_self_contract_private_prose"
+                ]
+                self.assertEqual(len(contract_rows), 6)
+                self.assertEqual(contract_rows[0]["metadata"]["contract_source"], "self")
+                self.assertEqual(contract_rows[0]["metadata"]["contract_visibility"], "private")
+                self.assertIn("transmission_contract", contract_rows[0]["metadata"])
+                self.assertNotIn(
+                    "PRIVATE_CONTRACT",
+                    contract_rows[0]["prompt"],
+                    "receiver prompt should not expose the private contract",
+                )
+                oracle_contract_rows = [
+                    row
+                    for row in store.fetch_trials(task_type="rule_z")
+                    if row["condition"] == "T_oracle_contract_private_prose"
+                ]
+                self.assertEqual(len(oracle_contract_rows), 6)
+                self.assertEqual(oracle_contract_rows[0]["metadata"]["contract_source"], "oracle")
+                self.assertEqual(oracle_contract_rows[0]["metadata"]["contract_visibility"], "private")
+                self.assertIn("transmission_contract", oracle_contract_rows[0]["metadata"])
+                self.assertNotIn(
+                    "PRIVATE_CONTRACT",
+                    oracle_contract_rows[0]["prompt"],
+                    "receiver prompt should not expose the private oracle contract",
+                )
 
                 write_rule_z_report(store, tmp / "reports")
                 self.assertTrue((tmp / "reports" / "rule_z_sender_contrasts.csv").exists())
@@ -133,6 +183,55 @@ class RuleZSmokeTests(unittest.TestCase):
         self.assertIn("ordinary prose", no_sections)
         self.assertIn("Do not use labelled sections", no_sections)
         self.assertIn("exact predicate names", no_sections)
+
+    def test_free_schema_repair_prompt_revises_without_sections(self) -> None:
+        case = make_rule_z_cases(1, seed=5)[0]
+        prompt = make_message_repair_prompt(
+            case.case_id,
+            case.payload["public"],
+            previous_message="A general rule schema goes here.",
+            mode="free_schema_prompt_self_repair_no_sections",
+        )
+
+        self.assertIn("TASK: rule_z_repair_message", prompt)
+        self.assertIn("PREVIOUS_MESSAGE:", prompt)
+        self.assertIn("A general rule schema goes here.", prompt)
+        self.assertIn("actual true facts for this specific case", prompt)
+        self.assertIn("Use ordinary prose", prompt)
+        self.assertIn("not labelled sections", prompt)
+        self.assertIn("Do not use the final answer label", prompt)
+
+    def test_contract_prompts_keep_contract_private_from_receiver(self) -> None:
+        case = make_rule_z_cases(1, seed=5)[0]
+        public = case.payload["public"]
+        contract_prompt = make_message_contract_prompt(
+            case.case_id,
+            public,
+            mode="self_contract_private_prose",
+        )
+        oracle_contract = make_oracle_contract()
+        message_prompt = make_contract_bound_message_prompt(
+            case.case_id,
+            public,
+            oracle_contract,
+            mode="oracle_contract_private_prose",
+        )
+        receiver_prompt = make_transmission_receiver_prompt(
+            case.case_id,
+            public,
+            "Ordinary prose for the future receiver.",
+            condition="T_oracle_contract_private_prose",
+        )
+
+        self.assertIn("TASK: rule_z_write_contract", contract_prompt)
+        self.assertIn("what distinctions", contract_prompt)
+        self.assertIn("actual facts vs available predicates", contract_prompt)
+        self.assertIn("TASK: rule_z_contract_bound_message", message_prompt)
+        self.assertIn("PRIVATE_CONTRACT:", message_prompt)
+        self.assertIn("future receiver will not see the private contract", message_prompt)
+        self.assertIn("ordinary prose", message_prompt)
+        self.assertNotIn("PRIVATE_CONTRACT", receiver_prompt)
+        self.assertNotIn("Private Rule-Z communication contract", receiver_prompt)
 
     def test_factlocked_plus_priority_sender_prompt_requires_fired_edges(self) -> None:
         case = make_rule_z_cases(1, seed=5)[0]

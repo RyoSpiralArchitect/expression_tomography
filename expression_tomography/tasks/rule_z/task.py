@@ -17,8 +17,12 @@ from expression_tomography.core.store import ExperimentStore
 from .generator import make_rule_z_cases
 from .oracle import answer_rule_z
 from .prompts import (
+    make_contract_bound_message_prompt,
     make_baseline_prompt,
     make_message_prompt,
+    make_message_contract_prompt,
+    make_message_repair_prompt,
+    make_oracle_contract,
     make_oracle_text_message,
     make_structured_prompt,
     make_transmission_receiver_prompt,
@@ -29,6 +33,9 @@ CONDITIONS = ("B", "O", "D", "T")
 TRANSMISSION_MODE_TO_CONDITION = {
     "free": "T",
     "free_schema_prompt": "T_free_schema_prompt",
+    "free_schema_prompt_self_repair_no_sections": "T_free_schema_prompt_self_repair_no_sections",
+    "self_contract_private_prose": "T_self_contract_private_prose",
+    "oracle_contract_private_prose": "T_oracle_contract_private_prose",
     "free_case_hint": "T_free_case_hint",
     "free_case_hint_no_sections": "T_free_case_hint_no_sections",
     "factlocked": "T_factlocked",
@@ -38,6 +45,12 @@ TRANSMISSION_MODE_TO_CONDITION = {
     "oracle_no_final": "T_oracle_no_final",
     "oracle_no_final_no_active": "T_oracle_no_final_no_active",
     "oracle_corrupt_final": "T_oracle_corrupt_final",
+}
+ORACLE_MESSAGE_MODES = {
+    "oracle_text",
+    "oracle_no_final",
+    "oracle_no_final_no_active",
+    "oracle_corrupt_final",
 }
 
 
@@ -141,9 +154,42 @@ def run_rule_z_case(
     for mode in transmission_modes:
         condition = TRANSMISSION_MODE_TO_CONDITION[mode]
         message_metadata = {}
-        if mode.startswith("oracle_"):
+        if mode in ORACLE_MESSAGE_MODES:
             message_prompt = ""
             message, message_metadata = _make_oracle_message(public, mode)
+        elif mode == "free_schema_prompt_self_repair_no_sections":
+            initial_message_prompt = make_message_prompt(case.case_id, public, mode="free_schema_prompt")
+            initial_message = provider.complete(initial_message_prompt)
+            message_prompt = make_message_repair_prompt(case.case_id, public, initial_message, mode=mode)
+            message = provider.complete(message_prompt)
+            message_metadata = {
+                "repair_mode": "self",
+                "repair_source_mode": "free_schema_prompt",
+                "initial_message_prompt": initial_message_prompt,
+                "initial_transmission_message": initial_message,
+            }
+        elif mode == "self_contract_private_prose":
+            contract_prompt = make_message_contract_prompt(case.case_id, public, mode=mode)
+            contract = provider.complete(contract_prompt)
+            message_prompt = make_contract_bound_message_prompt(case.case_id, public, contract, mode=mode)
+            message = provider.complete(message_prompt)
+            message_metadata = {
+                "contract_source": "self",
+                "contract_visibility": "private",
+                "contract_prompt": contract_prompt,
+                "transmission_contract": contract,
+            }
+        elif mode == "oracle_contract_private_prose":
+            contract_prompt = ""
+            contract = make_oracle_contract()
+            message_prompt = make_contract_bound_message_prompt(case.case_id, public, contract, mode=mode)
+            message = provider.complete(message_prompt)
+            message_metadata = {
+                "contract_source": "oracle",
+                "contract_visibility": "private",
+                "contract_prompt": contract_prompt,
+                "transmission_contract": contract,
+            }
         else:
             message_prompt = make_message_prompt(case.case_id, public, mode=mode)
             message = provider.complete(message_prompt)
@@ -217,8 +263,10 @@ def main() -> None:
         default="free",
         help=(
             "Comma-separated T modes: free, free_schema_prompt, free_case_hint, "
-            "free_case_hint_no_sections, factlocked, factlocked_plus_priority, "
-            "oracle_text, oracle_no_final, oracle_no_final_no_active, oracle_corrupt_final."
+            "free_case_hint_no_sections, free_schema_prompt_self_repair_no_sections, "
+            "self_contract_private_prose, oracle_contract_private_prose, factlocked, "
+            "factlocked_plus_priority, oracle_text, oracle_no_final, "
+            "oracle_no_final_no_active, oracle_corrupt_final."
         ),
     )
     parser.add_argument(

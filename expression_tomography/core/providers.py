@@ -206,6 +206,12 @@ class MockProvider:
             return self._detect_metaphor_debt(prompt)
         if "TASK: rule_z_write_message" in prompt:
             return self._write_rule_z_message(prompt)
+        if "TASK: rule_z_repair_message" in prompt:
+            return self._write_rule_z_message(prompt)
+        if "TASK: rule_z_write_contract" in prompt:
+            return self._write_rule_z_contract(prompt)
+        if "TASK: rule_z_contract_bound_message" in prompt:
+            return self._write_rule_z_message(prompt)
         if "TASK: rule_z_answer" in prompt:
             return self._answer_rule_z(prompt)
         return json.dumps({"answer": "yes", "confidence": 0.5}, ensure_ascii=False)
@@ -224,6 +230,16 @@ class MockProvider:
                 f"Facts: {facts}.",
                 "Rules: " + "; ".join(rules) + ".",
                 "Priority: " + ("; ".join(priorities) if priorities else "none") + ".",
+            ]
+        )
+
+    def _write_rule_z_contract(self, prompt: str) -> str:
+        return "\n".join(
+            [
+                "Preserve actual facts as case facts, not just available predicates.",
+                "Preserve which rules fire and which rules are merely possible.",
+                "Preserve priority and suppression before describing active conclusions.",
+                "Preserve unresolved conflict if eligible and not_eligible both remain active.",
             ]
         )
 
