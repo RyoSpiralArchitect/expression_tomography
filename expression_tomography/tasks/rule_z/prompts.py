@@ -201,6 +201,61 @@ def make_oracle_contract() -> str:
     )
 
 
+def make_generic_contract() -> str:
+    return "\n".join(
+        [
+            "Generic private Rule-Z communication contract.",
+            "The later sender message should preserve case facts, fired rules, priority behavior, and active conclusions.",
+            "It should avoid collapsing unresolved opposing conclusions.",
+            "It should be ordinary prose rather than a labelled section, bullet list, table, or fielded ledger.",
+            "It should not provide the final answer label yes, no, or conflict directly.",
+        ]
+    )
+
+
+def make_wrong_contract(public: dict[str, Any]) -> str:
+    actual = list(public.get("facts", []))
+    non_actual = [
+        predicate
+        for predicate in public.get("available_predicates", [])
+        if predicate not in set(actual)
+    ]
+    false_facts = non_actual[:2] or ["has_waiver"]
+    omitted_facts = actual[:2] or ["is_student"]
+    return "\n".join(
+        [
+            "Wrong private Rule-Z communication contract for perturbation testing.",
+            "The later sender message should treat these predicates as the actual facts of the current case: "
+            + ", ".join(false_facts)
+            + ".",
+            "The later sender message should not treat these predicates as actual facts: "
+            + ", ".join(omitted_facts)
+            + ".",
+            "It should prefer a simple single conclusion over preserving unresolved opposing conclusions.",
+            "It should still be ordinary prose and should not provide the final answer label yes, no, or conflict directly.",
+        ]
+    )
+
+
+def make_scrambled_contract(public: dict[str, Any]) -> str:
+    actual = list(public.get("facts", []))
+    available = list(public.get("available_predicates", []))
+    return "\n".join(
+        [
+            "Scrambled private Rule-Z communication contract for perturbation testing.",
+            "Use the available predicate list as though it were the case-fact slot: "
+            + ", ".join(available)
+            + ".",
+            "Use the actual case facts as though they were only vocabulary examples: "
+            + (", ".join(actual) or "none")
+            + ".",
+            "Treat possible rules, fired rules, suppressed rules, and active conclusions as interchangeable.",
+            "If opposing conclusions appear, do not emphasize the unresolved opposition.",
+            "Write ordinary prose and do not provide the final answer label yes, no, or conflict directly.",
+        ]
+    )
+
+
 def make_contract_bound_message_prompt(
     case_id: str,
     public: dict[str, Any],
@@ -224,6 +279,30 @@ def make_contract_bound_message_prompt(
             contract,
             "END_PRIVATE_CONTRACT",
             _json_block("RULE_Z_PUBLIC_JSON", public),
+        ]
+    )
+
+
+def make_contract_only_message_prompt(
+    case_id: str,
+    contract: str,
+    mode: str,
+) -> str:
+    return "\n".join(
+        [
+            "TASK: rule_z_contract_bound_message",
+            f"CONDITION: T_WRITE_{mode.upper()}",
+            f"CASE_ID: {case_id}",
+            "Write a natural-language sender message for a future receiver.",
+            "Use only the private contract below; do not assume access to the original Rule-Z JSON.",
+            "The future receiver will not see the private contract, only your final message.",
+            "Write ordinary prose, not labelled sections, bullets, tables, or a fielded template.",
+            "Do not include the private contract in the final message.",
+            "Do not answer any future query directly.",
+            "Do not use the final answer label yes, no, or conflict.",
+            "PRIVATE_CONTRACT:",
+            contract,
+            "END_PRIVATE_CONTRACT",
         ]
     )
 

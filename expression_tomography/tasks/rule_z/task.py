@@ -18,14 +18,18 @@ from .generator import make_rule_z_cases
 from .oracle import answer_rule_z
 from .prompts import (
     make_contract_bound_message_prompt,
+    make_contract_only_message_prompt,
     make_baseline_prompt,
+    make_generic_contract,
     make_message_prompt,
     make_message_contract_prompt,
     make_message_repair_prompt,
     make_oracle_contract,
     make_oracle_text_message,
+    make_scrambled_contract,
     make_structured_prompt,
     make_transmission_receiver_prompt,
+    make_wrong_contract,
 )
 
 
@@ -36,6 +40,10 @@ TRANSMISSION_MODE_TO_CONDITION = {
     "free_schema_prompt_self_repair_no_sections": "T_free_schema_prompt_self_repair_no_sections",
     "self_contract_private_prose": "T_self_contract_private_prose",
     "oracle_contract_private_prose": "T_oracle_contract_private_prose",
+    "generic_contract_private_prose": "T_generic_contract_private_prose",
+    "wrong_contract_private_prose": "T_wrong_contract_private_prose",
+    "scrambled_contract_private_prose": "T_scrambled_contract_private_prose",
+    "contract_only_private_prose": "T_contract_only_private_prose",
     "free_case_hint": "T_free_case_hint",
     "free_case_hint_no_sections": "T_free_case_hint_no_sections",
     "factlocked": "T_factlocked",
@@ -190,6 +198,51 @@ def run_rule_z_case(
                 "contract_prompt": contract_prompt,
                 "transmission_contract": contract,
             }
+        elif mode == "generic_contract_private_prose":
+            contract_prompt = ""
+            contract = make_generic_contract()
+            message_prompt = make_contract_bound_message_prompt(case.case_id, public, contract, mode=mode)
+            message = provider.complete(message_prompt)
+            message_metadata = {
+                "contract_source": "generic",
+                "contract_visibility": "private",
+                "contract_prompt": contract_prompt,
+                "transmission_contract": contract,
+            }
+        elif mode == "wrong_contract_private_prose":
+            contract_prompt = ""
+            contract = make_wrong_contract(public)
+            message_prompt = make_contract_bound_message_prompt(case.case_id, public, contract, mode=mode)
+            message = provider.complete(message_prompt)
+            message_metadata = {
+                "contract_source": "wrong",
+                "contract_visibility": "private",
+                "contract_prompt": contract_prompt,
+                "transmission_contract": contract,
+            }
+        elif mode == "scrambled_contract_private_prose":
+            contract_prompt = ""
+            contract = make_scrambled_contract(public)
+            message_prompt = make_contract_bound_message_prompt(case.case_id, public, contract, mode=mode)
+            message = provider.complete(message_prompt)
+            message_metadata = {
+                "contract_source": "scrambled",
+                "contract_visibility": "private",
+                "contract_prompt": contract_prompt,
+                "transmission_contract": contract,
+            }
+        elif mode == "contract_only_private_prose":
+            contract_prompt = make_message_contract_prompt(case.case_id, public, mode=mode)
+            contract = provider.complete(contract_prompt)
+            message_prompt = make_contract_only_message_prompt(case.case_id, contract, mode=mode)
+            message = provider.complete(message_prompt)
+            message_metadata = {
+                "contract_source": "self",
+                "contract_visibility": "private",
+                "contract_prompt": contract_prompt,
+                "transmission_contract": contract,
+                "contract_only_message": True,
+            }
         else:
             message_prompt = make_message_prompt(case.case_id, public, mode=mode)
             message = provider.complete(message_prompt)
@@ -264,7 +317,9 @@ def main() -> None:
         help=(
             "Comma-separated T modes: free, free_schema_prompt, free_case_hint, "
             "free_case_hint_no_sections, free_schema_prompt_self_repair_no_sections, "
-            "self_contract_private_prose, oracle_contract_private_prose, factlocked, "
+            "self_contract_private_prose, oracle_contract_private_prose, "
+            "generic_contract_private_prose, wrong_contract_private_prose, "
+            "scrambled_contract_private_prose, contract_only_private_prose, factlocked, "
             "factlocked_plus_priority, oracle_text, oracle_no_final, "
             "oracle_no_final_no_active, oracle_corrupt_final."
         ),

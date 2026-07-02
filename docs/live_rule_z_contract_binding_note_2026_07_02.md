@@ -84,6 +84,13 @@ rule_0026: expected no, answered yes
 
 Every other T condition was 30/30 on this set.
 
+The paired messages for these five failures are exported as:
+
+```text
+assets/runs/rule_z_contract_binding_anthropic_seed29_30/rule_z_contrast_packets.md
+assets/runs/rule_z_contract_binding_anthropic_seed29_30/rule_z_contrast_packets.jsonl
+```
+
 ## Reading
 
 The result supports the contract-binding hypothesis for Claude Sonnet 4.6 on

@@ -25,6 +25,12 @@ rule_z_ear_dependence.csv
 rule_z_case_level.csv
   Case-level answers, correctness flags, and failure-family scaffolding.
 
+rule_z_contrast_packets.md
+rule_z_contrast_packets.jsonl
+  Paired pure-transmission-loss packets containing failed free-schema messages,
+  recovered binding messages, private contracts when present, and blank human
+  annotation fields.
+
 rule_z_report.md
   Generated report from the run.
 ```

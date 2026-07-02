@@ -33,14 +33,14 @@ eta: `NA`
 
 ## Message Diagnostics
 
-| Provider | T condition | n | BCFR | CBS | GDR | Sufficiency | Coverage | Predicate intrusion |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| anthropic_sonnet_4_6 | T_factlocked | 30 | 1.000 | 1.000 | 0.000 | 1.000 | 1.000 | 0.633 |
-| anthropic_sonnet_4_6 | T_free_case_hint_no_sections | 30 | 0.578 | 1.000 | 0.000 | 0.967 | 0.967 | 0.175 |
-| anthropic_sonnet_4_6 | T_free_schema_prompt | 30 | 0.567 | 0.867 | 0.367 | 0.967 | 0.789 | 0.333 |
-| anthropic_sonnet_4_6 | T_oracle_contract_private_prose | 30 | 0.658 | 1.000 | 0.033 | 0.933 | 0.989 | 0.633 |
-| anthropic_sonnet_4_6 | T_oracle_text | 30 | 1.000 | 1.000 | 0.000 | 1.000 | 1.000 | 0.000 |
-| anthropic_sonnet_4_6 | T_self_contract_private_prose | 30 | 0.933 | 1.000 | 0.000 | 0.967 | 0.978 | 0.300 |
+| Provider | T condition | n | BCFR | CBS | GDR | Raw suff | Deriv suff | Answer suff | Coverage | Vocab mentions | Rule mentions | Fact intrusion |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| anthropic_sonnet_4_6 | T_factlocked | 30 | 1.000 | 1.000 | 0.000 | 1.000 | 1.000 | 1.000 | 1.000 | 0.200 | 2.833 | 0.633 |
+| anthropic_sonnet_4_6 | T_free_case_hint_no_sections | 30 | 0.578 | 1.000 | 0.000 | 0.983 | 0.967 | 0.900 | 0.967 | 0.167 | 2.800 | 0.175 |
+| anthropic_sonnet_4_6 | T_free_schema_prompt | 30 | 0.567 | 0.867 | 0.367 | 0.983 | 0.967 | 0.667 | 0.789 | 1.000 | 2.600 | 0.333 |
+| anthropic_sonnet_4_6 | T_oracle_contract_private_prose | 30 | 0.658 | 1.000 | 0.033 | 1.000 | 0.933 | 0.867 | 0.989 | 0.133 | 3.000 | 0.633 |
+| anthropic_sonnet_4_6 | T_oracle_text | 30 | 1.000 | 1.000 | 0.000 | 1.000 | 1.000 | 1.000 | 1.000 | 3.033 | 3.033 | 0.000 |
+| anthropic_sonnet_4_6 | T_self_contract_private_prose | 30 | 0.933 | 1.000 | 0.000 | 1.000 | 0.967 | 0.967 | 0.978 | 0.300 | 3.033 | 0.300 |
 
 ## Transmission Decomposition
 

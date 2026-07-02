@@ -12,7 +12,7 @@ the same provider/store/report plumbing.
 python3 -m expression_tomography.tasks.rule_z.task \
   --cases 20 \
   --seed 7 \
-  --transmission-modes free_schema_prompt,self_contract_private_prose,oracle_contract_private_prose,free_case_hint_no_sections,factlocked,oracle_text \
+  --transmission-modes free_schema_prompt,self_contract_private_prose,oracle_contract_private_prose,generic_contract_private_prose,wrong_contract_private_prose,scrambled_contract_private_prose,contract_only_private_prose,free_case_hint_no_sections,factlocked,oracle_text \
   --prompt-style strict_conflict \
   --db results/expression_tomography/rule_z.sqlite \
   --report-dir results/expression_tomography/reports
@@ -24,11 +24,15 @@ to split natural-language transmission into schema-framed free prose,
 self-generated private-contract prose, oracle-provided private-contract prose,
 case-hinted prose without labelled sections, fact-locked, and oracle-authored
 message channels.
+Contract perturbation modes are also available:
+`generic_contract_private_prose`, `wrong_contract_private_prose`,
+`scrambled_contract_private_prose`, and `contract_only_private_prose`.
 Ear red-team variants are also available: `oracle_no_final`,
 `oracle_no_final_no_active`, and `oracle_corrupt_final`.
 Reports include aggregate accuracy, provider-level accuracy, transmission
 survival/loss/rescue, sender contrasts, message diagnostics, and a case-level
-CSV for failure review.
+CSV for failure review. When paired pure transmission losses exist, reports also
+include `rule_z_contrast_packets.md` and `rule_z_contrast_packets.jsonl`.
 
 ## Metaphor Transfer Smoke
 

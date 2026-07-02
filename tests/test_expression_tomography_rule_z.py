@@ -9,6 +9,7 @@ from pathlib import Path
 from expression_tomography.core.providers import MockProvider
 from expression_tomography.core.report import (
     rule_z_case_level_rows,
+    rule_z_contrast_packet_rows,
     rule_z_message_diagnostic_rows,
     summarize_rule_z,
     write_rule_z_report,
@@ -19,13 +20,17 @@ from expression_tomography.tasks.rule_z.generator import make_rule_z_cases, publ
 from expression_tomography.tasks.rule_z.oracle import answer_rule_z
 from expression_tomography.tasks.rule_z.prompts import (
     make_contract_bound_message_prompt,
+    make_contract_only_message_prompt,
+    make_generic_contract,
     make_message_prompt,
     make_message_contract_prompt,
     make_message_repair_prompt,
     make_oracle_contract,
     make_oracle_text_message,
+    make_scrambled_contract,
     make_structured_prompt,
     make_transmission_receiver_prompt,
+    make_wrong_contract,
 )
 from expression_tomography.tasks.rule_z.task import run_rule_z_case, run_rule_z_experiment
 
@@ -79,6 +84,10 @@ class RuleZSmokeTests(unittest.TestCase):
                         "free_schema_prompt_self_repair_no_sections",
                         "self_contract_private_prose",
                         "oracle_contract_private_prose",
+                        "generic_contract_private_prose",
+                        "wrong_contract_private_prose",
+                        "scrambled_contract_private_prose",
+                        "contract_only_private_prose",
                         "free_case_hint",
                         "free_case_hint_no_sections",
                         "factlocked",
@@ -91,12 +100,16 @@ class RuleZSmokeTests(unittest.TestCase):
                     prompt_style="strict_conflict",
                 )
                 summary = summarize_rule_z(store)
-                self.assertEqual(summary["n_trials"], 96)
+                self.assertEqual(summary["n_trials"], 120)
                 self.assertEqual(summary["accuracy_by_condition"]["T"], 1.0)
                 self.assertEqual(summary["accuracy_by_condition"]["T_free_schema_prompt"], 1.0)
                 self.assertEqual(summary["accuracy_by_condition"]["T_free_schema_prompt_self_repair_no_sections"], 1.0)
                 self.assertEqual(summary["accuracy_by_condition"]["T_self_contract_private_prose"], 1.0)
                 self.assertEqual(summary["accuracy_by_condition"]["T_oracle_contract_private_prose"], 1.0)
+                self.assertEqual(summary["accuracy_by_condition"]["T_generic_contract_private_prose"], 1.0)
+                self.assertEqual(summary["accuracy_by_condition"]["T_wrong_contract_private_prose"], 1.0)
+                self.assertEqual(summary["accuracy_by_condition"]["T_scrambled_contract_private_prose"], 1.0)
+                self.assertEqual(summary["accuracy_by_condition"]["T_contract_only_private_prose"], 1.0)
                 self.assertEqual(summary["accuracy_by_condition"]["T_free_case_hint"], 1.0)
                 self.assertEqual(summary["accuracy_by_condition"]["T_free_case_hint_no_sections"], 1.0)
                 self.assertEqual(summary["accuracy_by_condition"]["T_factlocked"], 1.0)
@@ -116,6 +129,10 @@ class RuleZSmokeTests(unittest.TestCase):
                         "T_free_schema_prompt_self_repair_no_sections",
                         "T_self_contract_private_prose",
                         "T_oracle_contract_private_prose",
+                        "T_generic_contract_private_prose",
+                        "T_wrong_contract_private_prose",
+                        "T_scrambled_contract_private_prose",
+                        "T_contract_only_private_prose",
                         "T_factlocked",
                         "T_factlocked_plus_priority",
                         "T_oracle_corrupt_final",
@@ -164,10 +181,28 @@ class RuleZSmokeTests(unittest.TestCase):
                     oracle_contract_rows[0]["prompt"],
                     "receiver prompt should not expose the private oracle contract",
                 )
+                contract_sources = {
+                    "T_generic_contract_private_prose": "generic",
+                    "T_wrong_contract_private_prose": "wrong",
+                    "T_scrambled_contract_private_prose": "scrambled",
+                    "T_contract_only_private_prose": "self",
+                }
+                rows_by_condition = {
+                    row["condition"]: row for row in store.fetch_trials(task_type="rule_z")
+                }
+                for condition, source in contract_sources.items():
+                    self.assertEqual(rows_by_condition[condition]["metadata"]["contract_source"], source)
+                    self.assertEqual(rows_by_condition[condition]["metadata"]["contract_visibility"], "private")
+                    self.assertIn("transmission_contract", rows_by_condition[condition]["metadata"])
+                    self.assertNotIn("PRIVATE_CONTRACT", rows_by_condition[condition]["prompt"])
+                contract_only_prompt = rows_by_condition["T_contract_only_private_prose"]["metadata"]["message_prompt"]
+                self.assertNotIn("RULE_Z_PUBLIC_JSON", contract_only_prompt)
 
                 write_rule_z_report(store, tmp / "reports")
                 self.assertTrue((tmp / "reports" / "rule_z_sender_contrasts.csv").exists())
                 self.assertTrue((tmp / "reports" / "rule_z_message_diagnostics.csv").exists())
+                self.assertTrue((tmp / "reports" / "rule_z_contrast_packets.md").exists())
+                self.assertTrue((tmp / "reports" / "rule_z_contrast_packets.jsonl").exists())
             finally:
                 store.close()
 
@@ -210,11 +245,19 @@ class RuleZSmokeTests(unittest.TestCase):
             mode="self_contract_private_prose",
         )
         oracle_contract = make_oracle_contract()
+        generic_contract = make_generic_contract()
+        wrong_contract = make_wrong_contract(public)
+        scrambled_contract = make_scrambled_contract(public)
         message_prompt = make_contract_bound_message_prompt(
             case.case_id,
             public,
             oracle_contract,
             mode="oracle_contract_private_prose",
+        )
+        contract_only_prompt = make_contract_only_message_prompt(
+            case.case_id,
+            oracle_contract,
+            mode="contract_only_private_prose",
         )
         receiver_prompt = make_transmission_receiver_prompt(
             case.case_id,
@@ -232,6 +275,11 @@ class RuleZSmokeTests(unittest.TestCase):
         self.assertIn("ordinary prose", message_prompt)
         self.assertNotIn("PRIVATE_CONTRACT", receiver_prompt)
         self.assertNotIn("Private Rule-Z communication contract", receiver_prompt)
+        self.assertIn("Generic private Rule-Z", generic_contract)
+        self.assertIn("Wrong private Rule-Z", wrong_contract)
+        self.assertIn("Scrambled private Rule-Z", scrambled_contract)
+        self.assertIn("PRIVATE_CONTRACT:", contract_only_prompt)
+        self.assertNotIn("RULE_Z_PUBLIC_JSON", contract_only_prompt)
 
     def test_factlocked_plus_priority_sender_prompt_requires_fired_edges(self) -> None:
         case = make_rule_z_cases(1, seed=5)[0]
@@ -294,8 +342,14 @@ class RuleZSmokeTests(unittest.TestCase):
         self.assertEqual(bound["bound_case_fact_recall"], 1.0)
         self.assertEqual(bound["case_binding_score"], 1.0)
         self.assertEqual(bound["genericization_drift"], 0.0)
+        self.assertEqual(bound["raw_sufficiency"], 1.0)
+        self.assertEqual(bound["derivation_sufficiency"], 1.0)
+        self.assertEqual(bound["answer_specific_sufficiency"], 0.0)
         self.assertEqual(bound["transmission_sufficiency"], 1.0)
         self.assertEqual(bound["transmission_sufficiency_path"], "actual_facts_rules_priority")
+        self.assertEqual(bound["non_actual_predicates_mentioned_as_vocab"], 0)
+        self.assertEqual(bound["non_actual_predicates_mentioned_in_rules"], 0)
+        self.assertEqual(bound["non_actual_predicates_bound_as_facts"], 0)
         self.assertTrue(bound["mentions_actual_facts"])
         self.assertTrue(bound["mentions_rules"])
         self.assertTrue(bound["mentions_priority_edges"])
@@ -304,8 +358,13 @@ class RuleZSmokeTests(unittest.TestCase):
         self.assertEqual(schema["available_predicates_bound_mentioned"], 6)
         self.assertEqual(schema["case_binding_score"], 0.0)
         self.assertEqual(schema["genericization_drift"], 1.0)
+        self.assertEqual(schema["raw_sufficiency"], 0.5)
+        self.assertEqual(schema["derivation_sufficiency"], 0.0)
+        self.assertEqual(schema["answer_specific_sufficiency"], 0.0)
         self.assertEqual(schema["transmission_sufficiency"], 0.0)
         self.assertEqual(schema["transmission_sufficiency_path"], "insufficient")
+        self.assertEqual(schema["non_actual_predicates_mentioned_as_vocab"], 4)
+        self.assertEqual(schema["non_actual_predicates_bound_as_facts"], 0)
         self.assertTrue(schema["mentions_available_predicates"])
 
     def test_rule_z_message_diagnostics_parse_fielded_sufficiency(self) -> None:
@@ -364,6 +423,9 @@ class RuleZSmokeTests(unittest.TestCase):
         self.assertTrue(row["mentions_final_category"])
         self.assertEqual(row["transmission_sufficiency"], 1.0)
         self.assertEqual(row["transmission_sufficiency_path"], "active_conclusions")
+        self.assertEqual(row["raw_sufficiency"], 1.0)
+        self.assertEqual(row["derivation_sufficiency"], 1.0)
+        self.assertEqual(row["answer_specific_sufficiency"], 1.0)
         self.assertEqual(row["diagnostic_parse_coverage"], 1.0)
         self.assertEqual(row["diagnostic_unparsed_fields"], "")
 
@@ -508,6 +570,84 @@ class RuleZSmokeTests(unittest.TestCase):
 
                 write_rule_z_report(store, Path(td) / "reports")
                 self.assertTrue((Path(td) / "reports" / "rule_z_ear_dependence.csv").exists())
+            finally:
+                store.close()
+
+    def test_rule_z_contrast_packets_capture_paired_transmission_loss(self) -> None:
+        case = make_rule_z_cases(1, seed=29)[0]
+        expected = case.payload["oracle_private"]["answer"]
+        wrong_answer = "no" if expected != "no" else "yes"
+
+        def trial(condition: str, answer: str, message: str = "", metadata: dict | None = None) -> TrialResult:
+            meta = {
+                "transmission_message": message,
+                "transmission_mode": condition.removeprefix("T_"),
+            }
+            if metadata:
+                meta.update(metadata)
+            return TrialResult(
+                case_id=case.case_id,
+                case_hash=case.case_hash,
+                task_type="rule_z",
+                condition=condition,
+                provider="synthetic",
+                prompt="receiver prompt",
+                raw_response="{}",
+                parsed_response={"answer": answer},
+                score={
+                    "answer": answer,
+                    "expected": expected,
+                    "correct": answer == expected,
+                    "parse_ok": True,
+                },
+                metadata=meta if condition.startswith("T") else {},
+            )
+
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "rule_z.sqlite")
+            try:
+                store.upsert_case(case)
+                store.insert_trial(trial("B", wrong_answer))
+                store.insert_trial(trial("D", expected))
+                store.insert_trial(trial("O", expected))
+                store.insert_trial(
+                    trial(
+                        "T_free_schema_prompt",
+                        wrong_answer,
+                        "General schema message that drifts away from the specific case.",
+                    )
+                )
+                for condition in (
+                    "T_self_contract_private_prose",
+                    "T_oracle_contract_private_prose",
+                    "T_free_case_hint_no_sections",
+                    "T_factlocked",
+                    "T_oracle_text",
+                ):
+                    store.insert_trial(
+                        trial(
+                            condition,
+                            expected,
+                            f"Recovered message for {condition}.",
+                            {
+                                "contract_source": "self" if "self" in condition else "",
+                                "transmission_contract": "Preserve the case-specific distinctions.",
+                            },
+                        )
+                    )
+
+                packets = rule_z_contrast_packet_rows(
+                    store.fetch_trials(task_type="rule_z"),
+                    store.fetch_cases(task_type="rule_z"),
+                )
+                self.assertEqual(len(packets), 1)
+                self.assertEqual(packets[0]["contrast"]["condition"], "T_free_schema_prompt")
+                self.assertEqual(packets[0]["contrast"]["answer"], wrong_answer)
+                self.assertIn("T_self_contract_private_prose", packets[0]["recoveries"])
+
+                write_rule_z_report(store, Path(td) / "reports")
+                self.assertTrue((Path(td) / "reports" / "rule_z_contrast_packets.md").exists())
+                self.assertTrue((Path(td) / "reports" / "rule_z_contrast_packets.jsonl").exists())
             finally:
                 store.close()
 
