@@ -8,6 +8,7 @@ from pathlib import Path
 
 from expression_tomography.core.providers import MockProvider
 from expression_tomography.core.report import (
+    rule_z_replicate_stability_rows,
     rule_z_case_level_rows,
     rule_z_contrast_packet_rows,
     rule_z_message_diagnostic_rows,
@@ -19,6 +20,7 @@ from expression_tomography.core.store import ExperimentStore
 from expression_tomography.tasks.rule_z.generator import make_rule_z_cases, public_payload_from_facts
 from expression_tomography.tasks.rule_z.oracle import answer_rule_z
 from expression_tomography.tasks.rule_z.prompts import (
+    make_ablated_contract,
     make_contract_bound_message_prompt,
     make_contract_only_message_prompt,
     make_generic_contract,
@@ -44,6 +46,174 @@ class RuleZSmokeTests(unittest.TestCase):
         self.assertIsNotNone(match)
         public = json.loads(match.group(1))
         self.assertNotIn("answer", public["query"])
+
+    def test_binding_stress_profile_emits_seeded_isomorphic_pairs(self) -> None:
+        cases = make_rule_z_cases(24, seed=41, profile="binding_stress")
+        self.assertEqual(len(cases), 24)
+
+        pairs: dict[str, dict[str, Case]] = {}
+        family_targets = set()
+        for case in cases:
+            stress = case.payload["stress"]
+            pairs.setdefault(stress["pair_id"], {})[stress["naming"]] = case
+            family_targets.add((stress["family"], stress["target"]))
+            self.assertEqual(case.payload["oracle_private"]["answer"], stress["target"])
+            self.assertEqual(stress["available_predicate_count"], 12)
+        self.assertEqual(len(pairs), 12)
+        self.assertEqual(len(family_targets), 12)
+
+        def normalize(case: Case) -> dict:
+            public = case.payload["public"]
+            inverse = {
+                renamed: logical
+                for logical, renamed in case.payload["stress"]["predicate_mapping"].items()
+            }
+            return {
+                "facts": [inverse[predicate] for predicate in public["facts"]],
+                "rules": [
+                    {
+                        "id": rule["id"],
+                        "if": [inverse[predicate] for predicate in rule["if"]],
+                        "then": rule["then"],
+                    }
+                    for rule in public["rules"]
+                ],
+                "priority": public["priority"],
+                "query": public["query"],
+            }
+
+        for naming_cases in pairs.values():
+            self.assertEqual(set(naming_cases), {"semantic", "opaque"})
+            self.assertEqual(normalize(naming_cases["semantic"]), normalize(naming_cases["opaque"]))
+
+        other_seed = make_rule_z_cases(24, seed=42, profile="binding_stress")
+        self.assertNotEqual(cases[0].payload["public"], other_seed[0].payload["public"])
+
+        with self.assertRaises(ValueError):
+            make_rule_z_cases(3, seed=41, profile="binding_stress")
+
+    def test_contract_ablation_omits_only_selected_requirement(self) -> None:
+        facts = make_ablated_contract("facts")
+        firing = make_ablated_contract("firing")
+        priority = make_ablated_contract("priority")
+        conflict = make_ablated_contract("conflict")
+
+        self.assertNotIn("actual facts as facts", facts)
+        self.assertIn("fired rules from possible rules", facts)
+        self.assertNotIn("fired rules from possible rules", firing)
+        self.assertIn("actual facts as facts", firing)
+        self.assertNotIn("priority edges in the rule system", priority)
+        self.assertIn("unresolved opposition", priority)
+        self.assertNotIn("unresolved opposition", conflict)
+        self.assertIn("priority edges in the rule system", conflict)
+
+        with self.assertRaises(ValueError):
+            make_ablated_contract("unknown")
+
+    def test_binding_stress_repetitions_flow_through_reports(self) -> None:
+        modes = (
+            "free_schema_prompt",
+            "self_contract_private_prose",
+            "oracle_contract_private_prose",
+            "generic_contract_private_prose",
+            "contract_ablate_facts_private_prose",
+            "contract_ablate_firing_private_prose",
+            "contract_ablate_priority_private_prose",
+            "contract_ablate_conflict_private_prose",
+            "contract_only_private_prose",
+            "factlocked",
+            "oracle_text",
+        )
+        with tempfile.TemporaryDirectory() as td:
+            tmp = Path(td)
+            store = ExperimentStore(tmp / "rule_z.sqlite")
+            try:
+                cases = make_rule_z_cases(4, seed=41, profile="binding_stress")
+                run_rule_z_experiment(
+                    cases,
+                    MockProvider(),
+                    store,
+                    transmission_modes=modes,
+                    prompt_style="strict_conflict",
+                    repetitions=2,
+                    replicate_start=3,
+                )
+                rows = store.fetch_trials(task_type="rule_z")
+                self.assertEqual(len(rows), 4 * 2 * (3 + len(modes)))
+                self.assertEqual({row["metadata"]["replicate_index"] for row in rows}, {3, 4})
+
+                case_rows = rule_z_case_level_rows(rows)
+                self.assertEqual(len(case_rows), 4 * 2 * len(modes))
+                summary = summarize_rule_z(store)
+                overall_stability = next(
+                    row
+                    for row in summary["replicate_stability"]
+                    if row["provider"] == "mock"
+                    and row["family"] == "ALL"
+                    and row["naming"] == "ALL"
+                    and row["condition"] == "T_free_schema_prompt"
+                )
+                self.assertEqual(overall_stability["n_cases"], 4)
+                self.assertEqual(overall_stability["mean_repetitions"], 2)
+                self.assertEqual(overall_stability["stable_case_rate"], 1.0)
+
+                pair_summary = next(
+                    row
+                    for row in summary["binding_stress_pairs"]
+                    if row["provider"] == "mock"
+                    and row["family"] == "ALL"
+                    and row["condition"] == "T_free_schema_prompt"
+                )
+                self.assertEqual(pair_summary["n_pair_replicates"], 4)
+                ablation_rows = [
+                    row
+                    for row in rows
+                    if row["condition"].startswith("T_contract_ablate_")
+                ]
+                self.assertEqual(len(ablation_rows), 4 * 2 * 4)
+                self.assertEqual(
+                    {row["metadata"]["contract_ablation"] for row in ablation_rows},
+                    {"facts", "firing", "priority", "conflict"},
+                )
+
+                write_rule_z_report(store, tmp / "reports")
+                for filename in (
+                    "rule_z_binding_stress_accuracy.csv",
+                    "rule_z_binding_stress_contrasts.csv",
+                    "rule_z_binding_stress_pairs.csv",
+                    "rule_z_replicate_stability.csv",
+                ):
+                    self.assertTrue((tmp / "reports" / filename).exists())
+            finally:
+                store.close()
+
+    def test_replicate_stability_reports_answer_entropy(self) -> None:
+        rows = []
+        for replicate_index, answer in enumerate(("yes", "no")):
+            rows.append(
+                {
+                    "provider": "synthetic",
+                    "case_hash": "case_hash",
+                    "condition": "T_free_schema_prompt",
+                    "score": {"answer": answer, "expected": "yes", "correct": answer == "yes"},
+                    "metadata": {
+                        "replicate_index": replicate_index,
+                        "case_profile": "binding_stress",
+                        "stress_family": "fact_binding",
+                        "stress_naming": "opaque",
+                    },
+                }
+            )
+        overall = next(
+            row
+            for row in rule_z_replicate_stability_rows(rows)
+            if row["provider"] == "synthetic"
+            and row["family"] == "ALL"
+            and row["naming"] == "ALL"
+        )
+        self.assertEqual(overall["mean_answer_entropy"], 1.0)
+        self.assertEqual(overall["stable_case_rate"], 0.0)
+        self.assertEqual(overall["mean_pairwise_agreement"], 0.0)
 
     def test_rule_z_mock_end_to_end_reports_eta(self) -> None:
         with tempfile.TemporaryDirectory() as td:

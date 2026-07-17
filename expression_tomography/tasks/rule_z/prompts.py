@@ -87,7 +87,7 @@ def make_message_prompt(case_id: str, public: dict[str, Any], mode: str = "free"
                 "Do not answer any future query directly.",
                 "Do not use the final answer label.",
                 "You may use labelled sections or compact bullets if helpful.",
-                "You may use exact predicate names such as is_student and has_debt.",
+                "You may use the exact predicate names shown in the Rule-Z JSON.",
             ]
         )
     elif mode == "free_case_hint_no_sections":
@@ -99,7 +99,7 @@ def make_message_prompt(case_id: str, public: dict[str, Any], mode: str = "free"
                 "Do not use labelled sections such as actual facts, fired rules, priority, or final category.",
                 "Do not answer any future query directly.",
                 "Do not use the final answer label.",
-                "You may use exact predicate names such as is_student and has_debt.",
+                "You may use the exact predicate names shown in the Rule-Z JSON.",
             ]
         )
     if mode in {"factlocked", "factlocked_plus_priority", "factlocked_plus_priority_edges"}:
@@ -155,7 +155,7 @@ def make_message_repair_prompt(
             "Do not include your critique.",
             "Do not answer any future query directly.",
             "Do not use the final answer label yes, no, or conflict.",
-            "You may use exact predicate names such as is_student and has_debt.",
+            "You may use the exact predicate names shown in the Rule-Z JSON.",
             "PREVIOUS_MESSAGE:",
             previous_message,
             "END_PREVIOUS_MESSAGE",
@@ -190,15 +190,50 @@ def make_oracle_contract() -> str:
     return "\n".join(
         [
             "Private Rule-Z communication contract.",
-            "The later sender message must preserve actual facts as facts of the current case, not as merely available predicates.",
-            "It must distinguish fired rules from possible rules in the rule system.",
-            "It must distinguish priority edges in the rule system from suppressions that actually occur in this case.",
-            "It must preserve which conclusions remain active after suppression.",
-            "If eligible and not_eligible both remain active, it must preserve that unresolved opposition rather than collapsing it.",
+            *_contract_requirement_lines(),
             "The final message should be ordinary prose rather than a labelled section, bullet list, table, or fielded ledger.",
             "The final message should not provide the final answer label yes, no, or conflict directly.",
         ]
     )
+
+
+_CONTRACT_COMPONENT_LINES = {
+    "facts": (
+        "The later sender message must preserve actual facts as facts of the current case, not as merely available predicates.",
+    ),
+    "firing": ("It must distinguish fired rules from possible rules in the rule system.",),
+    "priority": (
+        "It must distinguish priority edges in the rule system from suppressions that actually occur in this case.",
+    ),
+    "conflict": (
+        "It must preserve which conclusions remain active after suppression.",
+        "If eligible and not_eligible both remain active, it must preserve that unresolved opposition rather than collapsing it.",
+    ),
+}
+
+
+def _contract_requirement_lines(excluded: str | None = None) -> list[str]:
+    return [
+        line
+        for component, lines in _CONTRACT_COMPONENT_LINES.items()
+        if component != excluded
+        for line in lines
+    ]
+
+
+def make_ablated_contract(component: str) -> str:
+    if component not in _CONTRACT_COMPONENT_LINES:
+        allowed = ", ".join(sorted(_CONTRACT_COMPONENT_LINES))
+        raise ValueError(f"Unknown Rule-Z contract ablation: {component}. Allowed: {allowed}")
+    lines = ["Private Rule-Z communication contract."]
+    lines.extend(_contract_requirement_lines(excluded=component))
+    lines.extend(
+        [
+            "The final message should be ordinary prose rather than a labelled section, bullet list, table, or fielded ledger.",
+            "The final message should not provide the final answer label yes, no, or conflict directly.",
+        ]
+    )
+    return "\n".join(lines)
 
 
 def make_generic_contract() -> str:
@@ -274,7 +309,7 @@ def make_contract_bound_message_prompt(
             "Do not include the private contract in the final message.",
             "Do not answer any future query directly.",
             "Do not use the final answer label yes, no, or conflict.",
-            "You may use exact predicate names such as is_student and has_debt.",
+            "You may use the exact predicate names shown in the Rule-Z JSON.",
             "PRIVATE_CONTRACT:",
             contract,
             "END_PRIVATE_CONTRACT",

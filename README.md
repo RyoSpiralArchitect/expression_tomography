@@ -27,6 +27,10 @@ message channels.
 Contract perturbation modes are also available:
 `generic_contract_private_prose`, `wrong_contract_private_prose`,
 `scrambled_contract_private_prose`, and `contract_only_private_prose`.
+The next binding-stress pass adds `--case-profile binding_stress`,
+`--repetitions`, semantic/opaque isomorphic pairs, and four contract-clause
+ablation modes. See `docs/rule_z_binding_stress_surface.md` for the staged live
+pilot and metric definitions.
 Ear red-team variants are also available: `oracle_no_final`,
 `oracle_no_final_no_active`, and `oracle_corrupt_final`.
 Reports include aggregate accuracy, provider-level accuracy, transmission

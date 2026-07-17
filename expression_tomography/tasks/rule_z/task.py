@@ -14,9 +14,10 @@ from expression_tomography.core.report import write_rule_z_report
 from expression_tomography.core.schema import Case, TrialResult
 from expression_tomography.core.store import ExperimentStore
 
-from .generator import make_rule_z_cases
+from .generator import CASE_PROFILES, make_rule_z_cases
 from .oracle import answer_rule_z
 from .prompts import (
+    make_ablated_contract,
     make_contract_bound_message_prompt,
     make_contract_only_message_prompt,
     make_baseline_prompt,
@@ -41,6 +42,10 @@ TRANSMISSION_MODE_TO_CONDITION = {
     "self_contract_private_prose": "T_self_contract_private_prose",
     "oracle_contract_private_prose": "T_oracle_contract_private_prose",
     "generic_contract_private_prose": "T_generic_contract_private_prose",
+    "contract_ablate_facts_private_prose": "T_contract_ablate_facts_private_prose",
+    "contract_ablate_firing_private_prose": "T_contract_ablate_firing_private_prose",
+    "contract_ablate_priority_private_prose": "T_contract_ablate_priority_private_prose",
+    "contract_ablate_conflict_private_prose": "T_contract_ablate_conflict_private_prose",
     "wrong_contract_private_prose": "T_wrong_contract_private_prose",
     "scrambled_contract_private_prose": "T_scrambled_contract_private_prose",
     "contract_only_private_prose": "T_contract_only_private_prose",
@@ -53,6 +58,12 @@ TRANSMISSION_MODE_TO_CONDITION = {
     "oracle_no_final": "T_oracle_no_final",
     "oracle_no_final_no_active": "T_oracle_no_final_no_active",
     "oracle_corrupt_final": "T_oracle_corrupt_final",
+}
+ABLATION_MODE_TO_COMPONENT = {
+    "contract_ablate_facts_private_prose": "facts",
+    "contract_ablate_firing_private_prose": "firing",
+    "contract_ablate_priority_private_prose": "priority",
+    "contract_ablate_conflict_private_prose": "conflict",
 }
 ORACLE_MESSAGE_MODES = {
     "oracle_text",
@@ -130,10 +141,21 @@ def run_rule_z_case(
     provider: Provider,
     transmission_modes: tuple[str, ...] = ("free",),
     prompt_style: str = "default",
+    replicate_index: int = 0,
 ) -> list[TrialResult]:
     public = case.payload["public"]
     expected = case.payload["oracle_private"]["answer"]
     strict_conflict = _uses_strict_conflict(prompt_style)
+    stress = case.payload.get("stress", {})
+    trial_context = {
+        "prompt_style": prompt_style,
+        "replicate_index": replicate_index,
+        "case_profile": stress.get("profile", "base"),
+        "stress_pair_id": stress.get("pair_id", ""),
+        "stress_family": stress.get("family", ""),
+        "stress_naming": stress.get("naming", ""),
+        "stress_target": stress.get("target", ""),
+    }
     trials: list[TrialResult] = []
 
     for condition in ("B", "O", "D"):
@@ -155,7 +177,7 @@ def run_rule_z_case(
                 raw_response=raw,
                 parsed_response=parsed,
                 score=_score(parsed, expected),
-                metadata={"prompt_style": prompt_style},
+                metadata=dict(trial_context),
             )
         )
 
@@ -207,6 +229,19 @@ def run_rule_z_case(
                 "contract_source": "generic",
                 "contract_visibility": "private",
                 "contract_prompt": contract_prompt,
+                "transmission_contract": contract,
+            }
+        elif mode in ABLATION_MODE_TO_COMPONENT:
+            component = ABLATION_MODE_TO_COMPONENT[mode]
+            contract_prompt = ""
+            contract = make_ablated_contract(component)
+            message_prompt = make_contract_bound_message_prompt(case.case_id, public, contract, mode=mode)
+            message = provider.complete(message_prompt)
+            message_metadata = {
+                "contract_source": "oracle_ablation",
+                "contract_visibility": "private",
+                "contract_prompt": contract_prompt,
+                "contract_ablation": component,
                 "transmission_contract": contract,
             }
         elif mode == "wrong_contract_private_prose":
@@ -270,10 +305,10 @@ def run_rule_z_case(
                 score=_score(parsed, expected),
                 metadata={
                     "message_prompt": message_prompt,
-                    "prompt_style": prompt_style,
                     "structured_hint_included": structured_hint,
                     "transmission_message": message,
                     "transmission_mode": mode,
+                    **trial_context,
                     **message_metadata,
                 },
             )
@@ -287,22 +322,48 @@ def run_rule_z_experiment(
     store: ExperimentStore,
     transmission_modes: tuple[str, ...] = ("free",),
     prompt_style: str = "default",
+    repetitions: int = 1,
+    replicate_start: int = 0,
 ) -> None:
+    if repetitions < 1:
+        raise ValueError("repetitions must be at least 1")
+    if replicate_start < 0:
+        raise ValueError("replicate_start must be non-negative")
     for case in cases:
         store.upsert_case(case)
-        for trial in run_rule_z_case(
-            case,
-            provider,
-            transmission_modes=transmission_modes,
-            prompt_style=prompt_style,
-        ):
-            store.insert_trial(trial)
+        for replicate_index in range(replicate_start, replicate_start + repetitions):
+            for trial in run_rule_z_case(
+                case,
+                provider,
+                transmission_modes=transmission_modes,
+                prompt_style=prompt_style,
+                replicate_index=replicate_index,
+            ):
+                store.insert_trial(trial)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run Rule-Z smoke experiment.")
     parser.add_argument("--cases", type=int, default=20)
     parser.add_argument("--seed", type=int, default=7)
+    parser.add_argument(
+        "--case-profile",
+        choices=CASE_PROFILES,
+        default="base",
+        help="Case generator profile. binding_stress emits semantic/opaque isomorphic pairs.",
+    )
+    parser.add_argument(
+        "--repetitions",
+        type=int,
+        default=1,
+        help="Independent generations per case and condition.",
+    )
+    parser.add_argument(
+        "--replicate-start",
+        type=int,
+        default=0,
+        help="First replicate index, for appending selective follow-up repetitions to one database.",
+    )
     parser.add_argument("--db", default="results/expression_tomography/rule_z.sqlite")
     parser.add_argument("--report-dir", default="results/expression_tomography/reports")
     parser.add_argument(
@@ -318,7 +379,9 @@ def main() -> None:
             "Comma-separated T modes: free, free_schema_prompt, free_case_hint, "
             "free_case_hint_no_sections, free_schema_prompt_self_repair_no_sections, "
             "self_contract_private_prose, oracle_contract_private_prose, "
-            "generic_contract_private_prose, wrong_contract_private_prose, "
+            "generic_contract_private_prose, contract_ablate_facts_private_prose, "
+            "contract_ablate_firing_private_prose, contract_ablate_priority_private_prose, "
+            "contract_ablate_conflict_private_prose, wrong_contract_private_prose, "
             "scrambled_contract_private_prose, contract_only_private_prose, factlocked, "
             "factlocked_plus_priority, oracle_text, oracle_no_final, "
             "oracle_no_final_no_active, oracle_corrupt_final."
@@ -333,7 +396,7 @@ def main() -> None:
 
     store = ExperimentStore(args.db)
     try:
-        cases = make_rule_z_cases(args.cases, args.seed)
+        cases = make_rule_z_cases(args.cases, args.seed, profile=args.case_profile)
         providers = build_providers_from_config(args.provider_config) if args.provider_config else [MockProvider()]
         transmission_modes = _parse_transmission_modes(args.transmission_modes)
         for provider in providers:
@@ -343,9 +406,19 @@ def main() -> None:
                 store,
                 transmission_modes=transmission_modes,
                 prompt_style=args.prompt_style,
+                repetitions=args.repetitions,
+                replicate_start=args.replicate_start,
             )
         summary = write_rule_z_report(store, Path(args.report_dir))
-        print(summary)
+        print(
+            {
+                "task_type": summary["task_type"],
+                "n_trials": summary["n_trials"],
+                "accuracy_by_condition": summary["accuracy_by_condition"],
+                "eta": summary["eta"],
+                "report_dir": str(Path(args.report_dir)),
+            }
+        )
     finally:
         store.close()
 
