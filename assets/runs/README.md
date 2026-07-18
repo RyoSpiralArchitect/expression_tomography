@@ -82,6 +82,11 @@ rule_z_contract_binding_anthropic_seed29_30
   oracle_contract_private_prose, free_case_hint_no_sections,
   factlocked, oracle_text.
 
+rule_z_binding_stress_anthropic_seed41
+  Anthropic Sonnet 4.6 24-case binding stress surface with semantic/opaque
+  isomorphic pairs, one full screen, and one selective replicate of the
+  trajectory-sensitive binding and priority conditions.
+
 metaphor_transfer_openai_live
   First OpenAI live metaphor-transfer smoke run.
 

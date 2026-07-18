@@ -110,7 +110,9 @@ python3 -m expression_tomography.tasks.rule_z.task \
 ```
 
 Then append one repeat only for the trajectory-sensitive positive-binding
-conditions. Reuse the same seed, case count, profile, database, and provider.
+conditions. Include the priority ablation and its oracle/factlocked references
+when the screen shows a possible priority-specific failure. Reuse the same
+seed, case count, profile, database, and provider.
 
 ```bash
 python3 -m expression_tomography.tasks.rule_z.task \
@@ -119,7 +121,7 @@ python3 -m expression_tomography.tasks.rule_z.task \
   --case-profile binding_stress \
   --repetitions 1 \
   --replicate-start 1 \
-  --transmission-modes free_schema_prompt,generic_contract_private_prose,self_contract_private_prose,contract_only_private_prose \
+  --transmission-modes free_schema_prompt,generic_contract_private_prose,self_contract_private_prose,contract_only_private_prose,oracle_contract_private_prose,contract_ablate_priority_private_prose,factlocked,oracle_text \
   --prompt-style strict_conflict \
   --db results/rule_z_binding_stress_anthropic_seed41.sqlite \
   --report-dir results/rule_z_binding_stress_anthropic_seed41_reports \
