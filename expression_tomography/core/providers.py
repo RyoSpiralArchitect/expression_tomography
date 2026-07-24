@@ -321,7 +321,11 @@ class OpenAICompatibleProvider:
                 if content.strip():
                     return content
                 usage = response.get("usage", {})
+                if not isinstance(usage, dict):
+                    usage = {}
                 completion_details = usage.get("completion_tokens_details", {})
+                if not isinstance(completion_details, dict):
+                    completion_details = {}
                 raise ProviderError(
                     "OpenAI-compatible provider returned empty text "
                     f"(finish_reason={choice.get('finish_reason', 'unknown')}, "
@@ -375,6 +379,8 @@ class AnthropicProvider:
             return text
         if parts:
             usage = response.get("usage", {})
+            if not isinstance(usage, dict):
+                usage = {}
             raise ProviderError(
                 "Anthropic provider returned empty text "
                 f"(stop_reason={response.get('stop_reason', 'unknown')}, "

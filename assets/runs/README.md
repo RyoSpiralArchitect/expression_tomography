@@ -25,6 +25,10 @@ rule_z_ear_dependence.csv
 rule_z_case_level.csv
   Case-level answers, correctness flags, and failure-family scaffolding.
 
+rule_z_transmission_integrity.csv
+  Empty, nonempty, and historically unobserved sender-stage counts, with raw
+  and nonempty-only receiver accuracy.
+
 rule_z_contrast_packets.md
 rule_z_contrast_packets.jsonl
   Paired pure-transmission-loss packets containing failed free-schema messages,
@@ -86,6 +90,15 @@ rule_z_binding_stress_anthropic_seed41
   Anthropic Sonnet 4.6 24-case binding stress surface with semantic/opaque
   isomorphic pairs, one full screen, and one selective replicate of the
   trajectory-sensitive binding and priority conditions.
+
+rule_z_priority_compute_openai_gpt55_seed41_budget900_diagnostic
+  GPT-5.5 high-load priority/compute screen and selective replicate at the old
+  900-token completion budget. Retained as a stage-integrity diagnostic because
+  six sender messages were blank.
+
+rule_z_priority_binding_openai_gpt55_seed41_budget2000
+  Clean GPT-5.5 two-replicate high-load notation/binding audit at a 2000-token
+  completion budget with blank completions rejected.
 
 metaphor_transfer_openai_live
   First OpenAI live metaphor-transfer smoke run.

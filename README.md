@@ -39,7 +39,9 @@ Ear red-team variants are also available: `oracle_no_final`,
 `oracle_no_final_no_active`, and `oracle_corrupt_final`.
 Reports include aggregate accuracy, provider-level accuracy, transmission
 survival/loss/rescue, sender contrasts, message diagnostics, and a case-level
-CSV for failure review. When paired pure transmission losses exist, reports also
+CSV for failure review. `rule_z_transmission_integrity.csv` separates empty,
+nonempty, and historically unobserved sender messages before semantic metrics
+are interpreted. When paired pure transmission losses exist, reports also
 include `rule_z_contrast_packets.md` and `rule_z_contrast_packets.jsonl`.
 
 ## Metaphor Transfer Smoke
@@ -73,6 +75,10 @@ A stronger OpenAI config is available for model-equalized ear red-team runs:
 python3 -m expression_tomography.tasks.rule_z.task \
   --provider-config expression_tomography/config/providers.openai_gpt_5_5.json
 ```
+
+Live adapters reject blank provider completions. The OpenAI error reports safe
+finish/token diagnostics, and the Anthropic error reports safe stop/token
+diagnostics, so an empty generation cannot silently become a receiver trial.
 
 Provider types:
 

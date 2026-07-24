@@ -45,6 +45,11 @@ def _expected(row: dict[str, Any] | None) -> str:
     return str(row["score"].get("expected", ""))
 
 
+def _transmission_message(row: dict[str, Any]) -> str:
+    value = row.get("metadata", {}).get("transmission_message", "")
+    return value if isinstance(value, str) else ""
+
+
 def _replicate_index(row: dict[str, Any]) -> int:
     return int(row.get("metadata", {}).get("replicate_index", 0))
 
@@ -57,6 +62,11 @@ def _failure_family(t_row: dict[str, Any] | None) -> str:
         return ""
     if not score.get("parse_ok", True):
         return "parse_or_format_failure"
+    if t_row["condition"].startswith("T"):
+        metadata = t_row.get("metadata", {})
+        message = _transmission_message(t_row)
+        if "transmission_message" in metadata and not message.strip():
+            return "empty_transmission_message"
     expected = str(score.get("expected", ""))
     answer = str(score.get("answer", ""))
     corrupted_final_label = str(t_row["metadata"].get("corrupted_final_label", ""))
@@ -737,6 +747,49 @@ def rule_z_message_diagnostic_rows(
     return out
 
 
+def rule_z_transmission_integrity_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    grouped: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        if not row["condition"].startswith("T"):
+            continue
+        for provider in sorted({str(row["provider"]), "ALL"}):
+            grouped[(provider, row["condition"])].append(row)
+
+    out = []
+    for (provider, condition), items in sorted(grouped.items()):
+        observed = [
+            row
+            for row in items
+            if "transmission_message" in row.get("metadata", {})
+        ]
+        nonempty = [
+            row
+            for row in observed
+            if _transmission_message(row).strip()
+        ]
+        empty = [
+            row
+            for row in observed
+            if not _transmission_message(row).strip()
+        ]
+        out.append(
+            {
+                "provider": provider,
+                "T_condition": condition,
+                "n_trials": len(items),
+                "observed_message_count": len(observed),
+                "unknown_message_count": len(items) - len(observed),
+                "nonempty_message_count": len(nonempty),
+                "empty_message_count": len(empty),
+                "empty_message_rate": _ratio(len(empty), len(observed)),
+                "receiver_accuracy_all": _accuracy(items),
+                "receiver_accuracy_nonempty": _accuracy(nonempty),
+                "correct_with_empty_message_count": sum(_correct(row) is True for row in empty),
+            }
+        )
+    return out
+
+
 def rule_z_case_level_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     by_case: dict[tuple[str, str, int], dict[str, dict[str, Any]]] = defaultdict(dict)
     for row in rows:
@@ -1394,6 +1447,7 @@ def summarize_rule_z(store: ExperimentStore) -> dict[str, Any]:
         "binding_stress_contrasts": rule_z_binding_stress_contrast_rows(binding_stress_accuracy),
         "binding_stress_pairs": rule_z_binding_stress_pair_rows(rows),
         "replicate_stability": rule_z_replicate_stability_rows(rows),
+        "transmission_integrity": rule_z_transmission_integrity_rows(rows),
     }
 
 
@@ -1641,6 +1695,25 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
         writer.writeheader()
         writer.writerows(message_rows)
 
+    integrity_path = out / "rule_z_transmission_integrity.csv"
+    with integrity_path.open("w", encoding="utf-8", newline="") as f:
+        fieldnames = [
+            "provider",
+            "T_condition",
+            "n_trials",
+            "observed_message_count",
+            "unknown_message_count",
+            "nonempty_message_count",
+            "empty_message_count",
+            "empty_message_rate",
+            "receiver_accuracy_all",
+            "receiver_accuracy_nonempty",
+            "correct_with_empty_message_count",
+        ]
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(summary["transmission_integrity"])
+
     contrast_packets = rule_z_contrast_packet_rows(trial_rows, case_records)
     _write_rule_z_contrast_packets(out, contrast_packets)
 
@@ -1814,6 +1887,41 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
                 f"| {row['provider']} | {row['condition']} | {row['n_cases']} | "
                 f"{row['mean_repetitions']:.1f} | {row['mean_answer_entropy']:.3f} | "
                 f"{row['stable_case_rate']:.3f} | {row['mean_pairwise_agreement']:.3f} |"
+            )
+
+    integrity_rows = [
+        row for row in summary["transmission_integrity"] if row["provider"] != "ALL"
+    ]
+    if integrity_rows:
+        lines.extend(
+            [
+                "",
+                "## Transmission Stage Integrity",
+                "",
+                "| Provider | T condition | n | Unknown | Empty | Empty rate | Raw accuracy | Nonempty-only accuracy | Correct despite empty |",
+                "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+            ]
+        )
+        for row in integrity_rows:
+            values = [
+                row["empty_message_rate"],
+                row["receiver_accuracy_all"],
+                row["receiver_accuracy_nonempty"],
+            ]
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        row["provider"],
+                        row["T_condition"],
+                        str(row["n_trials"]),
+                        str(row["unknown_message_count"]),
+                        str(row["empty_message_count"]),
+                        *["NA" if value is None else f"{value:.3f}" for value in values],
+                        str(row["correct_with_empty_message_count"]),
+                    ]
+                )
+                + " |"
             )
 
     message_summary = _message_diagnostic_summary(message_rows)

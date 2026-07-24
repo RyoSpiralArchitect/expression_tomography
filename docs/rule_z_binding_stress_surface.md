@@ -90,7 +90,14 @@ rule_z_binding_stress_accuracy.csv
 rule_z_binding_stress_contrasts.csv
 rule_z_binding_stress_pairs.csv
 rule_z_replicate_stability.csv
+rule_z_transmission_integrity.csv
 ```
+
+Check transmission-stage integrity before interpreting accuracy. A stored
+blank message is an invalid sender stage even when the receiver happens to
+guess the expected answer. A legacy row without a stored message is reported
+as unknown rather than blank. Live provider adapters reject new blank
+completions.
 
 ## Priority Notation And Compute-Matched Follow-Up
 
@@ -190,6 +197,12 @@ python3 -m expression_tomography.tasks.rule_z.task \
 Screen one replicate before deciding whether to repeat. A repeat should target
 only cells that distinguish notation, extra computation, or equal-call binding;
 do not automatically repeat every ceiling control.
+
+The first GPT-5.5 screen at a 900-token completion budget is retained as a
+stage-integrity diagnostic because six T messages were blank. The clean
+two-replicate notation/binding audit uses the current 2000-token GPT-5.5 config
+and is documented in
+`docs/live_rule_z_priority_compute_openai_note_2026_07_24.md`.
 
 ## Staged Pilot
 

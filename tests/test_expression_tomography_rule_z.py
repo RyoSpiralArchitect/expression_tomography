@@ -13,6 +13,7 @@ from expression_tomography.core.report import (
     rule_z_contrast_packet_rows,
     rule_z_message_diagnostic_rows,
     summarize_rule_z,
+    rule_z_transmission_integrity_rows,
     write_rule_z_report,
 )
 from expression_tomography.core.schema import Case, TrialResult
@@ -486,10 +487,40 @@ class RuleZSmokeTests(unittest.TestCase):
                 write_rule_z_report(store, tmp / "reports")
                 self.assertTrue((tmp / "reports" / "rule_z_sender_contrasts.csv").exists())
                 self.assertTrue((tmp / "reports" / "rule_z_message_diagnostics.csv").exists())
+                self.assertTrue((tmp / "reports" / "rule_z_transmission_integrity.csv").exists())
                 self.assertTrue((tmp / "reports" / "rule_z_contrast_packets.md").exists())
                 self.assertTrue((tmp / "reports" / "rule_z_contrast_packets.jsonl").exists())
             finally:
                 store.close()
+
+    def test_transmission_integrity_separates_empty_messages_from_semantic_loss(self) -> None:
+        def row(message: str | None, correct: bool) -> dict:
+            return {
+                "provider": "synthetic",
+                "condition": "T_free_schema_prompt",
+                "metadata": {"transmission_message": message},
+                "score": {"correct": correct},
+            }
+
+        integrity = rule_z_transmission_integrity_rows(
+            [
+                row("", False),
+                row("  ", True),
+                row(None, False),
+                row("A complete case message.", True),
+                row("A nonempty but insufficient message.", False),
+            ]
+        )
+        provider_row = next(item for item in integrity if item["provider"] == "synthetic")
+
+        self.assertEqual(provider_row["n_trials"], 5)
+        self.assertEqual(provider_row["observed_message_count"], 5)
+        self.assertEqual(provider_row["unknown_message_count"], 0)
+        self.assertEqual(provider_row["empty_message_count"], 3)
+        self.assertEqual(provider_row["empty_message_rate"], 0.6)
+        self.assertEqual(provider_row["receiver_accuracy_all"], 0.4)
+        self.assertEqual(provider_row["receiver_accuracy_nonempty"], 0.5)
+        self.assertEqual(provider_row["correct_with_empty_message_count"], 1)
 
     def test_free_case_hint_sender_prompts_bind_case_without_final_answer(self) -> None:
         case = make_rule_z_cases(1, seed=5)[0]
