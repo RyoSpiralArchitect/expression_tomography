@@ -13,6 +13,7 @@ from expression_tomography.core.providers import (
     HFLocalProvider,
     MockProvider,
     OpenAICompatibleProvider,
+    ProviderError,
     ProviderSpec,
     build_provider,
     build_providers_from_config,
@@ -81,6 +82,35 @@ class ProviderTests(unittest.TestCase):
         self.assertNotIn("max_tokens", captured["payload"])
         self.assertEqual(captured["payload"]["max_completion_tokens"], 321)
 
+    def test_openai_compatible_rejects_empty_text_with_safe_diagnostics(self) -> None:
+        spec = ProviderSpec(
+            name="oa",
+            type="openai_compatible",
+            model="gpt-5.5",
+            base_url="https://example.test/v1",
+            api_key_env="ET_TEST_OPENAI_KEY",
+        )
+        response = {
+            "choices": [
+                {
+                    "finish_reason": "length",
+                    "message": {"content": ""},
+                }
+            ],
+            "usage": {
+                "completion_tokens": 900,
+                "completion_tokens_details": {"reasoning_tokens": 900},
+            },
+        }
+
+        with mock.patch.dict(os.environ, {"ET_TEST_OPENAI_KEY": "sk-test"}):
+            with mock.patch.object(providers, "_post_json", return_value=response):
+                with self.assertRaisesRegex(
+                    ProviderError,
+                    r"finish_reason=length, completion_tokens=900, reasoning_tokens=900",
+                ):
+                    OpenAICompatibleProvider(spec).complete("hello")
+
     def test_anthropic_payload_and_response_extraction(self) -> None:
         spec = ProviderSpec(
             name="claude",
@@ -107,6 +137,28 @@ class ProviderTests(unittest.TestCase):
         self.assertEqual(captured["payload"]["model"], "claude-test")
         self.assertEqual(captured["payload"]["messages"][0]["content"], "hello")
         self.assertEqual(captured["payload"]["max_tokens"], 55)
+
+    def test_anthropic_rejects_empty_text_with_safe_diagnostics(self) -> None:
+        spec = ProviderSpec(
+            name="claude",
+            type="anthropic",
+            model="claude-test",
+            base_url="https://anthropic.example/v1",
+            api_key_env="ET_TEST_ANTHROPIC_KEY",
+        )
+        response = {
+            "content": [{"type": "text", "text": "  "}],
+            "stop_reason": "max_tokens",
+            "usage": {"output_tokens": 55},
+        }
+
+        with mock.patch.dict(os.environ, {"ET_TEST_ANTHROPIC_KEY": "anthropic-test"}):
+            with mock.patch.object(providers, "_post_json", return_value=response):
+                with self.assertRaisesRegex(
+                    ProviderError,
+                    r"stop_reason=max_tokens, output_tokens=55",
+                ):
+                    AnthropicProvider(spec).complete("hello")
 
     def test_hf_local_provider_is_lazy(self) -> None:
         spec = ProviderSpec(name="local", type="hf_local", model="./model/local")

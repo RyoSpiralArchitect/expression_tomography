@@ -314,12 +314,22 @@ class OpenAICompatibleProvider:
         )
         choices = response.get("choices", [])
         if choices:
-            message = choices[0].get("message", {})
+            choice = choices[0]
+            message = choice.get("message", {})
             content = message.get("content")
             if isinstance(content, str):
-                return content
+                if content.strip():
+                    return content
+                usage = response.get("usage", {})
+                completion_details = usage.get("completion_tokens_details", {})
+                raise ProviderError(
+                    "OpenAI-compatible provider returned empty text "
+                    f"(finish_reason={choice.get('finish_reason', 'unknown')}, "
+                    f"completion_tokens={usage.get('completion_tokens', 'unknown')}, "
+                    f"reasoning_tokens={completion_details.get('reasoning_tokens', 'unknown')})"
+                )
         output_text = response.get("output_text")
-        if isinstance(output_text, str):
+        if isinstance(output_text, str) and output_text.strip():
             return output_text
         raise ProviderError(f"Could not extract OpenAI-compatible text from response: {response}")
 
@@ -360,8 +370,16 @@ class AnthropicProvider:
                 text = block.get("text")
                 if isinstance(text, str):
                     parts.append(text)
+        text = "".join(parts)
+        if text.strip():
+            return text
         if parts:
-            return "".join(parts)
+            usage = response.get("usage", {})
+            raise ProviderError(
+                "Anthropic provider returned empty text "
+                f"(stop_reason={response.get('stop_reason', 'unknown')}, "
+                f"output_tokens={usage.get('output_tokens', 'unknown')})"
+            )
         raise ProviderError(f"Could not extract Anthropic text from response: {response}")
 
 
