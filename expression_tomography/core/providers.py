@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol
 
-from expression_tomography.tasks.rule_z.oracle import answer_rule_z
+from expression_tomography.tasks.rule_z.oracle import answer_rule_z, priority_edges_from_public
 
 
 class ProviderError(RuntimeError):
@@ -212,6 +212,8 @@ class MockProvider:
             return self._write_rule_z_contract(prompt)
         if "TASK: rule_z_contract_bound_message" in prompt:
             return self._write_rule_z_message(prompt)
+        if "TASK: rule_z_private_derivation" in prompt:
+            return self._write_rule_z_message(prompt)
         if "TASK: rule_z_answer" in prompt:
             return self._answer_rule_z(prompt)
         return json.dumps({"answer": "yes", "confidence": 0.5}, ensure_ascii=False)
@@ -223,7 +225,7 @@ class MockProvider:
         for rule in public.get("rules", []):
             antecedents = " and ".join(rule.get("if", [])) or "always"
             rules.append(f"{rule.get('id')}: if {antecedents} then {rule.get('then')}")
-        priorities = [f"{a} outranks {b}" for a, b in public.get("priority", [])]
+        priorities = [f"{a} outranks {b}" for a, b in priority_edges_from_public(public)]
         return "\n".join(
             [
                 "I will describe the rule system without answering any future query.",

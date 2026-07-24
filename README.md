@@ -30,7 +30,11 @@ Contract perturbation modes are also available:
 The next binding-stress pass adds `--case-profile binding_stress`,
 `--repetitions`, semantic/opaque isomorphic pairs, and four contract-clause
 ablation modes. See `docs/rule_z_binding_stress_surface.md` for the staged live
-pilot and metric definitions.
+pilot and metric definitions. The priority/compute follow-up adds
+`--stress-families`, explicit-priority transmission twins, and
+`--direct-probe-modes priority_explicit_edges,two_pass_free,two_pass_generic_contract`
+to separate notation, extra-pass, equal-call binding, and structured-access
+effects.
 Ear red-team variants are also available: `oracle_no_final`,
 `oracle_no_final_no_active`, and `oracle_corrupt_final`.
 Reports include aggregate accuracy, provider-level accuracy, transmission

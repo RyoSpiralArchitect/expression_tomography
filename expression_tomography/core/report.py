@@ -1146,6 +1146,34 @@ def rule_z_binding_stress_contrast_rows(
                     oracle_contract,
                     values.get("T_contract_ablate_conflict_private_prose"),
                 ),
+                "direct_notation_gain": _metric_diff(
+                    values.get("D_priority_explicit_edges"),
+                    values.get("D"),
+                ),
+                "free_notation_gain": _metric_diff(
+                    values.get("T_free_schema_prompt_explicit_edges"),
+                    values.get("T_free_schema_prompt"),
+                ),
+                "generic_notation_gain": _metric_diff(
+                    values.get("T_generic_contract_explicit_edges_private_prose"),
+                    values.get("T_generic_contract_private_prose"),
+                ),
+                "priority_ablation_notation_gain": _metric_diff(
+                    values.get("T_contract_ablate_priority_explicit_edges_private_prose"),
+                    values.get("T_contract_ablate_priority_private_prose"),
+                ),
+                "extra_pass_gain": _metric_diff(
+                    values.get("D_two_pass_free"),
+                    values.get("D"),
+                ),
+                "compute_matched_binding_gain": _metric_diff(
+                    values.get("D_two_pass_generic_contract"),
+                    values.get("D_two_pass_free"),
+                ),
+                "structured_access_gain": _metric_diff(
+                    values.get("D_two_pass_generic_contract"),
+                    values.get("T_generic_contract_private_prose"),
+                ),
             }
         )
     return out
@@ -1429,6 +1457,13 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
             "firing_ablation_cost",
             "priority_ablation_cost",
             "conflict_ablation_cost",
+            "direct_notation_gain",
+            "free_notation_gain",
+            "generic_notation_gain",
+            "priority_ablation_notation_gain",
+            "extra_pass_gain",
+            "compute_matched_binding_gain",
+            "structured_access_gain",
         ]
         writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
@@ -1708,6 +1743,38 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
                 )
                 + " |"
             )
+
+        probe_keys = [
+            "direct_notation_gain",
+            "free_notation_gain",
+            "generic_notation_gain",
+            "priority_ablation_notation_gain",
+            "extra_pass_gain",
+            "compute_matched_binding_gain",
+            "structured_access_gain",
+        ]
+        if any(row[key] is not None for row in stress_contrasts for key in probe_keys):
+            lines.extend(
+                [
+                    "",
+                    "## Priority And Compute Probes",
+                    "",
+                    "| Provider | Direct notation | Free notation | Generic notation | Priority-ablation notation | Extra pass | Equal-call binding | Structured access |",
+                    "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+                ]
+            )
+            for row in stress_contrasts:
+                values = [row[key] for key in probe_keys]
+                lines.append(
+                    "| "
+                    + " | ".join(
+                        [
+                            row["provider"],
+                            *["NA" if value is None else f"{value:.3f}" for value in values],
+                        ]
+                    )
+                    + " |"
+                )
 
     paired_rows = [row for row in summary["binding_stress_pairs"] if row["family"] == "ALL"]
     if paired_rows:

@@ -92,6 +92,105 @@ rule_z_binding_stress_pairs.csv
 rule_z_replicate_stability.csv
 ```
 
+## Priority Notation And Compute-Matched Follow-Up
+
+The first Anthropic stress run exposed two remaining confounds:
+
+```text
+priority notation:
+  a JSON pair such as ["r1", "r2"] can be misread as an equal-priority tier
+  instead of the directed edge r1 suppresses r2
+
+computation budget:
+  D and O use one provider call, while generic-contract transmission uses one
+  sender call plus one receiver call
+```
+
+The follow-up adds three direct probes:
+
+```text
+D_priority_explicit_edges:
+  one call, with priority represented as objects containing
+  higher_priority_rule and lower_priority_rule
+
+D_two_pass_free:
+  one unconstrained private derivation call, then one answer call that receives
+  both the derivation and the authoritative structured Z
+
+D_two_pass_generic_contract:
+  the same two-call path, but the private derivation is guided by the same
+  generic contract used by generic-contract transmission
+```
+
+It also adds explicit-edge twins for the decisive transmission cells:
+
+```text
+T_free_schema_prompt_explicit_edges
+T_generic_contract_explicit_edges_private_prose
+T_contract_ablate_priority_explicit_edges_private_prose
+```
+
+Only the sender sees the transformed structured Z in the T twins. The receiver
+still sees the sender message plus the question and answer options.
+
+The new contrasts are:
+
+```text
+Direct Notation Gain =
+  Acc(D_priority_explicit_edges) - Acc(D)
+
+Free Notation Gain =
+  Acc(T_free_schema_prompt_explicit_edges) -
+  Acc(T_free_schema_prompt)
+
+Generic Notation Gain =
+  Acc(T_generic_contract_explicit_edges_private_prose) -
+  Acc(T_generic_contract_private_prose)
+
+Priority-Ablation Notation Gain =
+  Acc(T_contract_ablate_priority_explicit_edges_private_prose) -
+  Acc(T_contract_ablate_priority_private_prose)
+
+Extra-Pass Gain =
+  Acc(D_two_pass_free) - Acc(D)
+
+Compute-Matched Binding Gain =
+  Acc(D_two_pass_generic_contract) - Acc(D_two_pass_free)
+
+Structured-Access Gain =
+  Acc(D_two_pass_generic_contract) -
+  Acc(T_generic_contract_private_prose)
+```
+
+`Compute-Matched Binding Gain` holds the number of provider calls at two.
+`Structured-Access Gain` is still a bounded diagnostic rather than a pure
+channel effect: the first-pass task framing differs between private derivation
+and sender-message generation, and the direct second pass retains Z.
+
+The decisive equalized-OpenAI screen uses only the two families where the
+Anthropic binding gain concentrated. Generating 24 cases first and filtering
+preserves all six semantic/opaque pairs spanning yes/no/conflict in
+`priority_load` and `conflict_load`.
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.task \
+  --cases 24 \
+  --seed 41 \
+  --case-profile binding_stress \
+  --stress-families priority_load,conflict_load \
+  --repetitions 1 \
+  --direct-probe-modes priority_explicit_edges,two_pass_free,two_pass_generic_contract \
+  --transmission-modes free_schema_prompt,free_schema_prompt_explicit_edges,generic_contract_private_prose,generic_contract_explicit_edges_private_prose,contract_ablate_priority_private_prose,contract_ablate_priority_explicit_edges_private_prose,oracle_contract_private_prose,oracle_text \
+  --prompt-style strict_conflict \
+  --db results/rule_z_priority_compute_openai_gpt55_seed41.sqlite \
+  --report-dir results/rule_z_priority_compute_openai_gpt55_seed41_reports \
+  --provider-config expression_tomography/config/providers.openai_gpt_5_5.json
+```
+
+Screen one replicate before deciding whether to repeat. A repeat should target
+only cells that distinguish notation, extra computation, or equal-call binding;
+do not automatically repeat every ceiling control.
+
 ## Staged Pilot
 
 Screen all conditions once before paying for repeated generations:

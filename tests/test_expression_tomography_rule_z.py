@@ -29,6 +29,7 @@ from expression_tomography.tasks.rule_z.prompts import (
     make_message_repair_prompt,
     make_oracle_contract,
     make_oracle_text_message,
+    make_public_with_priority_notation,
     make_scrambled_contract,
     make_structured_prompt,
     make_transmission_receiver_prompt,
@@ -109,6 +110,120 @@ class RuleZSmokeTests(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             make_ablated_contract("unknown")
+
+    def test_explicit_priority_notation_preserves_rule_z_semantics(self) -> None:
+        case = next(
+            case
+            for case in make_rule_z_cases(24, seed=41, profile="binding_stress")
+            if case.payload["stress"]["family"] == "priority_load"
+        )
+        public = case.payload["public"]
+        explicit = make_public_with_priority_notation(public, "explicit_edges")
+
+        self.assertIn("priority", public)
+        self.assertNotIn("priority", explicit)
+        self.assertIn("priority_edges", explicit)
+        self.assertTrue(explicit["priority_edges"])
+        self.assertEqual(
+            set(explicit["priority_edges"][0]),
+            {"higher_priority_rule", "lower_priority_rule"},
+        )
+        self.assertEqual(answer_rule_z(public), answer_rule_z(explicit))
+
+        prompt = make_structured_prompt(case.case_id, explicit, "D_priority_explicit_edges")
+        self.assertIn('"priority_edges"', prompt)
+        self.assertIn('"higher_priority_rule"', prompt)
+        self.assertNotIn('"priority":', prompt)
+
+        with self.assertRaises(ValueError):
+            make_public_with_priority_notation(public, "unknown")
+
+    def test_direct_probes_and_explicit_twins_flow_through_reports(self) -> None:
+        transmission_modes = (
+            "free_schema_prompt",
+            "free_schema_prompt_explicit_edges",
+            "generic_contract_private_prose",
+            "generic_contract_explicit_edges_private_prose",
+            "contract_ablate_priority_private_prose",
+            "contract_ablate_priority_explicit_edges_private_prose",
+        )
+        direct_probe_modes = (
+            "priority_explicit_edges",
+            "two_pass_free",
+            "two_pass_generic_contract",
+        )
+        cases = [
+            case
+            for case in make_rule_z_cases(24, seed=41, profile="binding_stress")
+            if case.payload["stress"]["family"] == "priority_load"
+        ][:2]
+
+        with tempfile.TemporaryDirectory() as td:
+            tmp = Path(td)
+            store = ExperimentStore(tmp / "rule_z.sqlite")
+            try:
+                run_rule_z_experiment(
+                    cases,
+                    MockProvider(),
+                    store,
+                    transmission_modes=transmission_modes,
+                    direct_probe_modes=direct_probe_modes,
+                    prompt_style="strict_conflict",
+                )
+                rows = store.fetch_trials(task_type="rule_z")
+                self.assertEqual(
+                    len(rows),
+                    len(cases) * (3 + len(direct_probe_modes) + len(transmission_modes)),
+                )
+                rows_by_condition = {row["condition"]: row for row in rows}
+
+                explicit_direct = rows_by_condition["D_priority_explicit_edges"]
+                self.assertEqual(explicit_direct["metadata"]["priority_notation"], "explicit_edges")
+                self.assertEqual(explicit_direct["metadata"]["pass_count"], 1)
+                self.assertIn('"priority_edges"', explicit_direct["prompt"])
+
+                free_two_pass = rows_by_condition["D_two_pass_free"]
+                bound_two_pass = rows_by_condition["D_two_pass_generic_contract"]
+                self.assertEqual(free_two_pass["metadata"]["pass_count"], 2)
+                self.assertEqual(free_two_pass["metadata"]["binding_contract"], "none")
+                self.assertEqual(bound_two_pass["metadata"]["binding_contract"], "generic")
+                self.assertIn("TASK: rule_z_private_derivation", free_two_pass["metadata"]["intermediate_prompt"])
+                self.assertIn("PRIVATE_DERIVATION:", free_two_pass["prompt"])
+                self.assertIn("RULE_Z_PUBLIC_JSON", free_two_pass["prompt"])
+                self.assertNotIn("PRIVATE_CONTRACT:", bound_two_pass["prompt"])
+
+                explicit_t = rows_by_condition["T_free_schema_prompt_explicit_edges"]
+                self.assertEqual(explicit_t["metadata"]["priority_notation"], "explicit_edges")
+                self.assertEqual(
+                    explicit_t["metadata"]["transmission_base_mode"],
+                    "free_schema_prompt",
+                )
+                self.assertIn('"priority_edges"', explicit_t["metadata"]["message_prompt"])
+
+                summary = summarize_rule_z(store)
+                overall = next(
+                    row
+                    for row in summary["binding_stress_contrasts"]
+                    if row["provider"] == "mock"
+                    and row["family"] == "ALL"
+                    and row["naming"] == "ALL"
+                )
+                for metric in (
+                    "direct_notation_gain",
+                    "free_notation_gain",
+                    "generic_notation_gain",
+                    "priority_ablation_notation_gain",
+                    "extra_pass_gain",
+                    "compute_matched_binding_gain",
+                    "structured_access_gain",
+                ):
+                    self.assertEqual(overall[metric], 0.0)
+
+                write_rule_z_report(store, tmp / "reports")
+                report = (tmp / "reports" / "rule_z_report.md").read_text(encoding="utf-8")
+                self.assertIn("## Priority And Compute Probes", report)
+            finally:
+                store.close()
 
     def test_binding_stress_repetitions_flow_through_reports(self) -> None:
         modes = (

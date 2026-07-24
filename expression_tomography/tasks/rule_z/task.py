@@ -14,7 +14,7 @@ from expression_tomography.core.report import write_rule_z_report
 from expression_tomography.core.schema import Case, TrialResult
 from expression_tomography.core.store import ExperimentStore
 
-from .generator import CASE_PROFILES, make_rule_z_cases
+from .generator import CASE_PROFILES, STRESS_FAMILIES, make_rule_z_cases
 from .oracle import answer_rule_z
 from .prompts import (
     make_ablated_contract,
@@ -27,8 +27,11 @@ from .prompts import (
     make_message_repair_prompt,
     make_oracle_contract,
     make_oracle_text_message,
+    make_private_derivation_prompt,
+    make_public_with_priority_notation,
     make_scrambled_contract,
     make_structured_prompt,
+    make_structured_review_prompt,
     make_transmission_receiver_prompt,
     make_wrong_contract,
 )
@@ -58,6 +61,25 @@ TRANSMISSION_MODE_TO_CONDITION = {
     "oracle_no_final": "T_oracle_no_final",
     "oracle_no_final_no_active": "T_oracle_no_final_no_active",
     "oracle_corrupt_final": "T_oracle_corrupt_final",
+    "free_schema_prompt_explicit_edges": "T_free_schema_prompt_explicit_edges",
+    "generic_contract_explicit_edges_private_prose": (
+        "T_generic_contract_explicit_edges_private_prose"
+    ),
+    "contract_ablate_priority_explicit_edges_private_prose": (
+        "T_contract_ablate_priority_explicit_edges_private_prose"
+    ),
+}
+EXPLICIT_PRIORITY_TRANSMISSION_MODE_TO_BASE = {
+    "free_schema_prompt_explicit_edges": "free_schema_prompt",
+    "generic_contract_explicit_edges_private_prose": "generic_contract_private_prose",
+    "contract_ablate_priority_explicit_edges_private_prose": (
+        "contract_ablate_priority_private_prose"
+    ),
+}
+DIRECT_PROBE_MODE_TO_CONDITION = {
+    "priority_explicit_edges": "D_priority_explicit_edges",
+    "two_pass_free": "D_two_pass_free",
+    "two_pass_generic_contract": "D_two_pass_generic_contract",
 }
 ABLATION_MODE_TO_COMPONENT = {
     "contract_ablate_facts_private_prose": "facts",
@@ -90,6 +112,24 @@ def _parse_transmission_modes(raw: str) -> tuple[str, ...]:
         allowed = ", ".join(sorted(TRANSMISSION_MODE_TO_CONDITION))
         raise ValueError(f"Unknown transmission mode(s): {', '.join(unknown)}. Allowed: {allowed}")
     return modes or ("free",)
+
+
+def _parse_direct_probe_modes(raw: str) -> tuple[str, ...]:
+    modes = tuple(item.strip() for item in raw.split(",") if item.strip())
+    unknown = sorted(set(modes) - set(DIRECT_PROBE_MODE_TO_CONDITION))
+    if unknown:
+        allowed = ", ".join(sorted(DIRECT_PROBE_MODE_TO_CONDITION))
+        raise ValueError(f"Unknown direct probe mode(s): {', '.join(unknown)}. Allowed: {allowed}")
+    return modes
+
+
+def _parse_stress_families(raw: str) -> tuple[str, ...]:
+    families = tuple(item.strip() for item in raw.split(",") if item.strip())
+    unknown = sorted(set(families) - set(STRESS_FAMILIES))
+    if unknown:
+        allowed = ", ".join(STRESS_FAMILIES)
+        raise ValueError(f"Unknown stress family/families: {', '.join(unknown)}. Allowed: {allowed}")
+    return families
 
 
 def _uses_strict_conflict(prompt_style: str) -> bool:
@@ -140,6 +180,7 @@ def run_rule_z_case(
     case: Case,
     provider: Provider,
     transmission_modes: tuple[str, ...] = ("free",),
+    direct_probe_modes: tuple[str, ...] = (),
     prompt_style: str = "default",
     replicate_index: int = 0,
 ) -> list[TrialResult]:
@@ -181,16 +222,90 @@ def run_rule_z_case(
             )
         )
 
+    for mode in direct_probe_modes:
+        condition = DIRECT_PROBE_MODE_TO_CONDITION[mode]
+        probe_public = public
+        probe_metadata = {
+            "direct_probe_mode": mode,
+            "priority_notation": "pair_list",
+            "pass_count": 1,
+        }
+        if mode == "priority_explicit_edges":
+            probe_public = make_public_with_priority_notation(public, "explicit_edges")
+            prompt = make_structured_prompt(
+                case.case_id,
+                probe_public,
+                condition,
+                strict_conflict=strict_conflict,
+            )
+            probe_metadata["priority_notation"] = "explicit_edges"
+        else:
+            contract = make_generic_contract() if mode == "two_pass_generic_contract" else None
+            derivation_prompt = make_private_derivation_prompt(
+                case.case_id,
+                probe_public,
+                condition,
+                contract=contract,
+            )
+            derivation = provider.complete(derivation_prompt)
+            prompt = make_structured_review_prompt(
+                case.case_id,
+                probe_public,
+                derivation,
+                condition,
+                strict_conflict=strict_conflict,
+            )
+            probe_metadata.update(
+                {
+                    "pass_count": 2,
+                    "binding_contract": "generic" if contract else "none",
+                    "intermediate_prompt": derivation_prompt,
+                    "intermediate_response": derivation,
+                }
+            )
+        raw = provider.complete(prompt)
+        parsed = parse_json_lenient(raw)
+        trials.append(
+            TrialResult(
+                case_id=case.case_id,
+                case_hash=case.case_hash,
+                task_type=case.task_type,
+                condition=condition,
+                provider=provider.name,
+                prompt=prompt,
+                raw_response=raw,
+                parsed_response=parsed,
+                score=_score(parsed, expected),
+                metadata={**trial_context, **probe_metadata},
+            )
+        )
+
     for mode in transmission_modes:
         condition = TRANSMISSION_MODE_TO_CONDITION[mode]
+        base_mode = EXPLICIT_PRIORITY_TRANSMISSION_MODE_TO_BASE.get(mode, mode)
+        priority_notation = (
+            "explicit_edges"
+            if mode in EXPLICIT_PRIORITY_TRANSMISSION_MODE_TO_BASE
+            else "pair_list"
+        )
+        message_public = make_public_with_priority_notation(public, priority_notation)
         message_metadata = {}
-        if mode in ORACLE_MESSAGE_MODES:
+        if base_mode in ORACLE_MESSAGE_MODES:
             message_prompt = ""
-            message, message_metadata = _make_oracle_message(public, mode)
-        elif mode == "free_schema_prompt_self_repair_no_sections":
-            initial_message_prompt = make_message_prompt(case.case_id, public, mode="free_schema_prompt")
+            message, message_metadata = _make_oracle_message(message_public, base_mode)
+        elif base_mode == "free_schema_prompt_self_repair_no_sections":
+            initial_message_prompt = make_message_prompt(
+                case.case_id,
+                message_public,
+                mode="free_schema_prompt",
+            )
             initial_message = provider.complete(initial_message_prompt)
-            message_prompt = make_message_repair_prompt(case.case_id, public, initial_message, mode=mode)
+            message_prompt = make_message_repair_prompt(
+                case.case_id,
+                message_public,
+                initial_message,
+                mode=base_mode,
+            )
             message = provider.complete(message_prompt)
             message_metadata = {
                 "repair_mode": "self",
@@ -198,10 +313,19 @@ def run_rule_z_case(
                 "initial_message_prompt": initial_message_prompt,
                 "initial_transmission_message": initial_message,
             }
-        elif mode == "self_contract_private_prose":
-            contract_prompt = make_message_contract_prompt(case.case_id, public, mode=mode)
+        elif base_mode == "self_contract_private_prose":
+            contract_prompt = make_message_contract_prompt(
+                case.case_id,
+                message_public,
+                mode=base_mode,
+            )
             contract = provider.complete(contract_prompt)
-            message_prompt = make_contract_bound_message_prompt(case.case_id, public, contract, mode=mode)
+            message_prompt = make_contract_bound_message_prompt(
+                case.case_id,
+                message_public,
+                contract,
+                mode=base_mode,
+            )
             message = provider.complete(message_prompt)
             message_metadata = {
                 "contract_source": "self",
@@ -209,10 +333,15 @@ def run_rule_z_case(
                 "contract_prompt": contract_prompt,
                 "transmission_contract": contract,
             }
-        elif mode == "oracle_contract_private_prose":
+        elif base_mode == "oracle_contract_private_prose":
             contract_prompt = ""
             contract = make_oracle_contract()
-            message_prompt = make_contract_bound_message_prompt(case.case_id, public, contract, mode=mode)
+            message_prompt = make_contract_bound_message_prompt(
+                case.case_id,
+                message_public,
+                contract,
+                mode=base_mode,
+            )
             message = provider.complete(message_prompt)
             message_metadata = {
                 "contract_source": "oracle",
@@ -220,10 +349,15 @@ def run_rule_z_case(
                 "contract_prompt": contract_prompt,
                 "transmission_contract": contract,
             }
-        elif mode == "generic_contract_private_prose":
+        elif base_mode == "generic_contract_private_prose":
             contract_prompt = ""
             contract = make_generic_contract()
-            message_prompt = make_contract_bound_message_prompt(case.case_id, public, contract, mode=mode)
+            message_prompt = make_contract_bound_message_prompt(
+                case.case_id,
+                message_public,
+                contract,
+                mode=base_mode,
+            )
             message = provider.complete(message_prompt)
             message_metadata = {
                 "contract_source": "generic",
@@ -231,11 +365,16 @@ def run_rule_z_case(
                 "contract_prompt": contract_prompt,
                 "transmission_contract": contract,
             }
-        elif mode in ABLATION_MODE_TO_COMPONENT:
-            component = ABLATION_MODE_TO_COMPONENT[mode]
+        elif base_mode in ABLATION_MODE_TO_COMPONENT:
+            component = ABLATION_MODE_TO_COMPONENT[base_mode]
             contract_prompt = ""
             contract = make_ablated_contract(component)
-            message_prompt = make_contract_bound_message_prompt(case.case_id, public, contract, mode=mode)
+            message_prompt = make_contract_bound_message_prompt(
+                case.case_id,
+                message_public,
+                contract,
+                mode=base_mode,
+            )
             message = provider.complete(message_prompt)
             message_metadata = {
                 "contract_source": "oracle_ablation",
@@ -244,10 +383,15 @@ def run_rule_z_case(
                 "contract_ablation": component,
                 "transmission_contract": contract,
             }
-        elif mode == "wrong_contract_private_prose":
+        elif base_mode == "wrong_contract_private_prose":
             contract_prompt = ""
-            contract = make_wrong_contract(public)
-            message_prompt = make_contract_bound_message_prompt(case.case_id, public, contract, mode=mode)
+            contract = make_wrong_contract(message_public)
+            message_prompt = make_contract_bound_message_prompt(
+                case.case_id,
+                message_public,
+                contract,
+                mode=base_mode,
+            )
             message = provider.complete(message_prompt)
             message_metadata = {
                 "contract_source": "wrong",
@@ -255,10 +399,15 @@ def run_rule_z_case(
                 "contract_prompt": contract_prompt,
                 "transmission_contract": contract,
             }
-        elif mode == "scrambled_contract_private_prose":
+        elif base_mode == "scrambled_contract_private_prose":
             contract_prompt = ""
-            contract = make_scrambled_contract(public)
-            message_prompt = make_contract_bound_message_prompt(case.case_id, public, contract, mode=mode)
+            contract = make_scrambled_contract(message_public)
+            message_prompt = make_contract_bound_message_prompt(
+                case.case_id,
+                message_public,
+                contract,
+                mode=base_mode,
+            )
             message = provider.complete(message_prompt)
             message_metadata = {
                 "contract_source": "scrambled",
@@ -266,10 +415,18 @@ def run_rule_z_case(
                 "contract_prompt": contract_prompt,
                 "transmission_contract": contract,
             }
-        elif mode == "contract_only_private_prose":
-            contract_prompt = make_message_contract_prompt(case.case_id, public, mode=mode)
+        elif base_mode == "contract_only_private_prose":
+            contract_prompt = make_message_contract_prompt(
+                case.case_id,
+                message_public,
+                mode=base_mode,
+            )
             contract = provider.complete(contract_prompt)
-            message_prompt = make_contract_only_message_prompt(case.case_id, contract, mode=mode)
+            message_prompt = make_contract_only_message_prompt(
+                case.case_id,
+                contract,
+                mode=base_mode,
+            )
             message = provider.complete(message_prompt)
             message_metadata = {
                 "contract_source": "self",
@@ -279,7 +436,7 @@ def run_rule_z_case(
                 "contract_only_message": True,
             }
         else:
-            message_prompt = make_message_prompt(case.case_id, public, mode=mode)
+            message_prompt = make_message_prompt(case.case_id, message_public, mode=base_mode)
             message = provider.complete(message_prompt)
         structured_hint = _include_structured_hint(provider)
         prompt = make_transmission_receiver_prompt(
@@ -308,6 +465,8 @@ def run_rule_z_case(
                     "structured_hint_included": structured_hint,
                     "transmission_message": message,
                     "transmission_mode": mode,
+                    "transmission_base_mode": base_mode,
+                    "priority_notation": priority_notation,
                     **trial_context,
                     **message_metadata,
                 },
@@ -321,6 +480,7 @@ def run_rule_z_experiment(
     provider: Provider,
     store: ExperimentStore,
     transmission_modes: tuple[str, ...] = ("free",),
+    direct_probe_modes: tuple[str, ...] = (),
     prompt_style: str = "default",
     repetitions: int = 1,
     replicate_start: int = 0,
@@ -336,6 +496,7 @@ def run_rule_z_experiment(
                 case,
                 provider,
                 transmission_modes=transmission_modes,
+                direct_probe_modes=direct_probe_modes,
                 prompt_style=prompt_style,
                 replicate_index=replicate_index,
             ):
@@ -351,6 +512,15 @@ def main() -> None:
         choices=CASE_PROFILES,
         default="base",
         help="Case generator profile. binding_stress emits semantic/opaque isomorphic pairs.",
+    )
+    parser.add_argument(
+        "--stress-families",
+        default="",
+        help=(
+            "Optional comma-separated binding_stress family filter: "
+            + ", ".join(STRESS_FAMILIES)
+            + "."
+        ),
     )
     parser.add_argument(
         "--repetitions",
@@ -384,7 +554,18 @@ def main() -> None:
             "contract_ablate_conflict_private_prose, wrong_contract_private_prose, "
             "scrambled_contract_private_prose, contract_only_private_prose, factlocked, "
             "factlocked_plus_priority, oracle_text, oracle_no_final, "
-            "oracle_no_final_no_active, oracle_corrupt_final."
+            "oracle_no_final_no_active, oracle_corrupt_final, "
+            "free_schema_prompt_explicit_edges, "
+            "generic_contract_explicit_edges_private_prose, "
+            "contract_ablate_priority_explicit_edges_private_prose."
+        ),
+    )
+    parser.add_argument(
+        "--direct-probe-modes",
+        default="",
+        help=(
+            "Comma-separated direct probes: priority_explicit_edges, "
+            "two_pass_free, two_pass_generic_contract."
         ),
     )
     parser.add_argument(
@@ -397,14 +578,28 @@ def main() -> None:
     store = ExperimentStore(args.db)
     try:
         cases = make_rule_z_cases(args.cases, args.seed, profile=args.case_profile)
+        stress_families = _parse_stress_families(args.stress_families)
+        if stress_families:
+            if args.case_profile != "binding_stress":
+                parser.error("--stress-families requires --case-profile binding_stress")
+            selected = set(stress_families)
+            cases = [
+                case
+                for case in cases
+                if case.payload.get("stress", {}).get("family") in selected
+            ]
+            if not cases:
+                parser.error("--stress-families selected no cases")
         providers = build_providers_from_config(args.provider_config) if args.provider_config else [MockProvider()]
         transmission_modes = _parse_transmission_modes(args.transmission_modes)
+        direct_probe_modes = _parse_direct_probe_modes(args.direct_probe_modes)
         for provider in providers:
             run_rule_z_experiment(
                 cases,
                 provider,
                 store,
                 transmission_modes=transmission_modes,
+                direct_probe_modes=direct_probe_modes,
                 prompt_style=args.prompt_style,
                 repetitions=args.repetitions,
                 replicate_start=args.replicate_start,

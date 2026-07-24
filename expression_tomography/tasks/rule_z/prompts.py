@@ -6,6 +6,9 @@ from typing import Any
 from .oracle import OracleAnswer
 
 
+PRIORITY_NOTATIONS = ("pair_list", "explicit_edges")
+
+
 def _json_block(marker: str, obj: dict[str, Any]) -> str:
     return f"{marker}\n{json.dumps(obj, ensure_ascii=False, sort_keys=True)}\nEND_{marker}"
 
@@ -28,6 +31,28 @@ def _answer_schema() -> str:
 
 def _format_priority_edges(edges: list[tuple[str, str]]) -> str:
     return ", ".join(f"{winner}>{loser}" for winner, loser in edges) or "none"
+
+
+def make_public_with_priority_notation(
+    public: dict[str, Any],
+    notation: str = "pair_list",
+) -> dict[str, Any]:
+    if notation not in PRIORITY_NOTATIONS:
+        allowed = ", ".join(PRIORITY_NOTATIONS)
+        raise ValueError(f"Unknown priority notation: {notation}. Allowed: {allowed}")
+    if notation == "pair_list":
+        return public
+
+    formatted = dict(public)
+    pair_edges = formatted.pop("priority", [])
+    formatted["priority_edges"] = [
+        {
+            "higher_priority_rule": str(winner),
+            "lower_priority_rule": str(loser),
+        }
+        for winner, loser in pair_edges
+    ]
+    return formatted
 
 
 def make_baseline_prompt(case_id: str, public: dict[str, Any], strict_conflict: bool = False) -> str:
@@ -58,6 +83,59 @@ def make_structured_prompt(
             "TASK: rule_z_answer",
             f"CONDITION: {condition}",
             f"CASE_ID: {case_id}",
+            _json_block("RULE_Z_PUBLIC_JSON", public),
+            *_conflict_rubric(strict_conflict),
+            "Return exactly one line of JSON and no prose.",
+            _answer_schema(),
+        ]
+    )
+
+
+def make_private_derivation_prompt(
+    case_id: str,
+    public: dict[str, Any],
+    condition: str,
+    contract: str | None = None,
+) -> str:
+    lines = [
+        "TASK: rule_z_private_derivation",
+        f"CONDITION: {condition}_DERIVE",
+        f"CASE_ID: {case_id}",
+        "Prepare private scratch work for a later answer pass over this specific case.",
+        "Use any prose or compact notation that seems useful.",
+        "Do not return answer JSON.",
+        "Do not state the final answer label yes, no, or conflict.",
+    ]
+    if contract:
+        lines.extend(
+            [
+                "Use the private contract below to decide which distinctions the scratch work must preserve.",
+                "PRIVATE_CONTRACT:",
+                contract,
+                "END_PRIVATE_CONTRACT",
+            ]
+        )
+    lines.append(_json_block("RULE_Z_PUBLIC_JSON", public))
+    return "\n".join(lines)
+
+
+def make_structured_review_prompt(
+    case_id: str,
+    public: dict[str, Any],
+    derivation: str,
+    condition: str,
+    strict_conflict: bool = False,
+) -> str:
+    return "\n".join(
+        [
+            "TASK: rule_z_answer",
+            f"CONDITION: {condition}",
+            f"CASE_ID: {case_id}",
+            "Review the private derivation, then answer from the structured Rule-Z case.",
+            "The structured case is authoritative if the derivation is incomplete or mistaken.",
+            "PRIVATE_DERIVATION:",
+            derivation,
+            "END_PRIVATE_DERIVATION",
             _json_block("RULE_Z_PUBLIC_JSON", public),
             *_conflict_rubric(strict_conflict),
             "Return exactly one line of JSON and no prose.",
