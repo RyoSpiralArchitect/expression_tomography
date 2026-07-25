@@ -244,3 +244,7 @@ This yields both a cleaner source-fidelity measure and a measurement-reactivity
 estimate. A small calibration set should include correct, reversed, equal-tier,
 and internally contradictory derivations so that audit-reader repair can be
 measured directly.
+
+The post-hoc, non-reactive half of this design is implemented in
+`docs/rule_z_posthoc_intermediate_probe.md`. Pre-answer declarations remain a
+separate prospective experiment.

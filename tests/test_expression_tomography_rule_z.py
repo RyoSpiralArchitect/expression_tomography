@@ -1,12 +1,14 @@
 from __future__ import annotations
 
+import copy
+import hashlib
 import tempfile
 import unittest
 import json
 import re
 from pathlib import Path
 
-from expression_tomography.core.providers import MockProvider
+from expression_tomography.core.providers import MockProvider, ProviderSpec
 from expression_tomography.core.report import (
     rule_z_replicate_stability_rows,
     rule_z_case_level_rows,
@@ -22,13 +24,26 @@ from expression_tomography.core.report import (
 from expression_tomography.core.schema import Case, TrialResult
 from expression_tomography.core.store import ExperimentStore
 from expression_tomography.tasks.rule_z.generator import make_rule_z_cases, public_payload_from_facts
-from expression_tomography.tasks.rule_z.intermediate import score_intermediate_audit
+from expression_tomography.tasks.rule_z.intermediate import (
+    score_intermediate_audit,
+    score_source_faithful_audit,
+)
+from expression_tomography.tasks.rule_z.intermediate_probe import (
+    make_hidden_query_battery_spec,
+    run_intermediate_probe,
+    score_hidden_query_battery,
+)
+from expression_tomography.tasks.rule_z.intermediate_probe_report import (
+    summarize_intermediate_probe,
+    write_intermediate_probe_report,
+)
 from expression_tomography.tasks.rule_z.oracle import answer_rule_z
 from expression_tomography.tasks.rule_z.prompts import (
     make_ablated_contract,
     make_contract_bound_message_prompt,
     make_contract_only_message_prompt,
     make_generic_contract,
+    make_hidden_query_battery_prompt,
     make_intermediate_audit_prompt,
     make_message_prompt,
     make_message_contract_prompt,
@@ -37,6 +52,7 @@ from expression_tomography.tasks.rule_z.prompts import (
     make_oracle_text_message,
     make_public_with_priority_notation,
     make_scrambled_contract,
+    make_source_faithful_audit_prompt,
     make_structured_prompt,
     make_transmission_receiver_prompt,
     make_wrong_contract,
@@ -377,6 +393,398 @@ class RuleZSmokeTests(unittest.TestCase):
                 self.assertIn("## Intermediate 2x2 Factorial", report)
             finally:
                 store.close()
+
+    def test_source_faithful_audit_requires_grounded_quotes(self) -> None:
+        case = next(
+            case
+            for case in make_rule_z_cases(24, seed=41, profile="binding_stress")
+            if case.payload["stress"]["family"] == "priority_load"
+        )
+        oracle = answer_rule_z(case.payload["public"])
+        source_lines = {
+            "fired_rules": (
+                "Fired rules: " + ", ".join(oracle.fired_rules) + "."
+            ),
+            "fired_priority_edges": (
+                "Fired priority edges: "
+                + (
+                    ", ".join(
+                        f"{higher}>{lower}"
+                        for higher, lower in oracle.fired_priority_edges
+                    )
+                    or "none"
+                )
+                + "."
+            ),
+            "suppressed_rules": (
+                "Suppressed rules: "
+                + (", ".join(oracle.suppressed_rules) or "none")
+                + "."
+            ),
+            "active_rules": (
+                "Active rules: "
+                + (", ".join(oracle.active_rules) or "none")
+                + "."
+            ),
+            "active_conclusions": (
+                "Active conclusions: "
+                + (", ".join(oracle.active_conclusions) or "none")
+                + "."
+            ),
+        }
+        source = "\n".join(source_lines.values())
+
+        def grounded_field(field: str, values: list[str]) -> dict:
+            line = source_lines[field]
+            if not values:
+                return {
+                    "status": "explicit_none",
+                    "items": [],
+                    "field_evidence": line,
+                }
+            return {
+                "status": "asserted",
+                "items": [
+                    {"value": value, "evidence": line}
+                    for value in values
+                ],
+                "field_evidence": "",
+            }
+
+        edge_line = source_lines["fired_priority_edges"]
+        if oracle.fired_priority_edges:
+            grounded_edges = {
+                "status": "asserted",
+                "items": [
+                    {
+                        "higher_priority_rule": higher,
+                        "lower_priority_rule": lower,
+                        "evidence": edge_line,
+                    }
+                    for higher, lower in oracle.fired_priority_edges
+                ],
+                "field_evidence": "",
+            }
+        else:
+            grounded_edges = {
+                "status": "explicit_none",
+                "items": [],
+                "field_evidence": edge_line,
+            }
+        parsed = {
+            "fired_rules": grounded_field("fired_rules", oracle.fired_rules),
+            "fired_priority_edges": grounded_edges,
+            "suppressed_rules": grounded_field(
+                "suppressed_rules",
+                oracle.suppressed_rules,
+            ),
+            "active_rules": grounded_field("active_rules", oracle.active_rules),
+            "active_conclusions": grounded_field(
+                "active_conclusions",
+                oracle.active_conclusions,
+            ),
+            "source_final_answer": {
+                "status": "not_stated",
+                "value": "",
+                "evidence": "",
+            },
+            "contradictions": [],
+        }
+        score = score_source_faithful_audit(parsed, source, oracle)
+        self.assertTrue(score["intermediate_state_exact"])
+        self.assertTrue(score["grounded_state_oracle_match"])
+        self.assertEqual(score["grounded_claim_rate"], 1.0)
+
+        ungrounded = copy.deepcopy(parsed)
+        ungrounded["fired_rules"]["items"][0]["evidence"] = "Invented quote."
+        ungrounded_score = score_source_faithful_audit(
+            ungrounded,
+            source,
+            oracle,
+        )
+        self.assertTrue(ungrounded_score["intermediate_state_exact"])
+        self.assertFalse(ungrounded_score["grounded_state_oracle_match"])
+        self.assertLess(ungrounded_score["grounded_claim_rate"], 1.0)
+
+        prompt = make_source_faithful_audit_prompt(
+            case.case_id,
+            source,
+            "D_two_pass_free",
+        )
+        self.assertIn("exact contiguous quote", prompt)
+        self.assertNotIn("RULE_Z_PUBLIC_JSON", prompt)
+        self.assertNotIn("oracle_private", prompt)
+
+    def test_hidden_query_battery_separates_local_and_global_utility(self) -> None:
+        case = next(
+            case
+            for case in make_rule_z_cases(24, seed=41, profile="binding_stress")
+            if case.payload["stress"]["family"] == "priority_load"
+        )
+        spec = make_hidden_query_battery_spec(
+            case.payload["public"],
+            "current_and_counterfactual",
+        )
+        parsed = copy.deepcopy(spec["expected"])
+        score = score_hidden_query_battery(parsed, spec)
+        self.assertTrue(score["correct"])
+        self.assertEqual(score["local_query_utility"], 1.0)
+        self.assertEqual(score["global_query_utility"], 1.0)
+        self.assertEqual(score["counterfactual_query_utility"], 1.0)
+
+        missing_facts = copy.deepcopy(parsed)
+        missing_facts["facts"] = None
+        missing_score = score_hidden_query_battery(missing_facts, spec)
+        self.assertFalse(missing_score["facts_exact"])
+        self.assertLess(missing_score["local_query_utility"], 1.0)
+        self.assertEqual(missing_score["global_query_utility"], 1.0)
+
+        no_edge_public = copy.deepcopy(case.payload["public"])
+        no_edge_public["priority"] = []
+        no_edge_spec = make_hidden_query_battery_spec(
+            no_edge_public,
+            "current_and_counterfactual",
+        )
+        invented_edge = copy.deepcopy(no_edge_spec["expected"])
+        invented_edge["edge_reversal"] = {
+            "higher_priority_rule": "r1",
+            "lower_priority_rule": "r2",
+            "active_conclusions": [],
+            "answer": "no",
+        }
+        invented_edge_score = score_hidden_query_battery(
+            invented_edge,
+            no_edge_spec,
+        )
+        self.assertFalse(
+            invented_edge_score["edge_reversal_applicability_exact"]
+        )
+        self.assertFalse(invented_edge_score["correct"])
+
+        prompt = make_hidden_query_battery_prompt(
+            case.case_id,
+            "Fixed source artifact.",
+            spec["prompt_spec"],
+            "D_two_pass_free",
+        )
+        self.assertIn("writer did not see this query battery", prompt)
+        self.assertIn("Use JSON null", prompt)
+        self.assertNotIn("RULE_Z_FROM_MESSAGE_JSON", prompt)
+        self.assertNotIn("oracle_private", prompt)
+
+    def test_posthoc_probe_reuses_frozen_messages_idempotently(self) -> None:
+        cases = [
+            case
+            for case in make_rule_z_cases(24, seed=41, profile="binding_stress")
+            if case.payload["stress"]["family"] == "priority_load"
+        ][:2]
+        with tempfile.TemporaryDirectory() as td:
+            tmp = Path(td)
+            source_path = tmp / "source.sqlite"
+            source_store = ExperimentStore(source_path)
+            try:
+                run_rule_z_experiment(
+                    cases,
+                    MockProvider(),
+                    source_store,
+                    transmission_modes=("oracle_text",),
+                    direct_probe_modes=("two_pass_free",),
+                    prompt_style="strict_conflict",
+                )
+                source_trial_count = len(
+                    source_store.fetch_trials(task_type="rule_z")
+                )
+            finally:
+                source_store.close()
+
+            source_sha = hashlib.sha256(source_path.read_bytes()).hexdigest()
+            source_store = ExperimentStore(source_path, read_only=True)
+            output_store = ExperimentStore(tmp / "probe.sqlite")
+            try:
+                with self.assertRaises(RuntimeError):
+                    source_store.upsert_case(cases[0])
+                first = run_intermediate_probe(
+                    source_store,
+                    output_store,
+                    MockProvider(),
+                    source_sha,
+                    source_conditions=("D_two_pass_free",),
+                    source_kind="intermediate",
+                    query_battery="current_state",
+                )
+                self.assertEqual(first["source_messages"], 2)
+                self.assertEqual(first["inserted_trials"], 6)
+                extended = run_intermediate_probe(
+                    source_store,
+                    output_store,
+                    MockProvider(),
+                    source_sha,
+                    source_conditions=("D_two_pass_free",),
+                    source_kind="intermediate",
+                    query_battery="current_and_counterfactual",
+                )
+                self.assertEqual(extended["inserted_trials"], 2)
+                self.assertEqual(extended["skipped_existing_trials"], 4)
+                extended_rerun = run_intermediate_probe(
+                    source_store,
+                    output_store,
+                    MockProvider(),
+                    source_sha,
+                    source_conditions=("D_two_pass_free",),
+                    source_kind="intermediate",
+                    query_battery="current_and_counterfactual",
+                )
+                self.assertEqual(extended_rerun["inserted_trials"], 0)
+                self.assertEqual(
+                    extended_rerun["skipped_existing_trials"],
+                    6,
+                )
+                self.assertEqual(
+                    len(source_store.fetch_trials(task_type="rule_z")),
+                    source_trial_count,
+                )
+
+                probe_rows = output_store.fetch_trials(
+                    task_type="rule_z_intermediate_probe"
+                )
+                self.assertEqual(len(probe_rows), 8)
+                self.assertTrue(
+                    all(
+                        row["metadata"][
+                            "posthoc_probe_not_in_source_answer_path"
+                        ]
+                        for row in probe_rows
+                    )
+                )
+                self.assertTrue(
+                    all(
+                        len(
+                            row["metadata"][
+                                "probe_provider_config_sha256"
+                            ]
+                        )
+                        == 64
+                        for row in probe_rows
+                    )
+                )
+                faithful = next(
+                    row
+                    for row in probe_rows
+                    if row["condition"] == "I_source_faithful"
+                )
+                repair = next(
+                    row
+                    for row in probe_rows
+                    if row["condition"] == "I_repair_capable"
+                )
+                current_query = next(
+                    row
+                    for row in probe_rows
+                    if row["condition"] == "Q_hidden_current_state"
+                )
+                extended_query = next(
+                    row
+                    for row in probe_rows
+                    if row["condition"]
+                    == "Q_hidden_current_and_counterfactual"
+                )
+                self.assertTrue(
+                    faithful["score"]["grounded_state_oracle_match"]
+                )
+                self.assertTrue(repair["score"]["intermediate_state_exact"])
+                self.assertEqual(
+                    current_query["score"]["overall_query_utility"],
+                    1.0,
+                )
+                self.assertEqual(
+                    extended_query["score"]["overall_query_utility"],
+                    1.0,
+                )
+                self.assertNotIn("RULE_Z_FROM_MESSAGE_JSON", faithful["prompt"])
+                self.assertNotIn("RULE_Z_FROM_MESSAGE_JSON", repair["prompt"])
+                self.assertIn(
+                    '"fact_removal": null',
+                    current_query["prompt"],
+                )
+                self.assertIn(
+                    "RULE_Z_FROM_MESSAGE_JSON",
+                    extended_query["prompt"],
+                )
+                self.assertTrue(
+                    extended_query["metadata"]["mock_structured_hint_included"]
+                )
+
+                summary = summarize_intermediate_probe(output_store)
+                self.assertEqual(len(summary["audit_contrasts"]), 2)
+                self.assertEqual(
+                    {row["source_provider"] for row in summary["audit_summary"]},
+                    {"mock"},
+                )
+                self.assertEqual(
+                    {row["source_db_sha256"] for row in summary["audit_summary"]},
+                    {source_sha},
+                )
+                self.assertEqual(
+                    {row["source_kind"] for row in summary["audit_summary"]},
+                    {"intermediate"},
+                )
+                self.assertEqual(
+                    {row["source_kind"] for row in summary["query_summary"]},
+                    {"intermediate"},
+                )
+                self.assertEqual(
+                    {row["query_battery"] for row in summary["query_summary"]},
+                    {"current_state", "current_and_counterfactual"},
+                )
+                write_intermediate_probe_report(
+                    output_store,
+                    tmp / "probe_reports",
+                )
+                for filename in (
+                    "rule_z_posthoc_audit.csv",
+                    "rule_z_posthoc_audit_summary.csv",
+                    "rule_z_audit_mode_contrasts.csv",
+                    "rule_z_hidden_query_utility.csv",
+                    "rule_z_hidden_query_summary.csv",
+                    "rule_z_intermediate_probe_report.md",
+                ):
+                    self.assertTrue((tmp / "probe_reports" / filename).exists())
+
+                changed_config_provider = MockProvider()
+                changed_config_provider.spec = ProviderSpec(
+                    name="mock",
+                    type="mock",
+                    model="mock",
+                    max_tokens=701,
+                )
+                changed_config = run_intermediate_probe(
+                    source_store,
+                    output_store,
+                    changed_config_provider,
+                    source_sha,
+                    source_conditions=("D_two_pass_free",),
+                    source_kind="intermediate",
+                    query_battery="current_and_counterfactual",
+                )
+                self.assertEqual(changed_config["inserted_trials"], 6)
+                self.assertEqual(changed_config["skipped_existing_trials"], 0)
+                changed_config_rerun = run_intermediate_probe(
+                    source_store,
+                    output_store,
+                    changed_config_provider,
+                    source_sha,
+                    source_conditions=("D_two_pass_free",),
+                    source_kind="intermediate",
+                    query_battery="current_and_counterfactual",
+                )
+                self.assertEqual(changed_config_rerun["inserted_trials"], 0)
+                self.assertEqual(
+                    changed_config_rerun["skipped_existing_trials"],
+                    6,
+                )
+            finally:
+                output_store.close()
+                source_store.close()
 
     def test_binding_stress_repetitions_flow_through_reports(self) -> None:
         modes = (

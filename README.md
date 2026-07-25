@@ -56,6 +56,41 @@ nonempty, and historically unobserved sender messages before semantic metrics
 are interpreted. When paired pure transmission losses exist, reports also
 include `rule_z_contrast_packets.md` and `rule_z_contrast_packets.jsonl`.
 
+## Rule-Z Post-Hoc Intermediate Probe
+
+Frozen two-pass derivations can be re-read without mutating the source database
+or rerunning the original sender and answer path:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.intermediate_probe \
+  --source-db assets/runs/rule_z_intermediate_factorial_anthropic_sonnet46_seed41/trials.sqlite \
+  --output-db results/rule_z_intermediate_probe.sqlite \
+  --report-dir results/rule_z_intermediate_probe_reports \
+  --audit-modes source_faithful,repair_capable \
+  --query-battery current_state \
+  --provider-config expression_tomography/config/providers.anthropic_sonnet_4_6_2000.json
+```
+
+The source store is opened read-only. The sidecar output records source database
+and message hashes, source trial identity, probe replicate identity, raw reader
+responses, parsed scores, and a secret-free reader-configuration fingerprint.
+Repeating the same probe identity skips existing rows.
+
+`source_faithful` requires exact supporting quotes and scores grounded source
+fidelity. `repair_capable` explicitly allows reader-side repair and measures
+recoverability. The hidden query battery measures receiver-specific utility for
+current-state and counterfactual questions that were not shown to the original
+writer. The extended battery names its intervention targets, so use a separate
+`current_state` run for uncued current-state retrieval. Mock query rows receive
+a structured hint, and the mock audit recognizes only its narrow fielded
+format; both validate plumbing rather than arbitrary prose semantics. See
+`docs/rule_z_posthoc_intermediate_probe.md` for the measurement contract and
+interpretation limits.
+
+After the uncued run, repeat the command against the same sidecar with
+`--query-battery current_and_counterfactual` to append the target-cued
+counterfactual condition. Existing audit identities are skipped.
+
 ## Metaphor Transfer Smoke
 
 ```bash

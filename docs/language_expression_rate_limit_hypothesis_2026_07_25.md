@@ -1,13 +1,18 @@
-# Language Expression Rate-Limit Hypothesis - Working Map 2026-07-25
+# Expression Tomography Working Map - 2026-07-25
+
+Operational distinction throughput, expressive generativity, and interface
+rate limits.
 
 ## Status
 
-This is a working hypothesis map, not a conclusion.
+This is an open research map, not a definition of expression and not a
+conclusion about general intelligence.
 
 The motivating possibility is that some model workflows are limited not only
 by what can be computed, but by whether task-relevant distinctions can be
 selected, serialized, and made available to later computation. Rule-Z provides
-a small environment in which those interfaces can be perturbed independently.
+a small calibration environment in which some of those interfaces can be
+perturbed independently.
 
 The current evidence does not establish that:
 
@@ -16,60 +21,224 @@ The current evidence does not establish that:
 - better prompts merely reveal a fixed hidden intelligence;
 - Rule-Z effects generalize directly to open-domain reasoning or writing.
 
-## Working Chain
+## Non-Reduction Clause
+
+The operational quantities in this program measure local preservation and
+reuse of task-relevant distinctions. They are not definitions of expression
+itself.
+
+Expression may also:
+
+- create distinctions that were not already represented;
+- reorganize the sender through the act of externalization;
+- alter the receiver's interpretive capacity rather than merely fill a fixed
+  receiver state;
+- create delayed effects that no fixed immediate query set captures;
+- participate in forming a problem for which no single oracle structure yet
+  exists.
+
+Rule-Z is therefore a calibration phantom for identifiable interface losses,
+not a closed model of linguistic expression.
+
+## Two-Layer Architecture
+
+### Layer A: Open Hypothesis
+
+Expression includes more than transporting an already complete state. It may
+bind what matters, generate new distinctions, reshape sender and receiver
+states, and make later thought possible.
+
+This layer remains open, but it is not exempt from evidence. It should generate
+bridge commitments that motivate new probes, survive contact with their
+results, and be revised when predicted patterns repeatedly fail to appear.
+
+### Layer B: Operational Tomography
+
+Local tasks isolate a specified projection of expression:
 
 ```text
-latent or structured state Z
-    -> binding B
-    -> encoding E
-    -> expressed message M
-    -> re-entry or interpretation R
-    -> answer or action A
+Rule-Z:
+  preservation and reuse of known typed distinctions
 
-                         ^              |
-                         |--- repair ---|
+Metaphor:
+  transfer of an intended relation while limiting collateral dimensions
+
+Reader-State:
+  changes in attention, uncertainty, expectation, and available interpretation
+
+Open-World:
+  creation of previously unnamed distinctions that independent receivers can
+  reuse on held-out observations
 ```
 
-The interfaces are provisionally defined as:
+Each probe measures a projection. No finite union of these probes is assumed to
+be expression itself.
+
+## Reference Variables
+
+The earlier symbol `Z` mixed an experimenter-known structure with a
+model-internal state. They must remain separate:
 
 ```text
-B: Binding
-   Select which task, case, entities, and relations must be preserved.
+world or oracle structure Z*
+            |
+            | observation / computation
+            v
+unobserved sender state h_S(t) <-----+
+            |                        |
+            | binding under control  | self re-entry / expression-driven change
+            v                        |
+selected distinction contract C     |
+            |                        |
+            | encoding E             |
+            v                        |
+expressed artifact M(t) -------------+
+            |
+            | receiver and query dependent re-entry R(M, q)
+            v
+unobserved receiver state h_R
+            |
+            | action A(h_R, q)
+            v
+answer or behavior y
+```
+
+The variables are provisionally defined as:
+
+```text
+Z*: Experimenter-side canonical structure when one is available.
+    It is not assumed to be present inside the model.
+
+h_S: Sender computation state.
+     It may be incomplete or wrong and is not identified by output-only tests.
+
+C:   The selected distinction set or effective communication contract.
+     An external contract can influence C without proving what h_S contained
+     before that control was introduced.
 
 E: Encoding
-   Serialize those bound distinctions into language, notation, or another
-   externally available representation.
+   Produce an externally available representation under the current binding.
 
 M: Expressed message
    The observable artifact consumed by a receiver or later model pass.
 
-R: Re-entry
-   Reconstruct a usable task state from the expressed artifact.
+h_R: Receiver state reconstructed from M for a particular query and receiver.
 
 A: Action
-   Produce the final classification, decision, or downstream behavior.
+   Produce a classification, decision, or downstream behavior.
 ```
 
-Repair is a loop in which a reader or verifier diagnoses an earlier artifact
-and changes the message, the reconstructed state, or both.
+Repair is a loop in which a reader or verifier diagnoses an artifact and
+changes M, h_R, or a later sender state. Output-only Rule-Z experiments observe
+M and y. They do not directly identify h_S, C, or h_R.
+
+## Operational Quantities
+
+For a canonical structure `Z*` and future query distribution `Q`, let
+`D_Q(Z*)` denote the typed distinctions required to answer that distribution.
+The full source need not be reproduced when a smaller sufficient projection
+supports Q.
+
+This motivates two quantities that must not be collapsed:
+
+```text
+Source fidelity:
+  F_src(M, Z*)
+  How faithfully M preserves roles and relations in the canonical source.
+
+Query utility:
+  U_Q(M; R, A)
+  Expected utility when a specified receiver and action rule use M to answer
+  q sampled from Q.
+```
+
+`U_Q` is not an intrinsic property of M. A strong receiver may repair a weak
+message, while another receiver may fail on the same artifact. Reports must
+therefore identify the receiver and query battery.
+
+A message may be source-incomplete but sufficient for a narrow Q. Conversely,
+it may mention all relevant vocabulary while failing to preserve the roles
+needed by downstream computation. A single final category is an especially
+weak query distribution because distinct damaged states can converge on the
+same endpoint.
+
+## Local And Global Fidelity
+
+Element-level preservation and simultaneous integration are separate axes:
+
+```text
+Local relation fidelity L:
+  individual facts, rule firings, directed edges, or suppressions are stated
+  and recoverable with the correct role
+
+Global integration fidelity G:
+  those relations remain jointly operative in the reconstructed state and
+  support a coherent downstream answer
+```
+
+For output-only work, these should be indexed at observable boundaries:
+
+```text
+L_M, G_M:
+  source-faithful claims visible in the expressed artifact
+
+L_R, G_R:
+  relations and integrated state reconstructed by a specified receiver
+```
+
+Labels such as `L_E` or `G_hS` should be reserved for experiments that actually
+intervene on or observe those stages.
 
 ## What "Rate" Means
 
-The proposed rate is not tokens per second. It is the reliable throughput of
-task-relevant distinctions across an interface.
+The proposed operational rate is not tokens per second. It is the reliable
+throughput of query-relevant typed distinctions across a specified interface.
+A long message can have a low distinction rate, while a compact typed
+representation can have a high one.
 
-A distinction has survived only when later computation can use the relevant
-role and relation, not merely when its vocabulary appears in the text. For
-Rule-Z, examples include:
+Load is a vector rather than a single difficulty scalar:
 
-- actual fact versus available predicate;
-- fired rule versus possible rule;
-- higher-priority rule versus an unordered peer;
-- suppressed rule versus active rule;
-- resolved conclusion versus unresolved conflict.
+```text
+ell = (
+  fact count,
+  rule count,
+  priority-edge count,
+  dependency depth,
+  conflict density,
+  naming opacity,
+  query diversity,
+  ...
+)
+```
 
-A long message can therefore have a low effective distinction rate, while a
-short typed representation can have a high one.
+For interface `j`, query distribution `Q`, and controlled load slice `ell`,
+measure a weighted preservation curve `F_j,Q(ell)`. Until monotonicity and
+channel distributions are calibrated, use a reliability envelope rather than
+calling a scalar threshold Shannon-style capacity:
+
+```text
+E_j(epsilon, Q) = {ell : F_j,Q(ell) >= 1 - epsilon}
+```
+
+The rate-limit question then becomes:
+
+```text
+As controlled load increases, which observable boundary loses reliable
+distinction preservation first?
+```
+
+This operational quantity is narrower than expressive generativity:
+
+```text
+Operational distinction throughput:
+  reliable preservation of known distinctions for a specified Q
+
+Expressive generativity:
+  creation of new distinctions, interpretations, or problem formulations that
+  were not fixed in advance
+```
+
+Rule-Z measures the first. It does not currently measure the second.
 
 ## Current Observations
 
@@ -121,6 +290,60 @@ The same packet shows that preserving individual edges is not sufficient.
 Those edges must remain operative when the model integrates conclusions. The
 rate limit may therefore occur at more than one boundary inside a single
 written derivation.
+
+### 7. Binding changes trajectory stability
+
+The earlier 24-case free-schema surface has pairwise replicate agreement
+`0.667`: 8 of 24 case answers change across the two observed generations. The
+new compact/free intermediate factorial has agreement `0.750`: 3 of 12 case
+answers change. The explicit and generic-contract controls in the new
+factorial have agreement `1.000`.
+
+These are distinct runs and should not be pooled. Together they motivate a
+stability claim narrower than deterministic internal dynamics: under the
+observed provider pipeline, weak binding permits more variable output
+trajectories, while the controlled paths are stable on these samples.
+
+## Stability And Measurement Reactivity
+
+Mean accuracy is not enough. Report at least:
+
+```text
+mean accuracy
+case-conditioned success probability
+pairwise replicate agreement
+answer entropy
+state-fidelity variance
+```
+
+Measurement can also alter the path being measured. Keep these as separate
+conditions:
+
+```text
+no declaration
+post-hoc audit outside the answer path
+pre-answer typed declaration
+pre-answer source-faithful declaration with evidence
+```
+
+A post-hoc audit estimates recoverability without changing the original
+answer. A pre-answer declaration may improve or damage that answer and must be
+scored for reactivity. Neither should be silently interpreted as a passive
+view into an unchanged internal state.
+
+Post-hoc readers must also be split:
+
+```text
+Source-faithful audit:
+  extract only source-supported claims and quote the supporting source span
+
+Repair-capable audit:
+  infer the most coherent recoverable state and explicitly permit repair
+```
+
+The first estimates grounded source fidelity, subject to audit calibration.
+The second estimates receiver-specific recoverability. Their difference is a
+repair gap, not evidence that the repaired state existed before the audit.
 
 ## Hypothesis Family
 
@@ -187,13 +410,13 @@ parts of this proposal, but cannot establish its scope.
 
 ## Bounded Formulation
 
-In workflows where a model must serialize task state into language or notation
-and later computation consumes that serialization, binding and distinction
-preservation can become rate-limiting interfaces. External contracts and
-explicit notation can raise realized capability by stabilizing which relations
-are expressed and re-entered. Current output-only evidence does not determine
-whether these controls elicit latent capacity, substitute for it, or combine
-both effects.
+In workflows where downstream computation depends on a serialized intermediate
+state, realized capability can be limited by the reliable preservation of
+query-sufficient typed distinctions across binding, encoding, and re-entry.
+Private contracts and explicit notation may improve performance by eliciting,
+supplying, or stabilizing those distinctions. Output-only behavior can
+establish interface effects, but cannot by itself determine whether the
+relevant state existed before the control was introduced.
 
 ## Alternative Explanations
 
@@ -205,7 +428,9 @@ The observed gains could still arise from:
   representation;
 - ceiling effects in a small case set;
 - provider-specific training conventions;
-- audit-reader reconstruction that is better than the audited source.
+- audit-reader reconstruction that is better than the audited source;
+- a probe family that measures only one convenient projection of a broader
+  expressive phenomenon.
 
 The experiment program should preserve these explanations until they are
 separated directly.
@@ -228,20 +453,25 @@ The claim should remain at the narrowest level supported by each probe.
 
 ## Next Experimental Program
 
-### 1. Measure audit reactivity
+### 1. Reuse Frozen Messages Without Reactivity
 
-Compare:
+Run a sidecar probe over already-frozen private derivations. Do not mutate the
+source SQLite database and do not rerun the original sender or answer path.
+
+For each fixed message, compare:
 
 ```text
-post-hoc audit only
-typed self-declaration before final answer
-typed self-declaration plus source-faithful evidence quotes
+source-faithful quote audit
+repair-capable audit
+hidden current-state query battery
+hidden counterfactual query battery
 ```
 
-Score both state fidelity and whether requesting the measurement changes the
-answer trajectory.
+This first separates source grounding, recoverability, and query utility
+without introducing pre-answer measurement reactivity. Run the uncued
+current-state battery separately from the target-cued counterfactual battery.
 
-### 2. Calibrate audit readers
+### 2. Calibrate Audit Readers
 
 Construct derivations with:
 
@@ -254,32 +484,67 @@ Construct derivations with:
 Use quote-grounded model audits, cross-provider audits, and a small human
 annotation set. This estimates repair bias and source-fidelity error.
 
-### 3. Transfer across relation types
+### 3. Add Prospective Reactivity Conditions
+
+After the post-hoc reader is calibrated, compare:
+
+```text
+no declaration
+pre-answer typed declaration
+pre-answer quote-grounded declaration
+```
+
+Hold provider-call count and output budget constant. Measure both declaration
+fidelity and the change in final behavior.
+
+### 4. Test Contract Causality
+
+Use a staged compute-matched design before attempting a full factorial:
+
+```text
+contract: correct / length-matched null / wrong
+notation: compact pair / explicit directed edge
+compute: equal two-pass path in every cell
+```
+
+Null controls separate semantic binding from generic attention or extra text.
+Wrong contracts test whether the contract causally controls the intermediate
+trajectory. Predictable wrong-contract effects establish control, but do not by
+themselves distinguish latent-state selection from scaffold substitution.
+
+### 5. Transfer Across Relation Types
 
 Replace priority with temporal order, causal direction, quantifier scope,
 entity-role binding, and exception structure. A general expression-rate account
 should predict more than one parser convention.
 
-### 4. Trace load curves
+### 6. Trace Reliability Envelopes
 
 Vary rule count, edge count, conflict density, naming opacity, and message
-length. Estimate where each notation and contract begins to fail instead of
-comparing only one easy and one hard surface.
+length along controlled slices. Estimate multi-dimensional reliability
+frontiers instead of collapsing load to one scalar.
 
-### 5. Add local-model latent probes cautiously
+### 7. Add Local-Model Latent Probes Cautiously
 
 The `hf_local` path can support probes at pre-expression, post-expression, and
 re-entry stages. Decodability alone is insufficient: candidate features should
 be tested with controlled causal interventions and held-out tasks.
 
-### 6. Connect metaphor and semantic debt
+### 8. Connect Metaphor And Semantic Debt
 
 Use the same distinction ledger to test whether a metaphor preserves the
 intended target relation while importing collateral dimensions. This extends
 Rule-Z from exact symbolic relations to graded reader-state control without
-collapsing the two tasks.
+collapsing the two tasks. Metaphor probes remain a projection, not an oracle
+definition of expression.
 
-### 7. Test learning from repair traces
+### 9. Add Open-World Generativity Probes
+
+Test proposed distinctions by whether independent receivers can reuse them to
+compress, predict, or reorganize held-out observations. Novel wording alone is
+not enough; the new distinction must support downstream uptake.
+
+### 10. Test Learning From Repair Traces
 
 Train or adapt only after the measurement is calibrated. Contrast:
 
@@ -292,6 +557,17 @@ Evaluate on held-out structures and notations to distinguish memorized scaffold
 imitation from improved binding and encoding.
 
 ## Evidence Ledger
+
+### Operationalized, Not Yet Live Evidence
+
+- Frozen messages can be opened read-only and probed through an append-only
+  sidecar.
+- Source-faithful and repair-capable readers now have separate prompt and score
+  contracts.
+- Hidden current-state and counterfactual query batteries now produce
+  receiver-indexed local and global utility scores.
+- Mock results validate plumbing only; they do not establish semantic
+  fidelity or utility on provider prose.
 
 ### Observed
 
@@ -317,3 +593,6 @@ imitation from improved binding and encoding.
 - Whether expression interfaces are a major limit on general intelligence.
 - Whether the same map transfers to open-domain language, metaphor, and
   learning.
+- Whether the proposed probe family shares a common factor.
+- How to measure expressive generativity without reducing novelty to arbitrary
+  difference from a fixed oracle.

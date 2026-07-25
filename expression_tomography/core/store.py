@@ -9,12 +9,20 @@ from .schema import Case, TrialResult
 
 
 class ExperimentStore:
-    def __init__(self, path: str | Path):
+    def __init__(self, path: str | Path, read_only: bool = False):
         self.path = Path(path)
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        self.conn = sqlite3.connect(self.path)
+        self.read_only = read_only
+        if read_only:
+            self.conn = sqlite3.connect(
+                f"{self.path.resolve().as_uri()}?mode=ro",
+                uri=True,
+            )
+        else:
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            self.conn = sqlite3.connect(self.path)
         self.conn.row_factory = sqlite3.Row
-        self._init_schema()
+        if not read_only:
+            self._init_schema()
 
     def close(self) -> None:
         self.conn.close()
@@ -49,6 +57,8 @@ class ExperimentStore:
         self.conn.commit()
 
     def upsert_case(self, case: Case) -> None:
+        if self.read_only:
+            raise RuntimeError("Cannot write cases through a read-only ExperimentStore")
         self.conn.execute(
             """
             INSERT INTO cases (case_hash, case_id, task_type, seed, payload_json)
@@ -70,6 +80,8 @@ class ExperimentStore:
         self.conn.commit()
 
     def insert_trial(self, trial: TrialResult) -> None:
+        if self.read_only:
+            raise RuntimeError("Cannot write trials through a read-only ExperimentStore")
         self.conn.execute(
             """
             INSERT INTO trials (

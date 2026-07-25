@@ -358,3 +358,41 @@ The live note is
 language-expression rate-limit proposal is kept as a graded hypothesis family
 in `docs/language_expression_rate_limit_hypothesis_2026_07_25.md`, with
 observed, inferred, and unidentified claims separated.
+
+## 2026-07-25: Post-Hoc Fidelity And Utility Probe
+
+The next measurement stage is implemented as a sidecar over frozen messages:
+
+```text
+fixed source artifact
+  -> source-faithful quote audit
+  -> repair-capable audit
+  -> hidden current-state query battery
+  -> hidden counterfactual query battery
+```
+
+The source SQLite database is opened read-only. The original sender and answer
+path are not rerun, so this stage does not introduce pre-answer measurement
+reactivity.
+
+The split establishes three different operational quantities:
+
+```text
+grounded source fidelity:
+  oracle agreement only when every extracted field is unambiguous and backed
+  by an exact source quote
+
+recoverability:
+  oracle agreement after a named reader is explicitly allowed to repair
+
+query utility:
+  exact answers a named receiver can recover from the fixed artifact for a
+  specified hidden battery
+```
+
+`U_Q` remains receiver dependent. A repair gap does not identify a latent
+sender state, and counterfactual failure is not automatically a violation of a
+source written only for one endpoint.
+
+The implementation and limitations are documented in
+`docs/rule_z_posthoc_intermediate_probe.md`.

@@ -170,6 +170,93 @@ def make_intermediate_audit_prompt(
     )
 
 
+def make_source_faithful_audit_prompt(
+    case_id: str,
+    source_artifact: str,
+    source_condition: str,
+) -> str:
+    return "\n".join(
+        [
+            "TASK: rule_z_source_faithful_audit",
+            "CONDITION: I_SOURCE_FAITHFUL",
+            f"SOURCE_CONDITION: {source_condition}",
+            f"CASE_ID: {case_id}",
+            "Extract only claims explicitly asserted by the source artifact.",
+            "Do not solve the Rule-Z case, repair the artifact, or select the claim that seems most likely to be correct.",
+            "You do not receive the authoritative structured case.",
+            "Every extracted item must include an exact contiguous quote from the source artifact.",
+            "Use status asserted when one or more values are stated, explicit_none when the source explicitly says none, not_stated when the field is absent, and contradictory when incompatible claims are present.",
+            "For explicit_none, put the exact supporting quote in field_evidence.",
+            "For not_stated, use empty items and an empty field_evidence.",
+            "Record source contradictions instead of silently resolving them.",
+            "Return exactly one JSON object and no prose.",
+            "Schema:",
+            '{"fired_rules": {"status": "asserted", "items": [{"value": "<rule_id>", "evidence": "<exact contiguous quote>"}], "field_evidence": ""}, "fired_priority_edges": {"status": "asserted", "items": [{"higher_priority_rule": "<higher_rule_id>", "lower_priority_rule": "<lower_rule_id>", "evidence": "<exact contiguous quote>"}], "field_evidence": ""}, "suppressed_rules": {"status": "explicit_none", "items": [], "field_evidence": "<exact quote stating none>"}, "active_rules": {"status": "not_stated", "items": [], "field_evidence": ""}, "active_conclusions": {"status": "asserted", "items": [{"value": "<eligible_or_not_eligible>", "evidence": "<exact contiguous quote>"}], "field_evidence": ""}, "source_final_answer": {"status": "asserted", "value": "<yes_no_or_conflict>", "evidence": "<exact contiguous quote>"}, "contradictions": [{"topic": "<topic>", "evidence": ["<exact quote A>", "<exact quote B>"]}]}',
+            "SOURCE_ARTIFACT",
+            source_artifact,
+            "END_SOURCE_ARTIFACT",
+        ]
+    )
+
+
+def make_repair_capable_audit_prompt(
+    case_id: str,
+    source_artifact: str,
+    source_condition: str,
+) -> str:
+    return "\n".join(
+        [
+            "TASK: rule_z_repair_capable_audit",
+            "CONDITION: I_REPAIR_CAPABLE",
+            f"SOURCE_CONDITION: {source_condition}",
+            f"CASE_ID: {case_id}",
+            "Recover the most coherent Rule-Z state that a careful reader can reconstruct from the source artifact.",
+            "You may reconcile inconsistent clauses or repair an apparent integration mistake when the source provides enough local evidence.",
+            "You do not receive the authoritative structured case.",
+            "Use an empty array when no state can be recovered for a field.",
+            "Return exactly one JSON object and no prose.",
+            "Schema:",
+            '{"fired_rules": ["<rule_id>"], "fired_priority_edges": [{"higher_priority_rule": "<higher_rule_id>", "lower_priority_rule": "<lower_rule_id>"}], "suppressed_rules": ["<rule_id>"], "active_rules": ["<rule_id>"], "active_conclusions": ["<eligible_or_not_eligible>"]}',
+            "SOURCE_ARTIFACT",
+            source_artifact,
+            "END_SOURCE_ARTIFACT",
+        ]
+    )
+
+
+def make_hidden_query_battery_prompt(
+    case_id: str,
+    source_artifact: str,
+    query_spec: dict[str, Any],
+    source_condition: str,
+    include_structured_hint: bool = False,
+    public: dict[str, Any] | None = None,
+) -> str:
+    lines = [
+        "TASK: rule_z_hidden_query_battery",
+        "CONDITION: Q_HIDDEN_BATTERY",
+        f"SOURCE_CONDITION: {source_condition}",
+        f"CASE_ID: {case_id}",
+        "Answer only from the fixed source artifact. The writer did not see this query battery.",
+        "Do not assume access to the original Rule-Z case.",
+        "Use JSON null for any field the source artifact does not support. Do not guess.",
+        "Treat each requested field as a separate query over the same fixed artifact.",
+        "For a counterfactual, apply only the stated change and keep every other recoverable relation fixed.",
+        _json_block("RULE_Z_QUERY_SPEC_JSON", query_spec),
+        "Return exactly one JSON object and no prose.",
+        "Schema:",
+        '{"facts": ["<predicate>"], "fired_rules": ["<rule_id>"], "fired_priority_edges": [{"higher_priority_rule": "<higher_rule_id>", "lower_priority_rule": "<lower_rule_id>"}], "suppressed_rules": ["<rule_id>"], "active_rules": ["<rule_id>"], "active_conclusions": ["<eligible_or_not_eligible>"], "final_answer": "<yes_no_or_conflict>", "fact_removal": {"removed_fact": "<requested_fact>", "active_conclusions": ["<eligible_or_not_eligible>"], "answer": "<yes_no_or_conflict>"}, "edge_reversal": {"higher_priority_rule": "<requested_higher_rule>", "lower_priority_rule": "<requested_lower_rule>", "active_conclusions": ["<eligible_or_not_eligible>"], "answer": "<yes_no_or_conflict>"}}',
+        "SOURCE_ARTIFACT",
+        source_artifact,
+        "END_SOURCE_ARTIFACT",
+    ]
+    if include_structured_hint:
+        if public is None:
+            raise ValueError("public is required when include_structured_hint is true")
+        lines.append(_json_block("RULE_Z_FROM_MESSAGE_JSON", public))
+    return "\n".join(lines)
+
+
 def make_message_prompt(case_id: str, public: dict[str, Any], mode: str = "free") -> str:
     lines = [
         "TASK: rule_z_write_message",
