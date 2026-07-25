@@ -1,0 +1,3 @@
+provider,T_condition,n_trials,observed_message_count,unknown_message_count,nonempty_message_count,empty_message_count,empty_message_rate,receiver_accuracy_all,receiver_accuracy_nonempty,correct_with_empty_message_count
+ALL,T_oracle_text,24,24,0,24,0,0.0,1.0,1.0,0
+anthropic_sonnet_4_6,T_oracle_text,24,24,0,24,0,0.0,1.0,1.0,0

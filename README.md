@@ -42,6 +42,11 @@ The next intermediate-stage factorial adds the explicit-edge twins
 `two_pass_generic_contract_explicit_edges`. Add `--audit-intermediates` to
 extract a non-answer-path readout of the state expressed by each private
 derivation and compare it with the Rule-Z oracle.
+The first live factorial result is documented in
+`docs/live_rule_z_intermediate_factorial_note_2026_07_25.md`. Its implications
+for the broader, still-unresolved language-expression rate-limit hypothesis are
+tracked separately in
+`docs/language_expression_rate_limit_hypothesis_2026_07_25.md`.
 Ear red-team variants are also available: `oracle_no_final`,
 `oracle_no_final_no_active`, and `oracle_corrupt_final`.
 Reports include aggregate accuracy, provider-level accuracy, transmission

@@ -111,6 +111,11 @@ rule_z_priority_compute_anthropic_sonnet46_seed41_budget2000
   replicate at a 2000-token completion budget, including equal-call
   free-versus-generic direct probes and their stored intermediates.
 
+rule_z_intermediate_factorial_anthropic_sonnet46_seed41
+  Anthropic Sonnet 4.6 compact/explicit priority notation by free/generic
+  private-binding factorial, with two replicates, stored private derivations,
+  non-answer-path audits, and case-level reconstruction scores.
+
 metaphor_transfer_openai_live
   First OpenAI live metaphor-transfer smoke run.
 
