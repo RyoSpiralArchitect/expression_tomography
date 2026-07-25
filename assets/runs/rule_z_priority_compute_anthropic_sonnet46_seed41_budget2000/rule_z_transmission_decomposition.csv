@@ -1,0 +1,17 @@
+provider,T_condition,n_cases,n_unique_cases,n_case_replicates,solved_by_both_count,unsolved_by_direct_count,transmission_survival,pure_transmission_loss,transmission_rescue,expected_conflict_count,conflict_reconstruction_accuracy,conflict_collapse_negative_rate,conflict_collapse_positive_rate,corrupted_label_count,label_dependence,label_resistance,derivation_dependence,survived_count,pure_loss_count,rescued_count
+ALL,T_contract_ablate_priority_explicit_edges_private_prose,12,12,12,9,3,1.0,0.0,1.0,4,1.0,0.0,0.0,0,,,,9,0,3
+ALL,T_contract_ablate_priority_private_prose,12,12,12,9,3,1.0,0.0,1.0,4,1.0,0.0,0.0,0,,,,9,0,3
+ALL,T_free_schema_prompt,24,12,24,17,7,0.7647058823529411,0.23529411764705882,0.0,8,0.625,0.375,0.0,0,,,,13,4,0
+ALL,T_free_schema_prompt_explicit_edges,24,12,24,17,7,0.8823529411764706,0.11764705882352941,0.5714285714285714,8,0.75,0.25,0.0,0,,,,15,2,4
+ALL,T_generic_contract_explicit_edges_private_prose,24,12,24,17,7,1.0,0.0,1.0,8,1.0,0.0,0.0,0,,,,17,0,7
+ALL,T_generic_contract_private_prose,24,12,24,17,7,0.9411764705882353,0.058823529411764705,0.8571428571428571,8,1.0,0.0,0.0,0,,,,16,1,6
+ALL,T_oracle_contract_private_prose,24,12,24,17,7,0.9411764705882353,0.058823529411764705,1.0,8,1.0,0.0,0.0,0,,,,16,1,7
+ALL,T_oracle_text,24,12,24,17,7,1.0,0.0,1.0,8,1.0,0.0,0.0,0,,,,17,0,7
+anthropic_sonnet_4_6,T_contract_ablate_priority_explicit_edges_private_prose,12,12,12,9,3,1.0,0.0,1.0,4,1.0,0.0,0.0,0,,,,9,0,3
+anthropic_sonnet_4_6,T_contract_ablate_priority_private_prose,12,12,12,9,3,1.0,0.0,1.0,4,1.0,0.0,0.0,0,,,,9,0,3
+anthropic_sonnet_4_6,T_free_schema_prompt,24,12,24,17,7,0.7647058823529411,0.23529411764705882,0.0,8,0.625,0.375,0.0,0,,,,13,4,0
+anthropic_sonnet_4_6,T_free_schema_prompt_explicit_edges,24,12,24,17,7,0.8823529411764706,0.11764705882352941,0.5714285714285714,8,0.75,0.25,0.0,0,,,,15,2,4
+anthropic_sonnet_4_6,T_generic_contract_explicit_edges_private_prose,24,12,24,17,7,1.0,0.0,1.0,8,1.0,0.0,0.0,0,,,,17,0,7
+anthropic_sonnet_4_6,T_generic_contract_private_prose,24,12,24,17,7,0.9411764705882353,0.058823529411764705,0.8571428571428571,8,1.0,0.0,0.0,0,,,,16,1,6
+anthropic_sonnet_4_6,T_oracle_contract_private_prose,24,12,24,17,7,0.9411764705882353,0.058823529411764705,1.0,8,1.0,0.0,0.0,0,,,,16,1,7
+anthropic_sonnet_4_6,T_oracle_text,24,12,24,17,7,1.0,0.0,1.0,8,1.0,0.0,0.0,0,,,,17,0,7

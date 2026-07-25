@@ -463,6 +463,18 @@ contract_only_private_prose fails while self_contract_private_prose succeeds:
   re-reference the original case structure
 ```
 
+## Binding Stress Surface
+
+After contract perturbation establishes causal steering, use the binding-stress
+profile to find the boundary of generic binding. The profile crosses four
+difficulty families with semantic/opaque isomorphic predicate names and three
+balanced answer targets.
+
+The pass also supports repeated generations and four pure contract-clause
+ablations. Reports add binding/specificity/scaffold contrasts, paired lexical
+effects, and replicate answer entropy. The full experiment contract and staged
+live commands are in `docs/rule_z_binding_stress_surface.md`.
+
 ## Ear Red Team
 
 The first live diagnostic run showed `T_oracle_text = 1.000`, but that condition

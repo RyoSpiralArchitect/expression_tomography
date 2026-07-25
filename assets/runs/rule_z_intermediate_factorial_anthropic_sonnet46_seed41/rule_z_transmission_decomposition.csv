@@ -1,0 +1,3 @@
+provider,T_condition,n_cases,n_unique_cases,n_case_replicates,solved_by_both_count,unsolved_by_direct_count,transmission_survival,pure_transmission_loss,transmission_rescue,expected_conflict_count,conflict_reconstruction_accuracy,conflict_collapse_negative_rate,conflict_collapse_positive_rate,corrupted_label_count,label_dependence,label_resistance,derivation_dependence,survived_count,pure_loss_count,rescued_count
+ALL,T_oracle_text,24,12,24,16,8,1.0,0.0,1.0,8,1.0,0.0,0.0,0,,,,16,0,8
+anthropic_sonnet_4_6,T_oracle_text,24,12,24,16,8,1.0,0.0,1.0,8,1.0,0.0,0.0,0,,,,16,0,8

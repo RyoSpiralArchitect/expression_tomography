@@ -27,12 +27,79 @@ message channels.
 Contract perturbation modes are also available:
 `generic_contract_private_prose`, `wrong_contract_private_prose`,
 `scrambled_contract_private_prose`, and `contract_only_private_prose`.
+The next binding-stress pass adds `--case-profile binding_stress`,
+`--repetitions`, semantic/opaque isomorphic pairs, and four contract-clause
+ablation modes. See `docs/rule_z_binding_stress_surface.md` for the staged live
+pilot and metric definitions. The priority/compute follow-up adds
+`--stress-families`, explicit-priority transmission twins, and
+`--direct-probe-modes priority_explicit_edges,two_pass_free,two_pass_generic_contract`
+to separate notation, extra-pass, equal-call binding, and structured-access
+effects. The live OpenAI and Anthropic follow-ups are documented in
+`docs/live_rule_z_priority_compute_openai_note_2026_07_24.md` and
+`docs/live_rule_z_priority_compute_anthropic_note_2026_07_25.md`.
+The next intermediate-stage factorial adds the explicit-edge twins
+`two_pass_free_explicit_edges` and
+`two_pass_generic_contract_explicit_edges`. Add `--audit-intermediates` to
+extract a non-answer-path readout of the state expressed by each private
+derivation and compare it with the Rule-Z oracle.
+The first live factorial result is documented in
+`docs/live_rule_z_intermediate_factorial_note_2026_07_25.md`. Its implications
+for the broader, still-unresolved language-expression rate-limit hypothesis are
+tracked separately in
+`docs/language_expression_rate_limit_hypothesis_2026_07_25.md`.
 Ear red-team variants are also available: `oracle_no_final`,
 `oracle_no_final_no_active`, and `oracle_corrupt_final`.
 Reports include aggregate accuracy, provider-level accuracy, transmission
 survival/loss/rescue, sender contrasts, message diagnostics, and a case-level
-CSV for failure review. When paired pure transmission losses exist, reports also
+CSV for failure review. `rule_z_transmission_integrity.csv` separates empty,
+nonempty, and historically unobserved sender messages before semantic metrics
+are interpreted. When paired pure transmission losses exist, reports also
 include `rule_z_contrast_packets.md` and `rule_z_contrast_packets.jsonl`.
+Rule-Z trial identity is `(provider, case_hash, condition, replicate_index)`.
+Rerunning the same identity resumes missing conditions and skips existing
+rows; requesting mode aliases that collapse to one condition is rejected
+before any provider call.
+
+## Rule-Z Post-Hoc Intermediate Probe
+
+Frozen two-pass derivations can be re-read without mutating the source database
+or rerunning the original sender and answer path:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.intermediate_probe \
+  --source-db assets/runs/rule_z_intermediate_factorial_anthropic_sonnet46_seed41/trials.sqlite \
+  --output-db results/rule_z_intermediate_probe.sqlite \
+  --report-dir results/rule_z_intermediate_probe_reports \
+  --audit-modes source_faithful,repair_capable \
+  --query-battery current_state \
+  --provider-config expression_tomography/config/providers.anthropic_sonnet_4_6_2000.json
+```
+
+The source store is opened read-only. The sidecar output records source database
+and message hashes, source trial identity, probe replicate identity, raw reader
+responses, parsed scores, and a secret-free reader-configuration fingerprint.
+Repeating the same probe identity skips existing rows.
+
+`source_faithful` requires exact supporting quotes and scores grounded source
+fidelity. `repair_capable` explicitly allows reader-side repair and measures
+recoverability. The hidden query battery measures receiver-specific utility for
+current-state and counterfactual questions that were not shown to the original
+writer. The extended battery names its intervention targets, so use a separate
+`current_state` run for uncued current-state retrieval. Mock query rows receive
+a structured hint, and the mock audit recognizes only its narrow fielded
+format; both validate plumbing rather than arbitrary prose semantics. See
+`docs/rule_z_posthoc_intermediate_probe.md` for the measurement contract and
+interpretation limits.
+
+Audit reports expose answer-reconstruction support separately from accuracy.
+A reconstructed answer counts as correct only when the reader supplied a
+nonempty, valid `active_conclusions` state; missing, malformed, empty, or
+out-of-vocabulary states are retained as unsupported rather than defaulting to
+`no`.
+
+After the uncued run, repeat the command against the same sidecar with
+`--query-battery current_and_counterfactual` to append the target-cued
+counterfactual condition. Existing audit identities are skipped.
 
 ## Metaphor Transfer Smoke
 
@@ -65,6 +132,17 @@ A stronger OpenAI config is available for model-equalized ear red-team runs:
 python3 -m expression_tomography.tasks.rule_z.task \
   --provider-config expression_tomography/config/providers.openai_gpt_5_5.json
 ```
+
+The matching clean Anthropic priority/compute probe uses:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.task \
+  --provider-config expression_tomography/config/providers.anthropic_sonnet_4_6_2000.json
+```
+
+Live adapters reject blank provider completions. The OpenAI error reports safe
+finish/token diagnostics, and the Anthropic error reports safe stop/token
+diagnostics, so an empty generation cannot silently become a receiver trial.
 
 Provider types:
 

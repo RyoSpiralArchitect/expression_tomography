@@ -6,6 +6,9 @@ from typing import Any
 from .oracle import OracleAnswer
 
 
+PRIORITY_NOTATIONS = ("pair_list", "explicit_edges")
+
+
 def _json_block(marker: str, obj: dict[str, Any]) -> str:
     return f"{marker}\n{json.dumps(obj, ensure_ascii=False, sort_keys=True)}\nEND_{marker}"
 
@@ -28,6 +31,28 @@ def _answer_schema() -> str:
 
 def _format_priority_edges(edges: list[tuple[str, str]]) -> str:
     return ", ".join(f"{winner}>{loser}" for winner, loser in edges) or "none"
+
+
+def make_public_with_priority_notation(
+    public: dict[str, Any],
+    notation: str = "pair_list",
+) -> dict[str, Any]:
+    if notation not in PRIORITY_NOTATIONS:
+        allowed = ", ".join(PRIORITY_NOTATIONS)
+        raise ValueError(f"Unknown priority notation: {notation}. Allowed: {allowed}")
+    if notation == "pair_list":
+        return public
+
+    formatted = dict(public)
+    pair_edges = formatted.pop("priority", [])
+    formatted["priority_edges"] = [
+        {
+            "higher_priority_rule": str(winner),
+            "lower_priority_rule": str(loser),
+        }
+        for winner, loser in pair_edges
+    ]
+    return formatted
 
 
 def make_baseline_prompt(case_id: str, public: dict[str, Any], strict_conflict: bool = False) -> str:
@@ -66,6 +91,172 @@ def make_structured_prompt(
     )
 
 
+def make_private_derivation_prompt(
+    case_id: str,
+    public: dict[str, Any],
+    condition: str,
+    contract: str | None = None,
+) -> str:
+    lines = [
+        "TASK: rule_z_private_derivation",
+        f"CONDITION: {condition}_DERIVE",
+        f"CASE_ID: {case_id}",
+        "Prepare private scratch work for a later answer pass over this specific case.",
+        "Use any prose or compact notation that seems useful.",
+        "Do not return answer JSON.",
+        "Do not state the final answer label yes, no, or conflict.",
+    ]
+    if contract:
+        lines.extend(
+            [
+                "Use the private contract below to decide which distinctions the scratch work must preserve.",
+                "PRIVATE_CONTRACT:",
+                contract,
+                "END_PRIVATE_CONTRACT",
+            ]
+        )
+    lines.append(_json_block("RULE_Z_PUBLIC_JSON", public))
+    return "\n".join(lines)
+
+
+def make_structured_review_prompt(
+    case_id: str,
+    public: dict[str, Any],
+    derivation: str,
+    condition: str,
+    strict_conflict: bool = False,
+) -> str:
+    return "\n".join(
+        [
+            "TASK: rule_z_answer",
+            f"CONDITION: {condition}",
+            f"CASE_ID: {case_id}",
+            "Review the private derivation, then answer from the structured Rule-Z case.",
+            "The structured case is authoritative if the derivation is incomplete or mistaken.",
+            "PRIVATE_DERIVATION:",
+            derivation,
+            "END_PRIVATE_DERIVATION",
+            _json_block("RULE_Z_PUBLIC_JSON", public),
+            *_conflict_rubric(strict_conflict),
+            "Return exactly one line of JSON and no prose.",
+            _answer_schema(),
+        ]
+    )
+
+
+def make_intermediate_audit_prompt(
+    case_id: str,
+    derivation: str,
+    condition: str,
+) -> str:
+    return "\n".join(
+        [
+            "TASK: rule_z_intermediate_audit",
+            f"CONDITION: {condition}_AUDIT",
+            f"CASE_ID: {case_id}",
+            "Extract only the Rule-Z state explicitly asserted by the private derivation.",
+            "Do not solve, repair, or reinterpret the original case.",
+            "You do not receive the authoritative structured case.",
+            "Use an empty array when the derivation does not state a requested field.",
+            "Record a priority edge only when the derivation states that one rule has higher priority than, beats, overrides, or suppresses the other.",
+            "Preserve the stated edge direction exactly, even when it appears mistaken.",
+            "Return exactly one JSON object and no prose.",
+            "Schema:",
+            '{"fired_rules": ["r1"], "fired_priority_edges": [{"higher_priority_rule": "r1", "lower_priority_rule": "r2"}], "suppressed_rules": ["r2"], "active_rules": ["r1"], "active_conclusions": ["eligible"]}',
+            "PRIVATE_DERIVATION",
+            derivation,
+            "END_PRIVATE_DERIVATION",
+        ]
+    )
+
+
+def make_source_faithful_audit_prompt(
+    case_id: str,
+    source_artifact: str,
+    source_condition: str,
+) -> str:
+    return "\n".join(
+        [
+            "TASK: rule_z_source_faithful_audit",
+            "CONDITION: I_SOURCE_FAITHFUL",
+            f"SOURCE_CONDITION: {source_condition}",
+            f"CASE_ID: {case_id}",
+            "Extract only claims explicitly asserted by the source artifact.",
+            "Do not solve the Rule-Z case, repair the artifact, or select the claim that seems most likely to be correct.",
+            "You do not receive the authoritative structured case.",
+            "Every extracted item must include an exact contiguous quote from the source artifact.",
+            "Use status asserted when one or more values are stated, explicit_none when the source explicitly says none, not_stated when the field is absent, and contradictory when incompatible claims are present.",
+            "For explicit_none, put the exact supporting quote in field_evidence.",
+            "For not_stated, use empty items and an empty field_evidence.",
+            "Record source contradictions instead of silently resolving them.",
+            "Return exactly one JSON object and no prose.",
+            "Schema:",
+            '{"fired_rules": {"status": "asserted", "items": [{"value": "<rule_id>", "evidence": "<exact contiguous quote>"}], "field_evidence": ""}, "fired_priority_edges": {"status": "asserted", "items": [{"higher_priority_rule": "<higher_rule_id>", "lower_priority_rule": "<lower_rule_id>", "evidence": "<exact contiguous quote>"}], "field_evidence": ""}, "suppressed_rules": {"status": "explicit_none", "items": [], "field_evidence": "<exact quote stating none>"}, "active_rules": {"status": "not_stated", "items": [], "field_evidence": ""}, "active_conclusions": {"status": "asserted", "items": [{"value": "<eligible_or_not_eligible>", "evidence": "<exact contiguous quote>"}], "field_evidence": ""}, "source_final_answer": {"status": "asserted", "value": "<yes_no_or_conflict>", "evidence": "<exact contiguous quote>"}, "contradictions": [{"topic": "<topic>", "evidence": ["<exact quote A>", "<exact quote B>"]}]}',
+            "SOURCE_ARTIFACT",
+            source_artifact,
+            "END_SOURCE_ARTIFACT",
+        ]
+    )
+
+
+def make_repair_capable_audit_prompt(
+    case_id: str,
+    source_artifact: str,
+    source_condition: str,
+) -> str:
+    return "\n".join(
+        [
+            "TASK: rule_z_repair_capable_audit",
+            "CONDITION: I_REPAIR_CAPABLE",
+            f"SOURCE_CONDITION: {source_condition}",
+            f"CASE_ID: {case_id}",
+            "Recover the most coherent Rule-Z state that a careful reader can reconstruct from the source artifact.",
+            "You may reconcile inconsistent clauses or repair an apparent integration mistake when the source provides enough local evidence.",
+            "You do not receive the authoritative structured case.",
+            "Use an empty array when no state can be recovered for a field.",
+            "Return exactly one JSON object and no prose.",
+            "Schema:",
+            '{"fired_rules": ["<rule_id>"], "fired_priority_edges": [{"higher_priority_rule": "<higher_rule_id>", "lower_priority_rule": "<lower_rule_id>"}], "suppressed_rules": ["<rule_id>"], "active_rules": ["<rule_id>"], "active_conclusions": ["<eligible_or_not_eligible>"]}',
+            "SOURCE_ARTIFACT",
+            source_artifact,
+            "END_SOURCE_ARTIFACT",
+        ]
+    )
+
+
+def make_hidden_query_battery_prompt(
+    case_id: str,
+    source_artifact: str,
+    query_spec: dict[str, Any],
+    source_condition: str,
+    include_structured_hint: bool = False,
+    public: dict[str, Any] | None = None,
+) -> str:
+    lines = [
+        "TASK: rule_z_hidden_query_battery",
+        "CONDITION: Q_HIDDEN_BATTERY",
+        f"SOURCE_CONDITION: {source_condition}",
+        f"CASE_ID: {case_id}",
+        "Answer only from the fixed source artifact. The writer did not see this query battery.",
+        "Do not assume access to the original Rule-Z case.",
+        "Use JSON null for any field the source artifact does not support. Do not guess.",
+        "Treat each requested field as a separate query over the same fixed artifact.",
+        "For a counterfactual, apply only the stated change and keep every other recoverable relation fixed.",
+        _json_block("RULE_Z_QUERY_SPEC_JSON", query_spec),
+        "Return exactly one JSON object and no prose.",
+        "Schema:",
+        '{"facts": ["<predicate>"], "fired_rules": ["<rule_id>"], "fired_priority_edges": [{"higher_priority_rule": "<higher_rule_id>", "lower_priority_rule": "<lower_rule_id>"}], "suppressed_rules": ["<rule_id>"], "active_rules": ["<rule_id>"], "active_conclusions": ["<eligible_or_not_eligible>"], "final_answer": "<yes_no_or_conflict>", "fact_removal": {"removed_fact": "<requested_fact>", "active_conclusions": ["<eligible_or_not_eligible>"], "answer": "<yes_no_or_conflict>"}, "edge_reversal": {"higher_priority_rule": "<requested_higher_rule>", "lower_priority_rule": "<requested_lower_rule>", "active_conclusions": ["<eligible_or_not_eligible>"], "answer": "<yes_no_or_conflict>"}}',
+        "SOURCE_ARTIFACT",
+        source_artifact,
+        "END_SOURCE_ARTIFACT",
+    ]
+    if include_structured_hint:
+        if public is None:
+            raise ValueError("public is required when include_structured_hint is true")
+        lines.append(_json_block("RULE_Z_FROM_MESSAGE_JSON", public))
+    return "\n".join(lines)
+
+
 def make_message_prompt(case_id: str, public: dict[str, Any], mode: str = "free") -> str:
     lines = [
         "TASK: rule_z_write_message",
@@ -87,7 +278,7 @@ def make_message_prompt(case_id: str, public: dict[str, Any], mode: str = "free"
                 "Do not answer any future query directly.",
                 "Do not use the final answer label.",
                 "You may use labelled sections or compact bullets if helpful.",
-                "You may use exact predicate names such as is_student and has_debt.",
+                "You may use the exact predicate names shown in the Rule-Z JSON.",
             ]
         )
     elif mode == "free_case_hint_no_sections":
@@ -99,7 +290,7 @@ def make_message_prompt(case_id: str, public: dict[str, Any], mode: str = "free"
                 "Do not use labelled sections such as actual facts, fired rules, priority, or final category.",
                 "Do not answer any future query directly.",
                 "Do not use the final answer label.",
-                "You may use exact predicate names such as is_student and has_debt.",
+                "You may use the exact predicate names shown in the Rule-Z JSON.",
             ]
         )
     if mode in {"factlocked", "factlocked_plus_priority", "factlocked_plus_priority_edges"}:
@@ -155,7 +346,7 @@ def make_message_repair_prompt(
             "Do not include your critique.",
             "Do not answer any future query directly.",
             "Do not use the final answer label yes, no, or conflict.",
-            "You may use exact predicate names such as is_student and has_debt.",
+            "You may use the exact predicate names shown in the Rule-Z JSON.",
             "PREVIOUS_MESSAGE:",
             previous_message,
             "END_PREVIOUS_MESSAGE",
@@ -190,15 +381,50 @@ def make_oracle_contract() -> str:
     return "\n".join(
         [
             "Private Rule-Z communication contract.",
-            "The later sender message must preserve actual facts as facts of the current case, not as merely available predicates.",
-            "It must distinguish fired rules from possible rules in the rule system.",
-            "It must distinguish priority edges in the rule system from suppressions that actually occur in this case.",
-            "It must preserve which conclusions remain active after suppression.",
-            "If eligible and not_eligible both remain active, it must preserve that unresolved opposition rather than collapsing it.",
+            *_contract_requirement_lines(),
             "The final message should be ordinary prose rather than a labelled section, bullet list, table, or fielded ledger.",
             "The final message should not provide the final answer label yes, no, or conflict directly.",
         ]
     )
+
+
+_CONTRACT_COMPONENT_LINES = {
+    "facts": (
+        "The later sender message must preserve actual facts as facts of the current case, not as merely available predicates.",
+    ),
+    "firing": ("It must distinguish fired rules from possible rules in the rule system.",),
+    "priority": (
+        "It must distinguish priority edges in the rule system from suppressions that actually occur in this case.",
+    ),
+    "conflict": (
+        "It must preserve which conclusions remain active after suppression.",
+        "If eligible and not_eligible both remain active, it must preserve that unresolved opposition rather than collapsing it.",
+    ),
+}
+
+
+def _contract_requirement_lines(excluded: str | None = None) -> list[str]:
+    return [
+        line
+        for component, lines in _CONTRACT_COMPONENT_LINES.items()
+        if component != excluded
+        for line in lines
+    ]
+
+
+def make_ablated_contract(component: str) -> str:
+    if component not in _CONTRACT_COMPONENT_LINES:
+        allowed = ", ".join(sorted(_CONTRACT_COMPONENT_LINES))
+        raise ValueError(f"Unknown Rule-Z contract ablation: {component}. Allowed: {allowed}")
+    lines = ["Private Rule-Z communication contract."]
+    lines.extend(_contract_requirement_lines(excluded=component))
+    lines.extend(
+        [
+            "The final message should be ordinary prose rather than a labelled section, bullet list, table, or fielded ledger.",
+            "The final message should not provide the final answer label yes, no, or conflict directly.",
+        ]
+    )
+    return "\n".join(lines)
 
 
 def make_generic_contract() -> str:
@@ -274,7 +500,7 @@ def make_contract_bound_message_prompt(
             "Do not include the private contract in the final message.",
             "Do not answer any future query directly.",
             "Do not use the final answer label yes, no, or conflict.",
-            "You may use exact predicate names such as is_student and has_debt.",
+            "You may use the exact predicate names shown in the Rule-Z JSON.",
             "PRIVATE_CONTRACT:",
             contract,
             "END_PRIVATE_CONTRACT",

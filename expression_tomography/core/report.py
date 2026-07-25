@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import json
+import math
 import re
 from collections import defaultdict
 from pathlib import Path
@@ -44,6 +45,15 @@ def _expected(row: dict[str, Any] | None) -> str:
     return str(row["score"].get("expected", ""))
 
 
+def _transmission_message(row: dict[str, Any]) -> str:
+    value = row.get("metadata", {}).get("transmission_message", "")
+    return value if isinstance(value, str) else ""
+
+
+def _replicate_index(row: dict[str, Any]) -> int:
+    return int(row.get("metadata", {}).get("replicate_index", 0))
+
+
 def _failure_family(t_row: dict[str, Any] | None) -> str:
     if t_row is None:
         return "missing_trial"
@@ -52,6 +62,11 @@ def _failure_family(t_row: dict[str, Any] | None) -> str:
         return ""
     if not score.get("parse_ok", True):
         return "parse_or_format_failure"
+    if t_row["condition"].startswith("T"):
+        metadata = t_row.get("metadata", {})
+        message = _transmission_message(t_row)
+        if "transmission_message" in metadata and not message.strip():
+            return "empty_transmission_message"
     expected = str(score.get("expected", ""))
     answer = str(score.get("answer", ""))
     corrupted_final_label = str(t_row["metadata"].get("corrupted_final_label", ""))
@@ -242,6 +257,23 @@ _DIAGNOSTIC_EXPECTED_FIELDS = {
         "mentions_priority_edges",
     ),
     "generic_contract_private_prose": (
+        "mentions_actual_facts",
+        "mentions_rules",
+        "mentions_priority_edges",
+    ),
+    "contract_ablate_facts_private_prose": (
+        "mentions_rules",
+        "mentions_priority_edges",
+    ),
+    "contract_ablate_firing_private_prose": (
+        "mentions_actual_facts",
+        "mentions_priority_edges",
+    ),
+    "contract_ablate_priority_private_prose": (
+        "mentions_actual_facts",
+        "mentions_rules",
+    ),
+    "contract_ablate_conflict_private_prose": (
         "mentions_actual_facts",
         "mentions_rules",
         "mentions_priority_edges",
@@ -667,6 +699,11 @@ def rule_z_message_diagnostic_rows(
                 "provider": row["provider"],
                 "case_id": row["case_id"],
                 "case_hash": row["case_hash"],
+                "replicate_index": _replicate_index(row),
+                "case_profile": row["metadata"].get("case_profile", "base"),
+                "stress_pair_id": row["metadata"].get("stress_pair_id", ""),
+                "stress_family": row["metadata"].get("stress_family", ""),
+                "stress_naming": row["metadata"].get("stress_naming", ""),
                 "mode": mode,
                 "T_condition": row["condition"],
                 "expected_answer": _expected(row),
@@ -710,13 +747,56 @@ def rule_z_message_diagnostic_rows(
     return out
 
 
-def rule_z_case_level_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    by_case: dict[tuple[str, str], dict[str, dict[str, Any]]] = defaultdict(dict)
+def rule_z_transmission_integrity_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    grouped: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
-        by_case[(row["provider"], row["case_hash"])][row["condition"]] = row
+        if not row["condition"].startswith("T"):
+            continue
+        for provider in sorted({str(row["provider"]), "ALL"}):
+            grouped[(provider, row["condition"])].append(row)
+
+    out = []
+    for (provider, condition), items in sorted(grouped.items()):
+        observed = [
+            row
+            for row in items
+            if "transmission_message" in row.get("metadata", {})
+        ]
+        nonempty = [
+            row
+            for row in observed
+            if _transmission_message(row).strip()
+        ]
+        empty = [
+            row
+            for row in observed
+            if not _transmission_message(row).strip()
+        ]
+        out.append(
+            {
+                "provider": provider,
+                "T_condition": condition,
+                "n_trials": len(items),
+                "observed_message_count": len(observed),
+                "unknown_message_count": len(items) - len(observed),
+                "nonempty_message_count": len(nonempty),
+                "empty_message_count": len(empty),
+                "empty_message_rate": _ratio(len(empty), len(observed)),
+                "receiver_accuracy_all": _accuracy(items),
+                "receiver_accuracy_nonempty": _accuracy(nonempty),
+                "correct_with_empty_message_count": sum(_correct(row) is True for row in empty),
+            }
+        )
+    return out
+
+
+def rule_z_case_level_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    by_case: dict[tuple[str, str, int], dict[str, dict[str, Any]]] = defaultdict(dict)
+    for row in rows:
+        by_case[(row["provider"], row["case_hash"], _replicate_index(row))][row["condition"]] = row
 
     case_rows = []
-    for (provider, case_hash), condition_rows in sorted(by_case.items()):
+    for (provider, case_hash, replicate_index), condition_rows in sorted(by_case.items()):
         b_row = condition_rows.get("B")
         d_row = condition_rows.get("D")
         o_row = condition_rows.get("O")
@@ -725,6 +805,7 @@ def rule_z_case_level_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "provider": provider,
             "case_id": (d_row or o_row or b_row or next(iter(condition_rows.values())))["case_id"],
             "case_hash": case_hash,
+            "replicate_index": replicate_index,
             "expected": _expected(d_row or o_row or b_row or next(iter(condition_rows.values()))),
             "B_answer": _answer(b_row),
             "B_correct": _correct(b_row),
@@ -775,12 +856,12 @@ def rule_z_contrast_packet_rows(
     ),
 ) -> list[dict[str, Any]]:
     cases_by_hash = {case["case_hash"]: case for case in cases}
-    by_case: dict[tuple[str, str], dict[str, dict[str, Any]]] = defaultdict(dict)
+    by_case: dict[tuple[str, str, int], dict[str, dict[str, Any]]] = defaultdict(dict)
     for row in rows:
-        by_case[(row["provider"], row["case_hash"])][row["condition"]] = row
+        by_case[(row["provider"], row["case_hash"], _replicate_index(row))][row["condition"]] = row
 
     packets: list[dict[str, Any]] = []
-    for (provider, case_hash), condition_rows in sorted(by_case.items()):
+    for (provider, case_hash, replicate_index), condition_rows in sorted(by_case.items()):
         contrast = condition_rows.get(contrast_condition)
         d_row = condition_rows.get("D")
         o_row = condition_rows.get("O")
@@ -813,6 +894,7 @@ def rule_z_contrast_packet_rows(
                 "provider": provider,
                 "case_id": contrast["case_id"],
                 "case_hash": case_hash,
+                "replicate_index": replicate_index,
                 "expected": _expected(contrast),
                 "facts": list(public.get("facts", [])),
                 "available_predicates": list(public.get("available_predicates", [])),
@@ -868,6 +950,8 @@ def _write_rule_z_contrast_packets(out: Path, packets: list[dict[str, Any]]) -> 
                 f"## {packet['case_id']} - expected `{packet['expected']}`",
                 "",
                 f"Provider: `{packet['provider']}`",
+                "",
+                f"Replicate: `{packet['replicate_index']}`",
                 "",
                 f"Facts: `{', '.join(packet['facts']) or 'none'}`",
                 "",
@@ -973,6 +1057,8 @@ def _decompose_transmission(case_rows: list[dict[str, Any]]) -> dict[str, dict[s
         label_dependence = len(label_following) / len(corrupted) if corrupted else None
         out[condition] = {
             "n_cases": len(items),
+            "n_unique_cases": len({row["case_hash"] for row in items}),
+            "n_case_replicates": len(items),
             "solved_by_both_count": len(solved),
             "unsolved_by_direct_count": len(unsolved),
             "transmission_survival": len(survived) / len(solved) if solved else None,
@@ -1027,6 +1113,473 @@ def _accuracy_by_provider_condition(rows: list[dict[str, Any]]) -> dict[str, dic
         provider: {condition: _accuracy(items) for condition, items in sorted(conditions.items())}
         for provider, conditions in sorted(grouped.items())
     }
+
+
+def _metric_diff(high: float | None, low: float | None) -> float | None:
+    return high - low if high is not None and low is not None else None
+
+
+def rule_z_binding_stress_accuracy_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    grouped: dict[tuple[str, str, str, str], list[dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        metadata = row.get("metadata", {})
+        if metadata.get("case_profile") != "binding_stress":
+            continue
+        family = str(metadata.get("stress_family", ""))
+        naming = str(metadata.get("stress_naming", ""))
+        for provider_scope in {str(row["provider"]), "ALL"}:
+            for family_scope, naming_scope in {
+                (family, naming),
+                (family, "ALL"),
+                ("ALL", naming),
+                ("ALL", "ALL"),
+            }:
+                grouped[(provider_scope, family_scope, naming_scope, row["condition"])].append(row)
+    return [
+        {
+            "provider": provider,
+            "family": family,
+            "naming": naming,
+            "condition": condition,
+            "n_trials": len(items),
+            "accuracy": _accuracy(items),
+        }
+        for (provider, family, naming, condition), items in sorted(grouped.items())
+    ]
+
+
+def rule_z_binding_stress_contrast_rows(
+    accuracy_rows: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    grouped: dict[tuple[str, str, str], dict[str, float | None]] = defaultdict(dict)
+    for row in accuracy_rows:
+        grouped[(row["provider"], row["family"], row["naming"])][row["condition"]] = row["accuracy"]
+
+    out = []
+    for (provider, family, naming), values in sorted(grouped.items()):
+        oracle_contract = values.get("T_oracle_contract_private_prose")
+        out.append(
+            {
+                "provider": provider,
+                "family": family,
+                "naming": naming,
+                "binding_gain": _metric_diff(
+                    values.get("T_generic_contract_private_prose"),
+                    values.get("T_free_schema_prompt"),
+                ),
+                "specificity_gain": _metric_diff(
+                    values.get("T_self_contract_private_prose"),
+                    values.get("T_generic_contract_private_prose"),
+                ),
+                "contract_ir_gap": _metric_diff(
+                    values.get("T_self_contract_private_prose"),
+                    values.get("T_contract_only_private_prose"),
+                ),
+                "scaffold_gap": _metric_diff(
+                    values.get("T_factlocked"),
+                    values.get("T_self_contract_private_prose"),
+                ),
+                "oracle_gap": _metric_diff(
+                    values.get("T_oracle_text"),
+                    values.get("T_self_contract_private_prose"),
+                ),
+                "facts_ablation_cost": _metric_diff(
+                    oracle_contract,
+                    values.get("T_contract_ablate_facts_private_prose"),
+                ),
+                "firing_ablation_cost": _metric_diff(
+                    oracle_contract,
+                    values.get("T_contract_ablate_firing_private_prose"),
+                ),
+                "priority_ablation_cost": _metric_diff(
+                    oracle_contract,
+                    values.get("T_contract_ablate_priority_private_prose"),
+                ),
+                "conflict_ablation_cost": _metric_diff(
+                    oracle_contract,
+                    values.get("T_contract_ablate_conflict_private_prose"),
+                ),
+                "direct_notation_gain": _metric_diff(
+                    values.get("D_priority_explicit_edges"),
+                    values.get("D"),
+                ),
+                "free_notation_gain": _metric_diff(
+                    values.get("T_free_schema_prompt_explicit_edges"),
+                    values.get("T_free_schema_prompt"),
+                ),
+                "generic_notation_gain": _metric_diff(
+                    values.get("T_generic_contract_explicit_edges_private_prose"),
+                    values.get("T_generic_contract_private_prose"),
+                ),
+                "priority_ablation_notation_gain": _metric_diff(
+                    values.get("T_contract_ablate_priority_explicit_edges_private_prose"),
+                    values.get("T_contract_ablate_priority_private_prose"),
+                ),
+                "extra_pass_gain": _metric_diff(
+                    values.get("D_two_pass_free"),
+                    values.get("D"),
+                ),
+                "compute_matched_binding_gain": _metric_diff(
+                    values.get("D_two_pass_generic_contract"),
+                    values.get("D_two_pass_free"),
+                ),
+                "structured_access_gain": _metric_diff(
+                    values.get("D_two_pass_generic_contract"),
+                    values.get("T_generic_contract_private_prose"),
+                ),
+            }
+        )
+    return out
+
+
+def rule_z_binding_stress_pair_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    paired: dict[tuple[str, str, int, str], dict[str, dict[str, Any]]] = defaultdict(dict)
+    for row in rows:
+        metadata = row.get("metadata", {})
+        pair_id = str(metadata.get("stress_pair_id", ""))
+        naming = str(metadata.get("stress_naming", ""))
+        if metadata.get("case_profile") != "binding_stress" or not pair_id or not naming:
+            continue
+        key = (str(row["provider"]), pair_id, _replicate_index(row), row["condition"])
+        paired[key][naming] = row
+
+    observations = []
+    for (provider, pair_id, replicate_index, condition), naming_rows in sorted(paired.items()):
+        semantic = naming_rows.get("semantic")
+        opaque = naming_rows.get("opaque")
+        if semantic is None or opaque is None:
+            continue
+        observations.append(
+            {
+                "provider": provider,
+                "pair_id": pair_id,
+                "replicate_index": replicate_index,
+                "family": semantic["metadata"].get("stress_family", ""),
+                "condition": condition,
+                "semantic_correct": float(bool(_correct(semantic))),
+                "opaque_correct": float(bool(_correct(opaque))),
+            }
+        )
+
+    grouped: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
+    for item in observations:
+        for provider_scope in {item["provider"], "ALL"}:
+            for family_scope in {item["family"], "ALL"}:
+                grouped[(provider_scope, family_scope, item["condition"])].append(item)
+    return [
+        {
+            "provider": provider,
+            "family": family,
+            "condition": condition,
+            "n_pair_replicates": len(items),
+            "semantic_accuracy": mean(item["semantic_correct"] for item in items),
+            "opaque_accuracy": mean(item["opaque_correct"] for item in items),
+            "paired_semantic_advantage": mean(
+                item["semantic_correct"] - item["opaque_correct"] for item in items
+            ),
+        }
+        for (provider, family, condition), items in sorted(grouped.items())
+    ]
+
+
+_INTERMEDIATE_FACTORIAL_CONDITIONS = {
+    "compact_free": "D_two_pass_free",
+    "explicit_free": "D_two_pass_free_explicit_edges",
+    "compact_generic": "D_two_pass_generic_contract",
+    "explicit_generic": "D_two_pass_generic_contract_explicit_edges",
+}
+
+_INTERMEDIATE_SUMMARY_METRICS = (
+    "audit_parse_rate",
+    "audit_fired_rules_oracle_match_rate",
+    "audit_priority_edges_oracle_match_rate",
+    "audit_priority_orientation_accuracy",
+    "audit_suppressed_rules_oracle_match_rate",
+    "audit_active_rules_oracle_match_rate",
+    "audit_active_conclusions_oracle_match_rate",
+    "audit_state_oracle_match_rate",
+    "audit_answer_reconstruction_sufficiency_rate",
+    "audit_reconstructed_answer_accuracy",
+    "audit_final_answer_agreement",
+    "final_accuracy",
+)
+
+
+def rule_z_intermediate_audit_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    out = []
+    for row in rows:
+        metadata = row.get("metadata", {})
+        score = metadata.get("intermediate_audit_score")
+        if not isinstance(score, dict):
+            continue
+        reported_state = score.get("reported_state", {})
+        reported_active = (
+            reported_state.get("active_conclusions")
+            if isinstance(reported_state, dict)
+            else None
+        )
+        legacy_answer_sufficiency = (
+            isinstance(reported_active, list)
+            and bool(reported_active)
+            and all(
+                isinstance(item, str)
+                and item in {"eligible", "not_eligible"}
+                for item in reported_active
+            )
+        )
+        answer_sufficiency = bool(score.get("audit_parse_ok")) and bool(
+            score.get(
+                "answer_reconstruction_sufficient",
+                legacy_answer_sufficiency,
+            )
+        )
+        out.append(
+            {
+                "provider": row["provider"],
+                "case_id": row["case_id"],
+                "case_hash": row["case_hash"],
+                "replicate_index": _replicate_index(row),
+                "case_profile": metadata.get("case_profile", ""),
+                "stress_pair_id": metadata.get("stress_pair_id", ""),
+                "stress_family": metadata.get("stress_family", ""),
+                "stress_naming": metadata.get("stress_naming", ""),
+                "condition": row["condition"],
+                "binding_contract": metadata.get("binding_contract", ""),
+                "priority_notation": metadata.get("priority_notation", ""),
+                "expected_answer": row["score"].get("expected", ""),
+                "final_answer": row["score"].get("answer", ""),
+                "final_correct": float(bool(row["score"].get("correct"))),
+                "audit_parse_ok": float(bool(score.get("audit_parse_ok"))),
+                "audit_fired_rules_oracle_match": float(
+                    bool(score.get("fired_rules_exact"))
+                ),
+                "audit_priority_edges_oracle_match": float(
+                    bool(score.get("priority_edges_exact"))
+                ),
+                "priority_edge_precision": float(score.get("priority_edge_precision", 0.0)),
+                "priority_edge_recall": float(score.get("priority_edge_recall", 0.0)),
+                "priority_edge_f1": float(score.get("priority_edge_f1", 0.0)),
+                "audit_priority_orientation_accuracy": float(
+                    score.get("priority_orientation_accuracy", 0.0)
+                ),
+                "priority_reversal_count": int(score.get("priority_reversal_count", 0)),
+                "unexpected_priority_edge_count": int(
+                    score.get("unexpected_priority_edge_count", 0)
+                ),
+                "audit_suppressed_rules_oracle_match": float(
+                    bool(score.get("suppressed_rules_exact"))
+                ),
+                "audit_active_rules_oracle_match": float(
+                    bool(score.get("active_rules_exact"))
+                ),
+                "audit_active_conclusions_oracle_match": float(
+                    bool(score.get("active_conclusions_exact"))
+                ),
+                "audit_state_oracle_match": float(
+                    bool(score.get("intermediate_state_exact"))
+                ),
+                "reconstructed_answer": score.get("reconstructed_answer", ""),
+                "audit_answer_reconstruction_sufficient": float(
+                    answer_sufficiency
+                ),
+                "audit_reconstructed_answer_correct": float(
+                    answer_sufficiency
+                    and bool(score.get("answer_reconstruction_correct"))
+                ),
+                "audit_final_answer_agreement": float(
+                    answer_sufficiency
+                    and score.get("reconstructed_answer", "")
+                    == row["score"].get("answer", "")
+                ),
+                "expected_state_json": json.dumps(
+                    score.get("expected_state", {}),
+                    ensure_ascii=False,
+                    sort_keys=True,
+                ),
+                "reported_state_json": json.dumps(
+                    score.get("reported_state", {}),
+                    ensure_ascii=False,
+                    sort_keys=True,
+                ),
+            }
+        )
+    return out
+
+
+def rule_z_intermediate_audit_summary_rows(
+    audit_rows: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    grouped: dict[tuple[str, str, str, str], list[dict[str, Any]]] = defaultdict(list)
+    for row in audit_rows:
+        family = str(row.get("stress_family", "")) or "base"
+        naming = str(row.get("stress_naming", "")) or "base"
+        for provider_scope in {str(row["provider"]), "ALL"}:
+            for family_scope, naming_scope in {
+                (family, naming),
+                (family, "ALL"),
+                ("ALL", naming),
+                ("ALL", "ALL"),
+            }:
+                grouped[(provider_scope, family_scope, naming_scope, row["condition"])].append(row)
+
+    def metric_mean(items: list[dict[str, Any]], key: str) -> float:
+        return mean(float(item[key]) for item in items)
+
+    out = []
+    for (provider, family, naming, condition), items in sorted(grouped.items()):
+        out.append(
+            {
+                "provider": provider,
+                "family": family,
+                "naming": naming,
+                "condition": condition,
+                "n_trials": len(items),
+                "audit_parse_rate": metric_mean(items, "audit_parse_ok"),
+                "audit_fired_rules_oracle_match_rate": metric_mean(
+                    items,
+                    "audit_fired_rules_oracle_match",
+                ),
+                "audit_priority_edges_oracle_match_rate": metric_mean(
+                    items,
+                    "audit_priority_edges_oracle_match",
+                ),
+                "audit_priority_orientation_accuracy": metric_mean(
+                    items,
+                    "audit_priority_orientation_accuracy",
+                ),
+                "audit_suppressed_rules_oracle_match_rate": metric_mean(
+                    items,
+                    "audit_suppressed_rules_oracle_match",
+                ),
+                "audit_active_rules_oracle_match_rate": metric_mean(
+                    items,
+                    "audit_active_rules_oracle_match",
+                ),
+                "audit_active_conclusions_oracle_match_rate": metric_mean(
+                    items,
+                    "audit_active_conclusions_oracle_match",
+                ),
+                "audit_state_oracle_match_rate": metric_mean(
+                    items,
+                    "audit_state_oracle_match",
+                ),
+                "audit_answer_reconstruction_sufficiency_rate": metric_mean(
+                    items,
+                    "audit_answer_reconstruction_sufficient",
+                ),
+                "audit_reconstructed_answer_accuracy": metric_mean(
+                    items,
+                    "audit_reconstructed_answer_correct",
+                ),
+                "audit_final_answer_agreement": metric_mean(
+                    items,
+                    "audit_final_answer_agreement",
+                ),
+                "final_accuracy": metric_mean(items, "final_correct"),
+            }
+        )
+    return out
+
+
+def rule_z_intermediate_factorial_rows(
+    summary_rows: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    grouped: dict[tuple[str, str, str], dict[str, dict[str, Any]]] = defaultdict(dict)
+    for row in summary_rows:
+        grouped[(row["provider"], row["family"], row["naming"])][row["condition"]] = row
+
+    out = []
+    for (provider, family, naming), by_condition in sorted(grouped.items()):
+        cells = {
+            cell: by_condition.get(condition)
+            for cell, condition in _INTERMEDIATE_FACTORIAL_CONDITIONS.items()
+        }
+        if any(row is None for row in cells.values()):
+            continue
+        for metric in _INTERMEDIATE_SUMMARY_METRICS:
+            compact_free = float(cells["compact_free"][metric])
+            explicit_free = float(cells["explicit_free"][metric])
+            compact_generic = float(cells["compact_generic"][metric])
+            explicit_generic = float(cells["explicit_generic"][metric])
+            binding_gain_compact = compact_generic - compact_free
+            binding_gain_explicit = explicit_generic - explicit_free
+            out.append(
+                {
+                    "provider": provider,
+                    "family": family,
+                    "naming": naming,
+                    "metric": metric,
+                    "compact_free": compact_free,
+                    "explicit_free": explicit_free,
+                    "compact_generic": compact_generic,
+                    "explicit_generic": explicit_generic,
+                    "notation_gain_free": explicit_free - compact_free,
+                    "notation_gain_generic": explicit_generic - compact_generic,
+                    "binding_gain_compact": binding_gain_compact,
+                    "binding_gain_explicit": binding_gain_explicit,
+                    "interaction": binding_gain_explicit - binding_gain_compact,
+                }
+            )
+    return out
+
+
+def rule_z_replicate_stability_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    by_case: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        by_case[(row["provider"], row["case_hash"], row["condition"])].append(row)
+
+    observations = []
+    for (provider, _case_hash, condition), items in sorted(by_case.items()):
+        if len(items) < 2:
+            continue
+        answer_counts: dict[str, int] = defaultdict(int)
+        for item in items:
+            answer_counts[_answer(item) or "<parse_failure>"] += 1
+        total = len(items)
+        entropy = -sum(
+            (count / total) * math.log2(count / total)
+            for count in answer_counts.values()
+        )
+        pair_count = total * (total - 1) / 2
+        agreeing_pairs = sum(count * (count - 1) / 2 for count in answer_counts.values())
+        first_metadata = items[0].get("metadata", {})
+        observations.append(
+            {
+                "provider": provider,
+                "condition": condition,
+                "family": str(first_metadata.get("stress_family", "")) or "base",
+                "naming": str(first_metadata.get("stress_naming", "")) or "base",
+                "repetitions": total,
+                "answer_entropy": entropy,
+                "stable": len(answer_counts) == 1,
+                "pairwise_agreement": agreeing_pairs / pair_count,
+            }
+        )
+
+    grouped: dict[tuple[str, str, str, str], list[dict[str, Any]]] = defaultdict(list)
+    for item in observations:
+        for provider_scope in {item["provider"], "ALL"}:
+            for family_scope, naming_scope in {
+                (item["family"], item["naming"]),
+                (item["family"], "ALL"),
+                ("ALL", item["naming"]),
+                ("ALL", "ALL"),
+            }:
+                grouped[(provider_scope, family_scope, naming_scope, item["condition"])].append(item)
+    return [
+        {
+            "provider": provider,
+            "family": family,
+            "naming": naming,
+            "condition": condition,
+            "n_cases": len(items),
+            "mean_repetitions": mean(item["repetitions"] for item in items),
+            "mean_answer_entropy": mean(item["answer_entropy"] for item in items),
+            "stable_case_rate": mean(float(item["stable"]) for item in items),
+            "mean_pairwise_agreement": mean(item["pairwise_agreement"] for item in items),
+        }
+        for (provider, family, naming, condition), items in sorted(grouped.items())
+    ]
 
 
 def _eta_by_provider(accuracies: dict[str, dict[str, float | None]]) -> dict[str, float | None]:
@@ -1106,6 +1659,11 @@ def summarize_rule_z(store: ExperimentStore) -> dict[str, Any]:
     transmission_decomposition_by_provider = {
         provider: _decompose_transmission(items) for provider, items in sorted(by_provider_cases.items())
     }
+    binding_stress_accuracy = rule_z_binding_stress_accuracy_rows(rows)
+    intermediate_audit = rule_z_intermediate_audit_rows(rows)
+    intermediate_audit_summary = rule_z_intermediate_audit_summary_rows(
+        intermediate_audit
+    )
     return {
         "task_type": "rule_z",
         "n_trials": len(rows),
@@ -1130,6 +1688,16 @@ def summarize_rule_z(store: ExperimentStore) -> dict[str, Any]:
             provider: _active_conclusion_dependence(values)
             for provider, values in transmission_decomposition_by_provider.items()
         },
+        "binding_stress_accuracy": binding_stress_accuracy,
+        "binding_stress_contrasts": rule_z_binding_stress_contrast_rows(binding_stress_accuracy),
+        "binding_stress_pairs": rule_z_binding_stress_pair_rows(rows),
+        "replicate_stability": rule_z_replicate_stability_rows(rows),
+        "transmission_integrity": rule_z_transmission_integrity_rows(rows),
+        "intermediate_audit": intermediate_audit,
+        "intermediate_audit_summary": intermediate_audit_summary,
+        "intermediate_factorial": rule_z_intermediate_factorial_rows(
+            intermediate_audit_summary
+        ),
     }
 
 
@@ -1171,12 +1739,156 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
         for provider, values in summary["sender_contrasts_by_provider"].items():
             writer.writerow({"provider": provider, **values})
 
+    stress_accuracy_path = out / "rule_z_binding_stress_accuracy.csv"
+    with stress_accuracy_path.open("w", encoding="utf-8", newline="") as f:
+        fieldnames = ["provider", "family", "naming", "condition", "n_trials", "accuracy"]
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(summary["binding_stress_accuracy"])
+
+    stress_contrast_path = out / "rule_z_binding_stress_contrasts.csv"
+    with stress_contrast_path.open("w", encoding="utf-8", newline="") as f:
+        fieldnames = [
+            "provider",
+            "family",
+            "naming",
+            "binding_gain",
+            "specificity_gain",
+            "contract_ir_gap",
+            "scaffold_gap",
+            "oracle_gap",
+            "facts_ablation_cost",
+            "firing_ablation_cost",
+            "priority_ablation_cost",
+            "conflict_ablation_cost",
+            "direct_notation_gain",
+            "free_notation_gain",
+            "generic_notation_gain",
+            "priority_ablation_notation_gain",
+            "extra_pass_gain",
+            "compute_matched_binding_gain",
+            "structured_access_gain",
+        ]
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(summary["binding_stress_contrasts"])
+
+    stress_pair_path = out / "rule_z_binding_stress_pairs.csv"
+    with stress_pair_path.open("w", encoding="utf-8", newline="") as f:
+        fieldnames = [
+            "provider",
+            "family",
+            "condition",
+            "n_pair_replicates",
+            "semantic_accuracy",
+            "opaque_accuracy",
+            "paired_semantic_advantage",
+        ]
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(summary["binding_stress_pairs"])
+
+    stability_path = out / "rule_z_replicate_stability.csv"
+    with stability_path.open("w", encoding="utf-8", newline="") as f:
+        fieldnames = [
+            "provider",
+            "family",
+            "naming",
+            "condition",
+            "n_cases",
+            "mean_repetitions",
+            "mean_answer_entropy",
+            "stable_case_rate",
+            "mean_pairwise_agreement",
+        ]
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(summary["replicate_stability"])
+
+    intermediate_path = out / "rule_z_intermediate_audit.csv"
+    with intermediate_path.open("w", encoding="utf-8", newline="") as f:
+        fieldnames = [
+            "provider",
+            "case_id",
+            "case_hash",
+            "replicate_index",
+            "case_profile",
+            "stress_pair_id",
+            "stress_family",
+            "stress_naming",
+            "condition",
+            "binding_contract",
+            "priority_notation",
+            "expected_answer",
+            "final_answer",
+            "final_correct",
+            "audit_parse_ok",
+            "audit_fired_rules_oracle_match",
+            "audit_priority_edges_oracle_match",
+            "priority_edge_precision",
+            "priority_edge_recall",
+            "priority_edge_f1",
+            "audit_priority_orientation_accuracy",
+            "priority_reversal_count",
+            "unexpected_priority_edge_count",
+            "audit_suppressed_rules_oracle_match",
+            "audit_active_rules_oracle_match",
+            "audit_active_conclusions_oracle_match",
+            "audit_state_oracle_match",
+            "reconstructed_answer",
+            "audit_answer_reconstruction_sufficient",
+            "audit_reconstructed_answer_correct",
+            "audit_final_answer_agreement",
+            "expected_state_json",
+            "reported_state_json",
+        ]
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(summary["intermediate_audit"])
+
+    intermediate_summary_path = out / "rule_z_intermediate_audit_summary.csv"
+    with intermediate_summary_path.open("w", encoding="utf-8", newline="") as f:
+        fieldnames = [
+            "provider",
+            "family",
+            "naming",
+            "condition",
+            "n_trials",
+            *_INTERMEDIATE_SUMMARY_METRICS,
+        ]
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(summary["intermediate_audit_summary"])
+
+    intermediate_factorial_path = out / "rule_z_intermediate_factorial.csv"
+    with intermediate_factorial_path.open("w", encoding="utf-8", newline="") as f:
+        fieldnames = [
+            "provider",
+            "family",
+            "naming",
+            "metric",
+            "compact_free",
+            "explicit_free",
+            "compact_generic",
+            "explicit_generic",
+            "notation_gain_free",
+            "notation_gain_generic",
+            "binding_gain_compact",
+            "binding_gain_explicit",
+            "interaction",
+        ]
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(summary["intermediate_factorial"])
+
     decomposition_path = out / "rule_z_transmission_decomposition.csv"
     with decomposition_path.open("w", encoding="utf-8", newline="") as f:
         fieldnames = [
             "provider",
             "T_condition",
             "n_cases",
+            "n_unique_cases",
+            "n_case_replicates",
             "solved_by_both_count",
             "unsolved_by_direct_count",
             "transmission_survival",
@@ -1224,6 +1936,7 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
             "provider",
             "case_id",
             "case_hash",
+            "replicate_index",
             "expected",
             "B_answer",
             "B_correct",
@@ -1254,6 +1967,11 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
             "provider",
             "case_id",
             "case_hash",
+            "replicate_index",
+            "case_profile",
+            "stress_pair_id",
+            "stress_family",
+            "stress_naming",
             "mode",
             "T_condition",
             "expected_answer",
@@ -1302,6 +2020,25 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
         writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         writer.writerows(message_rows)
+
+    integrity_path = out / "rule_z_transmission_integrity.csv"
+    with integrity_path.open("w", encoding="utf-8", newline="") as f:
+        fieldnames = [
+            "provider",
+            "T_condition",
+            "n_trials",
+            "observed_message_count",
+            "unknown_message_count",
+            "nonempty_message_count",
+            "empty_message_count",
+            "empty_message_rate",
+            "receiver_accuracy_all",
+            "receiver_accuracy_nonempty",
+            "correct_with_empty_message_count",
+        ]
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(summary["transmission_integrity"])
 
     contrast_packets = rule_z_contrast_packet_rows(trial_rows, case_records)
     _write_rule_z_contrast_packets(out, contrast_packets)
@@ -1365,6 +2102,234 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
                         "NA"
                         if values["residual_factlock_gap"] is None
                         else f"{values['residual_factlock_gap']:.3f}",
+                    ]
+                )
+                + " |"
+            )
+
+    stress_contrasts = [
+        row
+        for row in summary["binding_stress_contrasts"]
+        if row["family"] == "ALL" and row["naming"] == "ALL"
+    ]
+    if stress_contrasts:
+        lines.extend(
+            [
+                "",
+                "## Binding Stress Contrasts",
+                "",
+                "Positive ablation cost means omitting that contract requirement reduced accuracy.",
+                "",
+                "| Provider | Binding gain | Specificity gain | Contract IR gap | Scaffold gap | Facts cost | Firing cost | Priority cost | Conflict cost |",
+                "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+            ]
+        )
+        for row in stress_contrasts:
+            values = [
+                row["binding_gain"],
+                row["specificity_gain"],
+                row["contract_ir_gap"],
+                row["scaffold_gap"],
+                row["facts_ablation_cost"],
+                row["firing_ablation_cost"],
+                row["priority_ablation_cost"],
+                row["conflict_ablation_cost"],
+            ]
+            lines.append(
+                "| "
+                + " | ".join(
+                    [row["provider"], *["NA" if value is None else f"{value:.3f}" for value in values]]
+                )
+                + " |"
+            )
+
+        probe_keys = [
+            "direct_notation_gain",
+            "free_notation_gain",
+            "generic_notation_gain",
+            "priority_ablation_notation_gain",
+            "extra_pass_gain",
+            "compute_matched_binding_gain",
+            "structured_access_gain",
+        ]
+        if any(row[key] is not None for row in stress_contrasts for key in probe_keys):
+            lines.extend(
+                [
+                    "",
+                    "## Priority And Compute Probes",
+                    "",
+                    "| Provider | Direct notation | Free notation | Generic notation | Priority-ablation notation | Extra pass | Equal-call binding | Structured access |",
+                    "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+                ]
+            )
+            for row in stress_contrasts:
+                values = [row[key] for key in probe_keys]
+                lines.append(
+                    "| "
+                    + " | ".join(
+                        [
+                            row["provider"],
+                            *["NA" if value is None else f"{value:.3f}" for value in values],
+                        ]
+                    )
+                    + " |"
+                )
+
+    paired_rows = [row for row in summary["binding_stress_pairs"] if row["family"] == "ALL"]
+    if paired_rows:
+        lines.extend(
+            [
+                "",
+                "## Semantic/Opaque Pairing",
+                "",
+                "| Provider | Condition | Pair-replicates | Semantic acc | Opaque acc | Semantic advantage |",
+                "| --- | --- | ---: | ---: | ---: | ---: |",
+            ]
+        )
+        for row in paired_rows:
+            lines.append(
+                f"| {row['provider']} | {row['condition']} | {row['n_pair_replicates']} | "
+                f"{row['semantic_accuracy']:.3f} | {row['opaque_accuracy']:.3f} | "
+                f"{row['paired_semantic_advantage']:.3f} |"
+            )
+
+    stability_rows = [
+        row
+        for row in summary["replicate_stability"]
+        if row["family"] == "ALL" and row["naming"] == "ALL"
+    ]
+    if stability_rows:
+        lines.extend(
+            [
+                "",
+                "## Replicate Stability",
+                "",
+                "| Provider | Condition | Cases | Repetitions | Answer entropy | Stable case rate | Pairwise agreement |",
+                "| --- | --- | ---: | ---: | ---: | ---: | ---: |",
+            ]
+        )
+        for row in stability_rows:
+            lines.append(
+                f"| {row['provider']} | {row['condition']} | {row['n_cases']} | "
+                f"{row['mean_repetitions']:.1f} | {row['mean_answer_entropy']:.3f} | "
+                f"{row['stable_case_rate']:.3f} | {row['mean_pairwise_agreement']:.3f} |"
+            )
+
+    intermediate_rows = [
+        row
+        for row in summary["intermediate_audit_summary"]
+        if row["family"] == "ALL" and row["naming"] == "ALL"
+    ]
+    if intermediate_rows:
+        lines.extend(
+            [
+                "",
+                "## Intermediate State Audit",
+                "",
+                "| Provider | Condition | n | Parse | Audit fired match | Audit priority match | Audit orientation | Audit suppression match | Audit active-conclusion match | Audit state match | Audit answer support | Audit answer accuracy | Audit/final agreement | Final accuracy |",
+                "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+            ]
+        )
+        for row in intermediate_rows:
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        row["provider"],
+                        row["condition"],
+                        str(row["n_trials"]),
+                        *[
+                            f"{row[key]:.3f}"
+                            for key in (
+                                "audit_parse_rate",
+                                "audit_fired_rules_oracle_match_rate",
+                                "audit_priority_edges_oracle_match_rate",
+                                "audit_priority_orientation_accuracy",
+                                "audit_suppressed_rules_oracle_match_rate",
+                                "audit_active_conclusions_oracle_match_rate",
+                                "audit_state_oracle_match_rate",
+                                "audit_answer_reconstruction_sufficiency_rate",
+                                "audit_reconstructed_answer_accuracy",
+                                "audit_final_answer_agreement",
+                                "final_accuracy",
+                            )
+                        ],
+                    ]
+                )
+                + " |"
+            )
+
+    factorial_rows = [
+        row
+        for row in summary["intermediate_factorial"]
+        if row["family"] == "ALL" and row["naming"] == "ALL"
+    ]
+    if factorial_rows:
+        lines.extend(
+            [
+                "",
+                "## Intermediate 2x2 Factorial",
+                "",
+                "| Provider | Metric | Compact free | Explicit free | Compact generic | Explicit generic | Notation gain free | Notation gain generic | Binding gain compact | Binding gain explicit | Interaction |",
+                "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+            ]
+        )
+        for row in factorial_rows:
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        row["provider"],
+                        row["metric"],
+                        *[
+                            f"{row[key]:.3f}"
+                            for key in (
+                                "compact_free",
+                                "explicit_free",
+                                "compact_generic",
+                                "explicit_generic",
+                                "notation_gain_free",
+                                "notation_gain_generic",
+                                "binding_gain_compact",
+                                "binding_gain_explicit",
+                                "interaction",
+                            )
+                        ],
+                    ]
+                )
+                + " |"
+            )
+
+    integrity_rows = [
+        row for row in summary["transmission_integrity"] if row["provider"] != "ALL"
+    ]
+    if integrity_rows:
+        lines.extend(
+            [
+                "",
+                "## Transmission Stage Integrity",
+                "",
+                "| Provider | T condition | n | Unknown | Empty | Empty rate | Raw accuracy | Nonempty-only accuracy | Correct despite empty |",
+                "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+            ]
+        )
+        for row in integrity_rows:
+            values = [
+                row["empty_message_rate"],
+                row["receiver_accuracy_all"],
+                row["receiver_accuracy_nonempty"],
+            ]
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        row["provider"],
+                        row["T_condition"],
+                        str(row["n_trials"]),
+                        str(row["unknown_message_count"]),
+                        str(row["empty_message_count"]),
+                        *["NA" if value is None else f"{value:.3f}" for value in values],
+                        str(row["correct_with_empty_message_count"]),
                     ]
                 )
                 + " |"

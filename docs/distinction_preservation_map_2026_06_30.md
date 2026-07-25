@@ -313,3 +313,86 @@ case-level distinction failures
 The next implementation target is therefore not just higher accuracy. It is a
 map of which typed distinctions survive free expression, which require
 factlocking, and which can be recovered by iterative critique.
+
+## 2026-07-25: Expressed-Intermediate Factorial Update
+
+The Anthropic seed-41 high-load run now crosses private binding and priority
+notation:
+
+```text
+                         free binding    generic contract
+compact priority pairs      0.792             1.000
+explicit priority edges     1.000             1.000
+```
+
+Replicate agreement follows the same pattern: 0.750 for compact/free and 1.000
+for the other three cells. Every compact/free derivation identifies the fired
+rules, while audit-to-oracle priority-edge and full-state match are 0.792.
+
+This localizes the first visible loss after rule firing and near relation
+interpretation or preservation. Either explicit notation or a generic
+preservation contract stabilizes this surface. The ceiling prevents a strong
+claim about additivity or shared mechanism.
+
+Two case packets refine the map further:
+
+```text
+stress_0005_opaque:
+  priority state is lost, but the conflict endpoint remains correct
+
+stress_0008_semantic:
+  correct local edges are stated, then integrated incorrectly;
+  a post-hoc audit reader repairs the source and recovers the oracle state
+```
+
+Therefore:
+
+```text
+endpoint correctness != intermediate-state preservation
+audit-to-oracle match != source-fidelity proof
+local relation extraction != successful global integration
+```
+
+The live note is
+`docs/live_rule_z_intermediate_factorial_note_2026_07_25.md`. The broader
+language-expression rate-limit proposal is kept as a graded hypothesis family
+in `docs/language_expression_rate_limit_hypothesis_2026_07_25.md`, with
+observed, inferred, and unidentified claims separated.
+
+## 2026-07-25: Post-Hoc Fidelity And Utility Probe
+
+The next measurement stage is implemented as a sidecar over frozen messages:
+
+```text
+fixed source artifact
+  -> source-faithful quote audit
+  -> repair-capable audit
+  -> hidden current-state query battery
+  -> hidden counterfactual query battery
+```
+
+The source SQLite database is opened read-only. The original sender and answer
+path are not rerun, so this stage does not introduce pre-answer measurement
+reactivity.
+
+The split establishes three different operational quantities:
+
+```text
+grounded source fidelity:
+  oracle agreement only when every extracted field is unambiguous and backed
+  by an exact source quote
+
+recoverability:
+  oracle agreement after a named reader is explicitly allowed to repair
+
+query utility:
+  exact answers a named receiver can recover from the fixed artifact for a
+  specified hidden battery
+```
+
+`U_Q` remains receiver dependent. A repair gap does not identify a latent
+sender state, and counterfactual failure is not automatically a violation of a
+source written only for one endpoint.
+
+The implementation and limitations are documented in
+`docs/rule_z_posthoc_intermediate_probe.md`.

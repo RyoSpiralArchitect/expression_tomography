@@ -1,0 +1,9 @@
+provider,T_condition,n_cases,n_unique_cases,n_case_replicates,solved_by_both_count,unsolved_by_direct_count,transmission_survival,pure_transmission_loss,transmission_rescue,expected_conflict_count,conflict_reconstruction_accuracy,conflict_collapse_negative_rate,conflict_collapse_positive_rate,corrupted_label_count,label_dependence,label_resistance,derivation_dependence,survived_count,pure_loss_count,rescued_count
+ALL,T_free_schema_prompt,24,12,24,24,0,1.0,0.0,,8,1.0,0.0,0.0,0,,,,24,0,0
+ALL,T_free_schema_prompt_explicit_edges,24,12,24,24,0,0.9583333333333334,0.041666666666666664,,8,1.0,0.0,0.0,0,,,,23,1,0
+ALL,T_generic_contract_explicit_edges_private_prose,24,12,24,24,0,1.0,0.0,,8,1.0,0.0,0.0,0,,,,24,0,0
+ALL,T_generic_contract_private_prose,24,12,24,24,0,1.0,0.0,,8,1.0,0.0,0.0,0,,,,24,0,0
+openai_gpt_5_5,T_free_schema_prompt,24,12,24,24,0,1.0,0.0,,8,1.0,0.0,0.0,0,,,,24,0,0
+openai_gpt_5_5,T_free_schema_prompt_explicit_edges,24,12,24,24,0,0.9583333333333334,0.041666666666666664,,8,1.0,0.0,0.0,0,,,,23,1,0
+openai_gpt_5_5,T_generic_contract_explicit_edges_private_prose,24,12,24,24,0,1.0,0.0,,8,1.0,0.0,0.0,0,,,,24,0,0
+openai_gpt_5_5,T_generic_contract_private_prose,24,12,24,24,0,1.0,0.0,,8,1.0,0.0,0.0,0,,,,24,0,0

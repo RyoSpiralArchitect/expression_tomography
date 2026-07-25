@@ -14,6 +14,28 @@ class OracleAnswer:
     active_conclusions: list[str]
 
 
+def priority_edges_from_public(public_payload: dict[str, Any]) -> list[tuple[str, str]]:
+    pair_edges = public_payload.get("priority")
+    if isinstance(pair_edges, list):
+        return [
+            (str(edge[0]), str(edge[1]))
+            for edge in pair_edges
+            if isinstance(edge, (list, tuple)) and len(edge) == 2
+        ]
+
+    explicit_edges = public_payload.get("priority_edges", [])
+    return [
+        (
+            str(edge["higher_priority_rule"]),
+            str(edge["lower_priority_rule"]),
+        )
+        for edge in explicit_edges
+        if isinstance(edge, dict)
+        and "higher_priority_rule" in edge
+        and "lower_priority_rule" in edge
+    ]
+
+
 def answer_rule_z(public_payload: dict[str, Any]) -> OracleAnswer:
     facts = set(public_payload.get("facts", []))
     rules = list(public_payload.get("rules", []))
@@ -29,7 +51,7 @@ def answer_rule_z(public_payload: dict[str, Any]) -> OracleAnswer:
     suppressed: set[str] = set()
     fired_priority_edges = []
     fired_set = set(fired)
-    for winner, loser in public_payload.get("priority", []):
+    for winner, loser in priority_edges_from_public(public_payload):
         if winner in fired_set and loser in fired_set:
             suppressed.add(loser)
             fired_priority_edges.append((winner, loser))

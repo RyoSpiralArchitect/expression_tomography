@@ -25,11 +25,21 @@ rule_z_ear_dependence.csv
 rule_z_case_level.csv
   Case-level answers, correctness flags, and failure-family scaffolding.
 
+rule_z_transmission_integrity.csv
+  Empty, nonempty, and historically unobserved sender-stage counts, with raw
+  and nonempty-only receiver accuracy.
+
 rule_z_contrast_packets.md
 rule_z_contrast_packets.jsonl
   Paired pure-transmission-loss packets containing failed free-schema messages,
   recovered binding messages, private contracts when present, and blank human
   annotation fields.
+
+rule_z_intermediate_audit.csv
+rule_z_intermediate_audit_summary.csv
+rule_z_intermediate_factorial.csv
+  Case-level and aggregate scoring of the state recoverable from two-pass
+  private derivations, plus the compact/explicit by free/generic 2x2 contrasts.
 
 rule_z_report.md
   Generated report from the run.
@@ -81,6 +91,30 @@ rule_z_contract_binding_anthropic_seed29_30
   free_schema_prompt, self_contract_private_prose,
   oracle_contract_private_prose, free_case_hint_no_sections,
   factlocked, oracle_text.
+
+rule_z_binding_stress_anthropic_seed41
+  Anthropic Sonnet 4.6 24-case binding stress surface with semantic/opaque
+  isomorphic pairs, one full screen, and one selective replicate of the
+  trajectory-sensitive binding and priority conditions.
+
+rule_z_priority_compute_openai_gpt55_seed41_budget900_diagnostic
+  GPT-5.5 high-load priority/compute screen and selective replicate at the old
+  900-token completion budget. Retained as a stage-integrity diagnostic because
+  six sender messages were blank.
+
+rule_z_priority_binding_openai_gpt55_seed41_budget2000
+  Clean GPT-5.5 two-replicate high-load notation/binding audit at a 2000-token
+  completion budget with blank completions rejected.
+
+rule_z_priority_compute_anthropic_sonnet46_seed41_budget2000
+  Anthropic Sonnet 4.6 high-load priority/compute screen and selective
+  replicate at a 2000-token completion budget, including equal-call
+  free-versus-generic direct probes and their stored intermediates.
+
+rule_z_intermediate_factorial_anthropic_sonnet46_seed41
+  Anthropic Sonnet 4.6 compact/explicit priority notation by free/generic
+  private-binding factorial, with two replicates, stored private derivations,
+  non-answer-path audits, and case-level reconstruction scores.
 
 metaphor_transfer_openai_live
   First OpenAI live metaphor-transfer smoke run.
