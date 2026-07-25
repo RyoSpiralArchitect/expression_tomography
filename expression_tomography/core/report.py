@@ -1298,6 +1298,7 @@ _INTERMEDIATE_SUMMARY_METRICS = (
     "audit_active_rules_oracle_match_rate",
     "audit_active_conclusions_oracle_match_rate",
     "audit_state_oracle_match_rate",
+    "audit_answer_reconstruction_sufficiency_rate",
     "audit_reconstructed_answer_accuracy",
     "audit_final_answer_agreement",
     "final_accuracy",
@@ -1311,6 +1312,27 @@ def rule_z_intermediate_audit_rows(rows: list[dict[str, Any]]) -> list[dict[str,
         score = metadata.get("intermediate_audit_score")
         if not isinstance(score, dict):
             continue
+        reported_state = score.get("reported_state", {})
+        reported_active = (
+            reported_state.get("active_conclusions")
+            if isinstance(reported_state, dict)
+            else None
+        )
+        legacy_answer_sufficiency = (
+            isinstance(reported_active, list)
+            and bool(reported_active)
+            and all(
+                isinstance(item, str)
+                and item in {"eligible", "not_eligible"}
+                for item in reported_active
+            )
+        )
+        answer_sufficiency = bool(score.get("audit_parse_ok")) and bool(
+            score.get(
+                "answer_reconstruction_sufficient",
+                legacy_answer_sufficiency,
+            )
+        )
         out.append(
             {
                 "provider": row["provider"],
@@ -1357,11 +1379,15 @@ def rule_z_intermediate_audit_rows(rows: list[dict[str, Any]]) -> list[dict[str,
                     bool(score.get("intermediate_state_exact"))
                 ),
                 "reconstructed_answer": score.get("reconstructed_answer", ""),
+                "audit_answer_reconstruction_sufficient": float(
+                    answer_sufficiency
+                ),
                 "audit_reconstructed_answer_correct": float(
-                    bool(score.get("answer_reconstruction_correct"))
+                    answer_sufficiency
+                    and bool(score.get("answer_reconstruction_correct"))
                 ),
                 "audit_final_answer_agreement": float(
-                    bool(score.get("audit_parse_ok"))
+                    answer_sufficiency
                     and score.get("reconstructed_answer", "")
                     == row["score"].get("answer", "")
                 ),
@@ -1436,6 +1462,10 @@ def rule_z_intermediate_audit_summary_rows(
                 "audit_state_oracle_match_rate": metric_mean(
                     items,
                     "audit_state_oracle_match",
+                ),
+                "audit_answer_reconstruction_sufficiency_rate": metric_mean(
+                    items,
+                    "audit_answer_reconstruction_sufficient",
                 ),
                 "audit_reconstructed_answer_accuracy": metric_mean(
                     items,
@@ -1806,6 +1836,7 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
             "audit_active_conclusions_oracle_match",
             "audit_state_oracle_match",
             "reconstructed_answer",
+            "audit_answer_reconstruction_sufficient",
             "audit_reconstructed_answer_correct",
             "audit_final_answer_agreement",
             "expected_state_json",
@@ -2195,8 +2226,8 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
                 "",
                 "## Intermediate State Audit",
                 "",
-                "| Provider | Condition | n | Parse | Audit fired match | Audit priority match | Audit orientation | Audit suppression match | Audit active-conclusion match | Audit state match | Audit answer accuracy | Audit/final agreement | Final accuracy |",
-                "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+                "| Provider | Condition | n | Parse | Audit fired match | Audit priority match | Audit orientation | Audit suppression match | Audit active-conclusion match | Audit state match | Audit answer support | Audit answer accuracy | Audit/final agreement | Final accuracy |",
+                "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
             ]
         )
         for row in intermediate_rows:
@@ -2217,6 +2248,7 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
                                 "audit_suppressed_rules_oracle_match_rate",
                                 "audit_active_conclusions_oracle_match_rate",
                                 "audit_state_oracle_match_rate",
+                                "audit_answer_reconstruction_sufficiency_rate",
                                 "audit_reconstructed_answer_accuracy",
                                 "audit_final_answer_agreement",
                                 "final_accuracy",

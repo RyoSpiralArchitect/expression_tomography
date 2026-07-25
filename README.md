@@ -55,6 +55,10 @@ CSV for failure review. `rule_z_transmission_integrity.csv` separates empty,
 nonempty, and historically unobserved sender messages before semantic metrics
 are interpreted. When paired pure transmission losses exist, reports also
 include `rule_z_contrast_packets.md` and `rule_z_contrast_packets.jsonl`.
+Rule-Z trial identity is `(provider, case_hash, condition, replicate_index)`.
+Rerunning the same identity resumes missing conditions and skips existing
+rows; requesting mode aliases that collapse to one condition is rejected
+before any provider call.
 
 ## Rule-Z Post-Hoc Intermediate Probe
 
@@ -86,6 +90,12 @@ a structured hint, and the mock audit recognizes only its narrow fielded
 format; both validate plumbing rather than arbitrary prose semantics. See
 `docs/rule_z_posthoc_intermediate_probe.md` for the measurement contract and
 interpretation limits.
+
+Audit reports expose answer-reconstruction support separately from accuracy.
+A reconstructed answer counts as correct only when the reader supplied a
+nonempty, valid `active_conclusions` state; missing, malformed, empty, or
+out-of-vocabulary states are retained as unsupported rather than defaulting to
+`no`.
 
 After the uncued run, repeat the command against the same sidecar with
 `--query-battery current_and_counterfactual` to append the target-cued

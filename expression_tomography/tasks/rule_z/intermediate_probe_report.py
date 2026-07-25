@@ -61,6 +61,27 @@ def intermediate_probe_audit_rows(
             continue
         score = row.get("score", {})
         audit_mode = str(metadata.get("audit_mode", ""))
+        reported_state = score.get("reported_state", {})
+        reported_active = (
+            reported_state.get("active_conclusions")
+            if isinstance(reported_state, dict)
+            else None
+        )
+        legacy_answer_sufficiency = (
+            isinstance(reported_active, list)
+            and bool(reported_active)
+            and all(
+                isinstance(item, str)
+                and item in {"eligible", "not_eligible"}
+                for item in reported_active
+            )
+        )
+        answer_sufficiency = bool(score.get("audit_parse_ok")) and bool(
+            score.get(
+                "answer_reconstruction_sufficient",
+                legacy_answer_sufficiency,
+            )
+        )
         out.append(
             {
                 **_common_row(row),
@@ -100,8 +121,12 @@ def intermediate_probe_audit_rows(
                     else None
                 ),
                 "reconstructed_answer": score.get("reconstructed_answer", ""),
+                "audit_answer_reconstruction_sufficient": float(
+                    answer_sufficiency
+                ),
                 "audit_reconstructed_answer_correct": float(
-                    bool(score.get("answer_reconstruction_correct"))
+                    answer_sufficiency
+                    and bool(score.get("answer_reconstruction_correct"))
                 ),
                 "source_claimed_final_answer": score.get(
                     "source_final_answer",
@@ -201,6 +226,10 @@ def intermediate_probe_audit_summary_rows(
                     items,
                     "grounded_claim_rate",
                 ),
+                "audit_answer_reconstruction_sufficiency_rate": _mean_present(
+                    items,
+                    "audit_answer_reconstruction_sufficient",
+                ),
                 "audit_reconstructed_answer_accuracy": _mean_present(
                     items,
                     "audit_reconstructed_answer_correct",
@@ -292,7 +321,10 @@ def intermediate_probe_audit_contrast_rows(
                 "faithful_reconstructed_answer": faithful["reconstructed_answer"],
                 "repair_reconstructed_answer": repair["reconstructed_answer"],
                 "audit_answer_agreement": float(
-                    faithful["reconstructed_answer"] == repair["reconstructed_answer"]
+                    bool(faithful["audit_answer_reconstruction_sufficient"])
+                    and bool(repair["audit_answer_reconstruction_sufficient"])
+                    and faithful["reconstructed_answer"]
+                    == repair["reconstructed_answer"]
                 ),
             }
         )
@@ -495,6 +527,7 @@ def write_intermediate_probe_report(
                 "claim_count",
                 "contradiction_count",
                 "reconstructed_answer",
+                "audit_answer_reconstruction_sufficient",
                 "audit_reconstructed_answer_correct",
                 "source_claimed_final_answer",
                 "source_claimed_final_grounded",
@@ -524,6 +557,7 @@ def write_intermediate_probe_report(
                 "local_grounded_oracle_match_rate",
                 "global_grounded_oracle_match_rate",
                 "mean_grounded_claim_rate",
+                "audit_answer_reconstruction_sufficiency_rate",
                 "audit_reconstructed_answer_accuracy",
                 "source_claimed_final_oracle_match_rate",
                 "mean_contradiction_count",
@@ -647,8 +681,8 @@ def write_intermediate_probe_report(
         "",
         "## Audit Summary",
         "",
-        "| Reader | Model | Config | Version | Source DB | Source provider | Source kind | Source condition | Audit mode | n | Parse | State/oracle | Grounded state/oracle | Claim grounding | Reconstructed answer |",
-        "| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+        "| Reader | Model | Config | Version | Source DB | Source provider | Source kind | Source condition | Audit mode | n | Parse | State/oracle | Grounded state/oracle | Claim grounding | Answer support | Reconstructed answer |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
     ]
     for row in summary["audit_summary"]:
         lines.append(
@@ -669,6 +703,9 @@ def write_intermediate_probe_report(
                     _format_metric(row["audit_state_oracle_match_rate"]),
                     _format_metric(row["grounded_state_oracle_match_rate"]),
                     _format_metric(row["mean_grounded_claim_rate"]),
+                    _format_metric(
+                        row["audit_answer_reconstruction_sufficiency_rate"]
+                    ),
                     _format_metric(row["audit_reconstructed_answer_accuracy"]),
                 ]
             )

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 from pathlib import Path
 from typing import Iterable
 
@@ -107,6 +108,7 @@ ORACLE_MESSAGE_MODES = {
     "oracle_no_final_no_active",
     "oracle_corrupt_final",
 }
+TrialIdentity = tuple[str, str, str, int]
 
 
 def _score(parsed: dict | None, expected: str) -> dict:
@@ -117,6 +119,49 @@ def _score(parsed: dict | None, expected: str) -> dict:
         "correct": answer == expected,
         "parse_ok": parsed is not None,
     }
+
+
+def _planned_conditions(
+    transmission_modes: tuple[str, ...],
+    direct_probe_modes: tuple[str, ...],
+) -> tuple[str, ...]:
+    conditions = (
+        "B",
+        "O",
+        "D",
+        *(DIRECT_PROBE_MODE_TO_CONDITION[mode] for mode in direct_probe_modes),
+        *(TRANSMISSION_MODE_TO_CONDITION[mode] for mode in transmission_modes),
+    )
+    duplicates = sorted(
+        condition
+        for condition, count in Counter(conditions).items()
+        if count > 1
+    )
+    if duplicates:
+        raise ValueError(
+            "Multiple requested modes map to the same trial condition: "
+            + ", ".join(duplicates)
+        )
+    return conditions
+
+
+def _stored_trial_identity(row: dict) -> TrialIdentity:
+    metadata = row.get("metadata", {})
+    return (
+        str(row["provider"]),
+        str(row["case_hash"]),
+        str(row["condition"]),
+        int(metadata.get("replicate_index", 0)),
+    )
+
+
+def _trial_identity(trial: TrialResult) -> TrialIdentity:
+    return (
+        trial.provider,
+        trial.case_hash,
+        trial.condition,
+        int(trial.metadata.get("replicate_index", 0)),
+    )
 
 
 def _parse_transmission_modes(raw: str) -> tuple[str, ...]:
@@ -198,7 +243,9 @@ def run_rule_z_case(
     prompt_style: str = "default",
     replicate_index: int = 0,
     audit_intermediates: bool = False,
+    skip_conditions: set[str] | None = None,
 ) -> list[TrialResult]:
+    _planned_conditions(transmission_modes, direct_probe_modes)
     public = case.payload["public"]
     expected = case.payload["oracle_private"]["answer"]
     strict_conflict = _uses_strict_conflict(prompt_style)
@@ -213,8 +260,11 @@ def run_rule_z_case(
         "stress_target": stress.get("target", ""),
     }
     trials: list[TrialResult] = []
+    skipped = skip_conditions or set()
 
     for condition in ("B", "O", "D"):
+        if condition in skipped:
+            continue
         prompt = (
             make_baseline_prompt(case.case_id, public, strict_conflict=strict_conflict)
             if condition == "B"
@@ -239,6 +289,8 @@ def run_rule_z_case(
 
     for mode in direct_probe_modes:
         condition = DIRECT_PROBE_MODE_TO_CONDITION[mode]
+        if condition in skipped:
+            continue
         priority_notation = (
             "explicit_edges"
             if mode == "priority_explicit_edges" or mode in TWO_PASS_EXPLICIT_PRIORITY_MODES
@@ -325,6 +377,8 @@ def run_rule_z_case(
 
     for mode in transmission_modes:
         condition = TRANSMISSION_MODE_TO_CONDITION[mode]
+        if condition in skipped:
+            continue
         base_mode = EXPLICIT_PRIORITY_TRANSMISSION_MODE_TO_BASE.get(mode, mode)
         priority_notation = (
             "explicit_edges"
@@ -528,14 +582,51 @@ def run_rule_z_experiment(
     repetitions: int = 1,
     replicate_start: int = 0,
     audit_intermediates: bool = False,
-) -> None:
+) -> dict[str, int]:
     if repetitions < 1:
         raise ValueError("repetitions must be at least 1")
     if replicate_start < 0:
         raise ValueError("replicate_start must be non-negative")
+    planned_conditions = _planned_conditions(
+        transmission_modes,
+        direct_probe_modes,
+    )
+    identity_counts = Counter(
+        _stored_trial_identity(row)
+        for row in store.fetch_trials(task_type="rule_z")
+    )
+    duplicate_identities = sorted(
+        identity
+        for identity, count in identity_counts.items()
+        if count > 1
+    )
+    if duplicate_identities:
+        preview = ", ".join(
+            repr(identity)
+            for identity in duplicate_identities[:3]
+        )
+        raise RuntimeError(
+            "Rule-Z store already contains duplicate trial identities; "
+            f"refusing to append until they are repaired: {preview}"
+        )
+    seen = set(identity_counts)
+    inserted = 0
+    skipped_existing = 0
     for case in cases:
         store.upsert_case(case)
         for replicate_index in range(replicate_start, replicate_start + repetitions):
+            skip_conditions = {
+                condition
+                for condition in planned_conditions
+                if (
+                    provider.name,
+                    case.case_hash,
+                    condition,
+                    replicate_index,
+                )
+                in seen
+            }
+            skipped_existing += len(skip_conditions)
             for trial in run_rule_z_case(
                 case,
                 provider,
@@ -544,8 +635,21 @@ def run_rule_z_experiment(
                 prompt_style=prompt_style,
                 replicate_index=replicate_index,
                 audit_intermediates=audit_intermediates,
+                skip_conditions=skip_conditions,
             ):
+                identity = _trial_identity(trial)
+                if identity in seen:
+                    raise RuntimeError(
+                        "Rule-Z run produced a duplicate trial identity: "
+                        f"{identity}"
+                    )
                 store.insert_trial(trial)
+                seen.add(identity)
+                inserted += 1
+    return {
+        "inserted_trials": inserted,
+        "skipped_existing_trials": skipped_existing,
+    }
 
 
 def main() -> None:
@@ -648,22 +752,29 @@ def main() -> None:
         providers = build_providers_from_config(args.provider_config) if args.provider_config else [MockProvider()]
         transmission_modes = _parse_transmission_modes(args.transmission_modes)
         direct_probe_modes = _parse_direct_probe_modes(args.direct_probe_modes)
+        run_summaries = []
         for provider in providers:
-            run_rule_z_experiment(
-                cases,
-                provider,
-                store,
-                transmission_modes=transmission_modes,
-                direct_probe_modes=direct_probe_modes,
-                prompt_style=args.prompt_style,
-                repetitions=args.repetitions,
-                replicate_start=args.replicate_start,
-                audit_intermediates=args.audit_intermediates,
+            run_summaries.append(
+                {
+                    "provider": provider.name,
+                    **run_rule_z_experiment(
+                        cases,
+                        provider,
+                        store,
+                        transmission_modes=transmission_modes,
+                        direct_probe_modes=direct_probe_modes,
+                        prompt_style=args.prompt_style,
+                        repetitions=args.repetitions,
+                        replicate_start=args.replicate_start,
+                        audit_intermediates=args.audit_intermediates,
+                    ),
+                }
             )
         summary = write_rule_z_report(store, Path(args.report_dir))
         print(
             {
                 "task_type": summary["task_type"],
+                "runs": run_summaries,
                 "n_trials": summary["n_trials"],
                 "accuracy_by_condition": summary["accuracy_by_condition"],
                 "eta": summary["eta"],

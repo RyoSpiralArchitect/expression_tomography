@@ -230,6 +230,20 @@ It is not yet evidence that:
 - every prompt scaffold reveals rather than supplies capability;
 - the same factorization transfers unchanged to open-domain expression.
 
+## Review Hardening
+
+PR review added two conservative guards without changing the frozen evidence.
+Rule-Z reruns now resume missing trial identities instead of appending duplicate
+rows. Audit answer accuracy now requires a nonempty, valid
+`active_conclusions` state, so an omitted or malformed state cannot become an
+accidental correct `no`.
+
+The frozen source database remains
+`cd9fd6e9156ebba798558cac9675a605ba04fcb49f336911bbedca1953d75eef`.
+All 96 audited rows have supported active-conclusion states. Read-only
+regeneration therefore leaves the headline final accuracies unchanged:
+compact/free is 0.792 and the three controlled cells are 1.000.
+
 ## Next Probe
 
 The next measurement should separate expression from measurement repair:

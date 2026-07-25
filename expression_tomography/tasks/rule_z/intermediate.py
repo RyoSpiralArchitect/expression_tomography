@@ -118,7 +118,16 @@ def score_intermediate_audit(
     }
     reported_active = reported_lists["active_conclusions"]
     reconstructed_answer = _answer_from_active_conclusions(reported_active)
-    answer_reconstruction_correct = parsed is not None and reconstructed_answer == oracle.answer
+    answer_reconstruction_sufficient = (
+        parsed is not None
+        and isinstance(parsed.get("active_conclusions"), list)
+        and bool(reported_active)
+        and reported_active <= {"eligible", "not_eligible"}
+    )
+    answer_reconstruction_correct = (
+        answer_reconstruction_sufficient
+        and reconstructed_answer == oracle.answer
+    )
     component_exact = [*list_exact.values(), priority_edges_exact]
 
     return {
@@ -133,6 +142,7 @@ def score_intermediate_audit(
         "unexpected_priority_edge_count": len(reported_edges - expected_edges),
         "intermediate_state_exact": all(component_exact),
         "reconstructed_answer": reconstructed_answer,
+        "answer_reconstruction_sufficient": answer_reconstruction_sufficient,
         "answer_reconstruction_correct": answer_reconstruction_correct,
         "expected_state": {
             **{field: sorted(values) for field, values in expected_lists.items()},

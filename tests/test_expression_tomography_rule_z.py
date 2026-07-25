@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import copy
 import hashlib
-import tempfile
-import unittest
 import json
 import re
+import tempfile
+import unittest
 from pathlib import Path
 
 from expression_tomography.core.providers import MockProvider, ProviderSpec
@@ -270,6 +270,7 @@ class RuleZSmokeTests(unittest.TestCase):
         correct_score = score_intermediate_audit(correct, oracle)
         self.assertTrue(correct_score["intermediate_state_exact"])
         self.assertEqual(correct_score["priority_orientation_accuracy"], 1.0)
+        self.assertTrue(correct_score["answer_reconstruction_sufficient"])
         self.assertTrue(correct_score["answer_reconstruction_correct"])
 
         reversed_state = dict(correct)
@@ -290,7 +291,73 @@ class RuleZSmokeTests(unittest.TestCase):
 
         parse_failure = score_intermediate_audit(None, oracle)
         self.assertFalse(parse_failure["audit_parse_ok"])
+        self.assertFalse(parse_failure["answer_reconstruction_sufficient"])
+        self.assertFalse(parse_failure["answer_reconstruction_correct"])
         self.assertEqual(parse_failure["priority_orientation_accuracy"], 0.0)
+
+        expected_no = next(
+            answer_rule_z(candidate.payload["public"])
+            for candidate in make_rule_z_cases(24, seed=41, profile="binding_stress")
+            if candidate.payload["oracle_private"]["answer"] == "no"
+        )
+        for unsupported_active in (
+            {},
+            {"active_conclusions": []},
+            {"active_conclusions": "not_eligible"},
+            {"active_conclusions": ["unknown"]},
+        ):
+            unsupported_score = score_intermediate_audit(
+                unsupported_active,
+                expected_no,
+            )
+            self.assertFalse(
+                unsupported_score["answer_reconstruction_sufficient"]
+            )
+            self.assertFalse(
+                unsupported_score["answer_reconstruction_correct"]
+            )
+        supported_no = score_intermediate_audit(
+            {"active_conclusions": ["not_eligible"]},
+            expected_no,
+        )
+        self.assertTrue(supported_no["answer_reconstruction_sufficient"])
+        self.assertTrue(supported_no["answer_reconstruction_correct"])
+
+        legacy_unsupported = rule_z_intermediate_audit_rows(
+            [
+                {
+                    "provider": "legacy",
+                    "case_id": "legacy_no",
+                    "case_hash": "legacy_no_hash",
+                    "condition": "D_two_pass_free",
+                    "score": {
+                        "answer": "no",
+                        "expected": "no",
+                        "correct": True,
+                    },
+                    "metadata": {
+                        "intermediate_audit_score": {
+                            "audit_parse_ok": True,
+                            "reported_state": {"active_conclusions": []},
+                            "reconstructed_answer": "no",
+                            "answer_reconstruction_correct": True,
+                        }
+                    },
+                }
+            ]
+        )[0]
+        self.assertEqual(
+            legacy_unsupported["audit_answer_reconstruction_sufficient"],
+            0.0,
+        )
+        self.assertEqual(
+            legacy_unsupported["audit_reconstructed_answer_correct"],
+            0.0,
+        )
+        self.assertEqual(
+            legacy_unsupported["audit_final_answer_agreement"],
+            0.0,
+        )
 
         audit_prompt = make_intermediate_audit_prompt(
             case.case_id,
@@ -363,6 +430,7 @@ class RuleZSmokeTests(unittest.TestCase):
                         "audit_active_rules_oracle_match_rate",
                         "audit_active_conclusions_oracle_match_rate",
                         "audit_state_oracle_match_rate",
+                        "audit_answer_reconstruction_sufficiency_rate",
                         "audit_reconstructed_answer_accuracy",
                         "audit_final_answer_agreement",
                         "final_accuracy",
@@ -785,6 +853,111 @@ class RuleZSmokeTests(unittest.TestCase):
             finally:
                 output_store.close()
                 source_store.close()
+
+    def test_rule_z_experiment_resumes_missing_trial_identities(self) -> None:
+        class CountingMockProvider(MockProvider):
+            def __init__(self) -> None:
+                super().__init__()
+                self.call_count = 0
+
+            def complete(self, prompt: str) -> str:
+                self.call_count += 1
+                return super().complete(prompt)
+
+        case = make_rule_z_cases(1, seed=43)[0]
+        provider = CountingMockProvider()
+        modes = ("oracle_text",)
+
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "rule_z.sqlite")
+            try:
+                first_pass = run_rule_z_case(
+                    case,
+                    provider,
+                    transmission_modes=modes,
+                )
+                store.insert_trial(first_pass[0])
+                provider.call_count = 0
+
+                resumed = run_rule_z_experiment(
+                    [case],
+                    provider,
+                    store,
+                    transmission_modes=modes,
+                )
+                self.assertEqual(
+                    resumed,
+                    {
+                        "inserted_trials": 3,
+                        "skipped_existing_trials": 1,
+                    },
+                )
+                self.assertEqual(provider.call_count, 3)
+
+                rerun = run_rule_z_experiment(
+                    [case],
+                    provider,
+                    store,
+                    transmission_modes=modes,
+                )
+                self.assertEqual(
+                    rerun,
+                    {
+                        "inserted_trials": 0,
+                        "skipped_existing_trials": 4,
+                    },
+                )
+                self.assertEqual(provider.call_count, 3)
+
+                rows = store.fetch_trials(task_type="rule_z")
+                identities = {
+                    (
+                        row["provider"],
+                        row["case_hash"],
+                        row["condition"],
+                        row["metadata"]["replicate_index"],
+                    )
+                    for row in rows
+                }
+                self.assertEqual(len(rows), 4)
+                self.assertEqual(len(identities), 4)
+
+                store.insert_trial(first_pass[0])
+                provider.call_count = 0
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "already contains duplicate trial identities",
+                ):
+                    run_rule_z_experiment(
+                        [case],
+                        provider,
+                        store,
+                        transmission_modes=modes,
+                    )
+                self.assertEqual(provider.call_count, 0)
+            finally:
+                store.close()
+
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "rule_z.sqlite")
+            try:
+                provider.call_count = 0
+                with self.assertRaisesRegex(
+                    ValueError,
+                    "same trial condition",
+                ):
+                    run_rule_z_experiment(
+                        [case],
+                        provider,
+                        store,
+                        transmission_modes=(
+                            "factlocked_plus_priority",
+                            "factlocked_plus_priority_edges",
+                        ),
+                    )
+                self.assertEqual(provider.call_count, 0)
+            finally:
+                store.close()
 
     def test_binding_stress_repetitions_flow_through_reports(self) -> None:
         modes = (
