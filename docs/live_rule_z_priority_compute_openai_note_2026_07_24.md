@@ -286,8 +286,10 @@ surface is too saturated to estimate a broad OpenAI binding gain.
 - Message diagnostics remain heuristics; the paired raw messages carry more
   weight than aggregate cue scores.
 
-The next clean probe is an Anthropic compute-matched rerun on these same 12
-cases. A separate referential-completeness set should then vary whether actual
-facts are listed, referred to through an unavailable source, or recoverable
-from a genuinely included source. That would test the new failure mechanism
-directly rather than relying on one naturally occurring case.
+The Anthropic compute-matched rerun on these same 12 cases is now complete and
+documented in
+`docs/live_rule_z_priority_compute_anthropic_note_2026_07_25.md`. A separate
+referential-completeness set should still vary whether actual facts are listed,
+referred to through an unavailable source, or recoverable from a genuinely
+included source. That would test the OpenAI failure mechanism directly rather
+than relying on one naturally occurring case.

@@ -100,6 +100,11 @@ rule_z_priority_binding_openai_gpt55_seed41_budget2000
   Clean GPT-5.5 two-replicate high-load notation/binding audit at a 2000-token
   completion budget with blank completions rejected.
 
+rule_z_priority_compute_anthropic_sonnet46_seed41_budget2000
+  Anthropic Sonnet 4.6 high-load priority/compute screen and selective
+  replicate at a 2000-token completion budget, including equal-call
+  free-versus-generic direct probes and their stored intermediates.
+
 metaphor_transfer_openai_live
   First OpenAI live metaphor-transfer smoke run.
 

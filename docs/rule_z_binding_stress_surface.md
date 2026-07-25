@@ -204,6 +204,13 @@ two-replicate notation/binding audit uses the current 2000-token GPT-5.5 config
 and is documented in
 `docs/live_rule_z_priority_compute_openai_note_2026_07_24.md`.
 
+The matching Anthropic screen and selective replicate use Sonnet 4.6 with a
+2000-token output limit. On the same 12 cases, a free extra derivation pass did
+not improve over D, while the equal-call generic-contract path was perfect and
+stable. Explicit directed edges also repaired the one-call direct path. The
+frozen run and case-level intermediate analysis are documented in
+`docs/live_rule_z_priority_compute_anthropic_note_2026_07_25.md`.
+
 ## Staged Pilot
 
 Screen all conditions once before paying for repeated generations:

@@ -34,7 +34,9 @@ pilot and metric definitions. The priority/compute follow-up adds
 `--stress-families`, explicit-priority transmission twins, and
 `--direct-probe-modes priority_explicit_edges,two_pass_free,two_pass_generic_contract`
 to separate notation, extra-pass, equal-call binding, and structured-access
-effects.
+effects. The live OpenAI and Anthropic follow-ups are documented in
+`docs/live_rule_z_priority_compute_openai_note_2026_07_24.md` and
+`docs/live_rule_z_priority_compute_anthropic_note_2026_07_25.md`.
 Ear red-team variants are also available: `oracle_no_final`,
 `oracle_no_final_no_active`, and `oracle_corrupt_final`.
 Reports include aggregate accuracy, provider-level accuracy, transmission
@@ -74,6 +76,13 @@ A stronger OpenAI config is available for model-equalized ear red-team runs:
 ```bash
 python3 -m expression_tomography.tasks.rule_z.task \
   --provider-config expression_tomography/config/providers.openai_gpt_5_5.json
+```
+
+The matching clean Anthropic priority/compute probe uses:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.task \
+  --provider-config expression_tomography/config/providers.anthropic_sonnet_4_6_2000.json
 ```
 
 Live adapters reject blank provider completions. The OpenAI error reports safe
