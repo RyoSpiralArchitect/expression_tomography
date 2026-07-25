@@ -35,6 +35,12 @@ rule_z_contrast_packets.jsonl
   recovered binding messages, private contracts when present, and blank human
   annotation fields.
 
+rule_z_intermediate_audit.csv
+rule_z_intermediate_audit_summary.csv
+rule_z_intermediate_factorial.csv
+  Case-level and aggregate scoring of the state recoverable from two-pass
+  private derivations, plus the compact/explicit by free/generic 2x2 contrasts.
+
 rule_z_report.md
   Generated report from the run.
 ```

@@ -144,6 +144,32 @@ def make_structured_review_prompt(
     )
 
 
+def make_intermediate_audit_prompt(
+    case_id: str,
+    derivation: str,
+    condition: str,
+) -> str:
+    return "\n".join(
+        [
+            "TASK: rule_z_intermediate_audit",
+            f"CONDITION: {condition}_AUDIT",
+            f"CASE_ID: {case_id}",
+            "Extract only the Rule-Z state explicitly asserted by the private derivation.",
+            "Do not solve, repair, or reinterpret the original case.",
+            "You do not receive the authoritative structured case.",
+            "Use an empty array when the derivation does not state a requested field.",
+            "Record a priority edge only when the derivation states that one rule has higher priority than, beats, overrides, or suppresses the other.",
+            "Preserve the stated edge direction exactly, even when it appears mistaken.",
+            "Return exactly one JSON object and no prose.",
+            "Schema:",
+            '{"fired_rules": ["r1"], "fired_priority_edges": [{"higher_priority_rule": "r1", "lower_priority_rule": "r2"}], "suppressed_rules": ["r2"], "active_rules": ["r1"], "active_conclusions": ["eligible"]}',
+            "PRIVATE_DERIVATION",
+            derivation,
+            "END_PRIVATE_DERIVATION",
+        ]
+    )
+
+
 def make_message_prompt(case_id: str, public: dict[str, Any], mode: str = "free") -> str:
     lines = [
         "TASK: rule_z_write_message",

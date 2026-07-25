@@ -11,6 +11,9 @@ from expression_tomography.core.report import (
     rule_z_replicate_stability_rows,
     rule_z_case_level_rows,
     rule_z_contrast_packet_rows,
+    rule_z_intermediate_audit_rows,
+    rule_z_intermediate_factorial_rows,
+    rule_z_intermediate_audit_summary_rows,
     rule_z_message_diagnostic_rows,
     summarize_rule_z,
     rule_z_transmission_integrity_rows,
@@ -19,12 +22,14 @@ from expression_tomography.core.report import (
 from expression_tomography.core.schema import Case, TrialResult
 from expression_tomography.core.store import ExperimentStore
 from expression_tomography.tasks.rule_z.generator import make_rule_z_cases, public_payload_from_facts
+from expression_tomography.tasks.rule_z.intermediate import score_intermediate_audit
 from expression_tomography.tasks.rule_z.oracle import answer_rule_z
 from expression_tomography.tasks.rule_z.prompts import (
     make_ablated_contract,
     make_contract_bound_message_prompt,
     make_contract_only_message_prompt,
     make_generic_contract,
+    make_intermediate_audit_prompt,
     make_message_prompt,
     make_message_contract_prompt,
     make_message_repair_prompt,
@@ -223,6 +228,153 @@ class RuleZSmokeTests(unittest.TestCase):
                 write_rule_z_report(store, tmp / "reports")
                 report = (tmp / "reports" / "rule_z_report.md").read_text(encoding="utf-8")
                 self.assertIn("## Priority And Compute Probes", report)
+            finally:
+                store.close()
+
+    def test_intermediate_audit_scores_priority_direction_without_oracle_leakage(self) -> None:
+        case = next(
+            case
+            for case in make_rule_z_cases(24, seed=41, profile="binding_stress")
+            if case.payload["stress"]["family"] == "priority_load"
+        )
+        oracle = answer_rule_z(case.payload["public"])
+        correct = {
+            "fired_rules": oracle.fired_rules,
+            "fired_priority_edges": [
+                {
+                    "higher_priority_rule": higher,
+                    "lower_priority_rule": lower,
+                }
+                for higher, lower in oracle.fired_priority_edges
+            ],
+            "suppressed_rules": oracle.suppressed_rules,
+            "active_rules": oracle.active_rules,
+            "active_conclusions": oracle.active_conclusions,
+        }
+        correct_score = score_intermediate_audit(correct, oracle)
+        self.assertTrue(correct_score["intermediate_state_exact"])
+        self.assertEqual(correct_score["priority_orientation_accuracy"], 1.0)
+        self.assertTrue(correct_score["answer_reconstruction_correct"])
+
+        reversed_state = dict(correct)
+        reversed_state["fired_priority_edges"] = [
+            {
+                "higher_priority_rule": lower,
+                "lower_priority_rule": higher,
+            }
+            for higher, lower in oracle.fired_priority_edges
+        ]
+        reversed_score = score_intermediate_audit(reversed_state, oracle)
+        self.assertFalse(reversed_score["priority_edges_exact"])
+        self.assertEqual(reversed_score["priority_orientation_accuracy"], 0.0)
+        self.assertEqual(
+            reversed_score["priority_reversal_count"],
+            len(oracle.fired_priority_edges),
+        )
+
+        parse_failure = score_intermediate_audit(None, oracle)
+        self.assertFalse(parse_failure["audit_parse_ok"])
+        self.assertEqual(parse_failure["priority_orientation_accuracy"], 0.0)
+
+        audit_prompt = make_intermediate_audit_prompt(
+            case.case_id,
+            "r1 beats r2.",
+            "D_two_pass_free",
+        )
+        self.assertIn("PRIVATE_DERIVATION\n", audit_prompt)
+        self.assertNotIn("RULE_Z_PUBLIC_JSON", audit_prompt)
+        self.assertIn("Do not solve, repair, or reinterpret", audit_prompt)
+
+    def test_intermediate_factorial_flows_through_mock_reports(self) -> None:
+        direct_probe_modes = (
+            "two_pass_free",
+            "two_pass_free_explicit_edges",
+            "two_pass_generic_contract",
+            "two_pass_generic_contract_explicit_edges",
+        )
+        cases = [
+            case
+            for case in make_rule_z_cases(24, seed=41, profile="binding_stress")
+            if case.payload["stress"]["family"] == "priority_load"
+        ][:2]
+
+        with tempfile.TemporaryDirectory() as td:
+            tmp = Path(td)
+            store = ExperimentStore(tmp / "rule_z.sqlite")
+            try:
+                run_rule_z_experiment(
+                    cases,
+                    MockProvider(),
+                    store,
+                    transmission_modes=("oracle_text",),
+                    direct_probe_modes=direct_probe_modes,
+                    prompt_style="strict_conflict",
+                    audit_intermediates=True,
+                )
+                rows = store.fetch_trials(task_type="rule_z")
+                audited = rule_z_intermediate_audit_rows(rows)
+                self.assertEqual(len(audited), len(cases) * len(direct_probe_modes))
+                self.assertTrue(
+                    all(row["audit_state_oracle_match"] == 1.0 for row in audited)
+                )
+
+                rows_by_condition = {row["condition"]: row for row in rows}
+                explicit = rows_by_condition["D_two_pass_free_explicit_edges"]
+                self.assertEqual(explicit["metadata"]["priority_notation"], "explicit_edges")
+                self.assertEqual(explicit["metadata"]["pass_count"], 2)
+                self.assertEqual(explicit["metadata"]["provider_call_count"], 3)
+                self.assertTrue(explicit["metadata"]["intermediate_audit_not_in_answer_path"])
+                self.assertNotIn("rule_z_intermediate_audit", explicit["prompt"])
+                self.assertIn('"priority_edges"', explicit["prompt"])
+
+                summary_rows = rule_z_intermediate_audit_summary_rows(audited)
+                factorial = rule_z_intermediate_factorial_rows(summary_rows)
+                overall = [
+                    row
+                    for row in factorial
+                    if row["provider"] == "mock"
+                    and row["family"] == "ALL"
+                    and row["naming"] == "ALL"
+                ]
+                self.assertEqual(
+                    {row["metric"] for row in overall},
+                    {
+                        "audit_parse_rate",
+                        "audit_fired_rules_oracle_match_rate",
+                        "audit_priority_edges_oracle_match_rate",
+                        "audit_priority_orientation_accuracy",
+                        "audit_suppressed_rules_oracle_match_rate",
+                        "audit_active_rules_oracle_match_rate",
+                        "audit_active_conclusions_oracle_match_rate",
+                        "audit_state_oracle_match_rate",
+                        "audit_reconstructed_answer_accuracy",
+                        "audit_final_answer_agreement",
+                        "final_accuracy",
+                    },
+                )
+                self.assertTrue(
+                    all(
+                        row["compact_free"] == 1.0
+                        and row["explicit_free"] == 1.0
+                        and row["compact_generic"] == 1.0
+                        and row["explicit_generic"] == 1.0
+                        and row["interaction"] == 0.0
+                        for row in overall
+                    )
+                )
+
+                write_rule_z_report(store, tmp / "reports")
+                for filename in (
+                    "rule_z_intermediate_audit.csv",
+                    "rule_z_intermediate_audit_summary.csv",
+                    "rule_z_intermediate_factorial.csv",
+                ):
+                    self.assertTrue((tmp / "reports" / filename).exists())
+                report = (tmp / "reports" / "rule_z_report.md").read_text(
+                    encoding="utf-8"
+                )
+                self.assertIn("## Intermediate State Audit", report)
+                self.assertIn("## Intermediate 2x2 Factorial", report)
             finally:
                 store.close()
 

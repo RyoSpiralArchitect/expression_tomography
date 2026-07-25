@@ -211,6 +211,90 @@ stable. Explicit directed edges also repaired the one-call direct path. The
 frozen run and case-level intermediate analysis are documented in
 `docs/live_rule_z_priority_compute_anthropic_note_2026_07_25.md`.
 
+## Expressed Intermediate-State Factorial
+
+The next probe crosses private binding and priority notation inside the same
+two-pass direct path:
+
+```text
+                               compact pairs   explicit edges
+free private derivation        two_pass_free   two_pass_free_explicit_edges
+generic-contract derivation    two_pass_generic_contract
+                                               two_pass_generic_contract_explicit_edges
+```
+
+All four answer paths have two provider calls: one private derivation and one
+structured review. With `--audit-intermediates`, a third observation-only call
+receives the derivation text but not structured Z. It extracts:
+
+```text
+fired_rules
+fired_priority_edges, preserving stated direction
+suppressed_rules
+active_rules
+active_conclusions
+```
+
+The audit response is stored in trial metadata and never enters the answer
+prompt. A deterministic scorer compares the audit reconstruction with the
+private oracle and reports component matches, directed-edge precision/recall,
+orientation match, full-state match, and the answer reconstructable from the
+audited active conclusions. These are audit-to-oracle metrics, not direct
+measurements of the source derivation.
+
+Generated reports add:
+
+```text
+rule_z_intermediate_audit.csv
+rule_z_intermediate_audit_summary.csv
+rule_z_intermediate_factorial.csv
+```
+
+For any metric `m`, the 2x2 report computes:
+
+```text
+Notation Gain, free =
+  m(explicit, free) - m(compact, free)
+
+Notation Gain, generic =
+  m(explicit, generic) - m(compact, generic)
+
+Binding Gain, compact =
+  m(compact, generic) - m(compact, free)
+
+Binding Gain, explicit =
+  m(explicit, generic) - m(explicit, free)
+
+Interaction =
+  Binding Gain, explicit - Binding Gain, compact
+```
+
+The measurement boundary is strict. This audit estimates state recoverable
+from the written intermediate derivation. It does not expose a hidden latent
+computation and cannot by itself distinguish "the model internally knew but
+failed to write it" from "the model never computed it." The audit reader may
+also repair, omit, or reinterpret source claims. Audit-to-final agreement,
+raw derivation/audit pairs, and parse coverage must therefore accompany every
+aggregate audit-to-oracle score.
+
+The calibrated command is:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.task \
+  --cases 24 \
+  --seed 41 \
+  --case-profile binding_stress \
+  --stress-families priority_load,conflict_load \
+  --repetitions 1 \
+  --direct-probe-modes priority_explicit_edges,two_pass_free,two_pass_free_explicit_edges,two_pass_generic_contract,two_pass_generic_contract_explicit_edges \
+  --audit-intermediates \
+  --transmission-modes oracle_text \
+  --prompt-style strict_conflict \
+  --db results/rule_z_intermediate_factorial_anthropic_sonnet46_seed41.sqlite \
+  --report-dir results/rule_z_intermediate_factorial_anthropic_sonnet46_seed41_reports \
+  --provider-config expression_tomography/config/providers.anthropic_sonnet_4_6_2000.json
+```
+
 ## Staged Pilot
 
 Screen all conditions once before paying for repeated generations:

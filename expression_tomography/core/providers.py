@@ -213,7 +213,9 @@ class MockProvider:
         if "TASK: rule_z_contract_bound_message" in prompt:
             return self._write_rule_z_message(prompt)
         if "TASK: rule_z_private_derivation" in prompt:
-            return self._write_rule_z_message(prompt)
+            return self._write_rule_z_derivation(prompt)
+        if "TASK: rule_z_intermediate_audit" in prompt:
+            return self._audit_rule_z_derivation(prompt)
         if "TASK: rule_z_answer" in prompt:
             return self._answer_rule_z(prompt)
         return json.dumps({"answer": "yes", "confidence": 0.5}, ensure_ascii=False)
@@ -243,6 +245,60 @@ class MockProvider:
                 "Preserve priority and suppression before describing active conclusions.",
                 "Preserve unresolved conflict if eligible and not_eligible both remain active.",
             ]
+        )
+
+    def _write_rule_z_derivation(self, prompt: str) -> str:
+        public = _extract_json_block(prompt, "RULE_Z_PUBLIC_JSON")
+        oracle = answer_rule_z(public)
+
+        def values(items: list[str]) -> str:
+            return ", ".join(items) if items else "none"
+
+        edges = [f"{higher}>{lower}" for higher, lower in oracle.fired_priority_edges]
+        return "\n".join(
+            [
+                f"Fired rules: {values(oracle.fired_rules)}.",
+                f"Fired priority edges: {values(edges)}.",
+                f"Suppressed rules: {values(oracle.suppressed_rules)}.",
+                f"Active rules: {values(oracle.active_rules)}.",
+                f"Active conclusions: {values(oracle.active_conclusions)}.",
+            ]
+        )
+
+    def _audit_rule_z_derivation(self, prompt: str) -> str:
+        derivation = _extract_text_block(prompt, "PRIVATE_DERIVATION")
+
+        def line_values(label: str) -> list[str]:
+            match = re.search(
+                rf"^{re.escape(label)}:\s*(.*?)\.\s*$",
+                derivation,
+                flags=re.M,
+            )
+            if not match or match.group(1).strip().lower() == "none":
+                return []
+            return [item.strip() for item in match.group(1).split(",") if item.strip()]
+
+        edges = []
+        for item in line_values("Fired priority edges"):
+            if ">" not in item:
+                continue
+            higher, lower = (part.strip() for part in item.split(">", 1))
+            if higher and lower:
+                edges.append(
+                    {
+                        "higher_priority_rule": higher,
+                        "lower_priority_rule": lower,
+                    }
+                )
+        return json.dumps(
+            {
+                "fired_rules": line_values("Fired rules"),
+                "fired_priority_edges": edges,
+                "suppressed_rules": line_values("Suppressed rules"),
+                "active_rules": line_values("Active rules"),
+                "active_conclusions": line_values("Active conclusions"),
+            },
+            ensure_ascii=False,
         )
 
     def _answer_rule_z(self, prompt: str) -> str:

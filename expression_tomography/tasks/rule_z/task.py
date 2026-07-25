@@ -15,6 +15,7 @@ from expression_tomography.core.schema import Case, TrialResult
 from expression_tomography.core.store import ExperimentStore
 
 from .generator import CASE_PROFILES, STRESS_FAMILIES, make_rule_z_cases
+from .intermediate import score_intermediate_audit
 from .oracle import answer_rule_z
 from .prompts import (
     make_ablated_contract,
@@ -22,6 +23,7 @@ from .prompts import (
     make_contract_only_message_prompt,
     make_baseline_prompt,
     make_generic_contract,
+    make_intermediate_audit_prompt,
     make_message_prompt,
     make_message_contract_prompt,
     make_message_repair_prompt,
@@ -79,7 +81,19 @@ EXPLICIT_PRIORITY_TRANSMISSION_MODE_TO_BASE = {
 DIRECT_PROBE_MODE_TO_CONDITION = {
     "priority_explicit_edges": "D_priority_explicit_edges",
     "two_pass_free": "D_two_pass_free",
+    "two_pass_free_explicit_edges": "D_two_pass_free_explicit_edges",
     "two_pass_generic_contract": "D_two_pass_generic_contract",
+    "two_pass_generic_contract_explicit_edges": (
+        "D_two_pass_generic_contract_explicit_edges"
+    ),
+}
+TWO_PASS_EXPLICIT_PRIORITY_MODES = {
+    "two_pass_free_explicit_edges",
+    "two_pass_generic_contract_explicit_edges",
+}
+TWO_PASS_GENERIC_CONTRACT_MODES = {
+    "two_pass_generic_contract",
+    "two_pass_generic_contract_explicit_edges",
 }
 ABLATION_MODE_TO_COMPONENT = {
     "contract_ablate_facts_private_prose": "facts",
@@ -183,6 +197,7 @@ def run_rule_z_case(
     direct_probe_modes: tuple[str, ...] = (),
     prompt_style: str = "default",
     replicate_index: int = 0,
+    audit_intermediates: bool = False,
 ) -> list[TrialResult]:
     public = case.payload["public"]
     expected = case.payload["oracle_private"]["answer"]
@@ -224,23 +239,30 @@ def run_rule_z_case(
 
     for mode in direct_probe_modes:
         condition = DIRECT_PROBE_MODE_TO_CONDITION[mode]
-        probe_public = public
+        priority_notation = (
+            "explicit_edges"
+            if mode == "priority_explicit_edges" or mode in TWO_PASS_EXPLICIT_PRIORITY_MODES
+            else "pair_list"
+        )
+        probe_public = make_public_with_priority_notation(public, priority_notation)
         probe_metadata = {
             "direct_probe_mode": mode,
-            "priority_notation": "pair_list",
+            "priority_notation": priority_notation,
             "pass_count": 1,
         }
         if mode == "priority_explicit_edges":
-            probe_public = make_public_with_priority_notation(public, "explicit_edges")
             prompt = make_structured_prompt(
                 case.case_id,
                 probe_public,
                 condition,
                 strict_conflict=strict_conflict,
             )
-            probe_metadata["priority_notation"] = "explicit_edges"
         else:
-            contract = make_generic_contract() if mode == "two_pass_generic_contract" else None
+            contract = (
+                make_generic_contract()
+                if mode in TWO_PASS_GENERIC_CONTRACT_MODES
+                else None
+            )
             derivation_prompt = make_private_derivation_prompt(
                 case.case_id,
                 probe_public,
@@ -248,6 +270,26 @@ def run_rule_z_case(
                 contract=contract,
             )
             derivation = provider.complete(derivation_prompt)
+            audit_metadata = {}
+            if audit_intermediates:
+                audit_prompt = make_intermediate_audit_prompt(
+                    case.case_id,
+                    derivation,
+                    condition,
+                )
+                audit_raw = provider.complete(audit_prompt)
+                audit_parsed = parse_json_lenient(audit_raw)
+                audit_metadata = {
+                    "intermediate_audit_prompt": audit_prompt,
+                    "intermediate_audit_response": audit_raw,
+                    "intermediate_audit_parsed": audit_parsed,
+                    "intermediate_audit_score": score_intermediate_audit(
+                        audit_parsed,
+                        answer_rule_z(probe_public),
+                    ),
+                    "intermediate_audit_not_in_answer_path": True,
+                    "provider_call_count": 3,
+                }
             prompt = make_structured_review_prompt(
                 case.case_id,
                 probe_public,
@@ -261,6 +303,7 @@ def run_rule_z_case(
                     "binding_contract": "generic" if contract else "none",
                     "intermediate_prompt": derivation_prompt,
                     "intermediate_response": derivation,
+                    **audit_metadata,
                 }
             )
         raw = provider.complete(prompt)
@@ -484,6 +527,7 @@ def run_rule_z_experiment(
     prompt_style: str = "default",
     repetitions: int = 1,
     replicate_start: int = 0,
+    audit_intermediates: bool = False,
 ) -> None:
     if repetitions < 1:
         raise ValueError("repetitions must be at least 1")
@@ -499,6 +543,7 @@ def run_rule_z_experiment(
                 direct_probe_modes=direct_probe_modes,
                 prompt_style=prompt_style,
                 replicate_index=replicate_index,
+                audit_intermediates=audit_intermediates,
             ):
                 store.insert_trial(trial)
 
@@ -565,7 +610,17 @@ def main() -> None:
         default="",
         help=(
             "Comma-separated direct probes: priority_explicit_edges, "
-            "two_pass_free, two_pass_generic_contract."
+            "two_pass_free, two_pass_free_explicit_edges, "
+            "two_pass_generic_contract, "
+            "two_pass_generic_contract_explicit_edges."
+        ),
+    )
+    parser.add_argument(
+        "--audit-intermediates",
+        action="store_true",
+        help=(
+            "Extract and score the state asserted by two-pass private derivations. "
+            "The audit response is stored but never shown to the answer pass."
         ),
     )
     parser.add_argument(
@@ -603,6 +658,7 @@ def main() -> None:
                 prompt_style=args.prompt_style,
                 repetitions=args.repetitions,
                 replicate_start=args.replicate_start,
+                audit_intermediates=args.audit_intermediates,
             )
         summary = write_rule_z_report(store, Path(args.report_dir))
         print(

@@ -37,6 +37,11 @@ to separate notation, extra-pass, equal-call binding, and structured-access
 effects. The live OpenAI and Anthropic follow-ups are documented in
 `docs/live_rule_z_priority_compute_openai_note_2026_07_24.md` and
 `docs/live_rule_z_priority_compute_anthropic_note_2026_07_25.md`.
+The next intermediate-stage factorial adds the explicit-edge twins
+`two_pass_free_explicit_edges` and
+`two_pass_generic_contract_explicit_edges`. Add `--audit-intermediates` to
+extract a non-answer-path readout of the state expressed by each private
+derivation and compare it with the Rule-Z oracle.
 Ear red-team variants are also available: `oracle_no_final`,
 `oracle_no_final_no_active`, and `oracle_corrupt_final`.
 Reports include aggregate accuracy, provider-level accuracy, transmission

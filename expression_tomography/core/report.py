@@ -1282,6 +1282,217 @@ def rule_z_binding_stress_pair_rows(rows: list[dict[str, Any]]) -> list[dict[str
     ]
 
 
+_INTERMEDIATE_FACTORIAL_CONDITIONS = {
+    "compact_free": "D_two_pass_free",
+    "explicit_free": "D_two_pass_free_explicit_edges",
+    "compact_generic": "D_two_pass_generic_contract",
+    "explicit_generic": "D_two_pass_generic_contract_explicit_edges",
+}
+
+_INTERMEDIATE_SUMMARY_METRICS = (
+    "audit_parse_rate",
+    "audit_fired_rules_oracle_match_rate",
+    "audit_priority_edges_oracle_match_rate",
+    "audit_priority_orientation_accuracy",
+    "audit_suppressed_rules_oracle_match_rate",
+    "audit_active_rules_oracle_match_rate",
+    "audit_active_conclusions_oracle_match_rate",
+    "audit_state_oracle_match_rate",
+    "audit_reconstructed_answer_accuracy",
+    "audit_final_answer_agreement",
+    "final_accuracy",
+)
+
+
+def rule_z_intermediate_audit_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    out = []
+    for row in rows:
+        metadata = row.get("metadata", {})
+        score = metadata.get("intermediate_audit_score")
+        if not isinstance(score, dict):
+            continue
+        out.append(
+            {
+                "provider": row["provider"],
+                "case_id": row["case_id"],
+                "case_hash": row["case_hash"],
+                "replicate_index": _replicate_index(row),
+                "case_profile": metadata.get("case_profile", ""),
+                "stress_pair_id": metadata.get("stress_pair_id", ""),
+                "stress_family": metadata.get("stress_family", ""),
+                "stress_naming": metadata.get("stress_naming", ""),
+                "condition": row["condition"],
+                "binding_contract": metadata.get("binding_contract", ""),
+                "priority_notation": metadata.get("priority_notation", ""),
+                "expected_answer": row["score"].get("expected", ""),
+                "final_answer": row["score"].get("answer", ""),
+                "final_correct": float(bool(row["score"].get("correct"))),
+                "audit_parse_ok": float(bool(score.get("audit_parse_ok"))),
+                "audit_fired_rules_oracle_match": float(
+                    bool(score.get("fired_rules_exact"))
+                ),
+                "audit_priority_edges_oracle_match": float(
+                    bool(score.get("priority_edges_exact"))
+                ),
+                "priority_edge_precision": float(score.get("priority_edge_precision", 0.0)),
+                "priority_edge_recall": float(score.get("priority_edge_recall", 0.0)),
+                "priority_edge_f1": float(score.get("priority_edge_f1", 0.0)),
+                "audit_priority_orientation_accuracy": float(
+                    score.get("priority_orientation_accuracy", 0.0)
+                ),
+                "priority_reversal_count": int(score.get("priority_reversal_count", 0)),
+                "unexpected_priority_edge_count": int(
+                    score.get("unexpected_priority_edge_count", 0)
+                ),
+                "audit_suppressed_rules_oracle_match": float(
+                    bool(score.get("suppressed_rules_exact"))
+                ),
+                "audit_active_rules_oracle_match": float(
+                    bool(score.get("active_rules_exact"))
+                ),
+                "audit_active_conclusions_oracle_match": float(
+                    bool(score.get("active_conclusions_exact"))
+                ),
+                "audit_state_oracle_match": float(
+                    bool(score.get("intermediate_state_exact"))
+                ),
+                "reconstructed_answer": score.get("reconstructed_answer", ""),
+                "audit_reconstructed_answer_correct": float(
+                    bool(score.get("answer_reconstruction_correct"))
+                ),
+                "audit_final_answer_agreement": float(
+                    bool(score.get("audit_parse_ok"))
+                    and score.get("reconstructed_answer", "")
+                    == row["score"].get("answer", "")
+                ),
+                "expected_state_json": json.dumps(
+                    score.get("expected_state", {}),
+                    ensure_ascii=False,
+                    sort_keys=True,
+                ),
+                "reported_state_json": json.dumps(
+                    score.get("reported_state", {}),
+                    ensure_ascii=False,
+                    sort_keys=True,
+                ),
+            }
+        )
+    return out
+
+
+def rule_z_intermediate_audit_summary_rows(
+    audit_rows: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    grouped: dict[tuple[str, str, str, str], list[dict[str, Any]]] = defaultdict(list)
+    for row in audit_rows:
+        family = str(row.get("stress_family", "")) or "base"
+        naming = str(row.get("stress_naming", "")) or "base"
+        for provider_scope in {str(row["provider"]), "ALL"}:
+            for family_scope, naming_scope in {
+                (family, naming),
+                (family, "ALL"),
+                ("ALL", naming),
+                ("ALL", "ALL"),
+            }:
+                grouped[(provider_scope, family_scope, naming_scope, row["condition"])].append(row)
+
+    def metric_mean(items: list[dict[str, Any]], key: str) -> float:
+        return mean(float(item[key]) for item in items)
+
+    out = []
+    for (provider, family, naming, condition), items in sorted(grouped.items()):
+        out.append(
+            {
+                "provider": provider,
+                "family": family,
+                "naming": naming,
+                "condition": condition,
+                "n_trials": len(items),
+                "audit_parse_rate": metric_mean(items, "audit_parse_ok"),
+                "audit_fired_rules_oracle_match_rate": metric_mean(
+                    items,
+                    "audit_fired_rules_oracle_match",
+                ),
+                "audit_priority_edges_oracle_match_rate": metric_mean(
+                    items,
+                    "audit_priority_edges_oracle_match",
+                ),
+                "audit_priority_orientation_accuracy": metric_mean(
+                    items,
+                    "audit_priority_orientation_accuracy",
+                ),
+                "audit_suppressed_rules_oracle_match_rate": metric_mean(
+                    items,
+                    "audit_suppressed_rules_oracle_match",
+                ),
+                "audit_active_rules_oracle_match_rate": metric_mean(
+                    items,
+                    "audit_active_rules_oracle_match",
+                ),
+                "audit_active_conclusions_oracle_match_rate": metric_mean(
+                    items,
+                    "audit_active_conclusions_oracle_match",
+                ),
+                "audit_state_oracle_match_rate": metric_mean(
+                    items,
+                    "audit_state_oracle_match",
+                ),
+                "audit_reconstructed_answer_accuracy": metric_mean(
+                    items,
+                    "audit_reconstructed_answer_correct",
+                ),
+                "audit_final_answer_agreement": metric_mean(
+                    items,
+                    "audit_final_answer_agreement",
+                ),
+                "final_accuracy": metric_mean(items, "final_correct"),
+            }
+        )
+    return out
+
+
+def rule_z_intermediate_factorial_rows(
+    summary_rows: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    grouped: dict[tuple[str, str, str], dict[str, dict[str, Any]]] = defaultdict(dict)
+    for row in summary_rows:
+        grouped[(row["provider"], row["family"], row["naming"])][row["condition"]] = row
+
+    out = []
+    for (provider, family, naming), by_condition in sorted(grouped.items()):
+        cells = {
+            cell: by_condition.get(condition)
+            for cell, condition in _INTERMEDIATE_FACTORIAL_CONDITIONS.items()
+        }
+        if any(row is None for row in cells.values()):
+            continue
+        for metric in _INTERMEDIATE_SUMMARY_METRICS:
+            compact_free = float(cells["compact_free"][metric])
+            explicit_free = float(cells["explicit_free"][metric])
+            compact_generic = float(cells["compact_generic"][metric])
+            explicit_generic = float(cells["explicit_generic"][metric])
+            binding_gain_compact = compact_generic - compact_free
+            binding_gain_explicit = explicit_generic - explicit_free
+            out.append(
+                {
+                    "provider": provider,
+                    "family": family,
+                    "naming": naming,
+                    "metric": metric,
+                    "compact_free": compact_free,
+                    "explicit_free": explicit_free,
+                    "compact_generic": compact_generic,
+                    "explicit_generic": explicit_generic,
+                    "notation_gain_free": explicit_free - compact_free,
+                    "notation_gain_generic": explicit_generic - compact_generic,
+                    "binding_gain_compact": binding_gain_compact,
+                    "binding_gain_explicit": binding_gain_explicit,
+                    "interaction": binding_gain_explicit - binding_gain_compact,
+                }
+            )
+    return out
+
+
 def rule_z_replicate_stability_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     by_case: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
@@ -1419,6 +1630,10 @@ def summarize_rule_z(store: ExperimentStore) -> dict[str, Any]:
         provider: _decompose_transmission(items) for provider, items in sorted(by_provider_cases.items())
     }
     binding_stress_accuracy = rule_z_binding_stress_accuracy_rows(rows)
+    intermediate_audit = rule_z_intermediate_audit_rows(rows)
+    intermediate_audit_summary = rule_z_intermediate_audit_summary_rows(
+        intermediate_audit
+    )
     return {
         "task_type": "rule_z",
         "n_trials": len(rows),
@@ -1448,6 +1663,11 @@ def summarize_rule_z(store: ExperimentStore) -> dict[str, Any]:
         "binding_stress_pairs": rule_z_binding_stress_pair_rows(rows),
         "replicate_stability": rule_z_replicate_stability_rows(rows),
         "transmission_integrity": rule_z_transmission_integrity_rows(rows),
+        "intermediate_audit": intermediate_audit,
+        "intermediate_audit_summary": intermediate_audit_summary,
+        "intermediate_factorial": rule_z_intermediate_factorial_rows(
+            intermediate_audit_summary
+        ),
     }
 
 
@@ -1554,6 +1774,81 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
         writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         writer.writerows(summary["replicate_stability"])
+
+    intermediate_path = out / "rule_z_intermediate_audit.csv"
+    with intermediate_path.open("w", encoding="utf-8", newline="") as f:
+        fieldnames = [
+            "provider",
+            "case_id",
+            "case_hash",
+            "replicate_index",
+            "case_profile",
+            "stress_pair_id",
+            "stress_family",
+            "stress_naming",
+            "condition",
+            "binding_contract",
+            "priority_notation",
+            "expected_answer",
+            "final_answer",
+            "final_correct",
+            "audit_parse_ok",
+            "audit_fired_rules_oracle_match",
+            "audit_priority_edges_oracle_match",
+            "priority_edge_precision",
+            "priority_edge_recall",
+            "priority_edge_f1",
+            "audit_priority_orientation_accuracy",
+            "priority_reversal_count",
+            "unexpected_priority_edge_count",
+            "audit_suppressed_rules_oracle_match",
+            "audit_active_rules_oracle_match",
+            "audit_active_conclusions_oracle_match",
+            "audit_state_oracle_match",
+            "reconstructed_answer",
+            "audit_reconstructed_answer_correct",
+            "audit_final_answer_agreement",
+            "expected_state_json",
+            "reported_state_json",
+        ]
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(summary["intermediate_audit"])
+
+    intermediate_summary_path = out / "rule_z_intermediate_audit_summary.csv"
+    with intermediate_summary_path.open("w", encoding="utf-8", newline="") as f:
+        fieldnames = [
+            "provider",
+            "family",
+            "naming",
+            "condition",
+            "n_trials",
+            *_INTERMEDIATE_SUMMARY_METRICS,
+        ]
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(summary["intermediate_audit_summary"])
+
+    intermediate_factorial_path = out / "rule_z_intermediate_factorial.csv"
+    with intermediate_factorial_path.open("w", encoding="utf-8", newline="") as f:
+        fieldnames = [
+            "provider",
+            "family",
+            "naming",
+            "metric",
+            "compact_free",
+            "explicit_free",
+            "compact_generic",
+            "explicit_generic",
+            "notation_gain_free",
+            "notation_gain_generic",
+            "binding_gain_compact",
+            "binding_gain_explicit",
+            "interaction",
+        ]
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(summary["intermediate_factorial"])
 
     decomposition_path = out / "rule_z_transmission_decomposition.csv"
     with decomposition_path.open("w", encoding="utf-8", newline="") as f:
@@ -1887,6 +2182,90 @@ def write_rule_z_report(store: ExperimentStore, out_dir: str | Path) -> dict[str
                 f"| {row['provider']} | {row['condition']} | {row['n_cases']} | "
                 f"{row['mean_repetitions']:.1f} | {row['mean_answer_entropy']:.3f} | "
                 f"{row['stable_case_rate']:.3f} | {row['mean_pairwise_agreement']:.3f} |"
+            )
+
+    intermediate_rows = [
+        row
+        for row in summary["intermediate_audit_summary"]
+        if row["family"] == "ALL" and row["naming"] == "ALL"
+    ]
+    if intermediate_rows:
+        lines.extend(
+            [
+                "",
+                "## Intermediate State Audit",
+                "",
+                "| Provider | Condition | n | Parse | Audit fired match | Audit priority match | Audit orientation | Audit suppression match | Audit active-conclusion match | Audit state match | Audit answer accuracy | Audit/final agreement | Final accuracy |",
+                "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+            ]
+        )
+        for row in intermediate_rows:
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        row["provider"],
+                        row["condition"],
+                        str(row["n_trials"]),
+                        *[
+                            f"{row[key]:.3f}"
+                            for key in (
+                                "audit_parse_rate",
+                                "audit_fired_rules_oracle_match_rate",
+                                "audit_priority_edges_oracle_match_rate",
+                                "audit_priority_orientation_accuracy",
+                                "audit_suppressed_rules_oracle_match_rate",
+                                "audit_active_conclusions_oracle_match_rate",
+                                "audit_state_oracle_match_rate",
+                                "audit_reconstructed_answer_accuracy",
+                                "audit_final_answer_agreement",
+                                "final_accuracy",
+                            )
+                        ],
+                    ]
+                )
+                + " |"
+            )
+
+    factorial_rows = [
+        row
+        for row in summary["intermediate_factorial"]
+        if row["family"] == "ALL" and row["naming"] == "ALL"
+    ]
+    if factorial_rows:
+        lines.extend(
+            [
+                "",
+                "## Intermediate 2x2 Factorial",
+                "",
+                "| Provider | Metric | Compact free | Explicit free | Compact generic | Explicit generic | Notation gain free | Notation gain generic | Binding gain compact | Binding gain explicit | Interaction |",
+                "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+            ]
+        )
+        for row in factorial_rows:
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        row["provider"],
+                        row["metric"],
+                        *[
+                            f"{row[key]:.3f}"
+                            for key in (
+                                "compact_free",
+                                "explicit_free",
+                                "compact_generic",
+                                "explicit_generic",
+                                "notation_gain_free",
+                                "notation_gain_generic",
+                                "binding_gain_compact",
+                                "binding_gain_explicit",
+                                "interaction",
+                            )
+                        ],
+                    ]
+                )
+                + " |"
             )
 
     integrity_rows = [
