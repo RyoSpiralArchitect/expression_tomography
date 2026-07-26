@@ -36,6 +36,7 @@ class ProviderSpec:
     timeout_s: float = 60.0
     max_tokens: int = 700
     temperature: float = 0.0
+    reasoning_effort: str | None = None
     device: str = "auto"
     dtype: str = "auto"
 
@@ -51,6 +52,11 @@ class ProviderSpec:
             timeout_s=float(obj.get("timeout_s", 60.0)),
             max_tokens=int(obj.get("max_tokens", 700)),
             temperature=float(obj.get("temperature", 0.0)),
+            reasoning_effort=(
+                str(obj["reasoning_effort"])
+                if obj.get("reasoning_effort") is not None
+                else None
+            ),
             device=str(obj.get("device", "auto")),
             dtype=str(obj.get("dtype", "auto")),
         )
@@ -555,6 +561,8 @@ class OpenAICompatibleProvider:
         }
         if self.spec.temperature > 0:
             payload["temperature"] = self.spec.temperature
+        if self.spec.reasoning_effort:
+            payload["reasoning_effort"] = self.spec.reasoning_effort
         headers = {
             "Authorization": f"Bearer {_api_key(self.spec)}",
             "Content-Type": "application/json",

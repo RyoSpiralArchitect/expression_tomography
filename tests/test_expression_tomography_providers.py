@@ -34,6 +34,29 @@ class ProviderTests(unittest.TestCase):
             self.assertIsInstance(built[0], MockProvider)
             self.assertEqual(built[0].name, "mock-a")
 
+    def test_provider_config_loads_reasoning_effort(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "providers.json"
+            path.write_text(
+                json.dumps(
+                    {
+                        "providers": [
+                            {
+                                "name": "oa",
+                                "type": "openai_compatible",
+                                "model": "gpt-5.5",
+                                "reasoning_effort": "low",
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            built = build_providers_from_config(path)
+            self.assertEqual(len(built), 1)
+            self.assertIsInstance(built[0], OpenAICompatibleProvider)
+            self.assertEqual(built[0].spec.reasoning_effort, "low")
+
     def test_openai_compatible_payload_and_response_extraction(self) -> None:
         spec = ProviderSpec(
             name="oa",
@@ -59,6 +82,7 @@ class ProviderTests(unittest.TestCase):
         self.assertEqual(captured["payload"]["model"], "test-model")
         self.assertEqual(captured["payload"]["messages"][0]["content"], "hello")
         self.assertEqual(captured["payload"]["max_tokens"], 123)
+        self.assertNotIn("reasoning_effort", captured["payload"])
 
     def test_openai_gpt5_uses_max_completion_tokens(self) -> None:
         spec = ProviderSpec(
@@ -68,6 +92,7 @@ class ProviderTests(unittest.TestCase):
             base_url="https://example.test/v1",
             api_key_env="ET_TEST_OPENAI_KEY",
             max_tokens=321,
+            reasoning_effort="low",
         )
         captured = {}
 
@@ -81,6 +106,7 @@ class ProviderTests(unittest.TestCase):
 
         self.assertNotIn("max_tokens", captured["payload"])
         self.assertEqual(captured["payload"]["max_completion_tokens"], 321)
+        self.assertEqual(captured["payload"]["reasoning_effort"], "low")
 
     def test_openai_compatible_rejects_empty_text_with_safe_diagnostics(self) -> None:
         spec = ProviderSpec(

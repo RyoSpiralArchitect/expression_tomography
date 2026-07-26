@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import copy
 import hashlib
+from collections import Counter
 from pathlib import Path
 from statistics import mean
 from typing import Any, Iterable
@@ -86,6 +87,7 @@ def _provider_provenance(provider: Provider) -> dict[str, Any]:
         "timeout_s": getattr(spec, "timeout_s", None),
         "max_tokens": getattr(spec, "max_tokens", None),
         "temperature": getattr(spec, "temperature", None),
+        "reasoning_effort": getattr(spec, "reasoning_effort", None),
         "device": getattr(spec, "device", None),
         "dtype": getattr(spec, "dtype", None),
     }
@@ -407,13 +409,29 @@ def _parse_csv_values(raw: str) -> tuple[str, ...]:
 
 def _parse_audit_modes(raw: str) -> tuple[str, ...]:
     modes = _parse_csv_values(raw)
+    _validate_audit_modes(modes)
+    return modes
+
+
+def _validate_audit_modes(modes: tuple[str, ...]) -> None:
     unknown = sorted(set(modes) - set(AUDIT_MODE_TO_CONDITION))
     if unknown:
         allowed = ", ".join(sorted(AUDIT_MODE_TO_CONDITION))
         raise ValueError(
             f"Unknown audit mode(s): {', '.join(unknown)}. Allowed: {allowed}"
         )
-    return modes
+    duplicate_conditions = sorted(
+        condition
+        for condition, count in Counter(
+            AUDIT_MODE_TO_CONDITION[mode] for mode in modes
+        ).items()
+        if count > 1
+    )
+    if duplicate_conditions:
+        raise ValueError(
+            "Multiple audit modes map to the same probe condition: "
+            + ", ".join(duplicate_conditions)
+        )
 
 
 def _source_message(row: dict[str, Any], source_kind: str) -> str:
@@ -477,6 +495,7 @@ def run_intermediate_probe(
         raise ValueError("probe_repetitions must be at least 1")
     if probe_replicate_start < 0:
         raise ValueError("probe_replicate_start must be non-negative")
+    _validate_audit_modes(audit_modes)
     if query_battery != "none" and query_battery not in QUERY_BATTERY_TO_CONDITION:
         raise ValueError(f"Unknown hidden query battery: {query_battery}")
 
@@ -494,10 +513,35 @@ def run_intermediate_probe(
     if limit is not None:
         selected = selected[:limit]
 
-    seen = {
-        str(row.get("metadata", {}).get("probe_identity", ""))
-        for row in output_store.fetch_trials(task_type=PROBE_TASK_TYPE)
-    }
+    existing_rows = output_store.fetch_trials(task_type=PROBE_TASK_TYPE)
+    stored_identities = [
+        str(row.get("metadata", {}).get("probe_identity", "")).strip()
+        for row in existing_rows
+    ]
+    missing_identity_rows = [
+        row["id"]
+        for row, identity in zip(existing_rows, stored_identities)
+        if not identity
+    ]
+    if missing_identity_rows:
+        preview = ", ".join(str(row_id) for row_id in missing_identity_rows[:5])
+        raise RuntimeError(
+            "Post-hoc probe store contains rows without probe identities; "
+            f"refusing to append until they are repaired: {preview}"
+        )
+    identity_counts = Counter(stored_identities)
+    duplicate_identities = sorted(
+        identity
+        for identity, count in identity_counts.items()
+        if count > 1
+    )
+    if duplicate_identities:
+        preview = ", ".join(duplicate_identities[:3])
+        raise RuntimeError(
+            "Post-hoc probe store already contains duplicate probe identities; "
+            f"refusing to append until they are repaired: {preview}"
+        )
+    seen = set(identity_counts)
     inserted = 0
     skipped = 0
     provider_provenance = _provider_provenance(provider)

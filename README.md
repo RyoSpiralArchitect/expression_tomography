@@ -100,6 +100,9 @@ out-of-vocabulary states are retained as unsupported rather than defaulting to
 After the uncued run, repeat the command against the same sidecar with
 `--query-battery current_and_counterfactual` to append the target-cued
 counterfactual condition. Existing audit identities are skipped.
+The first live reader checkpoint and its completion boundary are documented in
+`docs/live_rule_z_posthoc_readers_note_2026_07_25.md`. Its Claude side is
+complete; GPT-5.5 remains an explicitly partial, resumable quota checkpoint.
 
 ## Metaphor Transfer Smoke
 
@@ -143,6 +146,9 @@ python3 -m expression_tomography.tasks.rule_z.task \
 Live adapters reject blank provider completions. The OpenAI error reports safe
 finish/token diagnostics, and the Anthropic error reports safe stop/token
 diagnostics, so an empty generation cannot silently become a receiver trial.
+OpenAI-compatible configs may set `reasoning_effort`; it is included in the
+secret-free provider fingerprint so runs with different reasoning budgets do
+not share probe identities.
 
 Provider types:
 

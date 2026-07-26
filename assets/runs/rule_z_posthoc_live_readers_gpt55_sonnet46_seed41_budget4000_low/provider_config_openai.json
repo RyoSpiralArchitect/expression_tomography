@@ -1,0 +1,14 @@
+{
+  "providers": [
+    {
+      "name": "openai_gpt_5_5",
+      "type": "openai_compatible",
+      "model": "gpt-5.5",
+      "base_url": "https://api.openai.com/v1",
+      "api_key_env": "OPENAI_API_KEY",
+      "max_tokens": 4000,
+      "temperature": 0.0,
+      "reasoning_effort": "low"
+    }
+  ]
+}
