@@ -471,6 +471,12 @@ This first separates source grounding, recoverability, and query utility
 without introducing pre-answer measurement reactivity. Run the uncued
 current-state battery separately from the target-cued counterfactual battery.
 
+Status on 2026-07-25: complete for Claude Sonnet 4.6 over all 96 frozen
+factorial messages and partial for GPT-5.5 after external quota exhaustion.
+The Claude reader reaches 0.961 uncued current-state utility but 0.591
+target-cued counterfactual utility. See
+`docs/live_rule_z_posthoc_readers_note_2026_07_25.md`.
+
 ### 2. Calibrate Audit Readers
 
 Construct derivations with:
@@ -560,14 +566,10 @@ imitation from improved binding and encoding.
 
 ### Operationalized, Not Yet Live Evidence
 
-- Frozen messages can be opened read-only and probed through an append-only
-  sidecar.
-- Source-faithful and repair-capable readers now have separate prompt and score
-  contracts.
-- Hidden current-state and counterfactual query batteries now produce
-  receiver-indexed local and global utility scores.
-- Mock results validate plumbing only; they do not establish semantic
-  fidelity or utility on provider prose.
+- Controlled omission, reversal, and contradiction artifacts for audit-reader
+  calibration have not yet been run live.
+- Prospective pre-answer declarations remain outside the current evidence.
+- Independent one-query-per-call delivery remains unimplemented.
 
 ### Observed
 
@@ -577,6 +579,19 @@ imitation from improved binding and encoding.
 - Compact/free fired-rule audit match is 1.000; priority-edge match is 0.792.
 - Compact/free replicate agreement is 0.750; controlled cells are 1.000.
 - One post-hoc audit repairs a source derivation whose final answer is wrong.
+- In a non-reactive Claude sidecar over 96 frozen messages, uncued
+  current-state utility is 0.845 for compact/free and 1.000 for each controlled
+  cell.
+- Claude source-faithful full-state exactness is 0.000 because `active_rules`
+  is not explicitly stated in 95 of 96 artifacts, while extracted-claim
+  grounding is 0.979.
+- Claude repair-capable full-state match is 0.938 and answer reconstruction is
+  0.958; these are reader-indexed recovery scores rather than source-fidelity
+  scores.
+- Claude target-cued counterfactual utility is 0.591 overall, compared with
+  0.961 current-state utility in both separately delivered batteries.
+- GPT-5.5 has 81 valid, resumable rows but remains an unbalanced partial
+  checkpoint after `insufficient_quota`; its aggregates are not comparative.
 
 ### Inferred
 
@@ -584,6 +599,10 @@ imitation from improved binding and encoding.
   priority-relation interpretation or preservation.
 - Explicit notation and generic binding each stabilize the observed pipeline.
 - Some failures are case-fixed and others are trajectory-sensitive.
+- The notation-by-binding boundary survives into downstream reader utility,
+  especially for global state.
+- Current-state recoverability and counterfactual reuse are distinct
+  reliability axes on the fixed-message interface.
 
 ### Unidentified
 

@@ -671,6 +671,30 @@ class RuleZSmokeTests(unittest.TestCase):
             try:
                 with self.assertRaises(RuntimeError):
                     source_store.upsert_case(cases[0])
+                with self.assertRaisesRegex(
+                    ValueError,
+                    "same probe condition",
+                ):
+                    run_intermediate_probe(
+                        source_store,
+                        output_store,
+                        MockProvider(),
+                        source_sha,
+                        source_conditions=("D_two_pass_free",),
+                        source_kind="intermediate",
+                        audit_modes=(
+                            "source_faithful",
+                            "source_faithful",
+                        ),
+                        query_battery="none",
+                        limit=1,
+                    )
+                self.assertEqual(
+                    output_store.fetch_trials(
+                        task_type="rule_z_intermediate_probe"
+                    ),
+                    [],
+                )
                 first = run_intermediate_probe(
                     source_store,
                     output_store,
@@ -817,6 +841,17 @@ class RuleZSmokeTests(unittest.TestCase):
                     "rule_z_intermediate_probe_report.md",
                 ):
                     self.assertTrue((tmp / "probe_reports" / filename).exists())
+                for filename in (
+                    "rule_z_posthoc_audit.csv",
+                    "rule_z_posthoc_audit_summary.csv",
+                    "rule_z_audit_mode_contrasts.csv",
+                    "rule_z_hidden_query_utility.csv",
+                    "rule_z_hidden_query_summary.csv",
+                ):
+                    self.assertNotIn(
+                        b"\r\n",
+                        (tmp / "probe_reports" / filename).read_bytes(),
+                    )
 
                 changed_config_provider = MockProvider()
                 changed_config_provider.spec = ProviderSpec(
@@ -850,6 +885,77 @@ class RuleZSmokeTests(unittest.TestCase):
                     changed_config_rerun["skipped_existing_trials"],
                     6,
                 )
+
+                duplicate_source = output_store.fetch_trials(
+                    task_type="rule_z_intermediate_probe"
+                )[0]
+                output_store.insert_trial(
+                    TrialResult(
+                        case_id=duplicate_source["case_id"],
+                        case_hash=duplicate_source["case_hash"],
+                        task_type=duplicate_source["task_type"],
+                        condition=duplicate_source["condition"],
+                        provider=duplicate_source["provider"],
+                        prompt=duplicate_source["prompt"],
+                        raw_response=duplicate_source["raw_response"],
+                        parsed_response=duplicate_source["parsed_response"],
+                        score=duplicate_source["score"],
+                        metadata=duplicate_source["metadata"],
+                    )
+                )
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "duplicate probe identities",
+                ):
+                    run_intermediate_probe(
+                        source_store,
+                        output_store,
+                        MockProvider(),
+                        source_sha,
+                        source_conditions=("D_two_pass_free",),
+                        source_kind="intermediate",
+                        query_battery="current_state",
+                        limit=1,
+                    )
+
+                missing_identity_store = ExperimentStore(
+                    tmp / "probe_missing_identity.sqlite"
+                )
+                try:
+                    missing_metadata = dict(duplicate_source["metadata"])
+                    missing_metadata.pop("probe_identity")
+                    missing_identity_store.insert_trial(
+                        TrialResult(
+                            case_id=duplicate_source["case_id"],
+                            case_hash=duplicate_source["case_hash"],
+                            task_type=duplicate_source["task_type"],
+                            condition=duplicate_source["condition"],
+                            provider=duplicate_source["provider"],
+                            prompt=duplicate_source["prompt"],
+                            raw_response=duplicate_source["raw_response"],
+                            parsed_response=duplicate_source[
+                                "parsed_response"
+                            ],
+                            score=duplicate_source["score"],
+                            metadata=missing_metadata,
+                        )
+                    )
+                    with self.assertRaisesRegex(
+                        RuntimeError,
+                        "without probe identities",
+                    ):
+                        run_intermediate_probe(
+                            source_store,
+                            missing_identity_store,
+                            MockProvider(),
+                            source_sha,
+                            source_conditions=("D_two_pass_free",),
+                            source_kind="intermediate",
+                            query_battery="current_state",
+                            limit=1,
+                        )
+                finally:
+                    missing_identity_store.close()
             finally:
                 output_store.close()
                 source_store.close()

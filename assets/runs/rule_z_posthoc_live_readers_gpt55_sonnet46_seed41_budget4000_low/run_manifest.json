@@ -1,0 +1,208 @@
+{
+  "manifest_version": "rule_z_posthoc_live_readers.run.v1",
+  "status": "checkpoint_partial_openai",
+  "local_run_date": "2026-07-25",
+  "secrets_stored": false,
+  "source": {
+    "path": "assets/runs/rule_z_intermediate_factorial_anthropic_sonnet46_seed41/trials.sqlite",
+    "sha256": "cd9fd6e9156ebba798558cac9675a605ba04fcb49f336911bbedca1953d75eef",
+    "open_mode": "sqlite_mode_ro",
+    "source_kind": "intermediate",
+    "source_provider": "anthropic_sonnet_4_6",
+    "source_conditions": [
+      "D_two_pass_free",
+      "D_two_pass_free_explicit_edges",
+      "D_two_pass_generic_contract",
+      "D_two_pass_generic_contract_explicit_edges"
+    ],
+    "messages_per_condition": 24,
+    "messages_total": 96
+  },
+  "probe": {
+    "schema_version": "rule_z_intermediate_probe.v1",
+    "audit_modes": [
+      "source_faithful",
+      "repair_capable"
+    ],
+    "query_batteries": {
+      "uncued": "current_state",
+      "target_cued": "current_and_counterfactual"
+    },
+    "probe_repetitions": 1,
+    "probe_replicate_start": 0
+  },
+  "calibration": {
+    "database": "calibration_trials.sqlite",
+    "sha256": "77cc9047c833c405b4033f42879d6a3c5c20ae23246ee0c4e18292f640016170",
+    "source_messages": 12,
+    "trial_count": 72,
+    "unique_probe_identities": 72,
+    "parse_failures": 0,
+    "rows_by_provider": {
+      "anthropic_sonnet_4_6": 36,
+      "openai_gpt_5_5": 36
+    },
+    "exact_rerun": {
+      "inserted_trials": 0,
+      "skipped_existing_trials": 72,
+      "provider_calls": 0
+    }
+  },
+  "canonical_checkpoint": {
+    "database": "trials.sqlite",
+    "sha256": "f97628639a121338b4fe6a2d203e3e17630c0817eeff4647e306c3e39953ac69",
+    "sqlite_integrity_check": "ok",
+    "case_count": 96,
+    "trial_count": 465,
+    "unique_probe_identities": 465,
+    "missing_probe_identities": 0,
+    "parse_failures": 0,
+    "distinct_source_hashes": 1,
+    "created_at_utc_min": "2026-07-26 06:42:03",
+    "created_at_utc_max": "2026-07-26 06:57:03",
+    "merge": {
+      "source_condition_sidecars": 4,
+      "prevalidated_rows": 369,
+      "prevalidated_unique_probe_identities": 369,
+      "target_cued_rows_appended": 96,
+      "target_cued_unique_probe_identities": 96,
+      "identity_collisions": 0
+    },
+    "anthropic_exact_reruns": [
+      {
+        "query_battery": "current_state",
+        "source_messages": 96,
+        "inserted_trials": 0,
+        "skipped_existing_trials": 288,
+        "provider_calls": 0
+      },
+      {
+        "query_battery": "current_and_counterfactual",
+        "source_messages": 96,
+        "inserted_trials": 0,
+        "skipped_existing_trials": 288,
+        "provider_calls": 0
+      }
+    ]
+  },
+  "providers": [
+    {
+      "name": "anthropic_sonnet_4_6",
+      "model": "claude-sonnet-4-6",
+      "provider_type": "anthropic",
+      "config_file": "provider_config_anthropic.json",
+      "config_file_sha256": "657d09e0a632271dc10646a7916c6504b32049a924dfc4e585178257fe9611bc",
+      "secret_free_config_sha256": "48bf056d1e4c05e4421d6f7d2a72f12f2fba5513594f284804d930ff43ab1e87",
+      "max_tokens": 4000,
+      "temperature": 0.0,
+      "reasoning_effort": null,
+      "status": "complete",
+      "expected_trials": 384,
+      "observed_trials": 384,
+      "counts": {
+        "I_source_faithful": 96,
+        "I_repair_capable": 96,
+        "Q_hidden_current_state": 96,
+        "Q_hidden_current_and_counterfactual": 96
+      }
+    },
+    {
+      "name": "openai_gpt_5_5",
+      "model": "gpt-5.5",
+      "provider_type": "openai_compatible",
+      "config_file": "provider_config_openai.json",
+      "config_file_sha256": "6cdca7497227c97f02cf538c1b9611d878fc567b96a5be9faf8c43a003568a9b",
+      "secret_free_config_sha256": "6c5ef6f9aefdbbe8a4614879c4ce3bc49e1d948fe2793a9bd48963f77fc0fd13",
+      "max_tokens": 4000,
+      "temperature": 0.0,
+      "reasoning_effort": "low",
+      "status": "partial_external_quota",
+      "stop_type": "insufficient_quota",
+      "stop_code": "insufficient_quota",
+      "expected_trials": 384,
+      "observed_trials": 81,
+      "uncued_expected_trials": 288,
+      "uncued_observed_trials": 81,
+      "target_cued_expected_trials": 96,
+      "target_cued_observed_trials": 0,
+      "counts": {
+        "I_source_faithful": 29,
+        "I_repair_capable": 26,
+        "Q_hidden_current_state": 26,
+        "Q_hidden_current_and_counterfactual": 0
+      },
+      "uncued_rows_by_source_condition": {
+        "D_two_pass_free": 22,
+        "D_two_pass_free_explicit_edges": 22,
+        "D_two_pass_generic_contract": 18,
+        "D_two_pass_generic_contract_explicit_edges": 19
+      },
+      "interpretation": "non-comparable checkpoint; early-prefix and quota selection may bias every aggregate"
+    }
+  ],
+  "stage_diagnostics": [
+    {
+      "stage": "budget2000_default_reasoning",
+      "status": "rejected_for_full_run",
+      "safe_error": "finish_reason=length, completion_tokens=2000, reasoning_tokens=2000",
+      "calibration_database": "diagnostics/calibration_budget2000_default.sqlite",
+      "calibration_database_sha256": "d2c776218c302692f7a48a4250c6a9810a918658840509ded07dfb5cf8f60020",
+      "calibration_rows": 12,
+      "full_database": "diagnostics/full_budget2000_default.sqlite",
+      "full_database_sha256": "1357020ff08af49ccb281612f2887650d677352cc4885e081d7a2a5c10e6d7d5",
+      "full_rows": 0,
+      "included_in_canonical_checkpoint": false
+    },
+    {
+      "stage": "budget4000_default_reasoning",
+      "status": "rejected_for_full_run",
+      "safe_error": "finish_reason=length, completion_tokens=4000, reasoning_tokens=4000",
+      "calibration_database": "diagnostics/calibration_budget4000_default.sqlite",
+      "calibration_database_sha256": "4e8bac5b95cdd208297c2eb2cd8d6832eb20444aead2ad2896629c22588d5201",
+      "calibration_rows": 12,
+      "serial_full_database": "diagnostics/full_budget4000_default.sqlite",
+      "serial_full_database_sha256": "e1194efc90fe704ef918e0dcb45dd26168f83f3db43f3aced52ad6cb2f693d71",
+      "serial_full_rows": 4,
+      "chunk_databases": {
+        "compact_free": {
+          "path": "diagnostics/budget4000_default_chunks/compact_free.sqlite",
+          "sha256": "6937cbc9e3417907b885c1f5969ef1ca13231f31fc4a347670ff91f05c83b636",
+          "rows": 22
+        },
+        "explicit_free": {
+          "path": "diagnostics/budget4000_default_chunks/explicit_free.sqlite",
+          "sha256": "d2a9eba3bea90009ca002df1c72b0d2eab9a40ee3792878452c54e6f25bcadb5",
+          "rows": 33
+        },
+        "compact_generic": {
+          "path": "diagnostics/budget4000_default_chunks/compact_generic.sqlite",
+          "sha256": "0010d904340e0615b19ae5a45adc430d060dc1c747b95cedf63ec3476ac1713b",
+          "rows": 33
+        },
+        "explicit_generic": {
+          "path": "diagnostics/budget4000_default_chunks/explicit_generic.sqlite",
+          "sha256": "0321cb1d754d42ca632a9a66bac5dd14d86022a8667b085d3949c3fa45e39d0f",
+          "rows": 30
+        }
+      },
+      "note": "diagnostic sidecars are separate attempts and may overlap; row counts are not additive",
+      "included_in_canonical_checkpoint": false
+    }
+  ],
+  "frozen_artifacts": {
+    "provider_config.json": "f911d9ac69a1b01e932e0f35d62a1583509ed0117e92bcaac4bf1a48ad8fabc2",
+    "rule_z_intermediate_probe_report.md": "6e6c843010ad66e7808f243c032d9fd15aa844bff23e1f9a1a6d2703243dd196",
+    "rule_z_posthoc_audit.csv": "b075c1cbc18ce0fcb3b54fac6b6675549abfe555065e3289665d7e9082a733b6",
+    "rule_z_posthoc_audit_summary.csv": "69886467546c830a42435ace5cb65e397d3f0355687da2fdcd402b3df60e2e8f",
+    "rule_z_audit_mode_contrasts.csv": "81d63c53e7e2eeea9b17c5bcadd486bcf135ed1d0531037fefcace3271993ee9",
+    "rule_z_hidden_query_utility.csv": "fae53db864db4756196bbebffbdaed16e85e1e3ccfe9adc843e7e8b433b52073",
+    "rule_z_hidden_query_summary.csv": "eece3bba853f9a873e8540fb77f8d1b9870644dc37045ee1c5d3e04459922b1a"
+  },
+  "interpretation_boundaries": [
+    "Source-faithful full-state exactness requires every ledger field to be explicitly supported by the fixed artifact.",
+    "Repair-capable and hidden-query scores estimate recovery under the named reader, not a pre-expression latent state.",
+    "The extended battery names intervention targets and remains a target-cued condition.",
+    "Counterfactual failure is not automatically a violation of the original current-answer writing contract.",
+    "OpenAI aggregates are partial and must not be used for cross-provider ranking."
+  ]
+}

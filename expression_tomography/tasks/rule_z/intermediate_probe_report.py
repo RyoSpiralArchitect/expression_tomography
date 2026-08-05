@@ -665,7 +665,11 @@ def write_intermediate_probe_report(
     )
     for filename, rows, fieldnames in csv_specs:
         with (out / filename).open("w", encoding="utf-8", newline="") as handle:
-            writer = csv.DictWriter(handle, fieldnames=fieldnames)
+            writer = csv.DictWriter(
+                handle,
+                fieldnames=fieldnames,
+                lineterminator="\n",
+            )
             writer.writeheader()
             writer.writerows(rows)
 

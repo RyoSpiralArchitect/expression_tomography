@@ -41,6 +41,15 @@ rule_z_intermediate_factorial.csv
   Case-level and aggregate scoring of the state recoverable from two-pass
   private derivations, plus the compact/explicit by free/generic 2x2 contrasts.
 
+rule_z_posthoc_audit.csv
+rule_z_posthoc_audit_summary.csv
+rule_z_audit_mode_contrasts.csv
+  Source-faithful and repair-capable post-hoc readings of frozen messages.
+
+rule_z_hidden_query_utility.csv
+rule_z_hidden_query_summary.csv
+  Receiver-indexed current-state and target-cued counterfactual utility.
+
 rule_z_report.md
   Generated report from the run.
 ```
@@ -115,6 +124,13 @@ rule_z_intermediate_factorial_anthropic_sonnet46_seed41
   Anthropic Sonnet 4.6 compact/explicit priority notation by free/generic
   private-binding factorial, with two replicates, stored private derivations,
   non-answer-path audits, and case-level reconstruction scores.
+
+rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low
+  Post-hoc readers over the frozen intermediate factorial. Claude Sonnet 4.6
+  is complete for faithful, repair, uncued current-state, and target-cued
+  counterfactual probes. GPT-5.5 is an explicitly partial, resumable checkpoint
+  after external quota exhaustion. The manifest separates canonical evidence
+  from retained output-budget diagnostics.
 
 metaphor_transfer_openai_live
   First OpenAI live metaphor-transfer smoke run.
