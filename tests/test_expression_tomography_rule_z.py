@@ -8,7 +8,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from expression_tomography.core.providers import MockProvider, ProviderSpec
+from expression_tomography.core.providers import ProviderSpec
 from expression_tomography.core.report import (
     rule_z_replicate_stability_rows,
     rule_z_case_level_rows,
@@ -37,6 +37,10 @@ from expression_tomography.tasks.rule_z.intermediate_probe_report import (
     summarize_intermediate_probe,
     write_intermediate_probe_report,
 )
+from expression_tomography.tasks.rule_z.mock_provider import (
+    RuleZMockProvider as MockProvider,
+    load_rule_z_providers,
+)
 from expression_tomography.tasks.rule_z.oracle import answer_rule_z
 from expression_tomography.tasks.rule_z.prompts import (
     make_ablated_contract,
@@ -61,6 +65,16 @@ from expression_tomography.tasks.rule_z.task import run_rule_z_case, run_rule_z_
 
 
 class RuleZSmokeTests(unittest.TestCase):
+    def test_task_loader_builds_rule_z_mock_from_shared_config(self) -> None:
+        config = (
+            Path(__file__).resolve().parents[1]
+            / "expression_tomography/config/providers.mock.json"
+        )
+        providers = load_rule_z_providers(config)
+        self.assertEqual(len(providers), 1)
+        self.assertIsInstance(providers[0], MockProvider)
+        self.assertEqual(providers[0].name, "mock")
+
     def test_rule_z_oracle_answer_is_private_from_structured_prompt(self) -> None:
         case = make_rule_z_cases(1, seed=3)[0]
         prompt = make_structured_prompt(case.case_id, case.payload["public"], "O")

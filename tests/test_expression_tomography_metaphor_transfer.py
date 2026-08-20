@@ -4,9 +4,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from expression_tomography.core.providers import MockProvider
 from expression_tomography.core.report import summarize_metaphor_transfer, write_metaphor_transfer_report
 from expression_tomography.core.store import ExperimentStore
+from expression_tomography.tasks.metaphor_transfer.mock_provider import (
+    MetaphorTransferMockProvider as MockProvider,
+    load_metaphor_providers,
+)
 from expression_tomography.tasks.metaphor_transfer.scorer import score_receiver
 from expression_tomography.tasks.metaphor_transfer.task import (
     load_metaphor_cases,
@@ -18,6 +21,13 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class MetaphorTransferTests(unittest.TestCase):
+    def test_task_loader_builds_metaphor_mock_from_shared_config(self) -> None:
+        config = ROOT / "expression_tomography" / "config" / "providers.mock.json"
+        providers = load_metaphor_providers(config)
+        self.assertEqual(len(providers), 1)
+        self.assertIsInstance(providers[0], MockProvider)
+        self.assertEqual(providers[0].name, "mock")
+
     def test_receiver_score_penalizes_collateral_selection(self) -> None:
         payload = {
             "intended_dimensions": ["a", "b"],

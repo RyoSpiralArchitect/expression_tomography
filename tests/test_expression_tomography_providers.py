@@ -11,7 +11,6 @@ from expression_tomography.core import providers
 from expression_tomography.core.providers import (
     AnthropicProvider,
     HFLocalProvider,
-    MockProvider,
     OpenAICompatibleProvider,
     ProviderError,
     ProviderSpec,
@@ -21,18 +20,34 @@ from expression_tomography.core.providers import (
 )
 
 
+class StubMockProvider:
+    def __init__(self, name: str):
+        self.name = name
+
+    def complete(self, prompt: str) -> str:
+        return prompt
+
+
 class ProviderTests(unittest.TestCase):
-    def test_provider_config_builds_mock(self) -> None:
+    def test_provider_config_builds_injected_mock(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             path = Path(td) / "providers.json"
             path.write_text(
                 json.dumps({"providers": [{"name": "mock-a", "type": "mock"}]}),
                 encoding="utf-8",
             )
-            built = build_providers_from_config(path)
+            built = build_providers_from_config(
+                path,
+                mock_factory=lambda spec: StubMockProvider(spec.name),
+            )
             self.assertEqual(len(built), 1)
-            self.assertIsInstance(built[0], MockProvider)
+            self.assertIsInstance(built[0], StubMockProvider)
             self.assertEqual(built[0].name, "mock-a")
+
+    def test_mock_provider_requires_task_factory(self) -> None:
+        spec = ProviderSpec(name="mock-a", type="mock")
+        with self.assertRaisesRegex(ProviderError, "task-specific"):
+            build_provider(spec)
 
     def test_provider_config_loads_reasoning_effort(self) -> None:
         with tempfile.TemporaryDirectory() as td:

@@ -9,9 +9,7 @@ from statistics import mean
 from typing import Any, Iterable
 
 from expression_tomography.core.providers import (
-    MockProvider,
     Provider,
-    build_providers_from_config,
     parse_json_lenient,
 )
 from expression_tomography.core.schema import (
@@ -29,6 +27,7 @@ from .intermediate import (
     string_set,
 )
 from .intermediate_probe_report import write_intermediate_probe_report
+from .mock_provider import RuleZMockProvider, load_rule_z_providers
 from .oracle import OracleAnswer, answer_rule_z, priority_edges_from_public
 from .prompts import (
     make_hidden_query_battery_prompt,
@@ -71,7 +70,7 @@ def _provider_provenance(provider: Provider) -> dict[str, Any]:
     spec = getattr(provider, "spec", None)
     if spec is not None:
         provider_type = str(getattr(spec, "type"))
-    elif isinstance(provider, MockProvider):
+    elif isinstance(provider, RuleZMockProvider):
         provider_type = "mock"
     else:
         provider_type = type(provider).__name__
@@ -654,7 +653,7 @@ def run_intermediate_probe(
 
             if battery_spec is not None:
                 condition = QUERY_BATTERY_TO_CONDITION[query_battery]
-                structured_hint = isinstance(provider, MockProvider)
+                structured_hint = isinstance(provider, RuleZMockProvider)
                 prompt = make_hidden_query_battery_prompt(
                     probe_case.case_id,
                     source_message,
@@ -763,11 +762,7 @@ def main() -> None:
     source_store = ExperimentStore(source_path, read_only=True)
     output_store = ExperimentStore(output_path)
     try:
-        providers: Iterable[Provider] = (
-            build_providers_from_config(args.provider_config)
-            if args.provider_config
-            else [MockProvider()]
-        )
+        providers: Iterable[Provider] = load_rule_z_providers(args.provider_config)
         source_conditions = _parse_csv_values(args.source_conditions)
         audit_modes = _parse_audit_modes(args.audit_modes)
         source_db_sha256 = _sha256_file(source_path)
