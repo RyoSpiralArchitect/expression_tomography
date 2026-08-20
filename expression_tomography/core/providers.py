@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import copy
 import importlib
 import json
 import os
@@ -9,9 +8,7 @@ import urllib.error
 import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Protocol
-
-from expression_tomography.tasks.rule_z.oracle import answer_rule_z, priority_edges_from_public
+from typing import Callable, Protocol
 
 
 class ProviderError(RuntimeError):
@@ -62,6 +59,9 @@ class ProviderSpec:
         )
 
 
+MockProviderFactory = Callable[[ProviderSpec], Provider]
+
+
 def load_provider_specs(path: str | Path) -> list[ProviderSpec]:
     with open(path, "r", encoding="utf-8") as f:
         obj = json.load(f)
@@ -71,9 +71,17 @@ def load_provider_specs(path: str | Path) -> list[ProviderSpec]:
     return [ProviderSpec.from_dict(item) for item in providers]
 
 
-def build_provider(spec: ProviderSpec) -> Provider:
+def build_provider(
+    spec: ProviderSpec,
+    *,
+    mock_factory: MockProviderFactory | None = None,
+) -> Provider:
     if spec.type == "mock":
-        return MockProvider(name=spec.name)
+        if mock_factory is None:
+            raise ProviderError(
+                "Mock providers are task-specific; pass a mock_factory from the task layer"
+            )
+        return mock_factory(spec)
     if spec.type == "openai_compatible":
         return OpenAICompatibleProvider(spec)
     if spec.type == "anthropic":
@@ -83,8 +91,15 @@ def build_provider(spec: ProviderSpec) -> Provider:
     raise ProviderError(f"Unknown provider type: {spec.type}")
 
 
-def build_providers_from_config(path: str | Path) -> list[Provider]:
-    return [build_provider(spec) for spec in load_provider_specs(path)]
+def build_providers_from_config(
+    path: str | Path,
+    *,
+    mock_factory: MockProviderFactory | None = None,
+) -> list[Provider]:
+    return [
+        build_provider(spec, mock_factory=mock_factory)
+        for spec in load_provider_specs(path)
+    ]
 
 
 def parse_json_lenient(raw: str) -> dict | None:
@@ -169,379 +184,6 @@ def _openai_token_limit_key(model: str) -> str:
     if model.startswith("gpt-5") and not model.endswith("chat-latest"):
         return "max_completion_tokens"
     return "max_tokens"
-
-
-def _extract_json_block(prompt: str, marker: str) -> dict:
-    pattern = rf"{re.escape(marker)}\n(.*?)\nEND_{re.escape(marker)}"
-    match = re.search(pattern, prompt, flags=re.S)
-    if not match:
-        return {}
-    try:
-        parsed = json.loads(match.group(1))
-        return parsed if isinstance(parsed, dict) else {}
-    except json.JSONDecodeError:
-        return {}
-
-
-def _extract_text_block(prompt: str, marker: str) -> str:
-    pattern = rf"{re.escape(marker)}\n(.*?)\nEND_{re.escape(marker)}"
-    match = re.search(pattern, prompt, flags=re.S)
-    return match.group(1).strip() if match else ""
-
-
-def _extract_generated_text(prompt: str) -> str:
-    return _extract_text_block(prompt, "GENERATED_TEXT")
-
-
-@dataclass
-class MockProvider:
-    """Deterministic provider for end-to-end harness tests.
-
-    The mock intentionally behaves like a calibrated instrument rather than a
-    language model. It keeps the plumbing testable before real providers are
-    connected.
-    """
-
-    name: str = "mock"
-
-    def complete(self, prompt: str) -> str:
-        if "TASK: metaphor_forward" in prompt:
-            return self._write_metaphor(prompt)
-        if "TASK: metaphor_receiver" in prompt:
-            return self._receive_metaphor(prompt)
-        if "TASK: metaphor_backward_detection" in prompt:
-            return self._detect_metaphor_debt(prompt)
-        if "TASK: rule_z_write_message" in prompt:
-            return self._write_rule_z_message(prompt)
-        if "TASK: rule_z_repair_message" in prompt:
-            return self._write_rule_z_message(prompt)
-        if "TASK: rule_z_write_contract" in prompt:
-            return self._write_rule_z_contract(prompt)
-        if "TASK: rule_z_contract_bound_message" in prompt:
-            return self._write_rule_z_message(prompt)
-        if "TASK: rule_z_private_derivation" in prompt:
-            return self._write_rule_z_derivation(prompt)
-        if "TASK: rule_z_source_faithful_audit" in prompt:
-            return self._audit_rule_z_source_faithful(prompt)
-        if "TASK: rule_z_repair_capable_audit" in prompt:
-            return self._audit_rule_z_derivation(prompt)
-        if "TASK: rule_z_intermediate_audit" in prompt:
-            return self._audit_rule_z_derivation(prompt)
-        if "TASK: rule_z_hidden_query_battery" in prompt:
-            return self._answer_rule_z_query_battery(prompt)
-        if "TASK: rule_z_answer" in prompt:
-            return self._answer_rule_z(prompt)
-        return json.dumps({"answer": "yes", "confidence": 0.5}, ensure_ascii=False)
-
-    def _write_rule_z_message(self, prompt: str) -> str:
-        public = _extract_json_block(prompt, "RULE_Z_PUBLIC_JSON")
-        facts = ", ".join(public.get("facts", [])) or "none"
-        rules = []
-        for rule in public.get("rules", []):
-            antecedents = " and ".join(rule.get("if", [])) or "always"
-            rules.append(f"{rule.get('id')}: if {antecedents} then {rule.get('then')}")
-        priorities = [f"{a} outranks {b}" for a, b in priority_edges_from_public(public)]
-        return "\n".join(
-            [
-                "I will describe the rule system without answering any future query.",
-                f"Facts: {facts}.",
-                "Rules: " + "; ".join(rules) + ".",
-                "Priority: " + ("; ".join(priorities) if priorities else "none") + ".",
-            ]
-        )
-
-    def _write_rule_z_contract(self, prompt: str) -> str:
-        return "\n".join(
-            [
-                "Preserve actual facts as case facts, not just available predicates.",
-                "Preserve which rules fire and which rules are merely possible.",
-                "Preserve priority and suppression before describing active conclusions.",
-                "Preserve unresolved conflict if eligible and not_eligible both remain active.",
-            ]
-        )
-
-    def _write_rule_z_derivation(self, prompt: str) -> str:
-        public = _extract_json_block(prompt, "RULE_Z_PUBLIC_JSON")
-        oracle = answer_rule_z(public)
-
-        def values(items: list[str]) -> str:
-            return ", ".join(items) if items else "none"
-
-        edges = [f"{higher}>{lower}" for higher, lower in oracle.fired_priority_edges]
-        return "\n".join(
-            [
-                f"Fired rules: {values(oracle.fired_rules)}.",
-                f"Fired priority edges: {values(edges)}.",
-                f"Suppressed rules: {values(oracle.suppressed_rules)}.",
-                f"Active rules: {values(oracle.active_rules)}.",
-                f"Active conclusions: {values(oracle.active_conclusions)}.",
-            ]
-        )
-
-    def _audit_rule_z_derivation(self, prompt: str) -> str:
-        derivation = (
-            _extract_text_block(prompt, "PRIVATE_DERIVATION")
-            or _extract_text_block(prompt, "SOURCE_ARTIFACT")
-        )
-
-        def line_values(label: str) -> list[str]:
-            match = re.search(
-                rf"^{re.escape(label)}:\s*(.*?)\.\s*$",
-                derivation,
-                flags=re.M,
-            )
-            if not match or match.group(1).strip().lower() == "none":
-                return []
-            return [item.strip() for item in match.group(1).split(",") if item.strip()]
-
-        edges = []
-        for item in line_values("Fired priority edges"):
-            if ">" not in item:
-                continue
-            higher, lower = (part.strip() for part in item.split(">", 1))
-            if higher and lower:
-                edges.append(
-                    {
-                        "higher_priority_rule": higher,
-                        "lower_priority_rule": lower,
-                    }
-                )
-        return json.dumps(
-            {
-                "fired_rules": line_values("Fired rules"),
-                "fired_priority_edges": edges,
-                "suppressed_rules": line_values("Suppressed rules"),
-                "active_rules": line_values("Active rules"),
-                "active_conclusions": line_values("Active conclusions"),
-            },
-            ensure_ascii=False,
-        )
-
-    def _audit_rule_z_source_faithful(self, prompt: str) -> str:
-        source = _extract_text_block(prompt, "SOURCE_ARTIFACT")
-
-        def source_line(label: str) -> tuple[str, list[str]]:
-            match = re.search(
-                rf"^({re.escape(label)}:\s*(.*?)\.\s*)$",
-                source,
-                flags=re.M,
-            )
-            if not match:
-                return "", []
-            line = match.group(1).strip()
-            raw_values = match.group(2).strip()
-            if raw_values.lower() == "none":
-                return line, []
-            return line, [
-                item.strip()
-                for item in raw_values.split(",")
-                if item.strip()
-            ]
-
-        def grounded_values(label: str) -> dict:
-            line, values = source_line(label)
-            if not line:
-                return {
-                    "status": "not_stated",
-                    "items": [],
-                    "field_evidence": "",
-                }
-            if not values:
-                return {
-                    "status": "explicit_none",
-                    "items": [],
-                    "field_evidence": line,
-                }
-            return {
-                "status": "asserted",
-                "items": [
-                    {
-                        "value": value,
-                        "evidence": line,
-                    }
-                    for value in values
-                ],
-                "field_evidence": "",
-            }
-
-        edge_line, edge_values = source_line("Fired priority edges")
-        if not edge_line:
-            grounded_edges = {
-                "status": "not_stated",
-                "items": [],
-                "field_evidence": "",
-            }
-        elif not edge_values:
-            grounded_edges = {
-                "status": "explicit_none",
-                "items": [],
-                "field_evidence": edge_line,
-            }
-        else:
-            grounded_edges = {
-                "status": "asserted",
-                "items": [
-                    {
-                        "higher_priority_rule": value.split(">", 1)[0].strip(),
-                        "lower_priority_rule": value.split(">", 1)[1].strip(),
-                        "evidence": edge_line,
-                    }
-                    for value in edge_values
-                    if ">" in value
-                ],
-                "field_evidence": "",
-            }
-
-        return json.dumps(
-            {
-                "fired_rules": grounded_values("Fired rules"),
-                "fired_priority_edges": grounded_edges,
-                "suppressed_rules": grounded_values("Suppressed rules"),
-                "active_rules": grounded_values("Active rules"),
-                "active_conclusions": grounded_values("Active conclusions"),
-                "source_final_answer": {
-                    "status": "not_stated",
-                    "value": "",
-                    "evidence": "",
-                },
-                "contradictions": [],
-            },
-            ensure_ascii=False,
-        )
-
-    def _answer_rule_z_query_battery(self, prompt: str) -> str:
-        public = _extract_json_block(prompt, "RULE_Z_FROM_MESSAGE_JSON")
-        query_spec = _extract_json_block(prompt, "RULE_Z_QUERY_SPEC_JSON")
-        if not public:
-            return json.dumps(
-                {
-                    "facts": None,
-                    "fired_rules": None,
-                    "fired_priority_edges": None,
-                    "suppressed_rules": None,
-                    "active_rules": None,
-                    "active_conclusions": None,
-                    "final_answer": None,
-                    "fact_removal": None,
-                    "edge_reversal": None,
-                },
-                ensure_ascii=False,
-            )
-
-        oracle = answer_rule_z(public)
-
-        def state(answer) -> dict:
-            return {
-                "fired_rules": sorted(answer.fired_rules),
-                "fired_priority_edges": [
-                    {
-                        "higher_priority_rule": higher,
-                        "lower_priority_rule": lower,
-                    }
-                    for higher, lower in sorted(answer.fired_priority_edges)
-                ],
-                "suppressed_rules": sorted(answer.suppressed_rules),
-                "active_rules": sorted(answer.active_rules),
-                "active_conclusions": sorted(answer.active_conclusions),
-                "final_answer": answer.answer,
-            }
-
-        result = {
-            "facts": sorted({str(value) for value in public.get("facts", [])}),
-            **state(oracle),
-            "fact_removal": None,
-            "edge_reversal": None,
-        }
-
-        fact_spec = query_spec.get("fact_removal")
-        if isinstance(fact_spec, dict):
-            fact = str(fact_spec.get("remove_fact", "")).strip()
-            updated = copy.deepcopy(public)
-            updated["facts"] = [
-                value
-                for value in updated.get("facts", [])
-                if str(value) != fact
-            ]
-            counterfactual = answer_rule_z(updated)
-            result["fact_removal"] = {
-                "removed_fact": fact,
-                "active_conclusions": sorted(counterfactual.active_conclusions),
-                "answer": counterfactual.answer,
-            }
-
-        edge_spec = query_spec.get("edge_reversal")
-        if isinstance(edge_spec, dict):
-            edge = edge_spec.get("reverse_edge")
-            if isinstance(edge, dict):
-                higher = str(edge.get("higher_priority_rule", "")).strip()
-                lower = str(edge.get("lower_priority_rule", "")).strip()
-                edges = priority_edges_from_public(public)
-                for index, candidate in enumerate(edges):
-                    if candidate == (higher, lower):
-                        edges[index] = (lower, higher)
-                        break
-                updated = copy.deepcopy(public)
-                if "priority" in updated:
-                    updated["priority"] = [list(item) for item in edges]
-                    updated.pop("priority_edges", None)
-                else:
-                    updated["priority_edges"] = [
-                        {
-                            "higher_priority_rule": winner,
-                            "lower_priority_rule": loser,
-                        }
-                        for winner, loser in edges
-                    ]
-                    updated.pop("priority", None)
-                counterfactual = answer_rule_z(updated)
-                result["edge_reversal"] = {
-                    "higher_priority_rule": higher,
-                    "lower_priority_rule": lower,
-                    "active_conclusions": sorted(
-                        counterfactual.active_conclusions
-                    ),
-                    "answer": counterfactual.answer,
-                }
-        return json.dumps(result, ensure_ascii=False)
-
-    def _answer_rule_z(self, prompt: str) -> str:
-        if "CONDITION: B" in prompt:
-            return json.dumps({"answer": "yes", "confidence": 0.5}, ensure_ascii=False)
-
-        public = _extract_json_block(prompt, "RULE_Z_PUBLIC_JSON")
-        if not public:
-            public = _extract_json_block(prompt, "RULE_Z_FROM_MESSAGE_JSON")
-        answer = answer_rule_z(public).answer if public else "yes"
-        return json.dumps({"answer": answer, "confidence": 1.0}, ensure_ascii=False)
-
-    def _write_metaphor(self, prompt: str) -> str:
-        case = _extract_json_block(prompt, "METAPHOR_CASE_JSON")
-        task = case.get("writing_task", "不快な沈黙を短く描写せよ。")
-        if "沈黙" in task:
-            text = "その沈黙は、古い冷蔵庫の低い唸りみたいに、部屋の温度まで支配していた。"
-        else:
-            text = f"{case.get('target_relation', 'それ')}は、古い機械の低い振動のように残った。"
-        return json.dumps({"text": text}, ensure_ascii=False)
-
-    def _receive_metaphor(self, prompt: str) -> str:
-        case = _extract_json_block(prompt, "METAPHOR_CASE_JSON")
-        text = _extract_generated_text(prompt)
-        intended = list(case.get("intended_dimensions", []))
-        collateral = list(case.get("collateral_dimensions", []))
-        selected = intended[:]
-        if any(token in text for token in ["冷蔵庫", "温度", "冷た"]):
-            for label in collateral:
-                if label in {"冷たさ", "実際に音が鳴っているという誤読", "部屋の温度"}:
-                    selected.append(label)
-        return json.dumps({"selected_dimensions": selected, "confidence": 1.0}, ensure_ascii=False)
-
-    def _detect_metaphor_debt(self, prompt: str) -> str:
-        case = _extract_json_block(prompt, "METAPHOR_CASE_JSON")
-        text = _extract_generated_text(prompt)
-        selected = []
-        if any(token in text for token in ["冷蔵庫", "温度", "冷た", "唸り"]):
-            selected = list(case.get("collateral_dimensions", []))
-        return json.dumps({"selected_debts": selected, "confidence": 1.0}, ensure_ascii=False)
 
 
 class OpenAICompatibleProvider:

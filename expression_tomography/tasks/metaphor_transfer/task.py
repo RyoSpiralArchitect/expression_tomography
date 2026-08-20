@@ -6,14 +6,13 @@ from pathlib import Path
 from typing import Iterable
 
 from expression_tomography.core.providers import (
-    MockProvider,
     Provider,
-    build_providers_from_config,
     parse_json_lenient,
 )
 from expression_tomography.core.schema import Case, TrialResult
 from expression_tomography.core.store import ExperimentStore
 
+from .mock_provider import load_metaphor_providers
 from .prompts import make_backward_detection_prompt, make_forward_prompt, make_receiver_prompt
 from .scorer import extract_generated_text, score_backward_detection, score_forward, score_receiver
 
@@ -122,7 +121,7 @@ def main() -> None:
     store = ExperimentStore(args.db)
     try:
         cases = load_metaphor_cases(args.cases_path)
-        providers = build_providers_from_config(args.provider_config) if args.provider_config else [MockProvider()]
+        providers = load_metaphor_providers(args.provider_config)
         for provider in providers:
             run_metaphor_experiment(cases, provider, store)
         summary = write_metaphor_transfer_report(store, args.report_dir)

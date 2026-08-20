@@ -6,9 +6,7 @@ from pathlib import Path
 from typing import Iterable
 
 from expression_tomography.core.providers import (
-    MockProvider,
     Provider,
-    build_providers_from_config,
     parse_json_lenient,
 )
 from expression_tomography.core.report import write_rule_z_report
@@ -17,6 +15,7 @@ from expression_tomography.core.store import ExperimentStore
 
 from .generator import CASE_PROFILES, STRESS_FAMILIES, make_rule_z_cases
 from .intermediate import score_intermediate_audit
+from .mock_provider import RuleZMockProvider, load_rule_z_providers
 from .oracle import answer_rule_z
 from .prompts import (
     make_ablated_contract,
@@ -196,7 +195,7 @@ def _uses_strict_conflict(prompt_style: str) -> bool:
 
 
 def _include_structured_hint(provider: Provider) -> bool:
-    return isinstance(provider, MockProvider)
+    return isinstance(provider, RuleZMockProvider)
 
 
 def _corrupted_final_label(answer: str) -> str:
@@ -749,7 +748,7 @@ def main() -> None:
             ]
             if not cases:
                 parser.error("--stress-families selected no cases")
-        providers = build_providers_from_config(args.provider_config) if args.provider_config else [MockProvider()]
+        providers = load_rule_z_providers(args.provider_config)
         transmission_modes = _parse_transmission_modes(args.transmission_modes)
         direct_probe_modes = _parse_direct_probe_modes(args.direct_probe_modes)
         run_summaries = []
