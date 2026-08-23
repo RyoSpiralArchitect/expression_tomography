@@ -206,6 +206,11 @@ not share probe identities. Provider request-contract versions are fingerprinted
 as well. A numeric temperature is sent explicitly, while `null` records an
 intentional provider-default request.
 
+The main Rule-Z runner also binds provider and request provenance plus its
+condition-specific execution contract into each resume identity. A logical
+trial that collides with changed execution semantics fails closed, and legacy
+stores without hardened provenance must be continued in a fresh database.
+
 Provider types:
 
 - `mock`

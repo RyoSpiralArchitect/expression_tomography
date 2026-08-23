@@ -991,12 +991,17 @@ class RuleZSmokeTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             store = ExperimentStore(Path(td) / "rule_z.sqlite")
             try:
-                first_pass = run_rule_z_case(
-                    case,
+                initial = run_rule_z_experiment(
+                    [case],
                     provider,
+                    store,
                     transmission_modes=modes,
                 )
-                store.insert_trial(first_pass[0])
+                self.assertEqual(initial["inserted_trials"], 4)
+                store.conn.execute(
+                    "DELETE FROM trials WHERE condition != 'B'"
+                )
+                store.conn.commit()
                 provider.call_count = 0
 
                 resumed = run_rule_z_experiment(
@@ -1042,11 +1047,65 @@ class RuleZSmokeTests(unittest.TestCase):
                 self.assertEqual(len(rows), 4)
                 self.assertEqual(len(identities), 4)
 
-                store.insert_trial(first_pass[0])
+                changed_contract_provider = CountingMockProvider()
+                changed_contract_provider.request_contract_version = (
+                    "changed.request.v2"
+                )
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "execution provenance drift",
+                ):
+                    run_rule_z_experiment(
+                        [case],
+                        changed_contract_provider,
+                        store,
+                        transmission_modes=modes,
+                    )
+                self.assertEqual(changed_contract_provider.call_count, 0)
+
+                duplicate_source = rows[0]
+                store.insert_trial(
+                    TrialResult(
+                        case_id=duplicate_source["case_id"],
+                        case_hash=duplicate_source["case_hash"],
+                        task_type=duplicate_source["task_type"],
+                        condition=duplicate_source["condition"],
+                        provider=duplicate_source["provider"],
+                        prompt=duplicate_source["prompt"],
+                        raw_response=duplicate_source["raw_response"],
+                        parsed_response=duplicate_source["parsed_response"],
+                        score=duplicate_source["score"],
+                        metadata=duplicate_source["metadata"],
+                    )
+                )
                 provider.call_count = 0
                 with self.assertRaisesRegex(
                     RuntimeError,
-                    "already contains duplicate trial identities",
+                    "duplicate logical trial identities",
+                ):
+                    run_rule_z_experiment(
+                        [case],
+                        provider,
+                        store,
+                        transmission_modes=modes,
+                    )
+                self.assertEqual(provider.call_count, 0)
+            finally:
+                store.close()
+
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "legacy.sqlite")
+            try:
+                legacy_trial = run_rule_z_case(
+                    case,
+                    provider,
+                    transmission_modes=modes,
+                )[0]
+                store.insert_trial(legacy_trial)
+                provider.call_count = 0
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "legacy rows without hardened execution provenance",
                 ):
                     run_rule_z_experiment(
                         [case],

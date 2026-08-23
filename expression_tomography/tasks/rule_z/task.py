@@ -10,7 +10,11 @@ from expression_tomography.core.providers import (
     parse_json_lenient,
 )
 from expression_tomography.core.report import write_rule_z_report
-from expression_tomography.core.schema import Case, TrialResult
+from expression_tomography.core.schema import (
+    Case,
+    TrialResult,
+    content_hash,
+)
 from expression_tomography.core.store import ExperimentStore
 
 from .generator import CASE_PROFILES, STRESS_FAMILIES, make_rule_z_cases
@@ -107,7 +111,8 @@ ORACLE_MESSAGE_MODES = {
     "oracle_no_final_no_active",
     "oracle_corrupt_final",
 }
-TrialIdentity = tuple[str, str, str, int]
+RULE_Z_EXECUTION_CONTRACT_VERSION = "rule_z.execution.v2"
+LogicalTrialIdentity = tuple[str, str, str, int]
 
 
 def _score(parsed: dict | None, expected: str) -> dict:
@@ -144,7 +149,7 @@ def _planned_conditions(
     return conditions
 
 
-def _stored_trial_identity(row: dict) -> TrialIdentity:
+def _logical_trial_identity(row: dict) -> LogicalTrialIdentity:
     metadata = row.get("metadata", {})
     return (
         str(row["provider"]),
@@ -154,13 +159,162 @@ def _stored_trial_identity(row: dict) -> TrialIdentity:
     )
 
 
-def _trial_identity(trial: TrialResult) -> TrialIdentity:
+def _trial_logical_identity(trial: TrialResult) -> LogicalTrialIdentity:
     return (
         trial.provider,
         trial.case_hash,
         trial.condition,
         int(trial.metadata.get("replicate_index", 0)),
     )
+
+
+def _request_contract_version(provider: Provider) -> str:
+    declared = getattr(provider, "request_contract_version", None)
+    if declared:
+        return str(declared)
+    provider_type = type(provider)
+    return (
+        f"{provider_type.__module__}.{provider_type.__qualname__}."
+        "request.v1"
+    )
+
+
+def _provider_provenance(provider: Provider) -> dict:
+    spec = getattr(provider, "spec", None)
+    provider_type = (
+        str(getattr(spec, "type"))
+        if spec is not None
+        else ("mock" if isinstance(provider, RuleZMockProvider) else type(provider).__name__)
+    )
+    config = {
+        "name": provider.name,
+        "type": provider_type,
+        "model": (
+            str(getattr(spec, "model"))
+            if spec is not None
+            else str(getattr(provider, "model", provider.name))
+        ),
+        "base_url": getattr(provider, "base_url", None),
+        "timeout_s": getattr(spec, "timeout_s", None),
+        "max_tokens": getattr(spec, "max_tokens", None),
+        "temperature": getattr(spec, "temperature", None),
+        "reasoning_effort": getattr(spec, "reasoning_effort", None),
+        "request_contract_version": _request_contract_version(provider),
+        "device": getattr(spec, "device", None),
+        "dtype": getattr(spec, "dtype", None),
+    }
+    return {
+        "rule_z_provider_config": config,
+        "rule_z_provider_config_sha256": content_hash(config),
+    }
+
+
+def _condition_execution_config(
+    condition: str,
+    prompt_style: str,
+    audit_intermediates: bool,
+) -> dict:
+    audited_conditions = {
+        DIRECT_PROBE_MODE_TO_CONDITION[mode]
+        for mode in DIRECT_PROBE_MODE_TO_CONDITION
+        if mode != "priority_explicit_edges"
+    }
+    return {
+        "condition": condition,
+        "prompt_style": prompt_style,
+        "audit_intermediates": (
+            audit_intermediates if condition in audited_conditions else False
+        ),
+        "execution_contract_version": RULE_Z_EXECUTION_CONTRACT_VERSION,
+    }
+
+
+def _execution_trial_identity(
+    logical_identity: LogicalTrialIdentity,
+    provider_config_sha256: str,
+    condition_config_sha256: str,
+) -> str:
+    provider, case_hash, condition, replicate_index = logical_identity
+    return content_hash(
+        {
+            "provider": provider,
+            "case_hash": case_hash,
+            "condition": condition,
+            "replicate_index": replicate_index,
+            "provider_config_sha256": provider_config_sha256,
+            "condition_config_sha256": condition_config_sha256,
+        }
+    )
+
+
+def _stored_execution_identity(row: dict) -> str:
+    metadata = row.get("metadata", {})
+    required = {
+        "rule_z_provider_config": metadata.get("rule_z_provider_config"),
+        "rule_z_provider_config_sha256": metadata.get(
+            "rule_z_provider_config_sha256"
+        ),
+        "rule_z_condition_config": metadata.get("rule_z_condition_config"),
+        "rule_z_condition_config_sha256": metadata.get(
+            "rule_z_condition_config_sha256"
+        ),
+        "rule_z_prompt_sha256": metadata.get("rule_z_prompt_sha256"),
+        "rule_z_trial_identity_sha256": metadata.get(
+            "rule_z_trial_identity_sha256"
+        ),
+    }
+    missing = sorted(key for key, value in required.items() if not value)
+    if missing:
+        raise RuntimeError(
+            "Rule-Z store contains legacy rows without hardened execution "
+            f"provenance ({row['id']} missing {', '.join(missing)}); "
+            "resume into a fresh database"
+        )
+    provider_config = required["rule_z_provider_config"]
+    if not isinstance(provider_config, dict) or not {
+        "request_contract_version",
+        "device",
+        "dtype",
+    } <= provider_config.keys():
+        raise RuntimeError(
+            f"Rule-Z provider configuration is incomplete in trial {row['id']}"
+        )
+    if (
+        content_hash(provider_config)
+        != required["rule_z_provider_config_sha256"]
+    ):
+        raise RuntimeError(
+            f"Rule-Z provider configuration hash mismatch in trial {row['id']}"
+        )
+    condition_config = required["rule_z_condition_config"]
+    if not isinstance(condition_config, dict):
+        raise RuntimeError(
+            f"Rule-Z condition configuration is invalid in trial {row['id']}"
+        )
+    if (
+        condition_config.get("execution_contract_version")
+        != RULE_Z_EXECUTION_CONTRACT_VERSION
+    ):
+        raise RuntimeError(
+            f"Rule-Z execution contract drift in trial {row['id']}"
+        )
+    if (
+        content_hash(condition_config)
+        != required["rule_z_condition_config_sha256"]
+    ):
+        raise RuntimeError(
+            f"Rule-Z condition configuration hash mismatch in trial {row['id']}"
+        )
+    if content_hash(row["prompt"]) != required["rule_z_prompt_sha256"]:
+        raise RuntimeError(f"Rule-Z prompt hash mismatch in trial {row['id']}")
+    identity = _execution_trial_identity(
+        _logical_trial_identity(row),
+        str(required["rule_z_provider_config_sha256"]),
+        str(required["rule_z_condition_config_sha256"]),
+    )
+    if identity != required["rule_z_trial_identity_sha256"]:
+        raise RuntimeError(f"Rule-Z execution identity mismatch in trial {row['id']}")
+    return identity
 
 
 def _parse_transmission_modes(raw: str) -> tuple[str, ...]:
@@ -590,41 +744,67 @@ def run_rule_z_experiment(
         transmission_modes,
         direct_probe_modes,
     )
-    identity_counts = Counter(
-        _stored_trial_identity(row)
-        for row in store.fetch_trials(task_type="rule_z")
+    existing_rows = store.fetch_trials(task_type="rule_z")
+    existing_by_logical: dict[LogicalTrialIdentity, str] = {}
+    execution_counts: Counter[str] = Counter()
+    for row in existing_rows:
+        logical_identity = _logical_trial_identity(row)
+        execution_identity = _stored_execution_identity(row)
+        if logical_identity in existing_by_logical:
+            raise RuntimeError(
+                "Rule-Z store already contains duplicate logical trial "
+                f"identities: {logical_identity}"
+            )
+        existing_by_logical[logical_identity] = execution_identity
+        execution_counts[execution_identity] += 1
+    duplicate_executions = sorted(
+        identity for identity, count in execution_counts.items() if count > 1
     )
-    duplicate_identities = sorted(
-        identity
-        for identity, count in identity_counts.items()
-        if count > 1
-    )
-    if duplicate_identities:
-        preview = ", ".join(
-            repr(identity)
-            for identity in duplicate_identities[:3]
-        )
+    if duplicate_executions:
         raise RuntimeError(
-            "Rule-Z store already contains duplicate trial identities; "
-            f"refusing to append until they are repaired: {preview}"
+            "Rule-Z store already contains duplicate execution identities: "
+            + ", ".join(duplicate_executions[:3])
         )
-    seen = set(identity_counts)
+    provider_provenance = _provider_provenance(provider)
     inserted = 0
     skipped_existing = 0
     for case in cases:
         store.upsert_case(case)
         for replicate_index in range(replicate_start, replicate_start + repetitions):
-            skip_conditions = {
-                condition
-                for condition in planned_conditions
-                if (
+            expected_by_condition = {}
+            skip_conditions = set()
+            for condition in planned_conditions:
+                logical_identity = (
                     provider.name,
                     case.case_hash,
                     condition,
                     replicate_index,
                 )
-                in seen
-            }
+                condition_config = _condition_execution_config(
+                    condition,
+                    prompt_style,
+                    audit_intermediates,
+                )
+                condition_config_sha256 = content_hash(condition_config)
+                execution_identity = _execution_trial_identity(
+                    logical_identity,
+                    provider_provenance["rule_z_provider_config_sha256"],
+                    condition_config_sha256,
+                )
+                expected_by_condition[condition] = (
+                    logical_identity,
+                    condition_config,
+                    condition_config_sha256,
+                    execution_identity,
+                )
+                stored_execution = existing_by_logical.get(logical_identity)
+                if stored_execution is not None:
+                    if stored_execution != execution_identity:
+                        raise RuntimeError(
+                            "Rule-Z execution provenance drift for "
+                            f"{logical_identity}; resume into a fresh database"
+                        )
+                    skip_conditions.add(condition)
             skipped_existing += len(skip_conditions)
             for trial in run_rule_z_case(
                 case,
@@ -636,14 +816,44 @@ def run_rule_z_experiment(
                 audit_intermediates=audit_intermediates,
                 skip_conditions=skip_conditions,
             ):
-                identity = _trial_identity(trial)
-                if identity in seen:
+                logical_identity = _trial_logical_identity(trial)
+                (
+                    expected_logical,
+                    condition_config,
+                    condition_config_sha256,
+                    execution_identity,
+                ) = expected_by_condition[trial.condition]
+                if logical_identity != expected_logical:
                     raise RuntimeError(
-                        "Rule-Z run produced a duplicate trial identity: "
-                        f"{identity}"
+                        "Rule-Z run produced an unexpected logical identity: "
+                        f"{logical_identity}"
                     )
+                if logical_identity in existing_by_logical:
+                    raise RuntimeError(
+                        "Rule-Z run produced a duplicate logical trial identity: "
+                        f"{logical_identity}"
+                    )
+                trial.metadata.update(
+                    {
+                        **provider_provenance,
+                        "rule_z_condition_config": condition_config,
+                        "rule_z_condition_config_sha256": (
+                            condition_config_sha256
+                        ),
+                        "rule_z_prompt_sha256": content_hash(trial.prompt),
+                        "rule_z_logical_trial_identity_sha256": content_hash(
+                            {
+                                "provider": logical_identity[0],
+                                "case_hash": logical_identity[1],
+                                "condition": logical_identity[2],
+                                "replicate_index": logical_identity[3],
+                            }
+                        ),
+                        "rule_z_trial_identity_sha256": execution_identity,
+                    }
+                )
                 store.insert_trial(trial)
-                seen.add(identity)
+                existing_by_logical[logical_identity] = execution_identity
                 inserted += 1
     return {
         "inserted_trials": inserted,
