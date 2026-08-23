@@ -34,6 +34,12 @@ LEGACY_REQUEST_SEMANTICS = {
     ),
     "anthropic": "anthropic.messages.temperature_positive_only.v1",
 }
+MIGRATION_TARGET_REQUEST_CONTRACTS = {
+    "openai_compatible": (
+        "openai_compatible.chat_completions.temperature_optional.v3"
+    ),
+    "anthropic": "anthropic.messages.temperature_optional.v2",
+}
 
 
 def _sha256_file(path: Path) -> str:
@@ -207,9 +213,14 @@ def migrate_legacy_provider_default_probe_checkpoint(
                 f"Current provider does not use provider-default temperature: {provider_name}"
             )
         request_contract = current_config.get("request_contract_version")
-        if not isinstance(request_contract, str) or not request_contract:
+        expected_request_contract = MIGRATION_TARGET_REQUEST_CONTRACTS[
+            provider_type
+        ]
+        if request_contract != expected_request_contract:
             raise RuntimeError(
-                f"Current provider lacks a request contract: {provider_name}"
+                "Unsupported current request contract for provenance migration: "
+                f"provider={provider_name}, expected={expected_request_contract}, "
+                f"observed={request_contract!r}"
             )
         if _provider_config_without_request_change(
             legacy_config
@@ -302,6 +313,7 @@ def migrate_legacy_provider_default_probe_checkpoint(
     )
     temporary_path = Path(temporary_handle.name)
     temporary_handle.close()
+    output_published = False
     try:
         shutil.copyfile(input_path, temporary_path)
         if _sha256_file(temporary_path) != input_hash:
@@ -340,13 +352,20 @@ def migrate_legacy_provider_default_probe_checkpoint(
         }
         if migrated_stored_identities != migrated_identities:
             raise RuntimeError("Migrated probe identities failed post-write validation")
+        if _sha256_file(input_path) != input_hash:
+            raise RuntimeError("Input checkpoint changed before migration publication")
         os.link(temporary_path, output_path)
+        output_published = True
+        if _sha256_file(input_path) != input_hash:
+            raise RuntimeError("Input checkpoint changed while publishing the migration")
+        output_hash = _sha256_file(output_path)
+    except Exception:
+        if output_published:
+            output_path.unlink(missing_ok=True)
+        raise
     finally:
         temporary_path.unlink(missing_ok=True)
 
-    if _sha256_file(input_path) != input_hash:
-        raise RuntimeError("Input checkpoint changed while writing the migration")
-    output_hash = _sha256_file(output_path)
     return {
         "migration_version": MIGRATION_VERSION,
         "input_db": str(input_path),
@@ -383,6 +402,13 @@ def _parse_legacy_hashes(values: list[str]) -> dict[str, str]:
     return parsed
 
 
+def _write_reserved_report(handle: Any, summary: dict[str, Any]) -> None:
+    handle.write(json.dumps(summary, indent=2, sort_keys=True))
+    handle.write("\n")
+    handle.flush()
+    os.fsync(handle.fileno())
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description=(
@@ -408,7 +434,24 @@ def main() -> None:
     parser.add_argument("--report-json", default=None)
     args = parser.parse_args()
 
+    output_path = Path(args.output_db)
+    report_path = Path(args.report_json) if args.report_json else None
+    report_handle = None
+    report_reserved = False
+    output_created = False
     try:
+        if report_path is not None:
+            if report_path.resolve() == output_path.resolve():
+                raise ValueError(
+                    "Migration report path must differ from the output database"
+                )
+            report_path.parent.mkdir(parents=True, exist_ok=True)
+            report_handle = report_path.open(
+                "x",
+                encoding="utf-8",
+                newline="\n",
+            )
+            report_reserved = True
         providers = []
         for config_path in args.provider_config:
             providers.extend(load_rule_z_providers(config_path))
@@ -421,13 +464,21 @@ def main() -> None:
                 args.legacy_provider_config_sha256
             ),
         )
-        if args.report_json:
-            report_path = Path(args.report_json)
-            report_path.parent.mkdir(parents=True, exist_ok=True)
-            with report_path.open("x", encoding="utf-8", newline="\n") as handle:
-                handle.write(json.dumps(summary, indent=2, sort_keys=True))
-                handle.write("\n")
+        output_created = True
+        if report_handle is not None:
+            _write_reserved_report(report_handle, summary)
+            report_handle.close()
+            report_handle = None
     except (OSError, RuntimeError, ValueError) as exc:
+        if report_handle is not None:
+            try:
+                report_handle.close()
+            except OSError:
+                pass
+        if output_created:
+            output_path.unlink(missing_ok=True)
+        if report_reserved and report_path is not None:
+            report_path.unlink(missing_ok=True)
         parser.error(str(exc))
     print(json.dumps(summary, sort_keys=True))
 

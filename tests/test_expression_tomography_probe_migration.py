@@ -1,9 +1,13 @@
 from __future__ import annotations
 
 import hashlib
+import io
+import sys
 import tempfile
 import unittest
+from contextlib import redirect_stderr
 from pathlib import Path
+from unittest.mock import patch
 
 from expression_tomography.core.providers import (
     AnthropicProvider,
@@ -18,9 +22,13 @@ from expression_tomography.tasks.rule_z.intermediate_probe import (
     _provider_provenance,
     make_probe_identity,
 )
+from expression_tomography.tasks.rule_z import (
+    intermediate_probe_migration as migration_module,
+)
 from expression_tomography.tasks.rule_z.intermediate_probe_migration import (
     MIGRATED_METADATA_KEY,
     MIGRATION_VERSION,
+    main as migration_main,
     migrate_legacy_provider_default_probe_checkpoint,
 )
 
@@ -241,6 +249,158 @@ class ProbeMigrationTests(unittest.TestCase):
                     legacy_provider_config_sha256=legacy_hashes,
                 )
             self.assertFalse(tampered_output.exists())
+
+    def test_migration_rejects_unknown_replacement_request_contract(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            input_path = root / "checkpoint.sqlite"
+            output_path = root / "completed.sqlite"
+            providers, legacy_hashes = self._make_legacy_checkpoint(input_path)
+            providers[0].request_contract_version = (
+                "openai_compatible.chat_completions.future.v999"
+            )
+
+            with self.assertRaisesRegex(
+                RuntimeError,
+                "Unsupported current request contract",
+            ):
+                migrate_legacy_provider_default_probe_checkpoint(
+                    input_path,
+                    output_path,
+                    providers,
+                    expected_input_sha256=sha256_file(input_path),
+                    legacy_provider_config_sha256=legacy_hashes,
+                )
+            self.assertFalse(output_path.exists())
+
+    def test_cli_preflights_report_destination_before_migration(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            input_path = root / "checkpoint.sqlite"
+            providers, legacy_hashes = self._make_legacy_checkpoint(input_path)
+            input_hash = sha256_file(input_path)
+            output_path = root / "completed.sqlite"
+            report_path = root / "report.json"
+            report_path.write_text("existing report\n", encoding="utf-8")
+            argv = [
+                "et-rule-z-intermediate-probe-migrate",
+                "--input-db",
+                str(input_path),
+                "--output-db",
+                str(output_path),
+                "--expected-input-sha256",
+                input_hash,
+                "--provider-config",
+                "unused.json",
+                "--legacy-provider-config-sha256",
+                f"openai-reader={legacy_hashes['openai-reader']}",
+                "--legacy-provider-config-sha256",
+                f"anthropic-reader={legacy_hashes['anthropic-reader']}",
+                "--report-json",
+                str(report_path),
+            ]
+            with patch.object(sys, "argv", argv), redirect_stderr(io.StringIO()):
+                with self.assertRaises(SystemExit):
+                    migration_main()
+            self.assertFalse(output_path.exists())
+            self.assertEqual(
+                report_path.read_text(encoding="utf-8"),
+                "existing report\n",
+            )
+            self.assertEqual(sha256_file(input_path), input_hash)
+
+            shared_path = root / "shared.sqlite"
+            argv[argv.index(str(output_path))] = str(shared_path)
+            argv[argv.index(str(report_path))] = str(shared_path)
+            with patch.object(sys, "argv", argv), redirect_stderr(io.StringIO()):
+                with self.assertRaises(SystemExit):
+                    migration_main()
+            self.assertFalse(shared_path.exists())
+
+    def test_cli_removes_database_when_report_write_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            input_path = root / "checkpoint.sqlite"
+            output_path = root / "completed.sqlite"
+            report_path = root / "report.json"
+            providers, legacy_hashes = self._make_legacy_checkpoint(input_path)
+            input_hash = sha256_file(input_path)
+            argv = [
+                "et-rule-z-intermediate-probe-migrate",
+                "--input-db",
+                str(input_path),
+                "--output-db",
+                str(output_path),
+                "--expected-input-sha256",
+                input_hash,
+                "--provider-config",
+                "providers.json",
+                "--legacy-provider-config-sha256",
+                f"openai-reader={legacy_hashes['openai-reader']}",
+                "--legacy-provider-config-sha256",
+                f"anthropic-reader={legacy_hashes['anthropic-reader']}",
+                "--report-json",
+                str(report_path),
+            ]
+            with (
+                patch.object(sys, "argv", argv),
+                patch(
+                    "expression_tomography.tasks.rule_z."
+                    "intermediate_probe_migration.load_rule_z_providers",
+                    return_value=providers,
+                ),
+                patch(
+                    "expression_tomography.tasks.rule_z."
+                    "intermediate_probe_migration._write_reserved_report",
+                    side_effect=OSError("simulated report write failure"),
+                ),
+                redirect_stderr(io.StringIO()),
+            ):
+                with self.assertRaises(SystemExit):
+                    migration_main()
+            self.assertFalse(output_path.exists())
+            self.assertFalse(report_path.exists())
+            self.assertEqual(sha256_file(input_path), input_hash)
+
+    def test_migration_removes_published_output_if_input_changes(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            input_path = root / "checkpoint.sqlite"
+            output_path = root / "completed.sqlite"
+            providers, legacy_hashes = self._make_legacy_checkpoint(input_path)
+            input_hash = sha256_file(input_path)
+            real_sha256_file = migration_module._sha256_file
+            input_hash_calls = 0
+
+            def changing_input_hash(path: Path) -> str:
+                nonlocal input_hash_calls
+                if Path(path) == input_path:
+                    input_hash_calls += 1
+                    if input_hash_calls == 4:
+                        return "0" * 64
+                return real_sha256_file(path)
+
+            with (
+                patch.object(
+                    migration_module,
+                    "_sha256_file",
+                    side_effect=changing_input_hash,
+                ),
+                self.assertRaisesRegex(
+                    RuntimeError,
+                    "changed while publishing",
+                ),
+            ):
+                migrate_legacy_provider_default_probe_checkpoint(
+                    input_path,
+                    output_path,
+                    providers,
+                    expected_input_sha256=input_hash,
+                    legacy_provider_config_sha256=legacy_hashes,
+                )
+            self.assertEqual(input_hash_calls, 4)
+            self.assertFalse(output_path.exists())
+            self.assertEqual(sha256_file(input_path), input_hash)
 
 
 if __name__ == "__main__":
