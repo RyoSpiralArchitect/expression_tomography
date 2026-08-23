@@ -147,8 +147,8 @@ rule_z_audit_reader_calibration_luna_seed53_120
   eight mutation families. Includes the legacy faithful audit, the Rule-Z
   invariant audit, the exploratory repair reader, and a paired prompt
   comparison. The manifest records the contract-indexed sensitivity/specificity
-  tradeoff, v3 field-and-claim quote grounding, and keeps repair-target matching
-  outside the primary endpoint.
+  calibration, v4 field/item and two-sided contradiction grounding, and keeps
+  repair-target matching outside the primary endpoint.
 
 metaphor_transfer_openai_live
   First OpenAI live metaphor-transfer smoke run.

@@ -41,7 +41,8 @@ The source-faithful score is primary. A calibrated row requires:
 - exact contiguous quote support matched to the reported field and item; a
   priority edge additionally requires the quoted directed pair;
 - no inferred final answer when none is stated;
-- correct contradiction presence or absence with grounded evidence.
+- correct contradiction presence or absence; a positive claim must name a
+  relevant topic and quote both sides of a designed incompatible pair.
 
 The repair-capable condition is exploratory. Its
 `designed_repair_target_match` metric asks whether the reader selected the one
@@ -59,9 +60,9 @@ more than one coherent repair can exist.
 - Cases: 120
 - Replicates: 1
 - Canonical trials: 360
-- Implementation commit: `2fbaae21b399af8a54786205db2717f9c27e3d59`
+- Implementation commit: `0fc80b4c7df50fa8aa418c0ccc91c170e868babe`
 - Prompt contract: `rule_z_audit_calibration.prompt.v1`
-- Score schema: `rule_z_audit_calibration.score.v3`
+- Score schema: `rule_z_audit_calibration.score.v4`
 
 The 360 canonical trials comprise 120 legacy faithful audits, 120
 repair-capable audits, and 120 invariant-rubric faithful audits. Preliminary
@@ -75,12 +76,15 @@ After review, all 360 stored raw responses were reparsed and rescored without
 provider calls. Execution identities now include provider configuration,
 including HF-local device and dtype where applicable, exact prompt,
 prompt-contract version, and score-schema version. All responses were
-schema-valid. The v3 revalidation left both primary calibrated endpoints and
-all paired transitions unchanged, but correctly reclassified eight rows whose
-quotes occurred in the artifact without supporting the claimed field or item.
-The paired comparison also reconstructs both prompts, proves that their
-normalized delta is limited to the invariant rubric, and reproduces every
-stored score with the declared scorer before calculating transitions.
+schema-valid. Score v3 first corrected eight field/item grounding rows. Score
+v4 then requires each positive contradiction claim to name a relevant topic
+and quote both sides of one contradiction designed by that mutation family.
+That second correction changes 40 legacy primary classifications, 28 legacy
+contradiction classifications, and no invariant primary classification. It
+also uses multisets for duplicate-sensitive repair diagnostics. The paired
+comparison reconstructs both prompts, proves that their normalized delta is
+limited to the invariant rubric, and reproduces every stored score with the
+declared scorer before calculating transitions.
 
 ## Primary Result
 
@@ -93,40 +97,43 @@ incompatible claims.
 | Metric | Legacy prompt | Invariant rubric |
 | --- | ---: | ---: |
 | Parse success | 1.000 | 1.000 |
-| Source-faithful calibrated | 0.508 | 0.700 |
+| Source-faithful calibrated | 0.175 | 0.700 |
 | Literal state exact | 0.833 | 0.975 |
-| All reported claims grounded | 0.900 | 0.967 |
-| Contradiction classification correct | 0.683 | 0.750 |
-| Contradiction sensitivity | 0.983 | 0.500 |
+| All reported claims grounded | 0.217 | 0.967 |
+| Contradiction classification correct | 0.450 | 0.750 |
+| Contradiction sensitivity | 0.517 | 0.500 |
 | Contradiction specificity | 0.383 | 1.000 |
-| Repair attraction | 0.008 | 0.008 |
+| Repair attraction | 0.025 | 0.008 |
 
-At the paired-row level, 50 cases improve, 27 regress, 34 remain passing, and 9
-remain failing. The net gain from 61 to 84 calibrated cases is real on this
-surface, but the sensitivity/specificity movement shows that it is not a
-uniformly better reader.
+At the paired-row level, 63 cases improve, none regress, 21 remain passing, and
+36 remain failing. The invariant rubric moves the calibrated count from 21 to
+84 on this surface.
 
-The legacy prompt is nearly maximally sensitive: it detects 59 of 60 designed
-contradictions. It is also highly nonspecific, correctly rejecting
+The legacy reader reports some contradiction object in 59 of 60 positive
+cases, but only 31 cases contain a topic and two-sided evidence for the
+contradiction designed by the generator. It also correctly rejects
 contradiction in only 23 of 60 negative cases. Most visibly, all 15 clean
 ledgers fail because the reader treats a rule appearing in both `fired_rules`
 and `suppressed_rules` as contradictory, even though suppression occurs after
-firing in Rule-Z.
+firing in Rule-Z. The old `0.983` sensitivity was therefore a scorer artifact:
+it measured contradiction presence, not designed-contradiction recovery.
 
 The invariant rubric fixes all 15 clean cases, all 15 duplicate cases, all 15
 irrelevant-fluent cases, and 13 of 15 omitted-field cases. It correctly rejects
-contradiction in all 60 negative cases. However, it misses all 15 reversed-edge
-and all 15 equal-tier inconsistencies, reducing positive sensitivity to 30 of
-60. The rubric suppresses false alarms but also appears to bias the reader
-toward literal field extraction without completing cross-field consistency
-checks in those two families.
+contradiction in all 60 negative cases and identifies all direct opposed-edge
+and contradictory-integration cases. It misses all 15 reversed-edge and all 15
+equal-tier cross-field inconsistencies, for 30 of 60 positive cases. The legacy
+prompt finds only one additional valid reversed-edge case and no equal-tier
+case, so these families remain hard under both contracts rather than exposing
+the large sensitivity tradeoff suggested by the earlier scorer.
 
 The important result is therefore:
 
 ```text
-Audit-reader behavior is contract-indexed. Adding the correct local ontology
-can greatly improve literal fidelity and specificity while simultaneously
-moving the contradiction boundary enough to hide whole inconsistency classes.
+Audit-reader behavior is contract-indexed. On this surface, adding the local
+Rule-Z ontology suppresses unsupported contradiction narratives and improves
+literal fidelity without reducing designed-contradiction recovery materially.
+Both contracts still fail the cross-field reversed-edge and equal-tier classes.
 ```
 
 An aggregate faithful-audit score without this calibration would conflate
@@ -137,26 +144,32 @@ source quality with the reader's prompt-dependent operating point.
 | Family | Legacy calibrated | Invariant calibrated | Paired improved | Paired regressed |
 | --- | ---: | ---: | ---: | ---: |
 | `clean` | 0.000 | 1.000 | 15 | 0 |
-| `contradictory_edge` | 0.867 | 0.933 | 1 | 0 |
-| `contradictory_integration` | 0.333 | 0.800 | 7 | 0 |
+| `contradictory_edge` | 0.133 | 0.933 | 12 | 0 |
+| `contradictory_integration` | 0.200 | 0.800 | 9 | 0 |
 | `duplicated_edge` | 0.333 | 1.000 | 10 | 0 |
-| `equal_tier_reinterpretation` | 1.000 | 0.000 | 0 | 15 |
+| `equal_tier_reinterpretation` | 0.000 | 0.000 | 0 | 0 |
 | `irrelevant_fluent` | 0.667 | 1.000 | 5 | 0 |
 | `omitted_field` | 0.067 | 0.867 | 12 | 0 |
-| `reversed_edge` | 0.800 | 0.000 | 0 | 12 |
+| `reversed_edge` | 0.000 | 0.000 | 0 | 0 |
 
 The three remaining invariant literal failures consist of two omitted-field
 cases and one contradictory-edge case. Four invariant reports also fail the
-field-and-item quote-grounding check. The stricter v3 scorer changes grounding
-on seven legacy rows and one invariant row; all eight already failed the
-primary calibrated endpoint, so calibrated rates and pair transitions remain
-unchanged. Those rows are small enough for a quote-level human audit rather
-than another automatic aggregate.
+field-and-item quote-grounding check. In the legacy condition, most grounding
+failures now come from contradiction objects whose exact source quotes do not
+support the contradiction named by the reader. This is intentionally stricter
+than checking substring presence alone and is the reason the aggregate
+grounding rate falls to `0.217`.
 
 ## Repair Is a Separate Estimand
 
 The repair-capable reader matches the designed target in 108 of 120 cases
 (`0.900`). That number is not the primary calibration result.
+
+Duplicate-sensitive scoring lowers literal-value exactness from `0.458` to
+`0.333`: all 15 duplicated-edge cases now preserve the distinction between one
+edge and two occurrences of that edge. The same multiset correction identifies
+two additional legacy source-faithful rows as attracted to the deduplicated
+repair target.
 
 The equal-tier family localizes the identification problem: designed-target
 match is only 4 of 15 (`0.267`). The artifact explicitly says that no priority

@@ -122,7 +122,8 @@ python3 -m expression_tomography.tasks.rule_z.audit_calibration_task \
 The eight balanced mutation families cover clean ledgers, omitted fields,
 reversed, duplicated, equal-tier, and contradictory priority claims,
 contradictory integration, and fluent artifacts with no case-specific claims.
-Source-faithful field-and-claim-matched quote grounding is the primary endpoint. A
+Source-faithful field/item-matched and two-sided contradiction quote grounding
+is the primary endpoint. A
 repair-capable reader is reported separately against one designed repair target
 because coherent repair can be non-identifiable.
 

@@ -1,12 +1,12 @@
 {
-  "manifest_version": "rule_z_audit_reader_calibration.run.v3",
+  "manifest_version": "rule_z_audit_reader_calibration.run.v4",
   "status": "complete",
   "local_run_date": "2026-08-22",
   "secrets_stored": false,
   "implementation": {
     "branch": "SpiralReality/audit-reader-calibration",
     "base_commit": "469bd461eb4fca84041a5a16d8c8ec7c7c0e0e15",
-    "implementation_commit": "2fbaae21b399af8a54786205db2717f9c27e3d59"
+    "implementation_commit": "0fc80b4c7df50fa8aa418c0ccc91c170e868babe"
   },
   "generator": {
     "task_type": "rule_z_audit_calibration",
@@ -38,14 +38,24 @@
   },
   "provenance_hardening": {
     "prompt_contract_version": "rule_z_audit_calibration.prompt.v1",
-    "score_schema_version": "rule_z_audit_calibration.score.v3",
+    "score_schema_version": "rule_z_audit_calibration.score.v4",
     "stored_raw_responses_revalidated": 360,
     "provider_calls_during_revalidation": 0,
     "schema_valid_responses": 360,
     "score_rows_changed": 360,
-    "claim_grounding_rows_changed": 8,
-    "primary_endpoint_metrics_changed": false,
+    "field_item_grounding_rows_changed_in_v3": 8,
+    "contradiction_grounding_rows_changed_in_v4": 82,
+    "contradiction_classification_rows_changed_in_v4": 28,
+    "primary_endpoint_rows_changed_in_v4": 40,
+    "repair_attraction_rows_changed_in_v4": 2,
+    "repair_literal_multiplicity_rows_changed_in_v4": 15,
+    "primary_endpoint_metrics_changed": true,
     "claim_grounding_metric_changed": true,
+    "positive_contradiction_requires": [
+      "relevant_topic",
+      "exact_source_quotes",
+      "both_sides_of_a_designed_incompatibility"
+    ],
     "execution_identity_includes": [
       "logical_trial_identity",
       "provider_config_sha256",
@@ -56,7 +66,7 @@
   },
   "legacy_run": {
     "database": "legacy/trials.sqlite",
-    "sha256": "1f2b86bbd37bed80d5f26d3e6293c99ef37f39f02dce23d95ef2c9406f959ff5",
+    "sha256": "cf6638a01b054b6d14c2c4562716dbd7cc23238beb2850f9c1f165ecf5401204",
     "sqlite_integrity_check": "ok",
     "case_count": 120,
     "trial_count": 240,
@@ -75,20 +85,20 @@
       "provider_calls": 0
     },
     "primary_source_faithful": {
-      "source_faithful_calibrated": 0.5083333333333333,
+      "source_faithful_calibrated": 0.175,
       "literal_state_exact": 0.8333333333333334,
-      "all_reported_claims_grounded": 0.9,
-      "contradiction_detection_correct": 0.6833333333333333,
-      "repair_attraction_any": 0.008333333333333333
+      "all_reported_claims_grounded": 0.21666666666666667,
+      "contradiction_detection_correct": 0.45,
+      "repair_attraction_any": 0.025
     },
     "exploratory_repair": {
       "designed_repair_target_match": 0.9,
-      "literal_value_state_exact": 0.4583333333333333
+      "literal_value_state_exact": 0.3333333333333333
     }
   },
   "invariant_run": {
     "database": "invariants/trials.sqlite",
-    "sha256": "3473ec3c417d5b505786eccebce817d2dd8b269e33eb2346ee1f9317a619463f",
+    "sha256": "3a4409b11d97b09a0d02868dc729d342150f57b05741fb2c5b8f460038ed731f",
     "sqlite_integrity_check": "ok",
     "case_count": 120,
     "trial_count": 120,
@@ -120,11 +130,11 @@
     "case_payloads_matched": true,
     "prompt_delta_limited_to_invariant_rubric": true,
     "stored_scores_reproduced": true,
-    "improved": 50,
-    "regressed": 27,
-    "stable_pass": 34,
-    "stable_fail": 9,
-    "legacy_contradiction_sensitivity": 0.9833333333333333,
+    "improved": 63,
+    "regressed": 0,
+    "stable_pass": 21,
+    "stable_fail": 36,
+    "legacy_contradiction_sensitivity": 0.5166666666666667,
     "invariant_contradiction_sensitivity": 0.5,
     "legacy_contradiction_specificity": 0.38333333333333336,
     "invariant_contradiction_specificity": 1.0
@@ -133,21 +143,21 @@
     "invariants/rule_z_audit_calibration_report.md": "496355eecde2290370ebfb69c5c0b7b3727c197633c43e83b3f4172d2ec937ba",
     "invariants/rule_z_audit_calibration_summary.csv": "d5a43f29d0986bdaa2be821e8a654f1bfa13ed9bcd90724d163ede663cea6be7",
     "invariants/rule_z_audit_calibration_summary.json": "832454803e7930978543d7d502d95c1b3fe00abb7c667a4c43be3de578915299",
-    "invariants/rule_z_audit_calibration_trials.csv": "5df45ebdb68e803c628cb25f32a172886d843fc6588d23cb43a2ded9c9f67e8c",
-    "legacy/rule_z_audit_calibration_report.md": "811bdfbc32f550ab3900540949b45e0c483f57ae587ef7603195c8816cec84eb",
-    "legacy/rule_z_audit_calibration_summary.csv": "88e4c2fef292737aa0c87b6071d647a87219a80b1ef9dd444e8bf1619346da56",
-    "legacy/rule_z_audit_calibration_summary.json": "41b1a41859435fe1d9c58fa5715d1eb78d23827a95689f6c56180456c6a34d52",
-    "legacy/rule_z_audit_calibration_trials.csv": "efe3fc9a935fd594f7d7cd2203da2ac5c3d891ce9f0506994902de828af71ec7",
-    "prompt_comparison/rule_z_audit_calibration_prompt_comparison.json": "bcf873661b5a43345543b15d9be08544b8c88ba60c256c14fa63dfbb00f655ea",
-    "prompt_comparison/rule_z_audit_calibration_prompt_comparison.md": "b0d7ffe61635efa7567e43571241729f8592ed5d7a46a6fd71a4814d7c72ec08",
-    "prompt_comparison/rule_z_audit_calibration_prompt_pairs.csv": "9ff9ca54f2c3657b195439a59aed3732fdc24c8548ee6876b5ee33e4ae1449cd"
+    "invariants/rule_z_audit_calibration_trials.csv": "41091286bfa77fa251a37f56610ce19d843132c9455d62002549ce9408727621",
+    "legacy/rule_z_audit_calibration_report.md": "fb355ff36c6ef247150c8ec8b2c55e2693e478259c36f83446b5108468b094d2",
+    "legacy/rule_z_audit_calibration_summary.csv": "07cf3f71ef1fc4ec0aee4e46d6b109cc2601745f606d475ad2c629583f4b499a",
+    "legacy/rule_z_audit_calibration_summary.json": "5ad46b5255caa7ce35d0544d42a850c48d067b5a7374164d67589d0a78d3d393",
+    "legacy/rule_z_audit_calibration_trials.csv": "97a3dbb25bc8b3a2d1be4dd3bef0bcaff6284cd00a2ef4f653bd0b104455576c",
+    "prompt_comparison/rule_z_audit_calibration_prompt_comparison.json": "9af9e626c8f3e711d8946d4ae8e8b85d951fae7a663019816eb56b507f4154c5",
+    "prompt_comparison/rule_z_audit_calibration_prompt_comparison.md": "6a40dd60f1e3e367240d1bab49bae4ac11bde85f5194603f7fea40bb715fbe64",
+    "prompt_comparison/rule_z_audit_calibration_prompt_pairs.csv": "0bae25c1172cca8bd7cfafc2c846a1a25ab14ad9d065202331e1e0ca39e3bcb7"
   },
   "interpretation_boundaries": [
     "Source-faithful quote-grounded calibration is the primary endpoint.",
     "Designed repair-target match is exploratory because coherent repairs can be non-identifiable.",
     "The prompt comparison has one response per artifact and does not estimate response stochasticity.",
     "Claim grounding is a field-and-item lexical exact-quote check on these fielded phantoms, not a general semantic-entailment judgment.",
-    "The invariant rubric improves specificity but loses all reversed-edge and equal-tier contradiction detections on this surface.",
+    "The invariant rubric improves specificity without a material loss of valid designed-contradiction sensitivity; both prompts remain weak on reversed-edge and equal-tier cross-field conflicts.",
     "This run calibrates a named reader and contract; it is not evidence of a pre-expression latent state or a provider leaderboard."
   ]
 }
