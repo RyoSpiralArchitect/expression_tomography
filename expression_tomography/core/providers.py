@@ -32,7 +32,7 @@ class ProviderSpec:
     api_key: str | None = None
     timeout_s: float = 60.0
     max_tokens: int = 700
-    temperature: float = 0.0
+    temperature: float | None = None
     reasoning_effort: str | None = None
     device: str = "auto"
     dtype: str = "auto"
@@ -48,7 +48,11 @@ class ProviderSpec:
             api_key=obj.get("api_key"),
             timeout_s=float(obj.get("timeout_s", 60.0)),
             max_tokens=int(obj.get("max_tokens", 700)),
-            temperature=float(obj.get("temperature", 0.0)),
+            temperature=(
+                float(obj["temperature"])
+                if obj.get("temperature") is not None
+                else None
+            ),
             reasoning_effort=(
                 str(obj["reasoning_effort"])
                 if obj.get("reasoning_effort") is not None
@@ -190,7 +194,7 @@ class OpenAICompatibleProvider:
     """Minimal OpenAI-compatible chat-completions adapter."""
 
     request_contract_version = (
-        "openai_compatible.chat_completions.temperature_explicit.v2"
+        "openai_compatible.chat_completions.temperature_optional.v3"
     )
 
     def __init__(self, spec: ProviderSpec):
@@ -204,8 +208,9 @@ class OpenAICompatibleProvider:
             "model": self.model,
             "messages": [{"role": "user", "content": prompt}],
             _openai_token_limit_key(self.model): self.spec.max_tokens,
-            "temperature": self.spec.temperature,
         }
+        if self.spec.temperature is not None:
+            payload["temperature"] = self.spec.temperature
         if self.spec.reasoning_effort:
             payload["reasoning_effort"] = self.spec.reasoning_effort
         headers = {
@@ -247,7 +252,7 @@ class OpenAICompatibleProvider:
 class AnthropicProvider:
     """Minimal Anthropic Messages API adapter."""
 
-    request_contract_version = "anthropic.messages.temperature_positive_only.v1"
+    request_contract_version = "anthropic.messages.temperature_optional.v2"
 
     def __init__(self, spec: ProviderSpec):
         self.spec = spec
@@ -261,9 +266,7 @@ class AnthropicProvider:
             "max_tokens": self.spec.max_tokens,
             "messages": [{"role": "user", "content": prompt}],
         }
-        # Some current Claude models reject non-default sampling parameters.
-        # Keep deterministic omission by default; configs can opt in.
-        if self.spec.temperature > 0:
+        if self.spec.temperature is not None:
             payload["temperature"] = self.spec.temperature
         headers = {
             "x-api-key": _api_key(self.spec),
@@ -305,7 +308,7 @@ class HFLocalProvider:
     inference runtime.
     """
 
-    request_contract_version = "hf_local.generate.temperature_positive_only.v1"
+    request_contract_version = "hf_local.generate.temperature_optional.v2"
 
     def __init__(self, spec: ProviderSpec):
         self.spec = spec
@@ -355,10 +358,13 @@ class HFLocalProvider:
         inputs = tokenizer(prompt, return_tensors="pt").to(self._device)
         generation_kwargs = {
             "max_new_tokens": self.spec.max_tokens,
-            "do_sample": self.spec.temperature > 0,
+            "do_sample": (
+                self.spec.temperature is not None
+                and self.spec.temperature > 0
+            ),
             "pad_token_id": tokenizer.eos_token_id,
         }
-        if self.spec.temperature > 0:
+        if self.spec.temperature is not None and self.spec.temperature > 0:
             generation_kwargs["temperature"] = self.spec.temperature
         with torch.no_grad():
             output_ids = model.generate(
