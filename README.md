@@ -149,6 +149,36 @@ responses can be upgraded without provider calls using
 `--revalidate-existing-only`. The first live Luna calibration is documented in
 `docs/live_rule_z_audit_reader_calibration_luna_note_2026_08_22.md`.
 
+## Rule-Z Extraction / Intervention Factorial
+
+The prospective follow-up separates literal extraction from intervention
+computation and keeps source-supported truth distinct from private world truth:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.extraction_intervention_task \
+  --worlds 4 \
+  --seed 67 \
+  --repetitions 2 \
+  --order-seed 9701 \
+  --max-new-calls 704 \
+  --provider-config expression_tomography/config/providers.openai_gpt_5_6_luna.json \
+  --db results/expression_tomography/rule_z_extraction_intervention.sqlite \
+  --report-dir results/expression_tomography/rule_z_extraction_intervention_reports
+```
+
+Four paired artifacts hold the current ledger fixed while making the
+counterfactual dependency complete, absent by design, selectively omitted, or
+contradictory. Eight literal fields are queried in independent calls. Fresh
+compute calls then compare direct source reading, perfect source-literal
+extraction, and model-extracted typed ledgers. Every field and compute path has
+an uncued versus target-preannounced pair with deterministic randomized order.
+The fixed pilot, score hierarchy, privacy boundary, stop criteria, and exact
+resume contract are frozen in
+`docs/rule_z_extraction_intervention_protocol_2026_08_23.md`.
+After a run, add `--revalidate-existing-only` with the same database and report
+paths to reconstruct every prompt, upstream typed ledger, parse, score, and
+execution identity without making provider calls.
+
 ## Metaphor Transfer Smoke
 
 ```bash

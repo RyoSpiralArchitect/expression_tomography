@@ -49,6 +49,10 @@ class RuleZMockProvider:
             return self._audit_rule_z_repair(prompt)
         if "TASK: rule_z_intermediate_audit" in prompt:
             return self._audit_rule_z_derivation(prompt)
+        if "TASK: rule_z_literal_field_extract" in prompt:
+            return self._extract_rule_z_literal_field(prompt)
+        if "TASK: rule_z_intervention_compute" in prompt:
+            return self._compute_rule_z_intervention(prompt)
         if "TASK: rule_z_hidden_query_battery" in prompt:
             return self._answer_rule_z_query_battery(prompt)
         if "TASK: rule_z_answer" in prompt:
@@ -504,6 +508,20 @@ class RuleZMockProvider:
                     "answer": counterfactual.answer,
                 }
         return json.dumps(result, ensure_ascii=False)
+
+    def _extract_rule_z_literal_field(self, prompt: str) -> str:
+        expected = extract_json_block(
+            prompt,
+            "RULE_Z_MOCK_LITERAL_EXPECTED_JSON",
+        )
+        return json.dumps(expected, ensure_ascii=False)
+
+    def _compute_rule_z_intervention(self, prompt: str) -> str:
+        expected = extract_json_block(
+            prompt,
+            "RULE_Z_MOCK_INTERVENTION_EXPECTED_JSON",
+        )
+        return json.dumps(expected, ensure_ascii=False)
 
     def _answer_rule_z(self, prompt: str) -> str:
         if "CONDITION: B" in prompt:

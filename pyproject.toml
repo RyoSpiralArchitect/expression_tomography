@@ -27,6 +27,7 @@ et-rule-z-intermediate-probe = "expression_tomography.tasks.rule_z.intermediate_
 et-rule-z-intermediate-probe-migrate = "expression_tomography.tasks.rule_z.intermediate_probe_migration:main"
 et-rule-z-audit-calibration = "expression_tomography.tasks.rule_z.audit_calibration_task:main"
 et-rule-z-audit-calibration-compare = "expression_tomography.tasks.rule_z.audit_calibration_compare:main"
+et-rule-z-extraction-intervention = "expression_tomography.tasks.rule_z.extraction_intervention_task:main"
 et-metaphor-transfer = "expression_tomography.tasks.metaphor_transfer.task:main"
 
 [tool.setuptools.packages.find]
