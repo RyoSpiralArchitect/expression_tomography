@@ -1,5 +1,9 @@
 # Live Rule-Z Post-Hoc Reader Note - 2026-07-25
 
+> Historical checkpoint note. GPT-5.5 was resumed to a balanced 384-row reader
+> surface on 2026-08-23; see the
+> [completion note](live_rule_z_posthoc_readers_completion_note_2026_08_23.md).
+
 ## Question
 
 The preceding intermediate factorial showed a local notation-by-binding effect,
@@ -37,7 +41,9 @@ hash, and stable probe identity.
 - Reader models: `claude-sonnet-4-6`, `gpt-5.5`
 - Reader maximum output tokens: 4,000
 - GPT-5.5 reasoning effort: `low`
-- Reader temperature: 0
+- Reader temperature on wire: provider default, field omitted. The original
+  metadata declared `0.0`; the completion sidecar corrects that provenance on
+  a copy while retaining every legacy row and identity.
 - Probe schema: `rule_z_intermediate_probe.v1`
 
 The four source cells remain:
@@ -83,7 +89,7 @@ readers:
 An exact calibration rerun inserted zero rows, skipped all 72 existing probe
 identities, and made no provider calls.
 
-## Completion Status
+## Checkpoint Status At 2026-07-25
 
 The Claude run is complete. The OpenAI project exhausted external API quota
 during the full run.

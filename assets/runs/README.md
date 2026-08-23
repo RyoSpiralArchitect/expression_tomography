@@ -142,6 +142,14 @@ rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low
   after external quota exhaustion. The manifest separates canonical evidence
   from retained output-budget diagnostics.
 
+rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low_complete
+  Balanced completion of the same frozen post-hoc surface: 384 Claude Sonnet
+  4.6 rows and 384 GPT-5.5 rows across faithful, repair, uncued current-state,
+  and target-cued counterfactual probes. Includes copy-only request-provenance
+  migration evidence, power-loss resume evidence, raw sidecar rows, generated
+  reports, and exact zero-insert rerun checks. The earlier partial asset remains
+  unchanged as the historical checkpoint.
+
 rule_z_audit_reader_calibration_luna_seed53_120
   GPT-5.6 Luna calibration on 120 controlled source artifacts, balanced across
   eight mutation families. Includes the legacy faithful audit, the Rule-Z

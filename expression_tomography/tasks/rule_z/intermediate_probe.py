@@ -107,6 +107,29 @@ def _provider_provenance(provider: Provider) -> dict[str, Any]:
     }
 
 
+def make_probe_identity(
+    *,
+    source_trial_identity: str,
+    provider: str,
+    provider_config_sha256: str,
+    condition: str,
+    probe_replicate: int,
+    prompt_sha256: str,
+    probe_schema_version: str = PROBE_SCHEMA_VERSION,
+) -> str:
+    return content_hash(
+        {
+            "source_trial_identity": source_trial_identity,
+            "provider": provider,
+            "provider_config_sha256": provider_config_sha256,
+            "condition": condition,
+            "probe_replicate": probe_replicate,
+            "probe_schema_version": probe_schema_version,
+            "prompt_sha256": prompt_sha256,
+        }
+    )
+
+
 def _oracle_state(oracle: OracleAnswer) -> dict[str, Any]:
     return {
         "fired_rules": sorted(oracle.fired_rules),
@@ -605,18 +628,15 @@ def run_intermediate_probe(
                         source_row["condition"],
                     )
                 prompt_sha256 = _sha256_text(prompt)
-                probe_identity = content_hash(
-                    {
-                        "source_trial_identity": source_identity,
-                        "provider": provider.name,
-                        "provider_config_sha256": provider_provenance[
-                            "probe_provider_config_sha256"
-                        ],
-                        "condition": condition,
-                        "probe_replicate": probe_replicate,
-                        "probe_schema_version": PROBE_SCHEMA_VERSION,
-                        "prompt_sha256": prompt_sha256,
-                    }
+                probe_identity = make_probe_identity(
+                    source_trial_identity=source_identity,
+                    provider=provider.name,
+                    provider_config_sha256=provider_provenance[
+                        "probe_provider_config_sha256"
+                    ],
+                    condition=condition,
+                    probe_replicate=probe_replicate,
+                    prompt_sha256=prompt_sha256,
                 )
                 if probe_identity in seen:
                     skipped += 1
@@ -672,18 +692,15 @@ def run_intermediate_probe(
                     public=public if structured_hint else None,
                 )
                 prompt_sha256 = _sha256_text(prompt)
-                probe_identity = content_hash(
-                    {
-                        "source_trial_identity": source_identity,
-                        "provider": provider.name,
-                        "provider_config_sha256": provider_provenance[
-                            "probe_provider_config_sha256"
-                        ],
-                        "condition": condition,
-                        "probe_replicate": probe_replicate,
-                        "probe_schema_version": PROBE_SCHEMA_VERSION,
-                        "prompt_sha256": prompt_sha256,
-                    }
+                probe_identity = make_probe_identity(
+                    source_trial_identity=source_identity,
+                    provider=provider.name,
+                    provider_config_sha256=provider_provenance[
+                        "probe_provider_config_sha256"
+                    ],
+                    condition=condition,
+                    probe_replicate=probe_replicate,
+                    prompt_sha256=prompt_sha256,
                 )
                 if probe_identity in seen:
                     skipped += 1
