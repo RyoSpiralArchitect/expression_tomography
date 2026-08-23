@@ -299,6 +299,37 @@ class ProbeMigrationTests(unittest.TestCase):
                     self.assertFalse(output_path.exists())
             self.assertEqual(sha256_file(input_path), input_hash)
 
+    def test_migration_rejects_stale_output_sidecars(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            input_path = root / "checkpoint.sqlite"
+            output_path = root / "completed.sqlite"
+            providers, legacy_hashes = self._make_legacy_checkpoint(input_path)
+            input_hash = sha256_file(input_path)
+
+            for suffix in SQLITE_SIDECAR_SUFFIXES:
+                with self.subTest(suffix=suffix):
+                    sidecar_path = Path(f"{output_path}{suffix}")
+                    sidecar_path.write_bytes(b"stale sidecar sentinel")
+                    with self.assertRaisesRegex(
+                        RuntimeError,
+                        "Migration output has an existing SQLite sidecar",
+                    ):
+                        migrate_legacy_provider_default_probe_checkpoint(
+                            input_path,
+                            output_path,
+                            providers,
+                            expected_input_sha256=input_hash,
+                            legacy_provider_config_sha256=legacy_hashes,
+                        )
+                    self.assertFalse(output_path.exists())
+                    self.assertEqual(
+                        sidecar_path.read_bytes(),
+                        b"stale sidecar sentinel",
+                    )
+                    sidecar_path.unlink()
+            self.assertEqual(sha256_file(input_path), input_hash)
+
     def test_cli_preflights_report_destination_before_migration(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)

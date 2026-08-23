@@ -72,6 +72,14 @@ def _provider_config_without_request_change(config: dict[str, Any]) -> dict[str,
     return comparable
 
 
+def _sqlite_sidecar_paths(database_path: Path) -> tuple[Path, ...]:
+    resolved_database = database_path.resolve()
+    return tuple(
+        Path(f"{resolved_database}{suffix}")
+        for suffix in SQLITE_SIDECAR_SUFFIXES
+    )
+
+
 def _reject_sqlite_sidecar_alias(
     candidate: Path,
     database_paths: Iterable[Path],
@@ -80,14 +88,22 @@ def _reject_sqlite_sidecar_alias(
 ) -> None:
     candidate_key = str(candidate.resolve()).casefold()
     for database_path in database_paths:
-        resolved_database = database_path.resolve()
-        for suffix in SQLITE_SIDECAR_SUFFIXES:
-            reserved_path = Path(f"{resolved_database}{suffix}")
+        for reserved_path in _sqlite_sidecar_paths(database_path):
             if candidate_key == str(reserved_path).casefold():
                 raise RuntimeError(
                     f"{label} aliases a reserved SQLite sidecar path: "
                     f"{reserved_path}"
                 )
+
+
+def _reject_existing_sqlite_sidecars(
+    database_path: Path,
+    *,
+    label: str,
+) -> None:
+    for sidecar in _sqlite_sidecar_paths(database_path):
+        if os.path.lexists(sidecar):
+            raise RuntimeError(f"{label} has an existing SQLite sidecar: {sidecar}")
 
 
 @contextmanager
@@ -113,12 +129,10 @@ def _hold_stable_input_checkpoint(input_path: Path) -> Iterator[None]:
                 "Input checkpoint uses WAL journal mode; checkpoint or convert "
                 "it to rollback-journal mode before migration"
             )
-        for suffix in ("-wal", "-shm"):
-            sidecar = Path(f"{input_path}{suffix}")
-            if sidecar.exists():
-                raise RuntimeError(
-                    f"Input checkpoint gained an active SQLite sidecar: {sidecar}"
-                )
+        _reject_existing_sqlite_sidecars(
+            input_path,
+            label="Input checkpoint",
+        )
         yield
     finally:
         if connection.in_transaction:
@@ -160,14 +174,16 @@ def migrate_legacy_provider_default_probe_checkpoint(
         [input_path],
         label="Migration output",
     )
-    if output_path.exists():
+    if os.path.lexists(output_path):
         raise RuntimeError(f"Migration output already exists: {output_path}")
-    for suffix in ("-wal", "-shm"):
-        sidecar = Path(f"{input_path}{suffix}")
-        if sidecar.exists():
-            raise RuntimeError(
-                f"Input checkpoint has an active SQLite sidecar: {sidecar}"
-            )
+    _reject_existing_sqlite_sidecars(
+        input_path,
+        label="Input checkpoint",
+    )
+    _reject_existing_sqlite_sidecars(
+        output_path,
+        label="Migration output",
+    )
 
     input_hash = _sha256_file(input_path)
     if input_hash != expected_input_hash:
@@ -429,6 +445,10 @@ def migrate_legacy_provider_default_probe_checkpoint(
                 raise RuntimeError(
                     "Input checkpoint changed before migration publication"
                 )
+            _reject_existing_sqlite_sidecars(
+                output_path,
+                label="Migration output",
+            )
             os.link(temporary_path, output_path)
             output_published = True
             if _sha256_file(input_path) != input_hash:
