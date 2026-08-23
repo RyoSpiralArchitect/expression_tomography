@@ -13,8 +13,10 @@ from expression_tomography.core.store import ExperimentStore
 from .audit_calibration import (
     AUDIT_CALIBRATION_PROMPT_CONTRACT_VERSION,
     AUDIT_CALIBRATION_SCORE_SCHEMA_VERSION,
+    AUDIT_CALIBRATION_SOURCE_CONDITION,
     AUDIT_CALIBRATION_TASK_TYPE,
     make_audit_calibration_cases,
+    public_audit_case_id,
     score_repair_calibration,
     score_source_faithful_calibration,
 )
@@ -135,26 +137,25 @@ def _stored_execution_identity(row: dict[str, Any]) -> str:
 
 
 def _make_audit_prompt(
-    case_id: str,
+    case_hash: str,
     payload: dict[str, Any],
     audit_mode: str,
 ) -> str:
     source_artifact = str(payload["source_artifact"])
-    family = str(payload["mutation_family"])
-    source_condition = f"audit_calibration:{family}"
+    public_case_id = public_audit_case_id(case_hash)
     if audit_mode in {"source_faithful", "source_faithful_invariants"}:
         return make_source_faithful_audit_prompt(
-            case_id,
+            public_case_id,
             source_artifact,
-            source_condition,
+            AUDIT_CALIBRATION_SOURCE_CONDITION,
             include_rule_z_invariants=(
                 audit_mode == "source_faithful_invariants"
             ),
         )
     return make_repair_capable_audit_prompt(
-        case_id,
+        public_case_id,
         source_artifact,
-        source_condition,
+        AUDIT_CALIBRATION_SOURCE_CONDITION,
     )
 
 
@@ -215,7 +216,7 @@ def revalidate_audit_calibration_store(
                 f"{row['condition']}"
             )
         expected_prompt = _make_audit_prompt(
-            row["case_id"],
+            row["case_hash"],
             case["payload"],
             audit_mode,
         )
@@ -404,7 +405,7 @@ def run_audit_calibration_experiment(
                     condition,
                     replicate_index,
                 )
-                prompt = _make_audit_prompt(case.case_id, case.payload, audit_mode)
+                prompt = _make_audit_prompt(case.case_hash, case.payload, audit_mode)
                 prompt_sha256 = content_hash(prompt)
                 execution_identity = _execution_trial_identity(
                     logical_identity,

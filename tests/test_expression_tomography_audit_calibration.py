@@ -12,8 +12,10 @@ from expression_tomography.core.schema import content_hash
 from expression_tomography.core.store import ExperimentStore
 from expression_tomography.tasks.rule_z.audit_calibration import (
     AUDIT_CALIBRATION_FAMILIES,
+    AUDIT_CALIBRATION_SOURCE_CONDITION,
     AUDIT_CALIBRATION_TASK_TYPE,
     make_audit_calibration_cases,
+    public_audit_case_id,
     score_repair_calibration,
     score_source_faithful_calibration,
 )
@@ -117,6 +119,23 @@ class AuditCalibrationTests(unittest.TestCase):
         self.assertTrue(
             all("repair_private" not in row["prompt"] for row in rows)
         )
+
+    def test_reader_prompts_hide_private_mutation_labels(self) -> None:
+        cases = make_audit_calibration_cases(8, seed=53)
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "calibration.sqlite")
+            try:
+                run_audit_calibration_experiment(cases, RuleZMockProvider(), store)
+                rows = store.fetch_trials(task_type=AUDIT_CALIBRATION_TASK_TYPE)
+            finally:
+                store.close()
+
+        for row in rows:
+            family = row["metadata"]["mutation_family"]
+            self.assertNotIn(row["case_id"], row["prompt"])
+            self.assertNotIn(family, row["prompt"])
+            self.assertIn(public_audit_case_id(row["case_hash"]), row["prompt"])
+            self.assertIn(AUDIT_CALIBRATION_SOURCE_CONDITION, row["prompt"])
 
     def test_source_faithful_scorer_detects_repair_attraction(self) -> None:
         case = make_audit_calibration_cases(3, seed=53)[2]
@@ -529,6 +548,63 @@ class AuditCalibrationTests(unittest.TestCase):
                     invariant,
                     audit_modes=("source_faithful_invariants",),
                 )
+            finally:
+                legacy.close()
+                invariant.close()
+
+    def test_prompt_comparison_reparses_raw_responses(self) -> None:
+        cases = make_audit_calibration_cases(1, seed=53)
+        case = cases[0]
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            legacy_path = root / "legacy.sqlite"
+            invariant_path = root / "invariant.sqlite"
+            legacy = ExperimentStore(legacy_path)
+            invariant = ExperimentStore(invariant_path)
+            try:
+                run_audit_calibration_experiment(
+                    cases,
+                    RuleZMockProvider(),
+                    legacy,
+                    audit_modes=("source_faithful",),
+                )
+                run_audit_calibration_experiment(
+                    cases,
+                    RuleZMockProvider(),
+                    invariant,
+                    audit_modes=("source_faithful_invariants",),
+                )
+            finally:
+                legacy.close()
+                invariant.close()
+
+            stale_parse = {}
+            stale_score = score_source_faithful_calibration(
+                stale_parse,
+                case.payload["source_artifact"],
+                case.payload,
+            )
+            connection = sqlite3.connect(invariant_path)
+            try:
+                connection.execute(
+                    "UPDATE trials SET parsed_response_json = ?, score_json = ?",
+                    (
+                        json.dumps(stale_parse, sort_keys=True),
+                        json.dumps(stale_score, sort_keys=True),
+                    ),
+                )
+                connection.commit()
+            finally:
+                connection.close()
+
+            legacy = ExperimentStore(legacy_path, read_only=True)
+            invariant = ExperimentStore(invariant_path, read_only=True)
+            try:
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "Stored parse is not reproducible",
+                ):
+                    compare_audit_calibrations(legacy, invariant)
             finally:
                 legacy.close()
                 invariant.close()

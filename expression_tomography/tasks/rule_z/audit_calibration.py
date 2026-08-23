@@ -16,9 +16,10 @@ from .intermediate import (
 
 AUDIT_CALIBRATION_TASK_TYPE = "rule_z_audit_calibration"
 AUDIT_CALIBRATION_PROMPT_CONTRACT_VERSION = (
-    "rule_z_audit_calibration.prompt.v1"
+    "rule_z_audit_calibration.prompt.v2"
 )
 AUDIT_CALIBRATION_SCORE_SCHEMA_VERSION = "rule_z_audit_calibration.score.v4"
+AUDIT_CALIBRATION_SOURCE_CONDITION = "audit_calibration:controlled_source"
 AUDIT_CALIBRATION_FAMILIES = (
     "clean",
     "omitted_field",
@@ -42,6 +43,10 @@ AUDIT_FIELD_STATUSES = {
     "not_stated",
     "contradictory",
 }
+
+
+def public_audit_case_id(case_hash: str) -> str:
+    return f"audit_case_{case_hash}"
 
 
 def _validate_text(value: Any, path: str, errors: list[str]) -> None:

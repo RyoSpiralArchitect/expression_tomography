@@ -8,13 +8,16 @@ from pathlib import Path
 from statistics import mean
 from typing import Any
 
+from expression_tomography.core.providers import parse_json_lenient
 from expression_tomography.core.schema import content_hash, stable_json
 from expression_tomography.core.store import ExperimentStore
 
 from .audit_calibration import (
     AUDIT_CALIBRATION_PROMPT_CONTRACT_VERSION,
     AUDIT_CALIBRATION_SCORE_SCHEMA_VERSION,
+    AUDIT_CALIBRATION_SOURCE_CONDITION,
     AUDIT_CALIBRATION_TASK_TYPE,
+    public_audit_case_id,
     score_source_faithful_calibration,
 )
 from .prompts import (
@@ -90,9 +93,9 @@ def _validate_trial_contract(
     payload = case["payload"]
     source_artifact = str(payload["source_artifact"])
     expected_prompt = make_source_faithful_audit_prompt(
-        row["case_id"],
+        public_audit_case_id(row["case_hash"]),
         source_artifact,
-        f"audit_calibration:{payload['mutation_family']}",
+        AUDIT_CALIBRATION_SOURCE_CONDITION,
         include_rule_z_invariants=include_rule_z_invariants,
     )
     if row["prompt"] != expected_prompt:
@@ -101,8 +104,11 @@ def _validate_trial_contract(
         raise RuntimeError(f"Prompt hash mismatch in trial {row['id']}")
     if metadata.get("source_artifact_sha256") != content_hash(source_artifact):
         raise RuntimeError(f"Source artifact hash mismatch in trial {row['id']}")
+    parsed = parse_json_lenient(row["raw_response"])
+    if parsed != row["parsed_response"]:
+        raise RuntimeError(f"Stored parse is not reproducible in trial {row['id']}")
     expected_score = score_source_faithful_calibration(
-        row["parsed_response"],
+        parsed,
         source_artifact,
         payload,
     )
