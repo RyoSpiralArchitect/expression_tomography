@@ -29,6 +29,7 @@ from expression_tomography.tasks.rule_z import (
 from expression_tomography.tasks.rule_z.intermediate_probe_migration import (
     MIGRATED_METADATA_KEY,
     MIGRATION_VERSION,
+    SQLITE_SIDECAR_SUFFIXES,
     main as migration_main,
     migrate_legacy_provider_default_probe_checkpoint,
 )
@@ -274,6 +275,30 @@ class ProbeMigrationTests(unittest.TestCase):
                 )
             self.assertFalse(output_path.exists())
 
+    def test_migration_rejects_input_sidecar_output_paths(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            input_path = root / "checkpoint.sqlite"
+            providers, legacy_hashes = self._make_legacy_checkpoint(input_path)
+            input_hash = sha256_file(input_path)
+
+            for suffix in SQLITE_SIDECAR_SUFFIXES:
+                with self.subTest(suffix=suffix):
+                    output_path = Path(f"{input_path}{suffix.upper()}")
+                    with self.assertRaisesRegex(
+                        RuntimeError,
+                        "reserved SQLite sidecar path",
+                    ):
+                        migrate_legacy_provider_default_probe_checkpoint(
+                            input_path,
+                            output_path,
+                            providers,
+                            expected_input_sha256=input_hash,
+                            legacy_provider_config_sha256=legacy_hashes,
+                        )
+                    self.assertFalse(output_path.exists())
+            self.assertEqual(sha256_file(input_path), input_hash)
+
     def test_cli_preflights_report_destination_before_migration(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
@@ -317,6 +342,16 @@ class ProbeMigrationTests(unittest.TestCase):
                 with self.assertRaises(SystemExit):
                     migration_main()
             self.assertFalse(shared_path.exists())
+
+            sidecar_output = root / "sidecar-output.sqlite"
+            sidecar_report = Path(f"{sidecar_output}-journal")
+            argv[argv.index(str(shared_path))] = str(sidecar_output)
+            argv[argv.index(str(shared_path))] = str(sidecar_report)
+            with patch.object(sys, "argv", argv), redirect_stderr(io.StringIO()):
+                with self.assertRaises(SystemExit):
+                    migration_main()
+            self.assertFalse(sidecar_output.exists())
+            self.assertFalse(sidecar_report.exists())
 
     def test_cli_removes_database_when_report_write_fails(self) -> None:
         with tempfile.TemporaryDirectory() as td:

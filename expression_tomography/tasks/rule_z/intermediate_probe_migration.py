@@ -41,6 +41,7 @@ MIGRATION_TARGET_REQUEST_CONTRACTS = {
     ),
     "anthropic": "anthropic.messages.temperature_optional.v2",
 }
+SQLITE_SIDECAR_SUFFIXES = ("-journal", "-wal", "-shm")
 
 
 def _sha256_file(path: Path) -> str:
@@ -69,6 +70,24 @@ def _provider_config_without_request_change(config: dict[str, Any]) -> dict[str,
     comparable.pop("temperature", None)
     comparable.pop("request_contract_version", None)
     return comparable
+
+
+def _reject_sqlite_sidecar_alias(
+    candidate: Path,
+    database_paths: Iterable[Path],
+    *,
+    label: str,
+) -> None:
+    candidate_key = str(candidate.resolve()).casefold()
+    for database_path in database_paths:
+        resolved_database = database_path.resolve()
+        for suffix in SQLITE_SIDECAR_SUFFIXES:
+            reserved_path = Path(f"{resolved_database}{suffix}")
+            if candidate_key == str(reserved_path).casefold():
+                raise RuntimeError(
+                    f"{label} aliases a reserved SQLite sidecar path: "
+                    f"{reserved_path}"
+                )
 
 
 @contextmanager
@@ -136,6 +155,11 @@ def migrate_legacy_provider_default_probe_checkpoint(
         raise RuntimeError(f"Input checkpoint does not exist: {input_path}")
     if input_path.resolve() == output_path.resolve():
         raise RuntimeError("Migration output must differ from the input checkpoint")
+    _reject_sqlite_sidecar_alias(
+        output_path,
+        [input_path],
+        label="Migration output",
+    )
     if output_path.exists():
         raise RuntimeError(f"Migration output already exists: {output_path}")
     for suffix in ("-wal", "-shm"):
@@ -488,6 +512,7 @@ def main() -> None:
     args = parser.parse_args()
 
     output_path = Path(args.output_db)
+    input_path = Path(args.input_db)
     report_path = Path(args.report_json) if args.report_json else None
     report_handle = None
     report_reserved = False
@@ -498,6 +523,11 @@ def main() -> None:
                 raise ValueError(
                     "Migration report path must differ from the output database"
                 )
+            _reject_sqlite_sidecar_alias(
+                report_path,
+                [input_path, output_path],
+                label="Migration report",
+            )
             report_path.parent.mkdir(parents=True, exist_ok=True)
             report_handle = report_path.open(
                 "x",
