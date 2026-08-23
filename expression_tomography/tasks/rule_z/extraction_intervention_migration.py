@@ -26,8 +26,11 @@ from .extraction_intervention_task import (
 )
 
 
-LEGACY_SCORE_SCHEMA_VERSION = "rule_z_extraction_intervention.score.v1"
-MIGRATION_SCHEMA_VERSION = "rule_z_extraction_intervention.score_migration.v1"
+SCORE_SCHEMA_V1 = "rule_z_extraction_intervention.score.v1"
+SCORE_SCHEMA_V2 = "rule_z_extraction_intervention.score.v2"
+LEGACY_SCORE_SCHEMA_VERSION = SCORE_SCHEMA_V1
+SUPPORTED_SOURCE_SCORE_SCHEMAS = {SCORE_SCHEMA_V1, SCORE_SCHEMA_V2}
+MIGRATION_SCHEMA_VERSION = "rule_z_extraction_intervention.score_migration.v2"
 
 
 def _sha256_file(path: Path) -> str:
@@ -93,9 +96,11 @@ def _new_identity(
     )
 
 
-def migrate_score_v1_store(
+def migrate_score_store(
     input_path: Path,
     output_path: Path,
+    *,
+    expected_source_schema: str | None = None,
 ) -> dict[str, Any]:
     input_path = input_path.resolve()
     output_path = output_path.resolve()
@@ -119,11 +124,33 @@ def migrate_score_v1_store(
             for row in source.fetch_cases(task_type=TASK_TYPE)
         }
         legacy_rows = source.fetch_trials(task_type=TASK_TYPE)
+        source_versions = {
+            str(row["metadata"].get("score_schema_version", ""))
+            for row in legacy_rows
+        }
+        if len(source_versions) != 1:
+            raise RuntimeError(
+                "Input store must contain exactly one score schema version"
+            )
+        source_score_schema_version = next(iter(source_versions))
+        if expected_source_schema and (
+            source_score_schema_version != expected_source_schema
+        ):
+            raise RuntimeError(
+                "Input score schema does not match the requested migration source"
+            )
+        if source_score_schema_version not in SUPPORTED_SOURCE_SCORE_SCHEMAS:
+            raise RuntimeError(
+                "Unsupported input score schema: "
+                f"{source_score_schema_version}"
+            )
+        if source_score_schema_version == SCORE_SCHEMA_VERSION:
+            raise RuntimeError("Input store already uses the target score schema")
         legacy_identities = []
         for row in legacy_rows:
             identity = _stored_execution_identity(
                 row,
-                expected_score_schema_version=LEGACY_SCORE_SCHEMA_VERSION,
+                expected_score_schema_version=source_score_schema_version,
             )
             legacy_identities.append(identity)
         if len(set(legacy_identities)) != len(legacy_identities):
@@ -155,17 +182,52 @@ def migrate_score_v1_store(
             score = _rescore_row(row, case["payload"])
             score_changes += stable_json(score) != stable_json(row["score"])
             metadata = dict(row["metadata"])
+            migration_history = list(
+                metadata.get("score_migration_history", [])
+            )
+            if (
+                not migration_history
+                and metadata.get("score_migration_schema_version")
+            ):
+                migration_history.append(
+                    {
+                        "migration_schema_version": metadata.get(
+                            "score_migration_schema_version"
+                        ),
+                        "input_db_sha256": metadata.get(
+                            "score_migration_input_db_sha256"
+                        ),
+                        "from_score_schema_version": metadata.get(
+                            "pre_score_v2_score_schema_version"
+                        ),
+                        "to_score_schema_version": metadata.get(
+                            "score_schema_version"
+                        ),
+                        "pre_migration_trial_identity_sha256": metadata.get(
+                            "pre_score_v2_trial_identity_sha256"
+                        ),
+                        "pre_migration_score_sha256": metadata.get(
+                            "pre_score_v2_score_sha256"
+                        ),
+                    }
+                )
+            migration_history.append(
+                {
+                    "migration_schema_version": MIGRATION_SCHEMA_VERSION,
+                    "input_db_sha256": input_sha256,
+                    "from_score_schema_version": source_score_schema_version,
+                    "to_score_schema_version": SCORE_SCHEMA_VERSION,
+                    "pre_migration_trial_identity_sha256": old_identity,
+                    "pre_migration_score_sha256": _sha256_json(row["score"]),
+                }
+            )
             metadata.update(
                 {
-                    "pre_score_v2_trial_identity_sha256": old_identity,
-                    "pre_score_v2_score_schema_version": (
-                        LEGACY_SCORE_SCHEMA_VERSION
-                    ),
-                    "pre_score_v2_score_sha256": _sha256_json(row["score"]),
                     "score_schema_version": SCORE_SCHEMA_VERSION,
                     "upstream_extraction_identities": list(upstream),
                     "score_migration_schema_version": MIGRATION_SCHEMA_VERSION,
                     "score_migration_input_db_sha256": input_sha256,
+                    "score_migration_history": migration_history,
                     "score_migration_raw_response_unchanged": True,
                     "score_migration_prompt_unchanged": True,
                     "score_migration_parsed_response_unchanged": True,
@@ -235,7 +297,7 @@ def migrate_score_v1_store(
         output_sha256 = _sha256_file(output_path)
         return {
             "migration_schema_version": MIGRATION_SCHEMA_VERSION,
-            "from_score_schema_version": LEGACY_SCORE_SCHEMA_VERSION,
+            "from_score_schema_version": source_score_schema_version,
             "to_score_schema_version": SCORE_SCHEMA_VERSION,
             "input_db": str(input_path),
             "output_db": str(output_path),
@@ -257,10 +319,21 @@ def migrate_score_v1_store(
         source.close()
 
 
+def migrate_score_v1_store(
+    input_path: Path,
+    output_path: Path,
+) -> dict[str, Any]:
+    return migrate_score_store(
+        input_path,
+        output_path,
+        expected_source_schema=SCORE_SCHEMA_V1,
+    )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description=(
-            "Copy and rescore a Rule-Z extraction/intervention score-v1 store."
+            "Copy and rescore a supported Rule-Z extraction/intervention store."
         )
     )
     parser.add_argument("--input-db", required=True)
@@ -268,7 +341,7 @@ def main() -> None:
     parser.add_argument("--report-dir", required=True)
     args = parser.parse_args()
 
-    report = migrate_score_v1_store(
+    report = migrate_score_store(
         Path(args.input_db),
         Path(args.output_db),
     )
@@ -280,7 +353,7 @@ def main() -> None:
         )
     finally:
         store.close()
-    report_path = Path(args.report_dir) / "score_v1_to_v2_migration.json"
+    report_path = Path(args.report_dir) / "score_migration.json"
     report_path.write_text(
         json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",

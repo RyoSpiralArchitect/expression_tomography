@@ -147,11 +147,19 @@ def _intervention_trial_rows(
             for identity in metadata.get("upstream_extraction_identities", [])
             if identity in by_execution
         ]
-        upstream_all_literal_correct: bool | None = None
-        upstream_current_correct: bool | None = None
-        upstream_dependency_correct: bool | None = None
+        upstream_all_value_exact: bool | None = None
+        upstream_current_value_exact: bool | None = None
+        upstream_dependency_value_exact: bool | None = None
+        upstream_all_calibrated: bool | None = None
         if metadata.get("compute_path") == "model_literal":
-            upstream_all_literal_correct = (
+            upstream_all_value_exact = (
+                len(upstream) == len(LITERAL_FIELDS)
+                and all(
+                    bool(row["score"].get("literal_exact"))
+                    for row in upstream
+                )
+            )
+            upstream_all_calibrated = (
                 len(upstream) == len(LITERAL_FIELDS)
                 and all(bool(row["score"].get("correct")) for row in upstream)
             )
@@ -165,13 +173,16 @@ def _intervention_trial_rows(
                 for row in upstream
                 if row["metadata"].get("literal_field") == "rule_definitions"
             ]
-            upstream_current_correct = (
+            upstream_current_value_exact = (
                 len(current_rows) == len(LITERAL_FIELDS) - 1
-                and all(bool(row["score"].get("correct")) for row in current_rows)
+                and all(
+                    bool(row["score"].get("literal_exact"))
+                    for row in current_rows
+                )
             )
-            upstream_dependency_correct = (
+            upstream_dependency_value_exact = (
                 len(dependency_rows) == 1
-                and bool(dependency_rows[0]["score"].get("correct"))
+                and bool(dependency_rows[0]["score"].get("literal_exact"))
             )
 
         rows.append(
@@ -207,27 +218,32 @@ def _intervention_trial_rows(
                 "unsupported_world_answer": int(
                     bool(score.get("unsupported_world_answer"))
                 ),
-                "upstream_all_literal_correct": (
+                "upstream_all_value_exact": (
                     ""
-                    if upstream_all_literal_correct is None
-                    else int(upstream_all_literal_correct)
+                    if upstream_all_value_exact is None
+                    else int(upstream_all_value_exact)
                 ),
-                "upstream_current_fields_correct": (
+                "upstream_current_values_exact": (
                     ""
-                    if upstream_current_correct is None
-                    else int(upstream_current_correct)
+                    if upstream_current_value_exact is None
+                    else int(upstream_current_value_exact)
                 ),
-                "upstream_rule_definitions_correct": (
+                "upstream_rule_definitions_value_exact": (
                     ""
-                    if upstream_dependency_correct is None
-                    else int(upstream_dependency_correct)
+                    if upstream_dependency_value_exact is None
+                    else int(upstream_dependency_value_exact)
                 ),
-                "extraction_correct_compute_failed": int(
-                    upstream_all_literal_correct is True
+                "upstream_all_grounded_calibrated": (
+                    ""
+                    if upstream_all_calibrated is None
+                    else int(upstream_all_calibrated)
+                ),
+                "value_exact_compute_failed": int(
+                    upstream_all_value_exact is True
                     and not bool(score.get("source_supported_exact"))
                 ),
-                "extraction_failed_compute_correct": int(
-                    upstream_all_literal_correct is False
+                "value_inexact_compute_correct": int(
+                    upstream_all_value_exact is False
                     and bool(score.get("source_supported_exact"))
                 ),
                 "trial_identity_sha256": metadata.get(
@@ -376,6 +392,47 @@ def _paired_cue_summary(trials: list[dict[str, Any]]) -> list[dict[str, Any]]:
     ]
 
 
+def _model_decomposition_summary(
+    intervention_rows: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    groups: dict[tuple[str, str, str, str], list[dict[str, Any]]] = defaultdict(list)
+    for row in intervention_rows:
+        if row["compute_path"] != "model_literal":
+            continue
+        key = (
+            str(row["provider"]),
+            str(row["artifact_family"]),
+            str(row["intervention_kind"]),
+            str(row["cue_mode"]),
+        )
+        groups[key].append(row)
+    return [
+        {
+            "provider": key[0],
+            "artifact_family": key[1],
+            "intervention_kind": key[2],
+            "cue_mode": key[3],
+            "n": len(rows),
+            "upstream_all_value_exact_rate": _format_rate(
+                mean(float(row["upstream_all_value_exact"]) for row in rows)
+            ),
+            "upstream_all_grounded_calibrated_rate": _format_rate(
+                mean(
+                    float(row["upstream_all_grounded_calibrated"])
+                    for row in rows
+                )
+            ),
+            "value_exact_compute_failed": sum(
+                int(row["value_exact_compute_failed"]) for row in rows
+            ),
+            "value_inexact_compute_correct": sum(
+                int(row["value_inexact_compute_correct"]) for row in rows
+            ),
+        }
+        for key, rows in sorted(groups.items())
+    ]
+
+
 def _markdown_report(summary: dict[str, Any]) -> str:
     lines = [
         "# Rule-Z Extraction / Intervention Factorial",
@@ -390,6 +447,7 @@ def _markdown_report(summary: dict[str, Any]) -> str:
         "- Source-supported intervention accuracy rewards an answer only when the supplied representation uniquely supports it; omitted or contradictory dependencies require `unknown`.",
         "- World-answer accuracy is diagnostic and can rise through guessing or reader-side reconstruction, so it is not the primary endpoint on incomplete artifacts.",
         "- Model-literal rows expose extraction-correct / computation-failed and extraction-failed / computation-correct cases separately.",
+        "- That causal split uses exact typed values because quote evidence is stripped before computation; grounded calibration remains a separate upstream metric.",
         "",
         "## Intervention Summary",
         "",
@@ -454,6 +512,9 @@ def write_extraction_intervention_report(
     literal_summary = _literal_summary(trials)
     intervention_summary = _intervention_summary(trials)
     paired_cue_summary = _paired_cue_summary(trials)
+    model_decomposition_summary = _model_decomposition_summary(
+        intervention_rows
+    )
     completion = _completion_summary(cases, trials)
     summary = {
         "task_type": TASK_TYPE,
@@ -464,6 +525,7 @@ def write_extraction_intervention_report(
         "literal_summary": literal_summary,
         "intervention_summary": intervention_summary,
         "paired_cue_summary": paired_cue_summary,
+        "model_decomposition_summary": model_decomposition_summary,
     }
 
     _write_csv(output_dir / "rule_z_literal_extraction_trials.csv", literal_rows)
@@ -474,6 +536,10 @@ def write_extraction_intervention_report(
     _write_csv(output_dir / "rule_z_literal_extraction_summary.csv", literal_summary)
     _write_csv(output_dir / "rule_z_intervention_computation_summary.csv", intervention_summary)
     _write_csv(output_dir / "rule_z_target_cue_pairs.csv", paired_cue_summary)
+    _write_csv(
+        output_dir / "rule_z_model_literal_decomposition.csv",
+        model_decomposition_summary,
+    )
     (output_dir / "rule_z_extraction_intervention_summary.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",

@@ -18,7 +18,7 @@ from .oracle import OracleAnswer, answer_rule_z, priority_edges_from_public
 TASK_TYPE = "rule_z_extraction_intervention"
 ARTIFACT_SCHEMA_VERSION = "rule_z_extraction_intervention.artifact.v1"
 PROMPT_CONTRACT_VERSION = "rule_z_extraction_intervention.prompt.v1"
-SCORE_SCHEMA_VERSION = "rule_z_extraction_intervention.score.v2"
+SCORE_SCHEMA_VERSION = "rule_z_extraction_intervention.score.v3"
 SOURCE_CONDITION = "extraction_intervention:controlled_source"
 
 ARTIFACT_FAMILIES = (
@@ -761,6 +761,17 @@ def _rule_quote_matches(rule: dict[str, Any], quote: str) -> bool:
     return _claim_token_present(quote, str(rule.get("then", "")))
 
 
+def _rule_claim_from_quote(rule_id: str, quote: str) -> tuple[str, str] | None:
+    match = re.fullmatch(
+        rf"Rule\s+{re.escape(rule_id)}:\s+if\s+(.+?)\s+then\s+"
+        r"(eligible|not_eligible)\.",
+        quote.strip(),
+    )
+    if not match:
+        return None
+    return match.group(1).strip(), match.group(2)
+
+
 def _schema_errors(field: str, parsed: dict[str, Any] | None) -> list[str]:
     if not isinstance(parsed, dict):
         return ["response must be a JSON object"]
@@ -980,10 +991,6 @@ def _literal_grounded(
         for rule in rules
         if isinstance(rule, dict)
     )
-    rules_by_id: dict[str, list[dict[str, Any]]] = {}
-    for rule in rules:
-        if isinstance(rule, dict):
-            rules_by_id.setdefault(str(rule.get("id", "")), []).append(rule)
     contradictions_grounded = True
     for item in contradictions:
         if not isinstance(item, dict) or not isinstance(item.get("evidence"), list):
@@ -992,11 +999,11 @@ def _literal_grounded(
         rule_id = str(item.get("rule_id", ""))
         quotes = [str(quote) for quote in item["evidence"]]
         matched_variants = {
-            _rule_key(rule)
+            claim
             for quote in quotes
-            for rule in rules_by_id.get(rule_id, [])
             if _quote_grounded(source_artifact, quote)
-            and _rule_quote_matches(rule, quote)
+            for claim in [_rule_claim_from_quote(rule_id, quote)]
+            if claim is not None
         }
         if len(quotes) < 2 or len(matched_variants) < 2:
             contradictions_grounded = False
@@ -1011,8 +1018,12 @@ def _literal_grounded(
     )
     if status == "not_stated":
         return not rules and not contradictions and not field_evidence
+    claims_present = bool(rules) or (
+        status == "contradictory" and bool(contradictions)
+    )
     return (
-        rules_grounded
+        claims_present
+        and rules_grounded
         and contradictions_grounded
         and field_evidence_grounded
     )

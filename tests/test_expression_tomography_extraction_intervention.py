@@ -224,6 +224,70 @@ class ExtractionInterventionTests(unittest.TestCase):
         self.assertTrue(score["literal_exact"])
         self.assertFalse(score["all_claims_grounded"])
 
+    def test_grounding_rejects_bare_tokens_without_field_context(self) -> None:
+        source = "Observed facts: p_01.\nRule r_01: if p_01 then eligible."
+        expected = {
+            "status": "asserted",
+            "items": [
+                {"value": "p_01", "evidence": "Observed facts: p_01."}
+            ],
+            "field_evidence": "",
+        }
+        parsed = copy.deepcopy(expected)
+        parsed["items"][0]["evidence"] = "p_01"
+        score = score_literal_extraction(
+            "facts",
+            parsed,
+            expected,
+            source,
+        )
+        self.assertTrue(score["literal_exact"])
+        self.assertFalse(score["all_claims_grounded"])
+
+    def test_contradiction_quotes_can_be_grounded_without_rule_duplication(self) -> None:
+        first = "Rule r_01: if p_01 then eligible."
+        second = "Rule r_01: if p_01 then not_eligible."
+        source = "\n".join(
+            ["Rule definitions:", first, "Additional dependency claim:", second]
+        )
+        expected = {
+            "status": "contradictory",
+            "rules": [
+                {
+                    "id": "r_01",
+                    "if": ["p_01"],
+                    "then": "eligible",
+                    "evidence": first,
+                },
+                {
+                    "id": "r_01",
+                    "if": ["p_01"],
+                    "then": "not_eligible",
+                    "evidence": second,
+                },
+            ],
+            "contradictions": [
+                {"rule_id": "r_01", "evidence": [first, second]}
+            ],
+            "field_evidence": "",
+        }
+        parsed = {
+            "status": "contradictory",
+            "rules": [],
+            "contradictions": [
+                {"rule_id": "r_01", "evidence": [first, second]}
+            ],
+            "field_evidence": "Rule definitions:",
+        }
+        score = score_literal_extraction(
+            "rule_definitions",
+            parsed,
+            expected,
+            source,
+        )
+        self.assertFalse(score["literal_exact"])
+        self.assertTrue(score["all_claims_grounded"])
+
     def test_intervention_score_separates_source_support_from_world_truth(self) -> None:
         incomplete = self.pair_cases[0].payload
         world = incomplete["world_private"]["counterfactual"]
@@ -534,7 +598,7 @@ class ExtractionInterventionTests(unittest.TestCase):
             self.assertTrue(all(len(identity) == 64 for identity in identities))
             self.assertTrue(
                 all(
-                    row["metadata"]["score_schema_version"].endswith(".v2")
+                    row["metadata"]["score_schema_version"].endswith(".v3")
                     for row in migrated_rows
                 )
             )
