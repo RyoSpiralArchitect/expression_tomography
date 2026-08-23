@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import json
 import random
+import re
 from collections import Counter
 from itertools import combinations
 from typing import Any
@@ -17,7 +18,7 @@ from .oracle import OracleAnswer, answer_rule_z, priority_edges_from_public
 TASK_TYPE = "rule_z_extraction_intervention"
 ARTIFACT_SCHEMA_VERSION = "rule_z_extraction_intervention.artifact.v1"
 PROMPT_CONTRACT_VERSION = "rule_z_extraction_intervention.prompt.v1"
-SCORE_SCHEMA_VERSION = "rule_z_extraction_intervention.score.v1"
+SCORE_SCHEMA_VERSION = "rule_z_extraction_intervention.score.v2"
 SOURCE_CONDITION = "extraction_intervention:controlled_source"
 
 ARTIFACT_FAMILIES = (
@@ -733,6 +734,33 @@ def _quote_grounded(source_artifact: str, value: Any) -> bool:
     return isinstance(value, str) and bool(value) and value in source_artifact
 
 
+def _claim_token_present(quote: str, value: str) -> bool:
+    return bool(
+        value
+        and re.search(
+            rf"(?<![A-Za-z0-9_]){re.escape(value)}(?![A-Za-z0-9_])",
+            quote,
+        )
+    )
+
+
+def _rule_quote_matches(rule: dict[str, Any], quote: str) -> bool:
+    if f"Rule {rule.get('id', '')}:" not in quote:
+        return False
+    antecedents = rule.get("if")
+    if not isinstance(antecedents, list):
+        return False
+    if antecedents:
+        if not all(
+            _claim_token_present(quote, str(antecedent))
+            for antecedent in antecedents
+        ):
+            return False
+    elif "always" not in quote:
+        return False
+    return _claim_token_present(quote, str(rule.get("then", "")))
+
+
 def _schema_errors(field: str, parsed: dict[str, Any] | None) -> list[str]:
     if not isinstance(parsed, dict):
         return ["response must be a JSON object"]
@@ -884,89 +912,78 @@ def _literal_grounded(
     field: str,
     parsed: dict[str, Any],
     source_artifact: str,
-    expected: dict[str, Any],
 ) -> bool:
     status = parsed.get("status")
     if field in _LIST_FIELDS or field == "fired_priority_edges":
         items = parsed.get("items")
         if not isinstance(items, list):
             return False
-        if field in _LIST_FIELDS:
-            expected_claims = Counter(
-                (str(item["value"]), str(item["evidence"]))
-                for item in expected["items"]
-            )
-            reported_claims = Counter(
-                (str(item.get("value", "")), str(item.get("evidence", "")))
-                for item in items
-                if isinstance(item, dict)
-            )
-        else:
-            expected_claims = Counter(
-                (
-                    str(item["higher_priority_rule"]),
-                    str(item["lower_priority_rule"]),
-                    str(item["evidence"]),
+        marker = f"{_FIELD_LABELS[field]}:"
+        item_checks = []
+        for item in items:
+            if not isinstance(item, dict):
+                item_checks.append(False)
+                continue
+            quote = str(item.get("evidence", ""))
+            grounded = _quote_grounded(source_artifact, quote) and marker in quote
+            if field == "fired_priority_edges":
+                higher = str(item.get("higher_priority_rule", ""))
+                lower = str(item.get("lower_priority_rule", ""))
+                claim_matched = bool(
+                    re.search(
+                        rf"(?<![A-Za-z0-9_]){re.escape(higher)}\s*>\s*"
+                        rf"{re.escape(lower)}(?![A-Za-z0-9_])",
+                        quote,
+                    )
                 )
-                for item in expected["items"]
-            )
-            reported_claims = Counter(
-                (
-                    str(item.get("higher_priority_rule", "")),
-                    str(item.get("lower_priority_rule", "")),
-                    str(item.get("evidence", "")),
+            else:
+                claim_matched = _claim_token_present(
+                    quote,
+                    str(item.get("value", "")),
                 )
-                for item in items
-                if isinstance(item, dict)
+            item_checks.append(grounded and claim_matched)
+        items_grounded = all(item_checks)
+        field_evidence = str(parsed.get("field_evidence", ""))
+        optional_field_evidence_grounded = (
+            not field_evidence
+            or (
+                _quote_grounded(source_artifact, field_evidence)
+                and marker in field_evidence
             )
-        items_grounded = all(
-            _quote_grounded(source_artifact, item.get("evidence"))
-            for item in items
-            if isinstance(item, dict)
-        ) and all(
-            count <= expected_claims[claim]
-            for claim, count in reported_claims.items()
         )
         if status == "explicit_none":
-            return items_grounded and _quote_grounded(
-                source_artifact,
-                parsed.get("field_evidence"),
-            ) and parsed.get("field_evidence") == expected.get("field_evidence")
+            return (
+                not items
+                and bool(field_evidence)
+                and optional_field_evidence_grounded
+                and "none" in field_evidence.lower()
+            )
         if status == "not_stated":
-            return items_grounded and not parsed.get("field_evidence")
-        return items_grounded
+            return not items and not field_evidence
+        return bool(items) and items_grounded and optional_field_evidence_grounded
     if field == "current_answer":
         if status == "not_stated":
             return not parsed.get("evidence")
-        return _quote_grounded(
-            source_artifact,
-            parsed.get("evidence"),
-        ) and parsed.get("evidence") == expected.get("evidence")
+        quote = str(parsed.get("evidence", ""))
+        return (
+            _quote_grounded(source_artifact, quote)
+            and f"{_FIELD_LABELS[field]}:" in quote
+            and _claim_token_present(quote, str(parsed.get("value", "")))
+        )
     rules = parsed.get("rules")
     contradictions = parsed.get("contradictions")
     if not isinstance(rules, list) or not isinstance(contradictions, list):
         return False
-    expected_rules = Counter(
-        (_rule_key(rule), str(rule["evidence"]))
-        for rule in expected["rules"]
-    )
-    reported_rules = Counter(
-        (_rule_key(rule), str(rule.get("evidence", "")))
-        for rule in rules
-        if isinstance(rule, dict)
-    )
     rules_grounded = all(
         _quote_grounded(source_artifact, rule.get("evidence"))
+        and _rule_quote_matches(rule, str(rule.get("evidence", "")))
         for rule in rules
         if isinstance(rule, dict)
-    ) and all(
-        count <= expected_rules[claim]
-        for claim, count in reported_rules.items()
     )
-    expected_contradictions = {
-        str(item["rule_id"]): Counter(str(quote) for quote in item["evidence"])
-        for item in expected["contradictions"]
-    }
+    rules_by_id: dict[str, list[dict[str, Any]]] = {}
+    for rule in rules:
+        if isinstance(rule, dict):
+            rules_by_id.setdefault(str(rule.get("id", "")), []).append(rule)
     contradictions_grounded = True
     for item in contradictions:
         if not isinstance(item, dict) or not isinstance(item.get("evidence"), list):
@@ -974,17 +991,30 @@ def _literal_grounded(
             break
         rule_id = str(item.get("rule_id", ""))
         quotes = [str(quote) for quote in item["evidence"]]
-        if (
-            len(quotes) < 2
-            or Counter(quotes) != expected_contradictions.get(rule_id)
-            or not all(_quote_grounded(source_artifact, quote) for quote in quotes)
-        ):
+        matched_variants = {
+            _rule_key(rule)
+            for quote in quotes
+            for rule in rules_by_id.get(rule_id, [])
+            if _quote_grounded(source_artifact, quote)
+            and _rule_quote_matches(rule, quote)
+        }
+        if len(quotes) < 2 or len(matched_variants) < 2:
             contradictions_grounded = False
             break
+    field_evidence = str(parsed.get("field_evidence", ""))
+    field_evidence_grounded = (
+        not field_evidence
+        or (
+            _quote_grounded(source_artifact, field_evidence)
+            and "Rule definitions:" in field_evidence
+        )
+    )
+    if status == "not_stated":
+        return not rules and not contradictions and not field_evidence
     return (
         rules_grounded
         and contradictions_grounded
-        and parsed.get("field_evidence") == expected.get("field_evidence")
+        and field_evidence_grounded
     )
 
 
@@ -1001,7 +1031,6 @@ def score_literal_extraction(
         field,
         reported,
         source_artifact,
-        expected,
     )
     return {
         "parse_ok": isinstance(parsed, dict),

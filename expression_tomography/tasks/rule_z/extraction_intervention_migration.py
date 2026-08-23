@@ -1,0 +1,301 @@
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from pathlib import Path
+from typing import Any
+
+from expression_tomography.core.providers import parse_json_lenient
+from expression_tomography.core.schema import stable_json
+from expression_tomography.core.store import ExperimentStore
+
+from .extraction_intervention import (
+    LITERAL_FIELDS,
+    SCORE_SCHEMA_VERSION,
+    TASK_TYPE,
+    score_intervention,
+    score_literal_extraction,
+)
+from .extraction_intervention_report import write_extraction_intervention_report
+from .extraction_intervention_task import (
+    _sha256_json,
+    _stored_execution_identity,
+    make_execution_identity,
+    validate_extraction_intervention_store,
+)
+
+
+LEGACY_SCORE_SCHEMA_VERSION = "rule_z_extraction_intervention.score.v1"
+MIGRATION_SCHEMA_VERSION = "rule_z_extraction_intervention.score_migration.v1"
+
+
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _rescore_row(
+    row: dict[str, Any],
+    payload: dict[str, Any],
+) -> dict[str, Any]:
+    parsed = parse_json_lenient(row["raw_response"])
+    if stable_json(parsed) != stable_json(row["parsed_response"]):
+        raise RuntimeError(
+            f"Raw response parse mismatch in legacy trial {row['id']}"
+        )
+    metadata = row["metadata"]
+    if metadata.get("trial_type") == "literal_extraction":
+        field = str(metadata.get("literal_field", ""))
+        if field not in LITERAL_FIELDS:
+            raise RuntimeError(
+                f"Unknown literal field in legacy trial {row['id']}: {field}"
+            )
+        return score_literal_extraction(
+            field,
+            parsed,
+            payload["literal_private"][field],
+            str(payload["source_artifact"]),
+        )
+    if metadata.get("trial_type") == "intervention_compute":
+        return score_intervention(
+            parsed,
+            payload["source_supported_private"],
+            payload["world_private"]["counterfactual"],
+        )
+    raise RuntimeError(
+        f"Unknown trial type in legacy trial {row['id']}: "
+        f"{metadata.get('trial_type')}"
+    )
+
+
+def _new_identity(
+    row: dict[str, Any],
+    metadata: dict[str, Any],
+    upstream_identities: tuple[str, ...],
+) -> str:
+    logical = (
+        str(row["provider"]),
+        str(row["case_hash"]),
+        str(row["condition"]),
+        int(metadata.get("replicate_index", 0)),
+    )
+    return make_execution_identity(
+        logical,
+        str(metadata["provider_config_sha256"]),
+        str(metadata["prompt_sha256"]),
+        int(metadata["execution_order_seed"]),
+        upstream_identities,
+        SCORE_SCHEMA_VERSION,
+    )
+
+
+def migrate_score_v1_store(
+    input_path: Path,
+    output_path: Path,
+) -> dict[str, Any]:
+    input_path = input_path.resolve()
+    output_path = output_path.resolve()
+    if input_path == output_path:
+        raise ValueError("Input and output databases must differ")
+    if not input_path.is_file():
+        raise FileNotFoundError(input_path)
+    if output_path.exists():
+        raise FileExistsError(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    input_sha256 = _sha256_file(input_path)
+    source = ExperimentStore(input_path, read_only=True)
+    output: ExperimentStore | None = None
+    try:
+        integrity = source.conn.execute("PRAGMA integrity_check").fetchone()[0]
+        if integrity != "ok":
+            raise RuntimeError(f"Input SQLite integrity check failed: {integrity}")
+        cases = {
+            str(row["case_hash"]): row
+            for row in source.fetch_cases(task_type=TASK_TYPE)
+        }
+        legacy_rows = source.fetch_trials(task_type=TASK_TYPE)
+        legacy_identities = []
+        for row in legacy_rows:
+            identity = _stored_execution_identity(
+                row,
+                expected_score_schema_version=LEGACY_SCORE_SCHEMA_VERSION,
+            )
+            legacy_identities.append(identity)
+        if len(set(legacy_identities)) != len(legacy_identities):
+            raise RuntimeError("Legacy store contains duplicate execution identities")
+        if _sha256_file(input_path) != input_sha256:
+            raise RuntimeError("Input database changed during migration preflight")
+
+        output = ExperimentStore(output_path)
+        source.conn.backup(output.conn)
+        output.conn.commit()
+        copied_rows = output.fetch_trials(task_type=TASK_TYPE)
+        if len(copied_rows) != len(legacy_rows):
+            raise RuntimeError("SQLite backup changed the trial count")
+
+        old_to_new: dict[str, str] = {}
+        pending_model_rows = []
+        updates = []
+        score_changes = 0
+
+        def prepare_update(
+            row: dict[str, Any],
+            old_identity: str,
+            upstream: tuple[str, ...],
+        ) -> None:
+            nonlocal score_changes
+            case = cases.get(str(row["case_hash"]))
+            if case is None:
+                raise RuntimeError(f"Missing case for legacy trial {row['id']}")
+            score = _rescore_row(row, case["payload"])
+            score_changes += stable_json(score) != stable_json(row["score"])
+            metadata = dict(row["metadata"])
+            metadata.update(
+                {
+                    "pre_score_v2_trial_identity_sha256": old_identity,
+                    "pre_score_v2_score_schema_version": (
+                        LEGACY_SCORE_SCHEMA_VERSION
+                    ),
+                    "pre_score_v2_score_sha256": _sha256_json(row["score"]),
+                    "score_schema_version": SCORE_SCHEMA_VERSION,
+                    "upstream_extraction_identities": list(upstream),
+                    "score_migration_schema_version": MIGRATION_SCHEMA_VERSION,
+                    "score_migration_input_db_sha256": input_sha256,
+                    "score_migration_raw_response_unchanged": True,
+                    "score_migration_prompt_unchanged": True,
+                    "score_migration_parsed_response_unchanged": True,
+                }
+            )
+            new_identity = _new_identity(row, metadata, upstream)
+            metadata["trial_identity_sha256"] = new_identity
+            old_to_new[old_identity] = new_identity
+            updates.append(
+                (
+                    json.dumps(score, ensure_ascii=False, sort_keys=True),
+                    json.dumps(metadata, ensure_ascii=False, sort_keys=True),
+                    row["id"],
+                )
+            )
+
+        for row, old_identity in zip(copied_rows, legacy_identities):
+            metadata = row["metadata"]
+            if metadata.get("compute_path") == "model_literal":
+                pending_model_rows.append((row, old_identity))
+                continue
+            if metadata.get("upstream_extraction_identities"):
+                raise RuntimeError(
+                    f"Non-model legacy trial {row['id']} has upstream identities"
+                )
+            prepare_update(row, old_identity, ())
+
+        for row, old_identity in pending_model_rows:
+            old_upstream = tuple(
+                str(value)
+                for value in row["metadata"].get(
+                    "upstream_extraction_identities",
+                    [],
+                )
+            )
+            if len(old_upstream) != len(LITERAL_FIELDS):
+                raise RuntimeError(
+                    f"Model legacy trial {row['id']} has incomplete upstream coverage"
+                )
+            try:
+                new_upstream = tuple(old_to_new[value] for value in old_upstream)
+            except KeyError as exc:
+                raise RuntimeError(
+                    f"Model legacy trial {row['id']} references an unknown extraction identity"
+                ) from exc
+            prepare_update(row, old_identity, new_upstream)
+
+        if len(updates) != len(copied_rows):
+            raise RuntimeError("Score migration did not cover every trial")
+        output.conn.executemany(
+            "UPDATE trials SET score_json = ?, metadata_json = ? WHERE id = ?",
+            updates,
+        )
+        output.conn.commit()
+        validation = validate_extraction_intervention_store(output)
+        output_integrity = output.conn.execute(
+            "PRAGMA integrity_check"
+        ).fetchone()[0]
+        if output_integrity != "ok":
+            raise RuntimeError(
+                f"Output SQLite integrity check failed: {output_integrity}"
+            )
+        if _sha256_file(input_path) != input_sha256:
+            raise RuntimeError("Input database changed during score migration")
+        output.close()
+        output = None
+        output_sha256 = _sha256_file(output_path)
+        return {
+            "migration_schema_version": MIGRATION_SCHEMA_VERSION,
+            "from_score_schema_version": LEGACY_SCORE_SCHEMA_VERSION,
+            "to_score_schema_version": SCORE_SCHEMA_VERSION,
+            "input_db": str(input_path),
+            "output_db": str(output_path),
+            "input_db_sha256": input_sha256,
+            "output_db_sha256": output_sha256,
+            "cases": len(cases),
+            "trials": len(copied_rows),
+            "score_rows_changed": score_changes,
+            "identity_rows_rekeyed": len(old_to_new),
+            "validation": validation,
+        }
+    except Exception:
+        if output is not None:
+            output.close()
+        if output_path.exists():
+            output_path.unlink()
+        raise
+    finally:
+        source.close()
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        description=(
+            "Copy and rescore a Rule-Z extraction/intervention score-v1 store."
+        )
+    )
+    parser.add_argument("--input-db", required=True)
+    parser.add_argument("--output-db", required=True)
+    parser.add_argument("--report-dir", required=True)
+    args = parser.parse_args()
+
+    report = migrate_score_v1_store(
+        Path(args.input_db),
+        Path(args.output_db),
+    )
+    store = ExperimentStore(args.output_db, read_only=True)
+    try:
+        summary = write_extraction_intervention_report(
+            store,
+            Path(args.report_dir),
+        )
+    finally:
+        store.close()
+    report_path = Path(args.report_dir) / "score_v1_to_v2_migration.json"
+    report_path.write_text(
+        json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    print(
+        stable_json(
+            {
+                "migration": report,
+                "n_cases": summary["n_cases"],
+                "n_trials": summary["n_trials"],
+                "report_dir": args.report_dir,
+            }
+        )
+    )
+
+
+if __name__ == "__main__":
+    main()

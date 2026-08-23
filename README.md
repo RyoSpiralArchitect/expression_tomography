@@ -178,6 +178,10 @@ resume contract are frozen in
 After a run, add `--revalidate-existing-only` with the same database and report
 paths to reconstruct every prompt, upstream typed ledger, parse, score, and
 execution identity without making provider calls.
+Score-v1 stores created before field/item grounding was aligned with the
+prompt's contiguous-quote contract can be copied and rekeyed without provider
+calls using `expression_tomography.tasks.rule_z.extraction_intervention_migration`.
+The input database remains unchanged.
 
 ## Metaphor Transfer Smoke
 

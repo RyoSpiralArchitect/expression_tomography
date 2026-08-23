@@ -134,6 +134,7 @@ def make_execution_identity(
     prompt_sha256: str,
     order_seed: int,
     upstream_extraction_identities: tuple[str, ...] = (),
+    score_schema_version: str = SCORE_SCHEMA_VERSION,
 ) -> str:
     provider, case_hash, condition, replicate_index = logical_identity
     return _sha256_json(
@@ -150,12 +151,16 @@ def make_execution_identity(
             ),
             "artifact_schema_version": ARTIFACT_SCHEMA_VERSION,
             "prompt_contract_version": PROMPT_CONTRACT_VERSION,
-            "score_schema_version": SCORE_SCHEMA_VERSION,
+            "score_schema_version": score_schema_version,
         }
     )
 
 
-def _stored_execution_identity(row: dict[str, Any]) -> str:
+def _stored_execution_identity(
+    row: dict[str, Any],
+    *,
+    expected_score_schema_version: str = SCORE_SCHEMA_VERSION,
+) -> str:
     metadata = row.get("metadata", {})
     required = (
         "provider_config",
@@ -183,7 +188,7 @@ def _stored_execution_identity(row: dict[str, Any]) -> str:
         raise RuntimeError(f"Artifact schema drift in stored trial {row['id']}")
     if metadata["prompt_contract_version"] != PROMPT_CONTRACT_VERSION:
         raise RuntimeError(f"Prompt contract drift in stored trial {row['id']}")
-    if metadata["score_schema_version"] != SCORE_SCHEMA_VERSION:
+    if metadata["score_schema_version"] != expected_score_schema_version:
         raise RuntimeError(f"Score schema drift in stored trial {row['id']}")
     prompt_sha256 = _sha256_text(row["prompt"])
     if prompt_sha256 != metadata["prompt_sha256"]:
@@ -197,6 +202,7 @@ def _stored_execution_identity(row: dict[str, Any]) -> str:
             str(value)
             for value in metadata.get("upstream_extraction_identities", [])
         ),
+        expected_score_schema_version,
     )
     if identity != metadata["trial_identity_sha256"]:
         raise RuntimeError(f"Execution identity mismatch in stored trial {row['id']}")

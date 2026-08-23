@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import tempfile
 import unittest
@@ -23,7 +24,12 @@ from expression_tomography.tasks.rule_z.extraction_intervention import (
 from expression_tomography.tasks.rule_z.extraction_intervention_report import (
     write_extraction_intervention_report,
 )
+from expression_tomography.tasks.rule_z.extraction_intervention_migration import (
+    LEGACY_SCORE_SCHEMA_VERSION,
+    migrate_score_v1_store,
+)
 from expression_tomography.tasks.rule_z.extraction_intervention_task import (
+    make_execution_identity,
     run_extraction_intervention_experiment,
     validate_extraction_intervention_store,
 )
@@ -410,6 +416,135 @@ class ExtractionInterventionTests(unittest.TestCase):
                 self.assertEqual(changed_order.call_count, 0)
             finally:
                 store.close()
+
+    def test_score_v1_migration_rekeys_upstream_identities_without_calls(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            input_path = Path(td) / "score_v1.sqlite"
+            output_path = Path(td) / "score_v2.sqlite"
+            store = ExperimentStore(input_path)
+            try:
+                run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    CountingRuleZMockProvider(),
+                    store,
+                    repetitions=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                )
+                rows = store.fetch_trials(task_type=TASK_TYPE)
+                current_to_legacy: dict[str, str] = {}
+                updates = []
+                pending = []
+                for row in rows:
+                    metadata = dict(row["metadata"])
+                    current_identity = metadata["trial_identity_sha256"]
+                    if metadata.get("compute_path") == "model_literal":
+                        pending.append((row, metadata, current_identity))
+                        continue
+                    legacy_identity = make_execution_identity(
+                        (
+                            row["provider"],
+                            row["case_hash"],
+                            row["condition"],
+                            int(metadata["replicate_index"]),
+                        ),
+                        metadata["provider_config_sha256"],
+                        metadata["prompt_sha256"],
+                        int(metadata["execution_order_seed"]),
+                        (),
+                        LEGACY_SCORE_SCHEMA_VERSION,
+                    )
+                    current_to_legacy[current_identity] = legacy_identity
+                    metadata["score_schema_version"] = LEGACY_SCORE_SCHEMA_VERSION
+                    metadata["trial_identity_sha256"] = legacy_identity
+                    metadata["upstream_extraction_identities"] = []
+                    updates.append(
+                        (
+                            json.dumps(metadata, sort_keys=True),
+                            row["id"],
+                        )
+                    )
+                for row, metadata, current_identity in pending:
+                    legacy_upstream = tuple(
+                        current_to_legacy[value]
+                        for value in metadata["upstream_extraction_identities"]
+                    )
+                    legacy_identity = make_execution_identity(
+                        (
+                            row["provider"],
+                            row["case_hash"],
+                            row["condition"],
+                            int(metadata["replicate_index"]),
+                        ),
+                        metadata["provider_config_sha256"],
+                        metadata["prompt_sha256"],
+                        int(metadata["execution_order_seed"]),
+                        legacy_upstream,
+                        LEGACY_SCORE_SCHEMA_VERSION,
+                    )
+                    current_to_legacy[current_identity] = legacy_identity
+                    metadata["score_schema_version"] = LEGACY_SCORE_SCHEMA_VERSION
+                    metadata["trial_identity_sha256"] = legacy_identity
+                    metadata["upstream_extraction_identities"] = list(
+                        legacy_upstream
+                    )
+                    updates.append(
+                        (
+                            json.dumps(metadata, sort_keys=True),
+                            row["id"],
+                        )
+                    )
+                store.conn.executemany(
+                    "UPDATE trials SET metadata_json = ? WHERE id = ?",
+                    updates,
+                )
+                first = rows[0]
+                legacy_score = dict(first["score"])
+                legacy_score["all_claims_grounded"] = False
+                legacy_score["correct"] = False
+                store.conn.execute(
+                    "UPDATE trials SET score_json = ? WHERE id = ?",
+                    (json.dumps(legacy_score, sort_keys=True), first["id"]),
+                )
+                store.conn.commit()
+            finally:
+                store.close()
+
+            input_sha256 = hashlib.sha256(input_path.read_bytes()).hexdigest()
+            report = migrate_score_v1_store(input_path, output_path)
+            self.assertEqual(
+                hashlib.sha256(input_path.read_bytes()).hexdigest(),
+                input_sha256,
+            )
+            self.assertEqual(report["trials"], 88)
+            self.assertEqual(report["identity_rows_rekeyed"], 88)
+            self.assertGreaterEqual(report["score_rows_changed"], 1)
+            self.assertEqual(report["validation"]["validated_trials"], 88)
+
+            migrated = ExperimentStore(output_path, read_only=True)
+            try:
+                migrated_rows = migrated.fetch_trials(task_type=TASK_TYPE)
+            finally:
+                migrated.close()
+            identities = {
+                row["metadata"]["trial_identity_sha256"]
+                for row in migrated_rows
+            }
+            self.assertEqual(len(identities), 88)
+            self.assertTrue(all(len(identity) == 64 for identity in identities))
+            self.assertTrue(
+                all(
+                    row["metadata"]["score_schema_version"].endswith(".v2")
+                    for row in migrated_rows
+                )
+            )
+            for row in migrated_rows:
+                if row["metadata"].get("compute_path") != "model_literal":
+                    continue
+                self.assertTrue(
+                    set(row["metadata"]["upstream_extraction_identities"])
+                    <= identities
+                )
 
 
 if __name__ == "__main__":
