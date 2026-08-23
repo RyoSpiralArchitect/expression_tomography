@@ -1,19 +1,19 @@
 {
   "by_family": [
     {
-      "all_reported_claims_grounded": 0.9333333333333333,
+      "all_reported_claims_grounded": 1.0,
       "audit_parse_ok": 1.0,
       "audit_schema_valid": 1.0,
       "condition": "I_source_faithful_invariants",
       "contradiction_detection_correct": 1.0,
       "designed_repair_target_match": null,
-      "literal_state_exact": 0.9333333333333333,
+      "literal_state_exact": 1.0,
       "literal_value_state_exact": null,
       "mutation_family": "clean",
       "n_trials": 15,
       "provider": "openai-gpt-5.6-luna-low",
       "repair_attraction_any": 0.0,
-      "source_faithful_calibrated": 0.9333333333333333
+      "source_faithful_calibrated": 1.0
     },
     {
       "all_reported_claims_grounded": 1.0,
@@ -22,20 +22,20 @@
       "condition": "I_source_faithful_invariants",
       "contradiction_detection_correct": 1.0,
       "designed_repair_target_match": null,
-      "literal_state_exact": 0.3333333333333333,
+      "literal_state_exact": 0.6666666666666666,
       "literal_value_state_exact": null,
       "mutation_family": "contradictory_edge",
       "n_trials": 15,
       "provider": "openai-gpt-5.6-luna-low",
       "repair_attraction_any": 0.0,
-      "source_faithful_calibrated": 0.3333333333333333
+      "source_faithful_calibrated": 0.6666666666666666
     },
     {
-      "all_reported_claims_grounded": 0.5333333333333333,
+      "all_reported_claims_grounded": 0.7333333333333333,
       "audit_parse_ok": 1.0,
       "audit_schema_valid": 1.0,
       "condition": "I_source_faithful_invariants",
-      "contradiction_detection_correct": 0.9333333333333333,
+      "contradiction_detection_correct": 1.0,
       "designed_repair_target_match": null,
       "literal_state_exact": 0.8,
       "literal_value_state_exact": null,
@@ -43,7 +43,7 @@
       "n_trials": 15,
       "provider": "openai-gpt-5.6-luna-low",
       "repair_attraction_any": 0.0,
-      "source_faithful_calibrated": 0.4
+      "source_faithful_calibrated": 0.6666666666666666
     },
     {
       "all_reported_claims_grounded": 1.0,
@@ -61,13 +61,13 @@
       "source_faithful_calibrated": 1.0
     },
     {
-      "all_reported_claims_grounded": 0.9333333333333333,
+      "all_reported_claims_grounded": 1.0,
       "audit_parse_ok": 1.0,
       "audit_schema_valid": 1.0,
       "condition": "I_source_faithful_invariants",
       "contradiction_detection_correct": 0.0,
       "designed_repair_target_match": null,
-      "literal_state_exact": 0.9333333333333333,
+      "literal_state_exact": 1.0,
       "literal_value_state_exact": null,
       "mutation_family": "equal_tier_reinterpretation",
       "n_trials": 15,
@@ -91,19 +91,19 @@
       "source_faithful_calibrated": 1.0
     },
     {
-      "all_reported_claims_grounded": 0.9333333333333333,
+      "all_reported_claims_grounded": 0.8,
       "audit_parse_ok": 1.0,
       "audit_schema_valid": 0.9333333333333333,
       "condition": "I_source_faithful_invariants",
       "contradiction_detection_correct": 1.0,
       "designed_repair_target_match": null,
-      "literal_state_exact": 0.8666666666666667,
+      "literal_state_exact": 0.7333333333333333,
       "literal_value_state_exact": null,
       "mutation_family": "omitted_field",
       "n_trials": 15,
       "provider": "openai-gpt-5.6-luna-low",
       "repair_attraction_any": 0.06666666666666667,
-      "source_faithful_calibrated": 0.8666666666666667
+      "source_faithful_calibrated": 0.7333333333333333
     },
     {
       "all_reported_claims_grounded": 0.9333333333333333,
@@ -125,18 +125,18 @@
   "n_trials": 120,
   "overall": [
     {
-      "all_reported_claims_grounded": 0.9083333333333333,
+      "all_reported_claims_grounded": 0.9333333333333333,
       "audit_parse_ok": 1.0,
       "audit_schema_valid": 0.9916666666666667,
       "condition": "I_source_faithful_invariants",
-      "contradiction_detection_correct": 0.7416666666666667,
+      "contradiction_detection_correct": 0.75,
       "designed_repair_target_match": null,
-      "literal_state_exact": 0.85,
+      "literal_state_exact": 0.8916666666666667,
       "literal_value_state_exact": null,
       "n_trials": 120,
       "provider": "openai-gpt-5.6-luna-low",
       "repair_attraction_any": 0.008333333333333333,
-      "source_faithful_calibrated": 0.5666666666666667
+      "source_faithful_calibrated": 0.6333333333333333
     }
   ],
   "task_type": "rule_z_audit_calibration"

@@ -182,7 +182,8 @@ python3 -m expression_tomography.tasks.rule_z.task \
 ```
 
 The lower-cost OpenAI audit-calibration config uses GPT-5.6 Luna with low
-reasoning effort:
+reasoning effort and its supported provider-default temperature
+(`temperature: null`):
 
 ```bash
 python3 -m expression_tomography.tasks.rule_z.audit_calibration_task \
@@ -201,7 +202,9 @@ finish/token diagnostics, and the Anthropic error reports safe stop/token
 diagnostics, so an empty generation cannot silently become a receiver trial.
 OpenAI-compatible configs may set `reasoning_effort`; it is included in the
 secret-free provider fingerprint so runs with different reasoning budgets do
-not share probe identities.
+not share probe identities. Provider request-contract versions are fingerprinted
+as well. A numeric temperature is sent explicitly, while `null` records an
+intentional provider-default request.
 
 Provider types:
 

@@ -61,8 +61,9 @@ CASE_ID: audit_case_<case_hash>
 SOURCE_CONDITION: audit_calibration:controlled_source
 ```
 
-All 360 canonical responses were generated fresh under v2. No response from
-the labelled v1 run was reused. Direct SQLite checks found:
+All 360 canonical responses were generated fresh under prompt v2 and provider
+request contract v3. No response from either superseded run was reused. Direct
+SQLite checks found:
 
 - 0 prompts containing the private case identifier;
 - 0 prompts containing the family-specific source condition;
@@ -73,6 +74,26 @@ The earlier labelled metrics and database hashes remain in
 `diagnostics/labelled_prompt_v1_superseded.json`; the old raw stores remain
 recoverable from git history. They are explicitly non-canonical.
 
+## Request Provenance Correction
+
+Review also found a second measurement mismatch. Provider metadata declared
+`temperature: 0.0`, but the adapter only transmitted positive values. The
+wire request therefore omitted temperature and used the API default.
+
+An explicit-zero probe then failed before creating any trial: Luna accepts only
+its provider-default temperature value. The corrected contract consequently
+does not pretend that zero is available. It represents the two states
+separately:
+
+- a numeric temperature means send that value explicitly;
+- `null` means intentionally omit the field and use the provider default.
+
+The canonical config records `temperature: null`, and all 360 rows record
+`openai_compatible.chat_completions.temperature_optional.v3` in the hashed
+provider execution provenance. The preceding opaque run remains available in
+`diagnostics/opaque_prompt_v2_temperature_mismatch_superseded.json`, but is
+not canonical because its declared configuration did not match the request.
+
 ## Fixed Run Configuration
 
 - Reader: `gpt-5.6-luna`
@@ -80,12 +101,14 @@ recoverable from git history. They are explicitly non-canonical.
 - API: OpenAI-compatible Chat Completions
 - Reasoning effort: `low`
 - Maximum completion tokens: 1,400
-- Temperature: 0
+- Temperature: provider default, intentionally omitted
+- Provider request contract:
+  `openai_compatible.chat_completions.temperature_optional.v3`
 - Cases: 120
 - Replicates: 1
 - Canonical trials: 360
 - Fresh provider calls: 360
-- Implementation commit: `e88eee8d0d26dcf3b45965c872595ee2eb1196aa`
+- Implementation commit: `e3adff55d638b8ee4014df1ab1cfaae8cc5d58ca`
 - Prompt contract: `rule_z_audit_calibration.prompt.v2`
 - Score schema: `rule_z_audit_calibration.score.v4`
 
@@ -100,10 +123,10 @@ raw response and reproduced all 360 stored parses and scores without provider
 calls or score changes. The paired comparator independently reparses raw
 responses before accepting the stored parse and score.
 
-All 360 responses were parseable. Two faithful completions contain trailing
+All 360 responses were parseable. One invariant completion contains trailing
 non-JSON text that causes the lenient parser to recover a nested object rather
-than the full response object; they are retained as schema failures. Thus 358
-of 360 responses, and 238 of 240 faithful responses, are schema-valid.
+than the full response object; it is retained as a schema failure. Thus 359 of
+360 responses, and 239 of 240 faithful responses, are schema-valid.
 
 ## Primary Result
 
@@ -116,17 +139,17 @@ claims from incompatible claims.
 | Metric | Legacy prompt | Invariant rubric |
 | --- | ---: | ---: |
 | Parse success | 1.000 | 1.000 |
-| Schema valid | 0.992 | 0.992 |
-| Source-faithful calibrated | 0.208 | 0.567 |
-| Literal state exact | 0.758 | 0.850 |
-| All reported claims grounded | 0.292 | 0.908 |
-| Contradiction classification correct | 0.450 | 0.742 |
-| Contradiction sensitivity | 0.500 | 0.483 |
-| Contradiction specificity | 0.400 | 1.000 |
-| Repair attraction | 0.075 | 0.008 |
+| Schema valid | 1.000 | 0.992 |
+| Source-faithful calibrated | 0.258 | 0.633 |
+| Literal state exact | 0.850 | 0.892 |
+| All reported claims grounded | 0.308 | 0.933 |
+| Contradiction classification correct | 0.425 | 0.750 |
+| Contradiction sensitivity | 0.517 | 0.500 |
+| Contradiction specificity | 0.333 | 1.000 |
+| Repair attraction | 0.058 | 0.008 |
 
-At the paired-row level, 52 cases improve, 9 regress, 16 remain passing, and 43
-remain failing. The invariant rubric moves the calibrated count from 25 to 68.
+At the paired-row level, 50 cases improve, 5 regress, 26 remain passing, and 39
+remain failing. The invariant rubric moves the calibrated count from 31 to 76.
 
 The central bounded result is:
 
@@ -144,19 +167,19 @@ source quality with the reader's prompt-dependent operating point.
 
 | Family | Legacy calibrated | Invariant calibrated | Improved | Regressed |
 | --- | ---: | ---: | ---: | ---: |
-| `clean` | 0.000 | 0.933 | 14 | 0 |
-| `contradictory_edge` | 0.200 | 0.333 | 4 | 2 |
-| `contradictory_integration` | 0.600 | 0.400 | 3 | 6 |
+| `clean` | 0.067 | 1.000 | 14 | 0 |
+| `contradictory_edge` | 0.400 | 0.667 | 6 | 2 |
+| `contradictory_integration` | 0.533 | 0.667 | 4 | 2 |
 | `duplicated_edge` | 0.067 | 1.000 | 14 | 0 |
 | `equal_tier_reinterpretation` | 0.000 | 0.000 | 0 | 0 |
-| `irrelevant_fluent` | 0.533 | 1.000 | 7 | 0 |
-| `omitted_field` | 0.267 | 0.867 | 10 | 1 |
+| `irrelevant_fluent` | 0.867 | 1.000 | 2 | 0 |
+| `omitted_field` | 0.133 | 0.733 | 10 | 1 |
 | `reversed_edge` | 0.000 | 0.000 | 0 | 0 |
 
-The rubric eliminates false-positive contradictions on all schema-valid clean
-cases and reaches perfect calibrated accuracy on duplicated-edge and
-irrelevant-fluent artifacts. It also causes six regressions on
-contradictory-integration artifacts, so the overall gain is not monotonic.
+The rubric reaches perfect calibrated accuracy on clean, duplicated-edge, and
+irrelevant-fluent artifacts. Five paired regressions remain across
+contradictory-edge, contradictory-integration, and omitted-field cases, so the
+overall gain is not monotonic.
 
 Both contracts fail all equal-tier and reversed-edge artifacts. Those families
 require a cross-field consistency judgment rather than detection of a direct
@@ -165,9 +188,9 @@ solved that integration problem.
 
 ## Repair Is a Separate Estimand
 
-The repair-capable reader matches the designed target in 92 of 120 cases
-(`0.767`). Duplicate-sensitive literal-value exactness is 48 of 120
-(`0.400`). Neither metric belongs in the primary faithful calibration score.
+The repair-capable reader matches the designed target in 93 of 120 cases
+(`0.775`). Duplicate-sensitive literal-value exactness is 46 of 120
+(`0.383`). Neither metric belongs in the primary faithful calibration score.
 
 The equal-tier family continues to expose the identification problem. An
 artifact can often be made coherent by restoring an intended priority edge or
@@ -178,18 +201,23 @@ Accordingly, repair-target match measures selection under a named reader and
 repair policy. It cannot by itself show what the writer originally computed or
 which coherent state was latent before expression.
 
-## What Changed From The Labelled Diagnostic
+## Superseded Diagnostics
 
 The labelled v1 run reported invariant calibrated accuracy `0.700`, literal
-accuracy `0.975`, and 63 paired improvements with no regressions. The fresh
-opaque v2 run reports `0.567`, `0.850`, and 52 improvements with 9
-regressions. Repair-target match also moves from `0.900` to `0.767`.
+accuracy `0.975`, and 63 paired improvements with no regressions. Its private
+family labels make those measurements non-canonical.
 
-This is enough to stop treating the leaked labels as harmless by default. It
-is not enough to assign every numerical difference to cue removal:
-responses were regenerated, there is one replicate per artifact, and
-temperature zero does not guarantee server-side determinism. A prospective
-replicated cue-ablation is needed to estimate the label effect itself.
+The first opaque v2 run removed those labels, but declared temperature zero
+while omitting it on the wire. It reported invariant calibrated accuracy
+`0.567`, literal accuracy `0.850`, and 52 improvements with 9 regressions.
+Those figures remain useful diagnostics of the review path, not canonical
+evidence.
+
+The current run corrects both boundaries and reports `0.633`, `0.892`, and
+50 improvements with 5 regressions. Because all three response sets were
+generated independently with one replicate, their numerical differences do
+not isolate either label cues or request semantics. Those effects require
+prospective replicated ablations.
 
 ## Rate-Limit Hypothesis Update
 
@@ -199,16 +227,18 @@ weighted.
 
 The broader working hypothesis currently relies on reader-indexed quantities:
 what distinctions a later model can reconstruct from a fixed artifact. This
-run shows that the reader is not a neutral window. Its ontology contract and
-even ostensibly administrative prompt fields can move the measured boundary.
+run shows that the reader is not a neutral window. Its ontology contract,
+administrative prompt fields, and request semantics can all move the measured
+boundary or invalidate its provenance.
 
 The bounded update is:
 
 ```text
 Observed distinction throughput is jointly indexed by the source artifact,
-the reader, the reader contract, and incidental cues. A language-interface
-bottleneck cannot be estimated cleanly until extraction, contradiction
-integration, and cue dependence are calibrated separately.
+the reader, the reader contract, incidental cues, and the actual request sent
+on the wire. A language-interface bottleneck cannot be estimated cleanly until
+extraction, contradiction integration, cue dependence, and request provenance
+are calibrated separately.
 ```
 
 This neither proves nor refutes that expression can become a rate-limiting
@@ -219,11 +249,12 @@ measurable instead of silently assigning it to the writer.
 
 - The artifacts are synthetic, fielded Rule-Z phantoms, not open-domain prose.
 - One replicate does not estimate response stochasticity.
-- Temperature zero does not guarantee deterministic server-side behavior.
+- Luna rejected explicit temperature zero; this run intentionally uses its
+  provider default, which does not imply deterministic server-side behavior.
 - The within-v2 comparison changes only the intended rubric and passes exact
   source, provider, prompt-delta, raw-parse, and score replay checks.
-- The v1-to-v2 difference is not a single-factor paired estimate because both
-  response sets were generated independently.
+- Differences from either superseded run are not single-factor paired
+  estimates because the response sets were generated independently.
 - High literal extraction does not imply correct semantic integration.
 - The grounding check is exact lexical support on this generated format, not a
   general entailment evaluator.
