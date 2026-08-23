@@ -61,7 +61,11 @@ from expression_tomography.tasks.rule_z.prompts import (
     make_transmission_receiver_prompt,
     make_wrong_contract,
 )
-from expression_tomography.tasks.rule_z.task import run_rule_z_case, run_rule_z_experiment
+from expression_tomography.tasks.rule_z.task import (
+    run_rule_z_case,
+    run_rule_z_experiment,
+    run_rule_z_provider_suite,
+)
 
 
 class RuleZSmokeTests(unittest.TestCase):
@@ -976,8 +980,8 @@ class RuleZSmokeTests(unittest.TestCase):
 
     def test_rule_z_experiment_resumes_missing_trial_identities(self) -> None:
         class CountingMockProvider(MockProvider):
-            def __init__(self) -> None:
-                super().__init__()
+            def __init__(self, name: str = "mock") -> None:
+                super().__init__(name=name)
                 self.call_count = 0
 
             def complete(self, prompt: str) -> str:
@@ -1067,6 +1071,30 @@ class RuleZSmokeTests(unittest.TestCase):
                         transmission_modes=modes,
                     )
                 self.assertEqual(changed_contract_provider.call_count, 0)
+                self.assertEqual(
+                    len(store.fetch_trials(task_type="rule_z")),
+                    row_count_before_drift,
+                )
+                self.assertEqual(
+                    len(store.fetch_cases(task_type="rule_z")),
+                    case_count_before_drift,
+                )
+
+                provider_a = CountingMockProvider(name="provider-a")
+                provider_b = CountingMockProvider(name="mock")
+                provider_b.request_contract_version = "changed.request.v2"
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "execution provenance drift",
+                ):
+                    run_rule_z_provider_suite(
+                        [missing_case, case],
+                        [provider_a, provider_b],
+                        store,
+                        transmission_modes=modes,
+                    )
+                self.assertEqual(provider_a.call_count, 0)
+                self.assertEqual(provider_b.call_count, 0)
                 self.assertEqual(
                     len(store.fetch_trials(task_type="rule_z")),
                     row_count_before_drift,

@@ -735,6 +735,7 @@ def run_rule_z_experiment(
     repetitions: int = 1,
     replicate_start: int = 0,
     audit_intermediates: bool = False,
+    preflight_only: bool = False,
 ) -> dict[str, int]:
     if repetitions < 1:
         raise ValueError("repetitions must be at least 1")
@@ -821,6 +822,12 @@ def run_rule_z_experiment(
             )
             skipped_existing += len(skip_conditions)
 
+    if preflight_only:
+        return {
+            "inserted_trials": 0,
+            "skipped_existing_trials": skipped_existing,
+        }
+
     inserted = 0
     for case in case_list:
         store.upsert_case(case)
@@ -881,6 +888,49 @@ def run_rule_z_experiment(
         "inserted_trials": inserted,
         "skipped_existing_trials": skipped_existing,
     }
+
+
+def run_rule_z_provider_suite(
+    cases: Iterable[Case],
+    providers: Iterable[Provider],
+    store: ExperimentStore,
+    transmission_modes: tuple[str, ...] = ("free",),
+    direct_probe_modes: tuple[str, ...] = (),
+    prompt_style: str = "default",
+    repetitions: int = 1,
+    replicate_start: int = 0,
+    audit_intermediates: bool = False,
+) -> list[dict]:
+    case_list = list(cases)
+    provider_list = list(providers)
+    common_options = {
+        "transmission_modes": transmission_modes,
+        "direct_probe_modes": direct_probe_modes,
+        "prompt_style": prompt_style,
+        "repetitions": repetitions,
+        "replicate_start": replicate_start,
+        "audit_intermediates": audit_intermediates,
+    }
+    for provider in provider_list:
+        run_rule_z_experiment(
+            case_list,
+            provider,
+            store,
+            **common_options,
+            preflight_only=True,
+        )
+    return [
+        {
+            "provider": provider.name,
+            **run_rule_z_experiment(
+                case_list,
+                provider,
+                store,
+                **common_options,
+            ),
+        }
+        for provider in provider_list
+    ]
 
 
 def main() -> None:
@@ -983,24 +1033,17 @@ def main() -> None:
         providers = load_rule_z_providers(args.provider_config)
         transmission_modes = _parse_transmission_modes(args.transmission_modes)
         direct_probe_modes = _parse_direct_probe_modes(args.direct_probe_modes)
-        run_summaries = []
-        for provider in providers:
-            run_summaries.append(
-                {
-                    "provider": provider.name,
-                    **run_rule_z_experiment(
-                        cases,
-                        provider,
-                        store,
-                        transmission_modes=transmission_modes,
-                        direct_probe_modes=direct_probe_modes,
-                        prompt_style=args.prompt_style,
-                        repetitions=args.repetitions,
-                        replicate_start=args.replicate_start,
-                        audit_intermediates=args.audit_intermediates,
-                    ),
-                }
-            )
+        run_summaries = run_rule_z_provider_suite(
+            cases,
+            providers,
+            store,
+            transmission_modes=transmission_modes,
+            direct_probe_modes=direct_probe_modes,
+            prompt_style=args.prompt_style,
+            repetitions=args.repetitions,
+            replicate_start=args.replicate_start,
+            audit_intermediates=args.audit_intermediates,
+        )
         summary = write_rule_z_report(store, Path(args.report_dir))
         print(
             {

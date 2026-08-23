@@ -30,6 +30,7 @@ from expression_tomography.tasks.rule_z.audit_calibration_compare import (
 from expression_tomography.tasks.rule_z.audit_calibration_task import (
     revalidate_audit_calibration_store,
     run_audit_calibration_experiment,
+    run_audit_calibration_provider_suite,
 )
 from expression_tomography.tasks.rule_z.mock_provider import RuleZMockProvider
 from expression_tomography.tasks.rule_z.prompts import (
@@ -44,11 +45,12 @@ class ConfiguredRuleZMockProvider:
         self,
         max_tokens: int,
         *,
+        name: str = "configured-mock",
         provider_type: str = "mock",
         device: str = "auto",
         dtype: str = "auto",
     ):
-        self.name = "configured-mock"
+        self.name = name
         self.spec = ProviderSpec(
             name=self.name,
             type=provider_type,
@@ -312,6 +314,57 @@ class AuditCalibrationTests(unittest.TestCase):
                 self.assertEqual(
                     len(store.fetch_cases(task_type=AUDIT_CALIBRATION_TASK_TYPE)),
                     case_count_before_drift,
+                )
+            finally:
+                store.close()
+
+    def test_provider_suite_preflights_every_provider_before_calls(self) -> None:
+        cases = make_audit_calibration_cases(2, seed=53)
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "calibration.sqlite")
+            try:
+                run_audit_calibration_experiment(
+                    [cases[1]],
+                    ConfiguredRuleZMockProvider(
+                        max_tokens=700,
+                        name="provider-b",
+                    ),
+                    store,
+                    audit_modes=("source_faithful_invariants",),
+                )
+                provider_a = ConfiguredRuleZMockProvider(
+                    max_tokens=700,
+                    name="provider-a",
+                )
+                provider_b = ConfiguredRuleZMockProvider(
+                    max_tokens=701,
+                    name="provider-b",
+                )
+                trial_count = len(
+                    store.fetch_trials(task_type=AUDIT_CALIBRATION_TASK_TYPE)
+                )
+                case_count = len(
+                    store.fetch_cases(task_type=AUDIT_CALIBRATION_TASK_TYPE)
+                )
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "execution provenance drift",
+                ):
+                    run_audit_calibration_provider_suite(
+                        cases,
+                        [provider_a, provider_b],
+                        store,
+                        audit_modes=("source_faithful_invariants",),
+                    )
+                self.assertEqual(provider_a.call_count, 0)
+                self.assertEqual(provider_b.call_count, 0)
+                self.assertEqual(
+                    len(store.fetch_trials(task_type=AUDIT_CALIBRATION_TASK_TYPE)),
+                    trial_count,
+                )
+                self.assertEqual(
+                    len(store.fetch_cases(task_type=AUDIT_CALIBRATION_TASK_TYPE)),
+                    case_count,
                 )
             finally:
                 store.close()

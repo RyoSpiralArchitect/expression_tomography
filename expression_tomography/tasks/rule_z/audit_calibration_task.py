@@ -374,6 +374,7 @@ def run_audit_calibration_experiment(
     repetitions: int = 1,
     replicate_start: int = 0,
     progress_every: int = 0,
+    preflight_only: bool = False,
 ) -> dict:
     if repetitions < 1:
         raise ValueError("repetitions must be positive")
@@ -451,6 +452,13 @@ def run_audit_calibration_experiment(
                 )
                 if stored_execution is not None:
                     skipped += 1
+
+    if preflight_only:
+        return {
+            "planned_trials": planned,
+            "inserted_trials": 0,
+            "skipped_existing_trials": skipped,
+        }
 
     inserted = 0
     for case in case_list:
@@ -546,6 +554,46 @@ def run_audit_calibration_experiment(
     }
 
 
+def run_audit_calibration_provider_suite(
+    cases: Iterable[Case],
+    providers: Iterable[Provider],
+    store: ExperimentStore,
+    *,
+    audit_modes: tuple[str, ...] = DEFAULT_AUDIT_MODES,
+    repetitions: int = 1,
+    replicate_start: int = 0,
+    progress_every: int = 0,
+) -> list[dict]:
+    case_list = list(cases)
+    provider_list = list(providers)
+    common_options = {
+        "audit_modes": audit_modes,
+        "repetitions": repetitions,
+        "replicate_start": replicate_start,
+        "progress_every": progress_every,
+    }
+    for provider in provider_list:
+        run_audit_calibration_experiment(
+            case_list,
+            provider,
+            store,
+            **common_options,
+            preflight_only=True,
+        )
+    return [
+        {
+            "provider": provider.name,
+            **run_audit_calibration_experiment(
+                case_list,
+                provider,
+                store,
+                **common_options,
+            ),
+        }
+        for provider in provider_list
+    ]
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Calibrate Rule-Z audit readers on controlled source artifacts."
@@ -614,22 +662,15 @@ def main() -> None:
             parser.error(str(exc))
         cases = make_audit_calibration_cases(args.cases, args.seed)
         providers = load_rule_z_providers(args.provider_config)
-        runs = []
-        for provider in providers:
-            runs.append(
-                {
-                    "provider": provider.name,
-                    **run_audit_calibration_experiment(
-                        cases,
-                        provider,
-                        store,
-                        audit_modes=audit_modes,
-                        repetitions=args.repetitions,
-                        replicate_start=args.replicate_start,
-                        progress_every=args.progress_every,
-                    ),
-                }
-            )
+        runs = run_audit_calibration_provider_suite(
+            cases,
+            providers,
+            store,
+            audit_modes=audit_modes,
+            repetitions=args.repetitions,
+            replicate_start=args.replicate_start,
+            progress_every=args.progress_every,
+        )
         summary = write_audit_calibration_report(store, Path(args.report_dir))
         print(
             stable_json(
