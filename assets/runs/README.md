@@ -146,9 +146,11 @@ rule_z_audit_reader_calibration_luna_seed53_120
   GPT-5.6 Luna calibration on 120 controlled source artifacts, balanced across
   eight mutation families. Includes the legacy faithful audit, the Rule-Z
   invariant audit, the exploratory repair reader, and a paired prompt
-  comparison. The manifest records the contract-indexed sensitivity/specificity
-  calibration, v4 field/item and two-sided contradiction grounding, and keeps
-  repair-target matching outside the primary endpoint.
+  comparison under opaque prompt contract v2. The manifest records privacy
+  checks, raw-response replay, contract-indexed sensitivity/specificity,
+  v4 field/item and two-sided contradiction grounding, and keeps repair-target
+  matching outside the primary endpoint. The labelled prompt-v1 run is retained
+  only as a superseded diagnostic because it exposed mutation-family labels.
 
 metaphor_transfer_openai_live
   First OpenAI live metaphor-transfer smoke run.

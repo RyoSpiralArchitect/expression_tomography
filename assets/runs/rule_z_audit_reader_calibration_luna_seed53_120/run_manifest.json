@@ -1,12 +1,12 @@
 {
-  "manifest_version": "rule_z_audit_reader_calibration.run.v4",
+  "manifest_version": "rule_z_audit_reader_calibration.run.v5",
   "status": "complete",
   "local_run_date": "2026-08-22",
   "secrets_stored": false,
   "implementation": {
     "branch": "SpiralReality/audit-reader-calibration",
     "base_commit": "469bd461eb4fca84041a5a16d8c8ec7c7c0e0e15",
-    "implementation_commit": "0fc80b4c7df50fa8aa418c0ccc91c170e868babe"
+    "implementation_commit": "e88eee8d0d26dcf3b45965c872595ee2eb1196aa"
   },
   "generator": {
     "task_type": "rule_z_audit_calibration",
@@ -37,20 +37,19 @@
     "api_key_env": "OPENAI_API_KEY"
   },
   "provenance_hardening": {
-    "prompt_contract_version": "rule_z_audit_calibration.prompt.v1",
+    "prompt_contract_version": "rule_z_audit_calibration.prompt.v2",
     "score_schema_version": "rule_z_audit_calibration.score.v4",
-    "stored_raw_responses_revalidated": 360,
-    "provider_calls_during_revalidation": 0,
-    "schema_valid_responses": 360,
-    "score_rows_changed": 360,
-    "field_item_grounding_rows_changed_in_v3": 8,
-    "contradiction_grounding_rows_changed_in_v4": 82,
-    "contradiction_classification_rows_changed_in_v4": 28,
-    "primary_endpoint_rows_changed_in_v4": 40,
-    "repair_attraction_rows_changed_in_v4": 2,
-    "repair_literal_multiplicity_rows_changed_in_v4": 15,
-    "primary_endpoint_metrics_changed": true,
-    "claim_grounding_metric_changed": true,
+    "fresh_provider_responses": 360,
+    "responses_reused_from_labelled_prompt_v1": 0,
+    "raw_response_reparse_validation_trials": 360,
+    "score_rows_changed_during_reparse_validation": 0,
+    "provider_calls_during_reparse_validation": 0,
+    "parse_valid_responses": 360,
+    "schema_valid_responses": 358,
+    "private_case_id_prompt_matches": 0,
+    "private_mutation_family_source_condition_matches": 0,
+    "opaque_public_case_id_prompt_matches": 360,
+    "controlled_source_condition_prompt_matches": 360,
     "positive_contradiction_requires": [
       "relevant_topic",
       "exact_source_quotes",
@@ -66,60 +65,60 @@
   },
   "legacy_run": {
     "database": "legacy/trials.sqlite",
-    "sha256": "cf6638a01b054b6d14c2c4562716dbd7cc23238beb2850f9c1f165ecf5401204",
+    "sha256": "1b673afdc5e1ffb33feeb649ebcb9c93e8edaedba4fb75ea9f382d7131190be7",
     "sqlite_integrity_check": "ok",
     "case_count": 120,
     "trial_count": 240,
     "unique_trial_identities": 240,
     "parse_failures": 0,
-    "schema_failures": 0,
+    "schema_failures": 1,
     "conditions": {
       "I_repair_capable": 120,
       "I_source_faithful": 120
     },
-    "created_at_utc_min": "2026-08-22 23:50:32",
-    "created_at_utc_max": "2026-08-23 00:05:13",
+    "created_at_utc_min": "2026-08-23 02:03:49",
+    "created_at_utc_max": "2026-08-23 02:20:32",
     "exact_rerun": {
       "inserted_trials": 0,
       "skipped_existing_trials": 240,
       "provider_calls": 0
     },
     "primary_source_faithful": {
-      "source_faithful_calibrated": 0.175,
-      "literal_state_exact": 0.8333333333333334,
-      "all_reported_claims_grounded": 0.21666666666666667,
+      "source_faithful_calibrated": 0.20833333333333334,
+      "literal_state_exact": 0.7583333333333333,
+      "all_reported_claims_grounded": 0.2916666666666667,
       "contradiction_detection_correct": 0.45,
-      "repair_attraction_any": 0.025
+      "repair_attraction_any": 0.075
     },
     "exploratory_repair": {
-      "designed_repair_target_match": 0.9,
-      "literal_value_state_exact": 0.3333333333333333
+      "designed_repair_target_match": 0.7666666666666667,
+      "literal_value_state_exact": 0.4
     }
   },
   "invariant_run": {
     "database": "invariants/trials.sqlite",
-    "sha256": "3a4409b11d97b09a0d02868dc729d342150f57b05741fb2c5b8f460038ed731f",
+    "sha256": "727d0c9757a4a489bc28d1df4bba33908003e81fec7f85683135eade8821b42a",
     "sqlite_integrity_check": "ok",
     "case_count": 120,
     "trial_count": 120,
     "unique_trial_identities": 120,
     "parse_failures": 0,
-    "schema_failures": 0,
+    "schema_failures": 1,
     "conditions": {
       "I_source_faithful_invariants": 120
     },
-    "created_at_utc_min": "2026-08-23 00:08:55",
-    "created_at_utc_max": "2026-08-23 00:17:28",
+    "created_at_utc_min": "2026-08-23 02:20:46",
+    "created_at_utc_max": "2026-08-23 02:30:09",
     "exact_rerun": {
       "inserted_trials": 0,
       "skipped_existing_trials": 120,
       "provider_calls": 0
     },
     "primary_source_faithful": {
-      "source_faithful_calibrated": 0.7,
-      "literal_state_exact": 0.975,
-      "all_reported_claims_grounded": 0.9666666666666667,
-      "contradiction_detection_correct": 0.75,
+      "source_faithful_calibrated": 0.5666666666666667,
+      "literal_state_exact": 0.85,
+      "all_reported_claims_grounded": 0.9083333333333333,
+      "contradiction_detection_correct": 0.7416666666666667,
       "repair_attraction_any": 0.008333333333333333
     }
   },
@@ -129,35 +128,44 @@
     "provider_configuration_hashes_matched": true,
     "case_payloads_matched": true,
     "prompt_delta_limited_to_invariant_rubric": true,
+    "stored_raw_responses_reparsed": true,
+    "stored_parses_reproduced": true,
     "stored_scores_reproduced": true,
-    "improved": 63,
-    "regressed": 0,
-    "stable_pass": 21,
-    "stable_fail": 36,
-    "legacy_contradiction_sensitivity": 0.5166666666666667,
-    "invariant_contradiction_sensitivity": 0.5,
-    "legacy_contradiction_specificity": 0.38333333333333336,
+    "improved": 52,
+    "regressed": 9,
+    "stable_pass": 16,
+    "stable_fail": 43,
+    "legacy_contradiction_sensitivity": 0.5,
+    "invariant_contradiction_sensitivity": 0.48333333333333334,
+    "legacy_contradiction_specificity": 0.4,
     "invariant_contradiction_specificity": 1.0
   },
+  "superseded_diagnostics": {
+    "labelled_prompt_v1": "diagnostics/labelled_prompt_v1_superseded.json"
+  },
   "frozen_artifacts": {
-    "invariants/rule_z_audit_calibration_report.md": "496355eecde2290370ebfb69c5c0b7b3727c197633c43e83b3f4172d2ec937ba",
-    "invariants/rule_z_audit_calibration_summary.csv": "d5a43f29d0986bdaa2be821e8a654f1bfa13ed9bcd90724d163ede663cea6be7",
-    "invariants/rule_z_audit_calibration_summary.json": "832454803e7930978543d7d502d95c1b3fe00abb7c667a4c43be3de578915299",
-    "invariants/rule_z_audit_calibration_trials.csv": "41091286bfa77fa251a37f56610ce19d843132c9455d62002549ce9408727621",
-    "legacy/rule_z_audit_calibration_report.md": "fb355ff36c6ef247150c8ec8b2c55e2693e478259c36f83446b5108468b094d2",
-    "legacy/rule_z_audit_calibration_summary.csv": "07cf3f71ef1fc4ec0aee4e46d6b109cc2601745f606d475ad2c629583f4b499a",
-    "legacy/rule_z_audit_calibration_summary.json": "5ad46b5255caa7ce35d0544d42a850c48d067b5a7374164d67589d0a78d3d393",
-    "legacy/rule_z_audit_calibration_trials.csv": "97a3dbb25bc8b3a2d1be4dd3bef0bcaff6284cd00a2ef4f653bd0b104455576c",
-    "prompt_comparison/rule_z_audit_calibration_prompt_comparison.json": "9af9e626c8f3e711d8946d4ae8e8b85d951fae7a663019816eb56b507f4154c5",
-    "prompt_comparison/rule_z_audit_calibration_prompt_comparison.md": "6a40dd60f1e3e367240d1bab49bae4ac11bde85f5194603f7fea40bb715fbe64",
-    "prompt_comparison/rule_z_audit_calibration_prompt_pairs.csv": "0bae25c1172cca8bd7cfafc2c846a1a25ab14ad9d065202331e1e0ca39e3bcb7"
+    "diagnostics/labelled_prompt_v1_superseded.json": "4017cf23453c2c7a7dcfa471f4a4cd64a259c8e9ce3ded654f82b36985758e19",
+    "invariants/rule_z_audit_calibration_report.md": "c7943e95463f0b950dff8ebf19f1c0ed7ca2a6364555d6255b1a82a85e28f7c8",
+    "invariants/rule_z_audit_calibration_summary.csv": "1315565b865d60a41824e7c8604d6b513939c52d2b7ecd70897d8a4e46066d07",
+    "invariants/rule_z_audit_calibration_summary.json": "bd397809cf3036ede2cfbd4dc81415f41a0e654996e3f69f334d9fcb366ad011",
+    "invariants/rule_z_audit_calibration_trials.csv": "81444833ab45a1b5c96d9af169b4ad607d38ac561efe064c5658d086e61a22b7",
+    "legacy/rule_z_audit_calibration_report.md": "61d83d6268af4c80b2ce9b1174711a386b23cccd7f75950342da2a96ea93bf4f",
+    "legacy/rule_z_audit_calibration_summary.csv": "8be476cc4f31ec56fdcb38d655d433f0ba48fdcaabfb7d8cce43682e957e865c",
+    "legacy/rule_z_audit_calibration_summary.json": "ccc638b8b25b0580a9344c6b0e082e0ee2770f0ea2e49e7c34884bb1bebbac02",
+    "legacy/rule_z_audit_calibration_trials.csv": "d2351a6e6cb1ee47bcf6c10e7f32955c6a54c7fc411c9633d06acb33c9017ed7",
+    "prompt_comparison/rule_z_audit_calibration_prompt_comparison.json": "5a007e3c56f4a742aa06aceffd7ad1859a57e78ed82c75eb4ce3dc96261dfb91",
+    "prompt_comparison/rule_z_audit_calibration_prompt_comparison.md": "4ff7a564e31076964974feb74b1be8dd57735181b53d25e20acf4fc98cee4a9d",
+    "prompt_comparison/rule_z_audit_calibration_prompt_pairs.csv": "6033e6ba45ad9359801a6495c0aa55b244c0a0901d02b98b33616790134aab5f"
   },
   "interpretation_boundaries": [
     "Source-faithful quote-grounded calibration is the primary endpoint.",
     "Designed repair-target match is exploratory because coherent repairs can be non-identifiable.",
-    "The prompt comparison has one response per artifact and does not estimate response stochasticity.",
+    "Mutation-family labels and private case identifiers are not present in the canonical prompts.",
+    "The earlier labelled prompt-v1 responses are superseded diagnostics and are not canonical evidence.",
+    "The difference between labelled and opaque runs cannot be assigned wholly to cue removal because responses were regenerated and there is one replicate per artifact.",
+    "The within-run prompt comparison has one response per artifact and does not estimate response stochasticity.",
     "Claim grounding is a field-and-item lexical exact-quote check on these fielded phantoms, not a general semantic-entailment judgment.",
-    "The invariant rubric improves specificity without a material loss of valid designed-contradiction sensitivity; both prompts remain weak on reversed-edge and equal-tier cross-field conflicts.",
+    "The invariant rubric improves specificity while both prompts remain weak on reversed-edge and equal-tier cross-field conflicts.",
     "This run calibrates a named reader and contract; it is not evidence of a pre-expression latent state or a provider leaderboard."
   ]
 }

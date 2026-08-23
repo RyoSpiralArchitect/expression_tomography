@@ -1,0 +1,33 @@
+{
+  "status": "superseded_noncanonical_diagnostic",
+  "reason": "The prompt exposed the private mutation family through CASE_ID and SOURCE_CONDITION.",
+  "prompt_contract_version": "rule_z_audit_calibration.prompt.v1",
+  "score_schema_version": "rule_z_audit_calibration.score.v4",
+  "last_frozen_commit": "3d436a9630ecf800bcf1525f9217981dae6db488",
+  "raw_databases_available_in_git_history": true,
+  "legacy_database_sha256": "cf6638a01b054b6d14c2c4562716dbd7cc23238beb2850f9c1f165ecf5401204",
+  "invariant_database_sha256": "3a4409b11d97b09a0d02868dc729d342150f57b05741fb2c5b8f460038ed731f",
+  "labelled_metrics": {
+    "legacy_source_faithful_calibrated": 0.175,
+    "legacy_literal_state_exact": 0.8333333333333334,
+    "legacy_all_reported_claims_grounded": 0.21666666666666667,
+    "legacy_contradiction_detection_correct": 0.45,
+    "legacy_contradiction_sensitivity": 0.5166666666666667,
+    "legacy_contradiction_specificity": 0.38333333333333336,
+    "legacy_repair_attraction_any": 0.025,
+    "invariant_source_faithful_calibrated": 0.7,
+    "invariant_literal_state_exact": 0.975,
+    "invariant_all_reported_claims_grounded": 0.9666666666666667,
+    "invariant_contradiction_detection_correct": 0.75,
+    "invariant_contradiction_sensitivity": 0.5,
+    "invariant_contradiction_specificity": 1.0,
+    "invariant_repair_attraction_any": 0.008333333333333333,
+    "repair_designed_target_match": 0.9,
+    "repair_literal_value_state_exact": 0.3333333333333333,
+    "paired_improved": 63,
+    "paired_regressed": 0,
+    "paired_stable_pass": 21,
+    "paired_stable_fail": 36
+  },
+  "interpretation": "Retained only to document the discovered cue leak and its historical output. It must not be used as source-only calibration evidence or compared causally with the fresh opaque run without replicated cue ablation."
+}
