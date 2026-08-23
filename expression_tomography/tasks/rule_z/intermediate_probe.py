@@ -74,6 +74,14 @@ def _provider_provenance(provider: Provider) -> dict[str, Any]:
         provider_type = "mock"
     else:
         provider_type = type(provider).__name__
+    request_contract_version = getattr(
+        provider,
+        "request_contract_version",
+        (
+            f"{type(provider).__module__}."
+            f"{type(provider).__qualname__}.request.v1"
+        ),
+    )
     config = {
         "name": provider.name,
         "type": provider_type,
@@ -87,6 +95,7 @@ def _provider_provenance(provider: Provider) -> dict[str, Any]:
         "max_tokens": getattr(spec, "max_tokens", None),
         "temperature": getattr(spec, "temperature", None),
         "reasoning_effort": getattr(spec, "reasoning_effort", None),
+        "request_contract_version": str(request_contract_version),
         "device": getattr(spec, "device", None),
         "dtype": getattr(spec, "dtype", None),
     }

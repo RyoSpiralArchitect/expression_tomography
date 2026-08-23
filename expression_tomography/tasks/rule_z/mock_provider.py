@@ -46,7 +46,7 @@ class RuleZMockProvider:
         if "TASK: rule_z_source_faithful_audit" in prompt:
             return self._audit_rule_z_source_faithful(prompt)
         if "TASK: rule_z_repair_capable_audit" in prompt:
-            return self._audit_rule_z_derivation(prompt)
+            return self._audit_rule_z_repair(prompt)
         if "TASK: rule_z_intermediate_audit" in prompt:
             return self._audit_rule_z_derivation(prompt)
         if "TASK: rule_z_hidden_query_battery" in prompt:
@@ -139,94 +139,273 @@ class RuleZMockProvider:
             ensure_ascii=False,
         )
 
+    def _audit_rule_z_repair(self, prompt: str) -> str:
+        derivation = (
+            extract_text_block(prompt, "PRIVATE_DERIVATION")
+            or extract_text_block(prompt, "SOURCE_ARTIFACT")
+        )
+
+        def first_values(label: str) -> list[str]:
+            match = re.search(
+                rf"^{re.escape(label)}:\s*(.*?)\.\s*$",
+                derivation,
+                flags=re.M,
+            )
+            if not match or match.group(1).strip().lower() == "none":
+                return []
+            return [
+                item.strip()
+                for item in match.group(1).split(",")
+                if item.strip()
+            ]
+
+        outcomes = {}
+        outcome_match = re.search(r"^Rule outcomes:\s*(.*?)\.\s*$", derivation, flags=re.M)
+        if outcome_match:
+            for item in outcome_match.group(1).split(";"):
+                if "=>" not in item:
+                    continue
+                rule_id, conclusion = (part.strip() for part in item.split("=>", 1))
+                if rule_id and conclusion:
+                    outcomes[rule_id] = conclusion
+
+        fired = first_values("Fired rules")
+        suppressed = first_values("Suppressed rules")
+        active = first_values("Active rules")
+        conclusions = first_values("Active conclusions")
+        edges = []
+        for item in first_values("Fired priority edges"):
+            if ">" not in item:
+                continue
+            higher, lower = (part.strip() for part in item.split(">", 1))
+            if higher and lower:
+                edges.append((higher, lower))
+
+        if len(active) == 1 and len(suppressed) == 1:
+            winner, loser = active[0], suppressed[0]
+            fired = fired or [winner, loser]
+            edges = [(winner, loser)]
+        elif len(edges) == 1:
+            winner, loser = edges[0]
+            fired = fired or [winner, loser]
+            suppressed = [loser]
+            active = [rule_id for rule_id in fired if rule_id != loser]
+        elif fired and len(suppressed) == 1:
+            active = [rule_id for rule_id in fired if rule_id not in suppressed]
+            if len(active) == 1:
+                edges = [(active[0], suppressed[0])]
+        elif fired and len(active) == 1:
+            suppressed = [rule_id for rule_id in fired if rule_id not in active]
+            if len(suppressed) == 1:
+                edges = [(active[0], suppressed[0])]
+
+        if active and outcomes:
+            reconstructed = [
+                outcomes[rule_id]
+                for rule_id in active
+                if rule_id in outcomes
+            ]
+            if reconstructed:
+                conclusions = reconstructed
+
+        return json.dumps(
+            {
+                "fired_rules": fired,
+                "fired_priority_edges": [
+                    {
+                        "higher_priority_rule": higher,
+                        "lower_priority_rule": lower,
+                    }
+                    for higher, lower in edges
+                ],
+                "suppressed_rules": suppressed,
+                "active_rules": active,
+                "active_conclusions": conclusions,
+            },
+            ensure_ascii=False,
+        )
+
     def _audit_rule_z_source_faithful(self, prompt: str) -> str:
         source = extract_text_block(prompt, "SOURCE_ARTIFACT")
 
-        def source_line(label: str) -> tuple[str, list[str]]:
-            match = re.search(
+        def source_lines(label: str) -> list[tuple[str, list[str]]]:
+            matches = re.finditer(
                 rf"^({re.escape(label)}:\s*(.*?)\.\s*)$",
                 source,
                 flags=re.M,
             )
-            if not match:
-                return "", []
-            line = match.group(1).strip()
-            raw_values = match.group(2).strip()
-            if raw_values.lower() == "none":
-                return line, []
-            return line, [
-                item.strip()
-                for item in raw_values.split(",")
-                if item.strip()
+            records = []
+            for match in matches:
+                line = match.group(1).strip()
+                raw_values = match.group(2).strip()
+                values = (
+                    []
+                    if raw_values.lower() == "none"
+                    else [
+                        item.strip()
+                        for item in raw_values.split(",")
+                        if item.strip()
+                    ]
+                )
+                records.append((line, values))
+            return records
+
+        records_by_field = {
+            "fired_rules": source_lines("Fired rules"),
+            "suppressed_rules": source_lines("Suppressed rules"),
+            "active_rules": source_lines("Active rules"),
+            "active_conclusions": source_lines("Active conclusions"),
+            "fired_priority_edges": source_lines("Fired priority edges"),
+        }
+
+        def status_for_claims(claims: list[tuple[str, ...]]) -> str:
+            if not claims:
+                return "not_stated"
+            nonempty = [claim for claim in claims if claim]
+            if not nonempty:
+                return "explicit_none"
+            if len(nonempty) != len(claims) or len(set(nonempty)) > 1:
+                return "contradictory"
+            return "asserted"
+
+        def grounded_values(field: str) -> dict:
+            records = records_by_field[field]
+            claims = [tuple(sorted(set(values))) for _line, values in records]
+            status = status_for_claims(claims)
+            items = [
+                {
+                    "value": value,
+                    "evidence": line,
+                }
+                for line, values in records
+                for value in values
             ]
-
-        def grounded_values(label: str) -> dict:
-            line, values = source_line(label)
-            if not line:
-                return {
-                    "status": "not_stated",
-                    "items": [],
-                    "field_evidence": "",
-                }
-            if not values:
-                return {
-                    "status": "explicit_none",
-                    "items": [],
-                    "field_evidence": line,
-                }
             return {
-                "status": "asserted",
-                "items": [
-                    {
-                        "value": value,
-                        "evidence": line,
-                    }
-                    for value in values
-                ],
-                "field_evidence": "",
+                "status": status,
+                "items": items,
+                "field_evidence": (
+                    records[0][0]
+                    if status == "explicit_none"
+                    else ""
+                ),
             }
 
-        edge_line, edge_values = source_line("Fired priority edges")
-        if not edge_line:
-            grounded_edges = {
-                "status": "not_stated",
-                "items": [],
-                "field_evidence": "",
-            }
-        elif not edge_values:
-            grounded_edges = {
-                "status": "explicit_none",
-                "items": [],
-                "field_evidence": edge_line,
-            }
-        else:
-            grounded_edges = {
-                "status": "asserted",
-                "items": [
-                    {
-                        "higher_priority_rule": value.split(">", 1)[0].strip(),
-                        "lower_priority_rule": value.split(">", 1)[1].strip(),
-                        "evidence": edge_line,
-                    }
-                    for value in edge_values
-                    if ">" in value
-                ],
-                "field_evidence": "",
-            }
+        edge_records = records_by_field["fired_priority_edges"]
+        parsed_edge_records = []
+        for line, values in edge_records:
+            edges = []
+            for value in values:
+                if ">" not in value:
+                    continue
+                higher, lower = (part.strip() for part in value.split(">", 1))
+                if higher and lower:
+                    edges.append((higher, lower))
+            parsed_edge_records.append((line, edges))
+        edge_claims = [
+            tuple(sorted(set(edges)))
+            for _line, edges in parsed_edge_records
+        ]
+        edge_status = status_for_claims(edge_claims)
+        grounded_edges = {
+            "status": edge_status,
+            "items": [
+                {
+                    "higher_priority_rule": higher,
+                    "lower_priority_rule": lower,
+                    "evidence": line,
+                }
+                for line, edges in parsed_edge_records
+                for higher, lower in edges
+            ],
+            "field_evidence": (
+                edge_records[0][0]
+                if edge_status == "explicit_none"
+                else ""
+            ),
+        }
+
+        fields = {
+            "fired_rules": grounded_values("fired_rules"),
+            "fired_priority_edges": grounded_edges,
+            "suppressed_rules": grounded_values("suppressed_rules"),
+            "active_rules": grounded_values("active_rules"),
+            "active_conclusions": grounded_values("active_conclusions"),
+        }
+        contradictions = []
+
+        def add_contradiction(topic: str, evidence: list[str]) -> None:
+            if any(item["topic"] == topic for item in contradictions):
+                return
+            quotes = list(dict.fromkeys(quote for quote in evidence if quote))
+            if quotes:
+                contradictions.append({"topic": topic, "evidence": quotes})
+
+        for field, payload in fields.items():
+            if payload["status"] == "contradictory":
+                add_contradiction(
+                    field,
+                    [line for line, _values in records_by_field[field]],
+                )
+
+        fired = {
+            item["value"]
+            for item in fields["fired_rules"]["items"]
+        }
+        suppressed = {
+            item["value"]
+            for item in fields["suppressed_rules"]["items"]
+        }
+        active = {
+            item["value"]
+            for item in fields["active_rules"]["items"]
+        }
+        edges = {
+            (
+                item["higher_priority_rule"],
+                item["lower_priority_rule"],
+            )
+            for item in fields["fired_priority_edges"]["items"]
+        }
+        coherence_evidence = [
+            line
+            for field in (
+                "fired_priority_edges",
+                "suppressed_rules",
+                "active_rules",
+            )
+            for line, _values in records_by_field[field]
+        ]
+        edge_unambiguous = fields["fired_priority_edges"]["status"] in {
+            "asserted",
+            "explicit_none",
+        }
+        globals_unambiguous = all(
+            fields[field]["status"] in {"asserted", "explicit_none", "not_stated"}
+            for field in ("suppressed_rules", "active_rules")
+        )
+        if edge_unambiguous and globals_unambiguous:
+            implied_suppressed = {lower for _higher, lower in edges}
+            if (
+                fields["suppressed_rules"]["status"] == "asserted"
+                and suppressed != implied_suppressed
+            ):
+                add_contradiction("priority_vs_suppression", coherence_evidence)
+            if (
+                fields["active_rules"]["status"] == "asserted"
+                and fired
+                and active != fired - implied_suppressed
+            ):
+                add_contradiction("priority_vs_active_rules", coherence_evidence)
 
         return json.dumps(
             {
-                "fired_rules": grounded_values("Fired rules"),
-                "fired_priority_edges": grounded_edges,
-                "suppressed_rules": grounded_values("Suppressed rules"),
-                "active_rules": grounded_values("Active rules"),
-                "active_conclusions": grounded_values("Active conclusions"),
+                **fields,
                 "source_final_answer": {
                     "status": "not_stated",
                     "value": "",
                     "evidence": "",
                 },
-                "contradictions": [],
+                "contradictions": contradictions,
             },
             ensure_ascii=False,
         )

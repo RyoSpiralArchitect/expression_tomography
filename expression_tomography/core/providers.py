@@ -8,7 +8,7 @@ import urllib.error
 import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable, Protocol
+from typing import Callable, Iterable, Protocol
 
 
 class ProviderError(RuntimeError):
@@ -32,7 +32,7 @@ class ProviderSpec:
     api_key: str | None = None
     timeout_s: float = 60.0
     max_tokens: int = 700
-    temperature: float = 0.0
+    temperature: float | None = None
     reasoning_effort: str | None = None
     device: str = "auto"
     dtype: str = "auto"
@@ -48,7 +48,11 @@ class ProviderSpec:
             api_key=obj.get("api_key"),
             timeout_s=float(obj.get("timeout_s", 60.0)),
             max_tokens=int(obj.get("max_tokens", 700)),
-            temperature=float(obj.get("temperature", 0.0)),
+            temperature=(
+                float(obj["temperature"])
+                if obj.get("temperature") is not None
+                else None
+            ),
             reasoning_effort=(
                 str(obj["reasoning_effort"])
                 if obj.get("reasoning_effort") is not None
@@ -60,6 +64,22 @@ class ProviderSpec:
 
 
 MockProviderFactory = Callable[[ProviderSpec], Provider]
+
+
+def materialize_unique_providers(providers: Iterable[Provider]) -> list[Provider]:
+    provider_list = list(providers)
+    seen = set()
+    duplicates = set()
+    for provider in provider_list:
+        if provider.name in seen:
+            duplicates.add(provider.name)
+        seen.add(provider.name)
+    if duplicates:
+        raise ProviderError(
+            "Provider names must be unique; duplicate provider names: "
+            + ", ".join(sorted(duplicates))
+        )
+    return provider_list
 
 
 def load_provider_specs(path: str | Path) -> list[ProviderSpec]:
@@ -96,10 +116,10 @@ def build_providers_from_config(
     *,
     mock_factory: MockProviderFactory | None = None,
 ) -> list[Provider]:
-    return [
+    return materialize_unique_providers(
         build_provider(spec, mock_factory=mock_factory)
         for spec in load_provider_specs(path)
-    ]
+    )
 
 
 def parse_json_lenient(raw: str) -> dict | None:
@@ -189,6 +209,10 @@ def _openai_token_limit_key(model: str) -> str:
 class OpenAICompatibleProvider:
     """Minimal OpenAI-compatible chat-completions adapter."""
 
+    request_contract_version = (
+        "openai_compatible.chat_completions.temperature_optional.v3"
+    )
+
     def __init__(self, spec: ProviderSpec):
         self.spec = spec
         self.name = spec.name
@@ -201,7 +225,7 @@ class OpenAICompatibleProvider:
             "messages": [{"role": "user", "content": prompt}],
             _openai_token_limit_key(self.model): self.spec.max_tokens,
         }
-        if self.spec.temperature > 0:
+        if self.spec.temperature is not None:
             payload["temperature"] = self.spec.temperature
         if self.spec.reasoning_effort:
             payload["reasoning_effort"] = self.spec.reasoning_effort
@@ -244,6 +268,8 @@ class OpenAICompatibleProvider:
 class AnthropicProvider:
     """Minimal Anthropic Messages API adapter."""
 
+    request_contract_version = "anthropic.messages.temperature_optional.v2"
+
     def __init__(self, spec: ProviderSpec):
         self.spec = spec
         self.name = spec.name
@@ -256,9 +282,7 @@ class AnthropicProvider:
             "max_tokens": self.spec.max_tokens,
             "messages": [{"role": "user", "content": prompt}],
         }
-        # Some current Claude models reject non-default sampling parameters.
-        # Keep deterministic omission by default; configs can opt in.
-        if self.spec.temperature > 0:
+        if self.spec.temperature is not None:
             payload["temperature"] = self.spec.temperature
         headers = {
             "x-api-key": _api_key(self.spec),
@@ -299,6 +323,8 @@ class HFLocalProvider:
     local evaluation and later fine-tuning loops, not as the fastest possible
     inference runtime.
     """
+
+    request_contract_version = "hf_local.generate.temperature_optional.v2"
 
     def __init__(self, spec: ProviderSpec):
         self.spec = spec
@@ -348,10 +374,13 @@ class HFLocalProvider:
         inputs = tokenizer(prompt, return_tensors="pt").to(self._device)
         generation_kwargs = {
             "max_new_tokens": self.spec.max_tokens,
-            "do_sample": self.spec.temperature > 0,
+            "do_sample": (
+                self.spec.temperature is not None
+                and self.spec.temperature > 0
+            ),
             "pad_token_id": tokenizer.eos_token_id,
         }
-        if self.spec.temperature > 0:
+        if self.spec.temperature is not None and self.spec.temperature > 0:
             generation_kwargs["temperature"] = self.spec.temperature
         with torch.no_grad():
             output_ids = model.generate(

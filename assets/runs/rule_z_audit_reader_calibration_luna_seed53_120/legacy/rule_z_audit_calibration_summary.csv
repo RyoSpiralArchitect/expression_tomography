@@ -1,0 +1,17 @@
+provider,condition,mutation_family,n_trials,audit_parse_ok,audit_schema_valid,source_faithful_calibrated,literal_state_exact,all_reported_claims_grounded,contradiction_detection_correct,repair_attraction_any,designed_repair_target_match,literal_value_state_exact
+openai-gpt-5.6-luna-low,I_repair_capable,clean,15,1.000,1.000,,,,,,1.000,1.000
+openai-gpt-5.6-luna-low,I_repair_capable,contradictory_edge,15,1.000,1.000,,,,,,1.000,0.000
+openai-gpt-5.6-luna-low,I_repair_capable,contradictory_integration,15,1.000,1.000,,,,,,1.000,0.000
+openai-gpt-5.6-luna-low,I_repair_capable,duplicated_edge,15,1.000,1.000,,,,,,1.000,0.000
+openai-gpt-5.6-luna-low,I_repair_capable,equal_tier_reinterpretation,15,1.000,1.000,,,,,,0.000,1.000
+openai-gpt-5.6-luna-low,I_repair_capable,irrelevant_fluent,15,1.000,1.000,,,,,,1.000,1.000
+openai-gpt-5.6-luna-low,I_repair_capable,omitted_field,15,1.000,1.000,,,,,,1.000,0.000
+openai-gpt-5.6-luna-low,I_repair_capable,reversed_edge,15,1.000,1.000,,,,,,0.200,0.067
+openai-gpt-5.6-luna-low,I_source_faithful,clean,15,1.000,1.000,0.067,1.000,0.067,0.067,0.000,,
+openai-gpt-5.6-luna-low,I_source_faithful,contradictory_edge,15,1.000,1.000,0.400,0.933,0.467,1.000,0.000,,
+openai-gpt-5.6-luna-low,I_source_faithful,contradictory_integration,15,1.000,1.000,0.533,0.667,0.800,1.000,0.000,,
+openai-gpt-5.6-luna-low,I_source_faithful,duplicated_edge,15,1.000,1.000,0.067,0.533,0.133,0.133,0.467,,
+openai-gpt-5.6-luna-low,I_source_faithful,equal_tier_reinterpretation,15,1.000,1.000,0.000,0.933,0.000,0.000,0.000,,
+openai-gpt-5.6-luna-low,I_source_faithful,irrelevant_fluent,15,1.000,1.000,0.867,0.867,0.867,1.000,0.000,,
+openai-gpt-5.6-luna-low,I_source_faithful,omitted_field,15,1.000,1.000,0.133,0.867,0.133,0.133,0.000,,
+openai-gpt-5.6-luna-low,I_source_faithful,reversed_edge,15,1.000,1.000,0.000,1.000,0.000,0.067,0.000,,

@@ -1,0 +1,186 @@
+{
+  "manifest_version": "rule_z_audit_reader_calibration.run.v6",
+  "status": "complete",
+  "local_run_date": "2026-08-22",
+  "secrets_stored": false,
+  "implementation": {
+    "branch": "SpiralReality/audit-reader-calibration",
+    "base_commit": "469bd461eb4fca84041a5a16d8c8ec7c7c0e0e15",
+    "implementation_commit": "e3adff55d638b8ee4014df1ab1cfaae8cc5d58ca"
+  },
+  "generator": {
+    "task_type": "rule_z_audit_calibration",
+    "seed": 53,
+    "cases": 120,
+    "replicates": 1,
+    "families": {
+      "clean": 15,
+      "contradictory_edge": 15,
+      "contradictory_integration": 15,
+      "duplicated_edge": 15,
+      "equal_tier_reinterpretation": 15,
+      "irrelevant_fluent": 15,
+      "omitted_field": 15,
+      "reversed_edge": 15
+    }
+  },
+  "provider": {
+    "name": "openai-gpt-5.6-luna-low",
+    "model": "gpt-5.6-luna",
+    "type": "openai_compatible",
+    "config_file": "provider_config.json",
+    "config_file_sha256": "ec09af8685b21682c7e957ec78f6efb322ffe75e2b920cd1f29c47b5c796ed69",
+    "stored_metadata_config_sha256": "c362b649ef693af847c2ceaf",
+    "request_contract_version": "openai_compatible.chat_completions.temperature_optional.v3",
+    "max_tokens": 1400,
+    "temperature": null,
+    "temperature_request_mode": "provider_default",
+    "reasoning_effort": "low",
+    "api_key_env": "OPENAI_API_KEY"
+  },
+  "provenance_hardening": {
+    "prompt_contract_version": "rule_z_audit_calibration.prompt.v2",
+    "score_schema_version": "rule_z_audit_calibration.score.v4",
+    "fresh_provider_responses": 360,
+    "responses_reused_from_labelled_prompt_v1": 0,
+    "responses_reused_from_temperature_mismatch_run": 0,
+    "raw_response_reparse_validation_trials": 360,
+    "score_rows_changed_during_reparse_validation": 0,
+    "provider_calls_during_reparse_validation": 0,
+    "parse_valid_responses": 360,
+    "schema_valid_responses": 359,
+    "private_case_id_prompt_matches": 0,
+    "private_mutation_family_source_condition_matches": 0,
+    "opaque_public_case_id_prompt_matches": 360,
+    "controlled_source_condition_prompt_matches": 360,
+    "provider_default_temperature_metadata_rows": 360,
+    "request_contract_metadata_rows": 360,
+    "positive_contradiction_requires": [
+      "relevant_topic",
+      "exact_source_quotes",
+      "both_sides_of_a_designed_incompatibility"
+    ],
+    "execution_identity_includes": [
+      "logical_trial_identity",
+      "provider_config_sha256",
+      "prompt_sha256",
+      "prompt_contract_version",
+      "score_schema_version"
+    ],
+    "provider_config_includes": [
+      "request_contract_version",
+      "temperature",
+      "reasoning_effort",
+      "device",
+      "dtype"
+    ]
+  },
+  "legacy_run": {
+    "database": "legacy/trials.sqlite",
+    "sha256": "aacd0c2e72f461a24fb2233cce2e15a41d51e03b2fca50feca10478b5cc709be",
+    "sqlite_integrity_check": "ok",
+    "case_count": 120,
+    "trial_count": 240,
+    "unique_trial_identities": 240,
+    "parse_failures": 0,
+    "schema_failures": 0,
+    "conditions": {
+      "I_repair_capable": 120,
+      "I_source_faithful": 120
+    },
+    "created_at_utc_min": "2026-08-23 02:52:18",
+    "created_at_utc_max": "2026-08-23 03:08:23",
+    "exact_rerun": {
+      "inserted_trials": 0,
+      "skipped_existing_trials": 240,
+      "provider_calls": 0
+    },
+    "primary_source_faithful": {
+      "source_faithful_calibrated": 0.25833333333333336,
+      "literal_state_exact": 0.85,
+      "all_reported_claims_grounded": 0.30833333333333335,
+      "contradiction_detection_correct": 0.425,
+      "repair_attraction_any": 0.058333333333333334
+    },
+    "exploratory_repair": {
+      "designed_repair_target_match": 0.775,
+      "literal_value_state_exact": 0.38333333333333336
+    }
+  },
+  "invariant_run": {
+    "database": "invariants/trials.sqlite",
+    "sha256": "dbadb4c01423295a6c66336c28ff6b355605b26132a9d2cea69b48c09041377a",
+    "sqlite_integrity_check": "ok",
+    "case_count": 120,
+    "trial_count": 120,
+    "unique_trial_identities": 120,
+    "parse_failures": 0,
+    "schema_failures": 1,
+    "conditions": {
+      "I_source_faithful_invariants": 120
+    },
+    "created_at_utc_min": "2026-08-23 03:08:36",
+    "created_at_utc_max": "2026-08-23 03:18:01",
+    "exact_rerun": {
+      "inserted_trials": 0,
+      "skipped_existing_trials": 120,
+      "provider_calls": 0
+    },
+    "primary_source_faithful": {
+      "source_faithful_calibrated": 0.6333333333333333,
+      "literal_state_exact": 0.8916666666666667,
+      "all_reported_claims_grounded": 0.9333333333333333,
+      "contradiction_detection_correct": 0.75,
+      "repair_attraction_any": 0.008333333333333333
+    }
+  },
+  "paired_prompt_comparison": {
+    "pairs": 120,
+    "source_artifact_hashes_matched": true,
+    "provider_configuration_hashes_matched": true,
+    "case_payloads_matched": true,
+    "prompt_delta_limited_to_invariant_rubric": true,
+    "stored_raw_responses_reparsed": true,
+    "stored_parses_reproduced": true,
+    "stored_scores_reproduced": true,
+    "improved": 50,
+    "regressed": 5,
+    "stable_pass": 26,
+    "stable_fail": 39,
+    "legacy_contradiction_sensitivity": 0.5166666666666667,
+    "invariant_contradiction_sensitivity": 0.5,
+    "legacy_contradiction_specificity": 0.3333333333333333,
+    "invariant_contradiction_specificity": 1.0
+  },
+  "superseded_diagnostics": {
+    "labelled_prompt_v1": "diagnostics/labelled_prompt_v1_superseded.json",
+    "opaque_prompt_v2_temperature_mismatch": "diagnostics/opaque_prompt_v2_temperature_mismatch_superseded.json"
+  },
+  "frozen_artifacts": {
+    "diagnostics/labelled_prompt_v1_superseded.json": "4017cf23453c2c7a7dcfa471f4a4cd64a259c8e9ce3ded654f82b36985758e19",
+    "diagnostics/opaque_prompt_v2_temperature_mismatch_superseded.json": "60cf66b05e7342a0bf6b1a707745abba05e996abcc832d5eaa8bc2bfcaf82096",
+    "invariants/rule_z_audit_calibration_report.md": "f24d6944b825729778c7220e316501c398dbc6ccaaadbbd4b8a28b1efd11c4ea",
+    "invariants/rule_z_audit_calibration_summary.csv": "7a2d395bd211e5637c792fd0470af6d3daeee52c4dfc32a7838f618d7a663252",
+    "invariants/rule_z_audit_calibration_summary.json": "5df8ca4edf34233c04fcb8562de0a56ac11154895436a95a6bc2290825bfc4af",
+    "invariants/rule_z_audit_calibration_trials.csv": "fbfcea675e28b90232829af079e9f32942623f3bec996448faac33e3c48938b0",
+    "legacy/rule_z_audit_calibration_report.md": "8f54ce474db1aeb8c2e098bfc32fe3572e34c292cc70e9bd9e75d7c2ee7d10fe",
+    "legacy/rule_z_audit_calibration_summary.csv": "d547d94e6c6e6e24c33471b6ce809c5bae8b59e7b610bcf22f785cca193afc1b",
+    "legacy/rule_z_audit_calibration_summary.json": "1e73859beaf382eaf04de77efe59fbad2d7d520995ba9478cb90e05832aa50ff",
+    "legacy/rule_z_audit_calibration_trials.csv": "56e6fe141da40b820f4bee0a130dc62c391313154d071aa74fde2718800dfe21",
+    "prompt_comparison/rule_z_audit_calibration_prompt_comparison.json": "8029decf34c080ddf154f60bed29e23ef1b5efa66e67b7eb3b7d054834e23e02",
+    "prompt_comparison/rule_z_audit_calibration_prompt_comparison.md": "5398b270c216f533ec3c3074c60ff878ecdc296d996cb42f87b357dc92a71e1f",
+    "prompt_comparison/rule_z_audit_calibration_prompt_pairs.csv": "e2b952b90659cbff86a8cefa62f208efd9a5319e2be8855b57a1bf5b7aedd7a1"
+  },
+  "interpretation_boundaries": [
+    "Source-faithful quote-grounded calibration is the primary endpoint.",
+    "Designed repair-target match is exploratory because coherent repairs can be non-identifiable.",
+    "Mutation-family labels and private case identifiers are not present in the canonical prompts.",
+    "The canonical request intentionally uses the only temperature mode supported by this model: provider default.",
+    "The earlier labelled prompt-v1 and temperature-mismatch responses are superseded diagnostics and are not canonical evidence.",
+    "Differences between independently generated runs cannot be assigned wholly to one corrected cue or request setting with one replicate per artifact.",
+    "The within-run prompt comparison has one response per artifact and does not estimate response stochasticity.",
+    "Claim grounding is a field-and-item lexical exact-quote check on these fielded phantoms, not a general semantic-entailment judgment.",
+    "The invariant rubric improves specificity while both prompts remain weak on reversed-edge and equal-tier cross-field conflicts.",
+    "This run calibrates a named reader and contract; it is not evidence of a pre-expression latent state or a provider leaderboard."
+  ]
+}

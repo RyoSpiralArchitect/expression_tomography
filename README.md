@@ -104,6 +104,51 @@ The first live reader checkpoint and its completion boundary are documented in
 `docs/live_rule_z_posthoc_readers_note_2026_07_25.md`. Its Claude side is
 complete; GPT-5.5 remains an explicitly partial, resumable quota checkpoint.
 
+## Rule-Z Audit Reader Calibration
+
+Controlled source artifacts calibrate the post-hoc audit reader before it is
+used as a measurement instrument over model-written derivations:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.audit_calibration_task \
+  --cases 120 \
+  --seed 53 \
+  --audit-modes source_faithful_invariants,repair_capable \
+  --provider-config expression_tomography/config/providers.openai_gpt_5_6_luna.json \
+  --db results/expression_tomography/rule_z_audit_calibration.sqlite \
+  --report-dir results/expression_tomography/rule_z_audit_calibration_reports
+```
+
+The eight balanced mutation families cover clean ledgers, omitted fields,
+reversed, duplicated, equal-tier, and contradictory priority claims,
+contradictory integration, and fluent artifacts with no case-specific claims.
+Canonical live prompts use hash-derived public case identifiers and one
+controlled source-condition label; mutation-family labels stay private in the
+stored case payload.
+Source-faithful field/item-matched and two-sided contradiction quote grounding
+is the primary endpoint. A
+repair-capable reader is reported separately against one designed repair target
+because coherent repair can be non-identifiable.
+
+Run `source_faithful` and `source_faithful_invariants` into separate databases,
+then compare their fixed source artifacts with:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.audit_calibration_compare \
+  --legacy-db results/expression_tomography/rule_z_audit_legacy.sqlite \
+  --invariant-db results/expression_tomography/rule_z_audit_invariants.sqlite \
+  --output-dir results/expression_tomography/rule_z_audit_prompt_comparison
+```
+
+The runner fails closed when a logical trial collides with changed execution
+provenance. The comparison reconstructs both prompts and scores, then fails
+closed when identities, source payloads, provider configuration (including HF
+device and dtype), prompt
+contracts, rubric-only normalization, or score schemas differ. Existing raw
+responses can be upgraded without provider calls using
+`--revalidate-existing-only`. The first live Luna calibration is documented in
+`docs/live_rule_z_audit_reader_calibration_luna_note_2026_08_22.md`.
+
 ## Metaphor Transfer Smoke
 
 ```bash
@@ -136,6 +181,15 @@ python3 -m expression_tomography.tasks.rule_z.task \
   --provider-config expression_tomography/config/providers.openai_gpt_5_5.json
 ```
 
+The lower-cost OpenAI audit-calibration config uses GPT-5.6 Luna with low
+reasoning effort and its supported provider-default temperature
+(`temperature: null`):
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.audit_calibration_task \
+  --provider-config expression_tomography/config/providers.openai_gpt_5_6_luna.json
+```
+
 The matching clean Anthropic priority/compute probe uses:
 
 ```bash
@@ -148,7 +202,14 @@ finish/token diagnostics, and the Anthropic error reports safe stop/token
 diagnostics, so an empty generation cannot silently become a receiver trial.
 OpenAI-compatible configs may set `reasoning_effort`; it is included in the
 secret-free provider fingerprint so runs with different reasoning budgets do
-not share probe identities.
+not share probe identities. Provider request-contract versions are fingerprinted
+as well. A numeric temperature is sent explicitly, while `null` records an
+intentional provider-default request.
+
+The main Rule-Z runner also binds provider and request provenance plus its
+condition-specific execution contract into each resume identity. A logical
+trial that collides with changed execution semantics fails closed, and legacy
+stores without hardened provenance must be continued in a fresh database.
 
 Provider types:
 

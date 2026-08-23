@@ -50,6 +50,16 @@ rule_z_hidden_query_utility.csv
 rule_z_hidden_query_summary.csv
   Receiver-indexed current-state and target-cued counterfactual utility.
 
+rule_z_audit_calibration_trials.csv
+rule_z_audit_calibration_summary.csv
+rule_z_audit_calibration_summary.json
+  Controlled audit-reader calibration rows and aggregates.
+
+rule_z_audit_calibration_prompt_pairs.csv
+rule_z_audit_calibration_prompt_comparison.json
+  Paired legacy-versus-invariant audit-prompt transitions with contradiction
+  sensitivity and specificity.
+
 rule_z_report.md
   Generated report from the run.
 ```
@@ -131,6 +141,17 @@ rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low
   counterfactual probes. GPT-5.5 is an explicitly partial, resumable checkpoint
   after external quota exhaustion. The manifest separates canonical evidence
   from retained output-budget diagnostics.
+
+rule_z_audit_reader_calibration_luna_seed53_120
+  GPT-5.6 Luna calibration on 120 controlled source artifacts, balanced across
+  eight mutation families. Includes the legacy faithful audit, the Rule-Z
+  invariant audit, the exploratory repair reader, and a paired prompt
+  comparison under opaque prompt contract v2. The manifest records privacy
+  checks, provider-default temperature request contract v3, raw-response
+  replay, contract-indexed sensitivity/specificity, v4 field/item and two-sided
+  contradiction grounding, and keeps repair-target matching outside the primary
+  endpoint. The labelled prompt-v1 and temperature-provenance mismatch runs are
+  retained only as superseded diagnostics.
 
 metaphor_transfer_openai_live
   First OpenAI live metaphor-transfer smoke run.
