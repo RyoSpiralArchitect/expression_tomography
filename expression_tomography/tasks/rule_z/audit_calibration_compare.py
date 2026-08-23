@@ -82,6 +82,7 @@ def _validate_trial_contract(
     if not isinstance(provider_config, dict) or not {
         "device",
         "dtype",
+        "request_contract_version",
     } <= provider_config.keys():
         raise RuntimeError(
             f"Provider configuration is incomplete in trial {row['id']}"

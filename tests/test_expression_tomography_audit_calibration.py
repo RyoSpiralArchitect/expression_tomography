@@ -38,6 +38,8 @@ from expression_tomography.tasks.rule_z.prompts import (
 
 
 class ConfiguredRuleZMockProvider:
+    request_contract_version = "configured_rule_z_mock.request.v1"
+
     def __init__(
         self,
         max_tokens: int,
@@ -373,6 +375,48 @@ class AuditCalibrationTests(unittest.TestCase):
                 with self.assertRaisesRegex(
                     RuntimeError,
                     "Cannot recover missing hf_local device/dtype",
+                ):
+                    revalidate_audit_calibration_store(store)
+            finally:
+                store.close()
+
+    def test_migration_rejects_missing_request_contract(self) -> None:
+        cases = make_audit_calibration_cases(1, seed=53)
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "calibration.sqlite"
+            store = ExperimentStore(path)
+            try:
+                run_audit_calibration_experiment(
+                    cases,
+                    ConfiguredRuleZMockProvider(max_tokens=700),
+                    store,
+                    audit_modes=("source_faithful_invariants",),
+                )
+            finally:
+                store.close()
+
+            connection = sqlite3.connect(path)
+            try:
+                row_id, raw_metadata = connection.execute(
+                    "SELECT id, metadata_json FROM trials"
+                ).fetchone()
+                metadata = json.loads(raw_metadata)
+                provider_config = metadata["provider_config"]
+                provider_config.pop("request_contract_version")
+                metadata["provider_config_sha256"] = content_hash(provider_config)
+                connection.execute(
+                    "UPDATE trials SET metadata_json = ? WHERE id = ?",
+                    (json.dumps(metadata, sort_keys=True), row_id),
+                )
+                connection.commit()
+            finally:
+                connection.close()
+
+            store = ExperimentStore(path)
+            try:
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "Cannot recover missing provider request-contract",
                 ):
                     revalidate_audit_calibration_store(store)
             finally:

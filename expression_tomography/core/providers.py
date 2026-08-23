@@ -189,6 +189,10 @@ def _openai_token_limit_key(model: str) -> str:
 class OpenAICompatibleProvider:
     """Minimal OpenAI-compatible chat-completions adapter."""
 
+    request_contract_version = (
+        "openai_compatible.chat_completions.temperature_explicit.v2"
+    )
+
     def __init__(self, spec: ProviderSpec):
         self.spec = spec
         self.name = spec.name
@@ -200,9 +204,8 @@ class OpenAICompatibleProvider:
             "model": self.model,
             "messages": [{"role": "user", "content": prompt}],
             _openai_token_limit_key(self.model): self.spec.max_tokens,
+            "temperature": self.spec.temperature,
         }
-        if self.spec.temperature > 0:
-            payload["temperature"] = self.spec.temperature
         if self.spec.reasoning_effort:
             payload["reasoning_effort"] = self.spec.reasoning_effort
         headers = {
@@ -243,6 +246,8 @@ class OpenAICompatibleProvider:
 
 class AnthropicProvider:
     """Minimal Anthropic Messages API adapter."""
+
+    request_contract_version = "anthropic.messages.temperature_positive_only.v1"
 
     def __init__(self, spec: ProviderSpec):
         self.spec = spec
@@ -299,6 +304,8 @@ class HFLocalProvider:
     local evaluation and later fine-tuning loops, not as the fastest possible
     inference runtime.
     """
+
+    request_contract_version = "hf_local.generate.temperature_positive_only.v1"
 
     def __init__(self, spec: ProviderSpec):
         self.spec = spec

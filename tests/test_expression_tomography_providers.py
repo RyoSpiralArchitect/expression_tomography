@@ -97,6 +97,7 @@ class ProviderTests(unittest.TestCase):
         self.assertEqual(captured["payload"]["model"], "test-model")
         self.assertEqual(captured["payload"]["messages"][0]["content"], "hello")
         self.assertEqual(captured["payload"]["max_tokens"], 123)
+        self.assertEqual(captured["payload"]["temperature"], 0.0)
         self.assertNotIn("reasoning_effort", captured["payload"])
 
     def test_openai_gpt5_uses_max_completion_tokens(self) -> None:

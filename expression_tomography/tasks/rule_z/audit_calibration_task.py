@@ -40,6 +40,17 @@ CONDITION_TO_AUDIT_MODE = {
 }
 
 
+def _request_contract_version(provider: Provider) -> str:
+    declared = getattr(provider, "request_contract_version", None)
+    if declared:
+        return str(declared)
+    provider_type = type(provider)
+    return (
+        f"{provider_type.__module__}.{provider_type.__qualname__}."
+        "request.v1"
+    )
+
+
 def _parse_audit_modes(raw: str) -> tuple[str, ...]:
     modes = tuple(item.strip() for item in raw.split(",") if item.strip())
     unknown = sorted(set(modes) - set(AUDIT_MODE_TO_CONDITION))
@@ -102,6 +113,7 @@ def _stored_execution_identity(row: dict[str, Any]) -> str:
     if not isinstance(provider_config, dict) or not {
         "device",
         "dtype",
+        "request_contract_version",
     } <= provider_config.keys():
         raise RuntimeError(
             "Audit calibration store contains provider provenance without "
@@ -180,6 +192,7 @@ def _provider_provenance(provider: Provider) -> dict:
         "max_tokens": getattr(spec, "max_tokens", None),
         "temperature": getattr(spec, "temperature", None),
         "reasoning_effort": getattr(spec, "reasoning_effort", None),
+        "request_contract_version": _request_contract_version(provider),
         "device": getattr(spec, "device", None) if is_hf_local else None,
         "dtype": getattr(spec, "dtype", None) if is_hf_local else None,
     }
@@ -258,6 +271,12 @@ def revalidate_audit_calibration_store(
             )
         provider_type = str(provider_config.get("type", ""))
         provider_config = dict(provider_config)
+        if "request_contract_version" not in provider_config:
+            raise RuntimeError(
+                "Cannot recover missing provider request-contract provenance "
+                f"in trial {row['id']}; revalidate from a store that recorded "
+                "the original adapter semantics"
+            )
         if provider_type == "hf_local" and not {
             "device",
             "dtype",
