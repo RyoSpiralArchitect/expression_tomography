@@ -1,0 +1,26 @@
+{
+  "immutable_case_rows_sha256": "a66de4066099705a1288759709bd71467e4864ee39e93b4d6a4f3620e1848b9c",
+  "immutable_trial_rows_sha256": "dce644ae7e3c4ba6e51b3a23b95ec4be934efa498bf04aa2997fbcffcffb4d12",
+  "input_db": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/trials.sqlite",
+  "input_db_sha256": "f97628639a121338b4fe6a2d203e3e17630c0817eeff4647e306c3e39953ac69",
+  "migrated_trials": 465,
+  "migration_version": "rule_z_intermediate_probe.provider_default_temperature.v1",
+  "output_db": "results/expression_tomography/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low_complete.sqlite",
+  "output_db_sha256": "2999cf267544fd5213b12e7680485d515e8cf3850d5e6c9b47dd4da144cedadd",
+  "providers": {
+    "anthropic_sonnet_4_6": {
+      "legacy_provider_config_sha256": "48bf056d1e4c05e4421d6f7d2a72f12f2fba5513594f284804d930ff43ab1e87",
+      "migrated_provider_config_sha256": "1c0a4fe08ebe9d0148d935feac2a4b71a5c9279b50600b4ab36d4a9af1fa3a95",
+      "migrated_trials": 384,
+      "request_contract_version": "anthropic.messages.temperature_optional.v2"
+    },
+    "openai_gpt_5_5": {
+      "legacy_provider_config_sha256": "6c5ef6f9aefdbbe8a4614879c4ce3bc49e1d948fe2793a9bd48963f77fc0fd13",
+      "migrated_provider_config_sha256": "86aa1228b69f21e8d86951f831c80bd601abf018df8d8b3d0639f29157143833",
+      "migrated_trials": 81,
+      "request_contract_version": "openai_compatible.chat_completions.temperature_optional.v3"
+    }
+  },
+  "sqlite_integrity_check": "ok",
+  "unique_probe_identities": 465
+}

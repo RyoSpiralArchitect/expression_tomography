@@ -1,0 +1,203 @@
+{
+  "manifest_version": "rule_z_posthoc_live_readers.complete.v1",
+  "status": "complete",
+  "local_completion_date": "2026-08-23",
+  "secrets_stored": false,
+  "source": {
+    "path": "assets/runs/rule_z_intermediate_factorial_anthropic_sonnet46_seed41/trials.sqlite",
+    "sha256": "cd9fd6e9156ebba798558cac9675a605ba04fcb49f336911bbedca1953d75eef",
+    "open_mode": "sqlite_mode_ro",
+    "source_kind": "intermediate",
+    "source_provider": "anthropic_sonnet_4_6",
+    "source_conditions": [
+      "D_two_pass_free",
+      "D_two_pass_free_explicit_edges",
+      "D_two_pass_generic_contract",
+      "D_two_pass_generic_contract_explicit_edges"
+    ],
+    "messages_per_condition": 24,
+    "messages_total": 96
+  },
+  "probe": {
+    "schema_version": "rule_z_intermediate_probe.v1",
+    "audit_modes": [
+      "source_faithful",
+      "repair_capable"
+    ],
+    "query_batteries": {
+      "uncued": "current_state",
+      "target_cued": "current_and_counterfactual"
+    },
+    "probe_repetitions": 1,
+    "probe_replicate_start": 0
+  },
+  "checkpoint_provenance": {
+    "partial_asset": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low",
+    "partial_database_sha256": "f97628639a121338b4fe6a2d203e3e17630c0817eeff4647e306c3e39953ac69",
+    "partial_rows": 465,
+    "partial_unique_probe_identities": 465,
+    "original_asset_reverified_unchanged": true,
+    "migration_version": "rule_z_intermediate_probe.provider_default_temperature.v1",
+    "migration_report": "provenance_migration.json",
+    "migration_checkpoint_sha256": "2999cf267544fd5213b12e7680485d515e8cf3850d5e6c9b47dd4da144cedadd",
+    "immutable_case_rows_sha256": "a66de4066099705a1288759709bd71467e4864ee39e93b4d6a4f3620e1848b9c",
+    "immutable_trial_rows_sha256": "dce644ae7e3c4ba6e51b3a23b95ec4be934efa498bf04aa2997fbcffcffb4d12",
+    "migrated_rows": {
+      "anthropic_sonnet_4_6": 384,
+      "openai_gpt_5_5": 81
+    },
+    "correction": "Historical adapters omitted temperature when the declared value was 0.0. Existing rows were migrated on a copy to temperature=null plus an explicit request contract, preserving raw responses, parses, scores, prompts, legacy identities, and legacy config hashes."
+  },
+  "completion_execution": {
+    "openai_rows_before_completion": 81,
+    "openai_uncued_rows_after_completion": 288,
+    "openai_target_cued_rows_after_completion": 96,
+    "openai_rows_appended": 303,
+    "power_loss_checkpoint": {
+      "openai_rows": 259,
+      "total_rows": 643,
+      "sqlite_integrity_check": "ok"
+    },
+    "power_loss_resume": {
+      "query_battery": "current_state",
+      "inserted_trials": 29,
+      "skipped_existing_trials": 259,
+      "total_rows_after_run": 672
+    },
+    "uncued_exact_rerun": {
+      "query_battery": "current_state",
+      "inserted_trials": 0,
+      "skipped_existing_trials": 288,
+      "provider_calls": 0,
+      "total_rows_after_run": 672
+    },
+    "target_cued_completion": {
+      "query_battery": "current_and_counterfactual",
+      "inserted_trials": 96,
+      "skipped_existing_trials": 192,
+      "total_rows_after_run": 768
+    },
+    "target_cued_exact_rerun": {
+      "query_battery": "current_and_counterfactual",
+      "inserted_trials": 0,
+      "skipped_existing_trials": 288,
+      "provider_calls": 0,
+      "total_rows_after_run": 768
+    }
+  },
+  "canonical": {
+    "database": "trials.sqlite",
+    "sha256": "c2381200da3fd81fb408a311317ed19095e3b7472d460e05a2a3d79d856bc058",
+    "sqlite_integrity_check": "ok",
+    "case_count": 96,
+    "trial_count": 768,
+    "unique_probe_identities": 768,
+    "parse_failures": 0,
+    "distinct_source_hashes": 1,
+    "created_at_utc_min": "2026-07-26 06:42:03",
+    "created_at_utc_max": "2026-08-23 20:07:47",
+    "counts_by_provider_and_condition": {
+      "anthropic_sonnet_4_6": {
+        "I_source_faithful": 96,
+        "I_repair_capable": 96,
+        "Q_hidden_current_state": 96,
+        "Q_hidden_current_and_counterfactual": 96
+      },
+      "openai_gpt_5_5": {
+        "I_source_faithful": 96,
+        "I_repair_capable": 96,
+        "Q_hidden_current_state": 96,
+        "Q_hidden_current_and_counterfactual": 96
+      }
+    }
+  },
+  "providers": [
+    {
+      "name": "anthropic_sonnet_4_6",
+      "model": "claude-sonnet-4-6",
+      "provider_type": "anthropic",
+      "config_file": "provider_config_anthropic.json",
+      "config_file_sha256": "ae2ee3dba0f76e27dca5634614c5f5c91ec53e4d9a06722307175cd3caf5c1b8",
+      "secret_free_config_sha256": "1c0a4fe08ebe9d0148d935feac2a4b71a5c9279b50600b4ab36d4a9af1fa3a95",
+      "request_contract_version": "anthropic.messages.temperature_optional.v2",
+      "temperature": null,
+      "max_tokens": 4000,
+      "status": "complete",
+      "observed_trials": 384
+    },
+    {
+      "name": "openai_gpt_5_5",
+      "model": "gpt-5.5",
+      "provider_type": "openai_compatible",
+      "config_file": "provider_config_openai.json",
+      "config_file_sha256": "2ed2b2460a1ff7654584ea498b50b1d76c5f0c12ade51394a9d5bafe6d5324cd",
+      "secret_free_config_sha256": "86aa1228b69f21e8d86951f831c80bd601abf018df8d8b3d0639f29157143833",
+      "request_contract_version": "openai_compatible.chat_completions.temperature_optional.v3",
+      "temperature": null,
+      "max_tokens": 4000,
+      "reasoning_effort": "low",
+      "status": "complete",
+      "observed_trials": 384
+    }
+  ],
+  "primary_metrics": {
+    "anthropic_sonnet_4_6": {
+      "source_faithful_state_oracle_match": 0.0,
+      "source_faithful_mean_grounded_claim_rate": 0.9790355647306078,
+      "source_faithful_reconstructed_answer_accuracy": 0.9270833333333334,
+      "repair_state_oracle_match": 0.9375,
+      "repair_reconstructed_answer_accuracy": 0.9583333333333334,
+      "uncued_current_query_utility": 0.9613095238095238,
+      "target_cued_counterfactual_query_utility": 0.5911458333333334,
+      "fact_removal_answer_exact_rate": 0.3333333333333333,
+      "edge_reversal_answer_exact_rate": 0.84375
+    },
+    "openai_gpt_5_5": {
+      "source_faithful_state_oracle_match": 0.28125,
+      "source_faithful_mean_grounded_claim_rate": 0.9975,
+      "source_faithful_reconstructed_answer_accuracy": 0.9166666666666666,
+      "repair_state_oracle_match": 0.9583333333333334,
+      "repair_reconstructed_answer_accuracy": 0.9583333333333334,
+      "uncued_current_query_utility": 0.9598214285714286,
+      "target_cued_counterfactual_query_utility": 0.9895833333333334,
+      "fact_removal_answer_exact_rate": 0.9895833333333334,
+      "edge_reversal_answer_exact_rate": 0.9895833333333334
+    }
+  },
+  "paired_current_state_cue_check": {
+    "anthropic_sonnet_4_6": {
+      "paired_rows": 96,
+      "changed_rows": 0,
+      "mean_utility_delta": 0.0
+    },
+    "openai_gpt_5_5": {
+      "paired_rows": 96,
+      "changed_rows": 2,
+      "improved_rows": 1,
+      "regressed_rows": 1,
+      "mean_utility_delta": 0.0,
+      "changed_field": "active_rules"
+    }
+  },
+  "interpretation_boundaries": [
+    "Source-faithful, repair-capable, and hidden-query scores are distinct estimands.",
+    "The same fixed artifacts receive different source-faithful full-state scores from the two readers, so faithful audit output is reader-and-contract-indexed rather than an intrinsic source score.",
+    "Repair and hidden-query success can include reader-side computation and do not establish a complete pre-expression latent state.",
+    "The extended battery names intervention targets inside a batched call and remains target-cued.",
+    "The large counterfactual gap between readers is a reader-by-battery interaction, not a provider leaderboard or a direct measure of source information alone.",
+    "One replicate under provider-default temperature does not estimate stochastic stability.",
+    "The source artifacts are synthetic fielded Rule-Z derivations, not open-domain prose."
+  ],
+  "frozen_artifacts": {
+    "provenance_migration.json": "e19a022be50253f73ab03407703e35605269f0d6d4d4bdb16bd26cd07c322928",
+    "provider_config_anthropic.json": "ae2ee3dba0f76e27dca5634614c5f5c91ec53e4d9a06722307175cd3caf5c1b8",
+    "provider_config_openai.json": "2ed2b2460a1ff7654584ea498b50b1d76c5f0c12ade51394a9d5bafe6d5324cd",
+    "rule_z_audit_mode_contrasts.csv": "be68cacb24b26da8a46d1b353d0754de22ad0d77f1a58e1ce831f6e7cc20d3fa",
+    "rule_z_hidden_query_summary.csv": "f00a982f3ca3e7e5a1d8a2774160748fed652b873d1c443986c1238ce1314294",
+    "rule_z_hidden_query_utility.csv": "5d91f16f790e4891691aabfd25ffe3843f057a4db8da6b1c9ec9e5ddcb486c38",
+    "rule_z_intermediate_probe_report.md": "82e9fdcf92e9877998d45c214647856679092ad570ecdee41348e4a08f8de592",
+    "rule_z_posthoc_audit.csv": "45e355199936e015cb0f8d9fcbd135e11ee4c82182f835a1503487c3f22f2108",
+    "rule_z_posthoc_audit_summary.csv": "f9568417d5e3fc596255592cec4e1a415f35e1438bf24afd84f1a33455e95e84",
+    "trials.sqlite": "c2381200da3fd81fb408a311317ed19095e3b7472d460e05a2a3d79d856bc058"
+  }
+}
