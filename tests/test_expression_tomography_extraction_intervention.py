@@ -339,9 +339,11 @@ class ExtractionInterventionTests(unittest.TestCase):
                     max_new_calls=0,
                     progress_every=0,
                 )
-                summary = write_extraction_intervention_report(
-                    store,
-                    Path(td) / "reports",
+                report_dir = Path(td) / "reports"
+                summary = write_extraction_intervention_report(store, report_dir)
+                report_csvs_use_lf = all(
+                    b"\r\n" not in path.read_bytes()
+                    for path in report_dir.glob("*.csv")
                 )
                 validation = validate_extraction_intervention_store(store)
                 rows = store.fetch_trials(task_type=TASK_TYPE)
@@ -354,6 +356,7 @@ class ExtractionInterventionTests(unittest.TestCase):
         self.assertEqual(provider.call_count, 88)
         self.assertEqual(len(rows), 88)
         self.assertTrue(summary["completion"]["surface_complete"])
+        self.assertTrue(report_csvs_use_lf)
         self.assertEqual(validation["validated_trials"], 88)
         self.assertEqual(validation["score_matches"], 88)
         self.assertEqual(validation["validated_model_upstream_references"], 64)

@@ -34,7 +34,11 @@ def _write_csv(path: Path, rows: Iterable[dict[str, Any]]) -> None:
         return
     fieldnames = list(materialized[0])
     with path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=fieldnames,
+            lineterminator="\n",
+        )
         writer.writeheader()
         writer.writerows(materialized)
 

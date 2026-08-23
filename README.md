@@ -151,8 +151,9 @@ responses can be upgraded without provider calls using
 
 ## Rule-Z Extraction / Intervention Factorial
 
-The prospective follow-up separates literal extraction from intervention
-computation and keeps source-supported truth distinct from private world truth:
+The extraction/intervention factorial separates literal extraction from
+intervention computation and keeps source-supported truth distinct from private
+world truth:
 
 ```bash
 python3 -m expression_tomography.tasks.rule_z.extraction_intervention_task \
@@ -172,16 +173,21 @@ contradictory. Eight literal fields are queried in independent calls. Fresh
 compute calls then compare direct source reading, perfect source-literal
 extraction, and model-extracted typed ledgers. Every field and compute path has
 an uncued versus target-preannounced pair with deterministic randomized order.
-The fixed pilot, score hierarchy, privacy boundary, stop criteria, and exact
-resume contract are frozen in
-`docs/rule_z_extraction_intervention_protocol_2026_08_23.md`.
+The pilot, score hierarchy, privacy boundary, stop criteria, and exact resume
+contract are frozen in
+`docs/rule_z_extraction_intervention_protocol_2026_08_23.md`. The completed
+704-call Luna pilot and its bounded interpretation are documented in
+`docs/live_rule_z_extraction_intervention_luna_note_2026_08_23.md`; canonical
+and pre-canonical stores are preserved in
+`assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/`.
 After a run, add `--revalidate-existing-only` with the same database and report
 paths to reconstruct every prompt, upstream typed ledger, parse, score, and
 execution identity without making provider calls.
-Score-v1 stores created before field/item grounding was aligned with the
-prompt's contiguous-quote contract can be copied and rekeyed without provider
-calls using `expression_tomography.tasks.rule_z.extraction_intervention_migration`.
-The input database remains unchanged.
+Score-v1 or score-v2 stores created before value completeness and field/item
+grounding were separated can be copied, rescored, and rekeyed without provider
+calls using
+`expression_tomography.tasks.rule_z.extraction_intervention_migration`. The
+input database and all stored provider responses remain unchanged.
 
 ## Metaphor Transfer Smoke
 

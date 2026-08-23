@@ -1,0 +1,195 @@
+{
+  "manifest_version": "rule_z_extraction_intervention.run.v1",
+  "status": "complete",
+  "local_run_date": "2026-08-23",
+  "secrets_stored": false,
+  "implementation": {
+    "branch": "SpiralReality/luna-extraction-intervention",
+    "base_commit": "defdbe40dab5c761862f05da2598cbdcc06e6dd6",
+    "implementation_commits": [
+      "f25d10db9db43e45c5f753047960423f94cdfeab",
+      "47b713a30ae0e4277b6d5e29b1e298531787a562",
+      "68939d78ba492a4cd9533723dc5d937a1b96915d"
+    ],
+    "protocol": "docs/rule_z_extraction_intervention_protocol_2026_08_23.md",
+    "protocol_sha256": "cc7d64955034fcaf0afefb1135b308d6072eed35b7e3c9cbd69c4527e64b6420",
+    "research_note": "docs/live_rule_z_extraction_intervention_luna_note_2026_08_23.md"
+  },
+  "generator": {
+    "task_type": "rule_z_extraction_intervention",
+    "world_seed": 67,
+    "worlds": 4,
+    "artifact_variants_per_world": 4,
+    "cases": 16,
+    "replicates": 2,
+    "conditions_per_case_replicate": 22,
+    "planned_trials": 704,
+    "static_order_seed": 9701,
+    "model_literal_order_seed": 9702,
+    "artifact_families": [
+      "current_complete",
+      "counterfactual_complete",
+      "dependency_omitted",
+      "dependency_contradictory"
+    ],
+    "compute_paths": [
+      "direct_source",
+      "oracle_literal",
+      "model_literal"
+    ],
+    "cue_modes": [
+      "uncued",
+      "target_preannounced"
+    ]
+  },
+  "provider": {
+    "name": "openai-gpt-5.6-luna-low",
+    "model": "gpt-5.6-luna",
+    "type": "openai_compatible",
+    "config_file": "provider_config.json",
+    "config_file_sha256": "ec09af8685b21682c7e957ec78f6efb322ffe75e2b920cd1f29c47b5c796ed69",
+    "stored_provider_config_sha256": "c362b649ef693af847c2ceaf2f6b6950feddb8a0973da178e023ba59f849ec08",
+    "request_contract_version": "openai_compatible.chat_completions.temperature_optional.v3",
+    "max_tokens": 1400,
+    "temperature": null,
+    "temperature_request_mode": "provider_default",
+    "reasoning_effort": "low",
+    "api_key_env": "OPENAI_API_KEY"
+  },
+  "execution": {
+    "created_at_utc_min": "2026-08-23 21:40:08",
+    "created_at_utc_max": "2026-08-23 22:09:50",
+    "first_process_committed_trials": 446,
+    "resumed_process_skipped_trials": 446,
+    "resumed_process_inserted_trials": 258,
+    "performance_dependent_early_stop": false,
+    "case_count": 16,
+    "trial_count": 704,
+    "unique_trial_identities": 704,
+    "complete_case_replicate_blocks": 32,
+    "parse_failures": 0,
+    "schema_failures": 0,
+    "mock_structured_hint_rows": 0,
+    "sqlite_integrity_check": "ok",
+    "exact_rerun": {
+      "inserted_trials": 0,
+      "skipped_existing_trials": 704,
+      "provider_calls": 0
+    }
+  },
+  "provenance": {
+    "artifact_schema_version": "rule_z_extraction_intervention.artifact.v1",
+    "prompt_contract_version": "rule_z_extraction_intervention.prompt.v1",
+    "canonical_score_schema_version": "rule_z_extraction_intervention.score.v3",
+    "execution_identity_includes_score_schema": true,
+    "raw_response_reparse_validation_trials": 704,
+    "prompt_matches": 704,
+    "parse_matches": 704,
+    "score_matches": 704,
+    "validated_model_upstream_references": 512,
+    "provider_calls_during_revalidation": 0,
+    "model_literal_compute_source_present": false,
+    "model_literal_compute_evidence_present": false,
+    "model_literal_rows_bound_to_eight_upstream_identities": 64
+  },
+  "score_migrations": [
+    {
+      "from": "rule_z_extraction_intervention.score.v1",
+      "to": "rule_z_extraction_intervention.score.v2",
+      "input_database": "diagnostics/score_v1.sqlite",
+      "input_sha256": "58b2fe08b9e80ab12aaacf8153c34d600f064f0ab47e890a4c5a0d50c7b9e6de",
+      "output_database": "diagnostics/score_v2.sqlite",
+      "output_sha256": "9741c8bc88b2306b4c0c094409909df14ef9defb7612d2da07bce3c5120ae772",
+      "migration_record": "diagnostics/score_v1_to_v2_migration.json",
+      "score_rows_changed": 59,
+      "provider_calls": 0,
+      "raw_prompt_parse_unchanged": true
+    },
+    {
+      "from": "rule_z_extraction_intervention.score.v2",
+      "to": "rule_z_extraction_intervention.score.v3",
+      "input_database": "diagnostics/score_v2.sqlite",
+      "input_sha256": "9741c8bc88b2306b4c0c094409909df14ef9defb7612d2da07bce3c5120ae772",
+      "output_database": "trials.sqlite",
+      "output_sha256": "6213fb1cb99cbac2bb25b1eeab52060bbb411fe3a00b723c33bbd47e1eea23a2",
+      "migration_record": "diagnostics/score_v2_to_v3_migration.json",
+      "score_rows_changed": 13,
+      "changed_metric": "rule_definitions.all_claims_grounded",
+      "provider_calls": 0,
+      "raw_prompt_parse_unchanged": true
+    }
+  ],
+  "primary_results": {
+    "source_supported_accuracy_by_compute_path": {
+      "direct_source": {
+        "correct": 58,
+        "n": 64,
+        "accuracy": 0.90625
+      },
+      "oracle_literal": {
+        "correct": 54,
+        "n": 64,
+        "accuracy": 0.84375
+      },
+      "model_literal": {
+        "correct": 44,
+        "n": 64,
+        "accuracy": 0.6875
+      }
+    },
+    "paired_target_cue_compute": {
+      "direct_source": {
+        "pairs": 32,
+        "improved": 4,
+        "regressed": 0
+      },
+      "oracle_literal": {
+        "pairs": 32,
+        "improved": 3,
+        "regressed": 1
+      },
+      "model_literal": {
+        "pairs": 32,
+        "improved": 2,
+        "regressed": 0
+      }
+    },
+    "model_literal_decomposition": {
+      "rows": 64,
+      "all_upstream_values_exact": 24,
+      "all_upstream_values_exact_compute_correct": 20,
+      "all_upstream_values_exact_compute_failed": 4,
+      "upstream_values_inexact_compute_correct": 24
+    },
+    "replicate_response_pairs": {
+      "pairs": 352,
+      "byte_identical": 286,
+      "different": 66
+    }
+  },
+  "frozen_artifacts": {
+    "diagnostics/score_v1.sqlite": "58b2fe08b9e80ab12aaacf8153c34d600f064f0ab47e890a4c5a0d50c7b9e6de",
+    "diagnostics/score_v1_to_v2_migration.json": "a97db27b2dec65931d31d93dc22b584151b97a14e50d68b1504ed438d623bac1",
+    "diagnostics/score_v2.sqlite": "9741c8bc88b2306b4c0c094409909df14ef9defb7612d2da07bce3c5120ae772",
+    "diagnostics/score_v2_to_v3_migration.json": "f4698b17a0a4d5550f39c73aba484828e2ba44932b12a07f86f7158fcdb0ed65",
+    "provider_config.json": "ec09af8685b21682c7e957ec78f6efb322ffe75e2b920cd1f29c47b5c796ed69",
+    "rule_z_extraction_intervention_report.md": "a4e29cb0489edecb9ba54e99a3d8cf615acf41dbf2d075785ba3051dddc6e3a2",
+    "rule_z_extraction_intervention_summary.json": "940983cc991592c5893d11b14c58e7a0d436ed687f00e4a6b0a4341c89bb38c0",
+    "rule_z_intervention_computation_summary.csv": "0de70b97e42a02a4f981794e35ae55407588220bc9e3973b5dffb9e1f64a6a5a",
+    "rule_z_intervention_computation_trials.csv": "c3e8d72ddd4f2542283cc062f09e4c64f8b11e5e39e7f4376a8e8317b074046e",
+    "rule_z_literal_extraction_summary.csv": "08c1037cb3eadf2f26ecec035917b470f0f648af5dfc045061abf0547817261b",
+    "rule_z_literal_extraction_trials.csv": "3d344d0e5695a171e0c6d789c9704060e71cca808a8b7a27290bdf86e3031be0",
+    "rule_z_model_literal_decomposition.csv": "f38986f36563e0e50a3ecd44ee69cd2bfe1a5113629bb9f2f49b9dd20db04881",
+    "rule_z_target_cue_pairs.csv": "c99dbe8314e724b61d8fc64a393a0290d0a79c850bfdea0f47c755636e94bdc3",
+    "trials.sqlite": "6213fb1cb99cbac2bb25b1eeab52060bbb411fe3a00b723c33bbd47e1eea23a2"
+  },
+  "interpretation_boundaries": [
+    "Source-supported intervention correctness is primary; private-world agreement on incomplete artifacts is diagnostic only.",
+    "Literal value exactness and exact-quote grounding are independent measurements.",
+    "The model-literal causal split uses typed value exactness because evidence and source prose are absent from its compute prompt.",
+    "A typed oracle is a source normalization, not a private-world oracle and not a guaranteed easier representation.",
+    "Target preannouncement is a reactive control whose gains and regressions must be reported field by field.",
+    "Two repetitions over four worlds expose variability but do not estimate broad model performance.",
+    "The pilot identifies local extraction and post-extraction failures; it does not identify a pre-expression latent state or establish a general language bottleneck."
+  ]
+}

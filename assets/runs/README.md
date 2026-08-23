@@ -60,6 +60,21 @@ rule_z_audit_calibration_prompt_comparison.json
   Paired legacy-versus-invariant audit-prompt transitions with contradiction
   sensitivity and specificity.
 
+rule_z_literal_extraction_trials.csv
+rule_z_literal_extraction_summary.csv
+  Independent field-level literal values, quote-grounding checks, and aggregate
+  extraction scores for extraction/intervention runs.
+
+rule_z_intervention_computation_trials.csv
+rule_z_intervention_computation_summary.csv
+  Direct-source, oracle-literal, and model-literal intervention outcomes scored
+  against source support and private-world diagnostics.
+
+rule_z_target_cue_pairs.csv
+rule_z_model_literal_decomposition.csv
+  Paired cue transitions and extraction-exact versus computation-exact
+  localization for the composed model-literal path.
+
 rule_z_report.md
   Generated report from the run.
 ```
@@ -160,6 +175,14 @@ rule_z_audit_reader_calibration_luna_seed53_120
   contradiction grounding, and keeps repair-target matching outside the primary
   endpoint. The labelled prompt-v1 and temperature-provenance mismatch runs are
   retained only as superseded diagnostics.
+
+rule_z_extraction_intervention_luna_seed67_4x2
+  GPT-5.6 Luna 704-call extraction/intervention factorial over four worlds,
+  four dependency artifacts, two replicates, paired target cues, eight
+  independent literal fields, and three compute paths. The canonical v3 store
+  is accompanied by raw score-v1 and score-v2 databases plus copy-only
+  migration evidence; provider responses were not regenerated during scoring
+  calibration.
 
 metaphor_transfer_openai_live
   First OpenAI live metaphor-transfer smoke run.
