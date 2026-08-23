@@ -1,12 +1,12 @@
 {
-  "manifest_version": "rule_z_audit_reader_calibration.run.v1",
+  "manifest_version": "rule_z_audit_reader_calibration.run.v2",
   "status": "complete",
   "local_run_date": "2026-08-22",
   "secrets_stored": false,
   "implementation": {
     "branch": "SpiralReality/audit-reader-calibration",
     "base_commit": "469bd461eb4fca84041a5a16d8c8ec7c7c0e0e15",
-    "implementation_commit": "e530c989f3f262543b7339c27569a25aeba9acc9"
+    "implementation_commit": "71056104d935cc5581f0b5ccd77266a90a619360"
   },
   "generator": {
     "task_type": "rule_z_audit_calibration",
@@ -36,14 +36,30 @@
     "reasoning_effort": "low",
     "api_key_env": "OPENAI_API_KEY"
   },
+  "provenance_hardening": {
+    "prompt_contract_version": "rule_z_audit_calibration.prompt.v1",
+    "score_schema_version": "rule_z_audit_calibration.score.v2",
+    "stored_raw_responses_revalidated": 360,
+    "provider_calls_during_revalidation": 0,
+    "schema_valid_responses": 360,
+    "headline_metrics_changed": false,
+    "execution_identity_includes": [
+      "logical_trial_identity",
+      "provider_config_sha256",
+      "prompt_sha256",
+      "prompt_contract_version",
+      "score_schema_version"
+    ]
+  },
   "legacy_run": {
     "database": "legacy/trials.sqlite",
-    "sha256": "441916c728425c1b3b6fa53514d6205047aadd09b8fd1c41e90a3bd44aaae70f",
+    "sha256": "fcd6eccc29afb81dce1df9a99167844762da6e222218368fa2f50306149a6e2b",
     "sqlite_integrity_check": "ok",
     "case_count": 120,
     "trial_count": 240,
     "unique_trial_identities": 240,
     "parse_failures": 0,
+    "schema_failures": 0,
     "conditions": {
       "I_repair_capable": 120,
       "I_source_faithful": 120
@@ -69,12 +85,13 @@
   },
   "invariant_run": {
     "database": "invariants/trials.sqlite",
-    "sha256": "9a0fc7e77aa62ee6530ed48ea0b7cabee76d317d4a4294ed241e3195d584ff61",
+    "sha256": "f05320fc1761d22ceb87e85f70bcf0d4af12f80276f9cae4b2b29bf4db3b1715",
     "sqlite_integrity_check": "ok",
     "case_count": 120,
     "trial_count": 120,
     "unique_trial_identities": 120,
     "parse_failures": 0,
+    "schema_failures": 0,
     "conditions": {
       "I_source_faithful_invariants": 120
     },
@@ -97,6 +114,9 @@
     "pairs": 120,
     "source_artifact_hashes_matched": true,
     "provider_configuration_hashes_matched": true,
+    "case_payloads_matched": true,
+    "prompt_delta_limited_to_invariant_rubric": true,
+    "stored_scores_reproduced": true,
     "improved": 50,
     "regressed": 27,
     "stable_pass": 34,
@@ -107,17 +127,17 @@
     "invariant_contradiction_specificity": 1.0
   },
   "frozen_artifacts": {
-    "invariants/rule_z_audit_calibration_report.md": "d758c726e79c6d2656f96e0b03a3486e01910efe7565e8a9e4cd645509f5755c",
-    "invariants/rule_z_audit_calibration_summary.csv": "2cae909bd69aeaa516cfa3e524950510d952ca61f23a5505bc00a08179b163e5",
-    "invariants/rule_z_audit_calibration_summary.json": "e8bb72f53482d5b371ef495958cc2e1687a149169d81b6cfdcc32d702f9d69b7",
-    "invariants/rule_z_audit_calibration_trials.csv": "0d50a4e40c48a5809f469f513150ef2d7d287854e44ff4dd8ac0148e4149e5c7",
-    "legacy/rule_z_audit_calibration_report.md": "9bfdced0e19d1650a8c859380facee9ad26d2194876818ca14b02081628cc572",
-    "legacy/rule_z_audit_calibration_summary.csv": "dcfc670c6f42e217c31c2b068b8ab1e2cede99da1747249d300be290ebdad4c4",
-    "legacy/rule_z_audit_calibration_summary.json": "5f899462448496a51eb27772cfb6df57650585b76301fac3d5ad8b71a1ec9b7b",
-    "legacy/rule_z_audit_calibration_trials.csv": "84bcae969f0e5e7f5f23d6609ce87a269f94c8c87c326919ca47657c356f12f1",
-    "prompt_comparison/rule_z_audit_calibration_prompt_comparison.json": "b63f634e90440c8f0dce9a0e7ecc982355ebf54fb814efba7659ba649abd086e",
-    "prompt_comparison/rule_z_audit_calibration_prompt_comparison.md": "0734ca3c9bf2c165ed3a0fc8a5460143de5079717c9abeb44ba1079929f24cac",
-    "prompt_comparison/rule_z_audit_calibration_prompt_pairs.csv": "de80455529e48ad2ea9a06fc630c134d223ec4a431e32ab02d6020119f5ca6e5"
+    "invariants/rule_z_audit_calibration_report.md": "496355eecde2290370ebfb69c5c0b7b3727c197633c43e83b3f4172d2ec937ba",
+    "invariants/rule_z_audit_calibration_summary.csv": "0cd33728f4a1d7dd500273f6a69468b6bed85d606a801863a7bb1580d7d8457b",
+    "invariants/rule_z_audit_calibration_summary.json": "2bcdcf8c83afb0e2d3b521f252941bab13a2c1073a04a6392d38e62140dbed8b",
+    "invariants/rule_z_audit_calibration_trials.csv": "36bc1e0693b9f24518efe51328b624709d5ebd1a96aad680b05985543ad5e972",
+    "legacy/rule_z_audit_calibration_report.md": "811bdfbc32f550ab3900540949b45e0c483f57ae587ef7603195c8816cec84eb",
+    "legacy/rule_z_audit_calibration_summary.csv": "05d2a9eb82a6d517bba76ca3f1f63874f31045b5ea17ec892495dc432cb4e8c6",
+    "legacy/rule_z_audit_calibration_summary.json": "854452c8c4c72742a6a019a8390a9fd42b670c3926790d523eab87e673a09c33",
+    "legacy/rule_z_audit_calibration_trials.csv": "406126c41ff350ed7591994d274a65d7f3144fb0a763d01bca36dbdf69997eaa",
+    "prompt_comparison/rule_z_audit_calibration_prompt_comparison.json": "483ef5e5e585b1d74b57578a999aa2e7c289c48c3d3a65a96568ea85db31fe09",
+    "prompt_comparison/rule_z_audit_calibration_prompt_comparison.md": "b0d7ffe61635efa7567e43571241729f8592ed5d7a46a6fd71a4814d7c72ec08",
+    "prompt_comparison/rule_z_audit_calibration_prompt_pairs.csv": "1b840b48e66c2e72b963ca47cdd76f5971a1f35f0ceb390f5ecfb7791345109f"
   },
   "interpretation_boundaries": [
     "Source-faithful quote-grounded calibration is the primary endpoint.",

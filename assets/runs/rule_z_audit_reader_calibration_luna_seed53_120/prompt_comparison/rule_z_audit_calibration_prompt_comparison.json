@@ -3,6 +3,7 @@
     {
       "improved": 15,
       "invariant_all_reported_claims_grounded": 1.0,
+      "invariant_audit_schema_valid": 1.0,
       "invariant_contradiction_detection_correct": 1.0,
       "invariant_contradiction_sensitivity": null,
       "invariant_contradiction_specificity": 1.0,
@@ -10,6 +11,7 @@
       "invariant_repair_attraction_any": 0.0,
       "invariant_source_faithful_calibrated": 1.0,
       "legacy_all_reported_claims_grounded": 1.0,
+      "legacy_audit_schema_valid": 1.0,
       "legacy_contradiction_detection_correct": 0.0,
       "legacy_contradiction_sensitivity": null,
       "legacy_contradiction_specificity": 0.0,
@@ -25,6 +27,7 @@
     {
       "improved": 1,
       "invariant_all_reported_claims_grounded": 1.0,
+      "invariant_audit_schema_valid": 1.0,
       "invariant_contradiction_detection_correct": 1.0,
       "invariant_contradiction_sensitivity": 1.0,
       "invariant_contradiction_specificity": null,
@@ -32,6 +35,7 @@
       "invariant_repair_attraction_any": 0.0,
       "invariant_source_faithful_calibrated": 0.9333333333333333,
       "legacy_all_reported_claims_grounded": 1.0,
+      "legacy_audit_schema_valid": 1.0,
       "legacy_contradiction_detection_correct": 1.0,
       "legacy_contradiction_sensitivity": 1.0,
       "legacy_contradiction_specificity": null,
@@ -47,6 +51,7 @@
     {
       "improved": 7,
       "invariant_all_reported_claims_grounded": 0.8,
+      "invariant_audit_schema_valid": 1.0,
       "invariant_contradiction_detection_correct": 1.0,
       "invariant_contradiction_sensitivity": 1.0,
       "invariant_contradiction_specificity": null,
@@ -54,6 +59,7 @@
       "invariant_repair_attraction_any": 0.0,
       "invariant_source_faithful_calibrated": 0.8,
       "legacy_all_reported_claims_grounded": 0.6666666666666666,
+      "legacy_audit_schema_valid": 1.0,
       "legacy_contradiction_detection_correct": 1.0,
       "legacy_contradiction_sensitivity": 1.0,
       "legacy_contradiction_specificity": null,
@@ -69,6 +75,7 @@
     {
       "improved": 10,
       "invariant_all_reported_claims_grounded": 1.0,
+      "invariant_audit_schema_valid": 1.0,
       "invariant_contradiction_detection_correct": 1.0,
       "invariant_contradiction_sensitivity": null,
       "invariant_contradiction_specificity": 1.0,
@@ -76,6 +83,7 @@
       "invariant_repair_attraction_any": 0.0,
       "invariant_source_faithful_calibrated": 1.0,
       "legacy_all_reported_claims_grounded": 1.0,
+      "legacy_audit_schema_valid": 1.0,
       "legacy_contradiction_detection_correct": 0.4,
       "legacy_contradiction_sensitivity": null,
       "legacy_contradiction_specificity": 0.4,
@@ -91,6 +99,7 @@
     {
       "improved": 0,
       "invariant_all_reported_claims_grounded": 1.0,
+      "invariant_audit_schema_valid": 1.0,
       "invariant_contradiction_detection_correct": 0.0,
       "invariant_contradiction_sensitivity": 0.0,
       "invariant_contradiction_specificity": null,
@@ -98,6 +107,7 @@
       "invariant_repair_attraction_any": 0.0,
       "invariant_source_faithful_calibrated": 0.0,
       "legacy_all_reported_claims_grounded": 1.0,
+      "legacy_audit_schema_valid": 1.0,
       "legacy_contradiction_detection_correct": 1.0,
       "legacy_contradiction_sensitivity": 1.0,
       "legacy_contradiction_specificity": null,
@@ -113,6 +123,7 @@
     {
       "improved": 5,
       "invariant_all_reported_claims_grounded": 1.0,
+      "invariant_audit_schema_valid": 1.0,
       "invariant_contradiction_detection_correct": 1.0,
       "invariant_contradiction_sensitivity": null,
       "invariant_contradiction_specificity": 1.0,
@@ -120,6 +131,7 @@
       "invariant_repair_attraction_any": 0.0,
       "invariant_source_faithful_calibrated": 1.0,
       "legacy_all_reported_claims_grounded": 1.0,
+      "legacy_audit_schema_valid": 1.0,
       "legacy_contradiction_detection_correct": 1.0,
       "legacy_contradiction_sensitivity": null,
       "legacy_contradiction_specificity": 1.0,
@@ -135,6 +147,7 @@
     {
       "improved": 12,
       "invariant_all_reported_claims_grounded": 1.0,
+      "invariant_audit_schema_valid": 1.0,
       "invariant_contradiction_detection_correct": 1.0,
       "invariant_contradiction_sensitivity": null,
       "invariant_contradiction_specificity": 1.0,
@@ -142,6 +155,7 @@
       "invariant_repair_attraction_any": 0.06666666666666667,
       "invariant_source_faithful_calibrated": 0.8666666666666667,
       "legacy_all_reported_claims_grounded": 1.0,
+      "legacy_audit_schema_valid": 1.0,
       "legacy_contradiction_detection_correct": 0.13333333333333333,
       "legacy_contradiction_sensitivity": null,
       "legacy_contradiction_specificity": 0.13333333333333333,
@@ -157,6 +171,7 @@
     {
       "improved": 0,
       "invariant_all_reported_claims_grounded": 1.0,
+      "invariant_audit_schema_valid": 1.0,
       "invariant_contradiction_detection_correct": 0.0,
       "invariant_contradiction_sensitivity": 0.0,
       "invariant_contradiction_specificity": null,
@@ -164,6 +179,7 @@
       "invariant_repair_attraction_any": 0.0,
       "invariant_source_faithful_calibrated": 0.0,
       "legacy_all_reported_claims_grounded": 1.0,
+      "legacy_audit_schema_valid": 1.0,
       "legacy_contradiction_detection_correct": 0.9333333333333333,
       "legacy_contradiction_sensitivity": 0.9333333333333333,
       "legacy_contradiction_specificity": null,
@@ -181,6 +197,7 @@
   "overall": {
     "improved": 50,
     "invariant_all_reported_claims_grounded": 0.975,
+    "invariant_audit_schema_valid": 1.0,
     "invariant_contradiction_detection_correct": 0.75,
     "invariant_contradiction_sensitivity": 0.5,
     "invariant_contradiction_specificity": 1.0,
@@ -188,6 +205,7 @@
     "invariant_repair_attraction_any": 0.008333333333333333,
     "invariant_source_faithful_calibrated": 0.7,
     "legacy_all_reported_claims_grounded": 0.9583333333333334,
+    "legacy_audit_schema_valid": 1.0,
     "legacy_contradiction_detection_correct": 0.6833333333333333,
     "legacy_contradiction_sensitivity": 0.9833333333333333,
     "legacy_contradiction_specificity": 0.38333333333333336,
@@ -199,6 +217,14 @@
     "regressed": 27,
     "stable_fail": 9,
     "stable_pass": 34
+  },
+  "provenance_validation": {
+    "case_payloads_matched": true,
+    "prompt_contract_version": "rule_z_audit_calibration.prompt.v1",
+    "prompt_delta_limited_to_invariant_rubric": true,
+    "provider_configurations_matched": true,
+    "score_schema_version": "rule_z_audit_calibration.score.v2",
+    "stored_scores_reproduced": true
   },
   "task_type": "rule_z_audit_calibration"
 }

@@ -3,6 +3,7 @@
 - Paired artifacts: 120
 - Source artifacts, provider configuration, seed, and scoring are fixed.
 - The only intended factor is the Rule-Z invariant rubric in the audit prompt.
+- Exact prompt reconstruction, rubric-only normalization, score-schema versions, and stored-score replay passed.
 
 | Family | n | Improved | Regressed | Legacy calibrated | Invariant calibrated | Legacy sensitivity | Invariant sensitivity | Legacy specificity | Invariant specificity |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|

@@ -3,6 +3,7 @@
     {
       "all_reported_claims_grounded": null,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_repair_capable",
       "contradiction_detection_correct": null,
       "designed_repair_target_match": 1.0,
@@ -17,6 +18,7 @@
     {
       "all_reported_claims_grounded": null,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_repair_capable",
       "contradiction_detection_correct": null,
       "designed_repair_target_match": 0.9333333333333333,
@@ -31,6 +33,7 @@
     {
       "all_reported_claims_grounded": null,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_repair_capable",
       "contradiction_detection_correct": null,
       "designed_repair_target_match": 1.0,
@@ -45,6 +48,7 @@
     {
       "all_reported_claims_grounded": null,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_repair_capable",
       "contradiction_detection_correct": null,
       "designed_repair_target_match": 1.0,
@@ -59,6 +63,7 @@
     {
       "all_reported_claims_grounded": null,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_repair_capable",
       "contradiction_detection_correct": null,
       "designed_repair_target_match": 0.26666666666666666,
@@ -73,6 +78,7 @@
     {
       "all_reported_claims_grounded": null,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_repair_capable",
       "contradiction_detection_correct": null,
       "designed_repair_target_match": 1.0,
@@ -87,6 +93,7 @@
     {
       "all_reported_claims_grounded": null,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_repair_capable",
       "contradiction_detection_correct": null,
       "designed_repair_target_match": 1.0,
@@ -101,6 +108,7 @@
     {
       "all_reported_claims_grounded": null,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_repair_capable",
       "contradiction_detection_correct": null,
       "designed_repair_target_match": 1.0,
@@ -115,6 +123,7 @@
     {
       "all_reported_claims_grounded": 1.0,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_source_faithful",
       "contradiction_detection_correct": 0.0,
       "designed_repair_target_match": null,
@@ -129,6 +138,7 @@
     {
       "all_reported_claims_grounded": 1.0,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_source_faithful",
       "contradiction_detection_correct": 1.0,
       "designed_repair_target_match": null,
@@ -143,6 +153,7 @@
     {
       "all_reported_claims_grounded": 0.6666666666666666,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_source_faithful",
       "contradiction_detection_correct": 1.0,
       "designed_repair_target_match": null,
@@ -157,6 +168,7 @@
     {
       "all_reported_claims_grounded": 1.0,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_source_faithful",
       "contradiction_detection_correct": 0.4,
       "designed_repair_target_match": null,
@@ -171,6 +183,7 @@
     {
       "all_reported_claims_grounded": 1.0,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_source_faithful",
       "contradiction_detection_correct": 1.0,
       "designed_repair_target_match": null,
@@ -185,6 +198,7 @@
     {
       "all_reported_claims_grounded": 1.0,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_source_faithful",
       "contradiction_detection_correct": 1.0,
       "designed_repair_target_match": null,
@@ -199,6 +213,7 @@
     {
       "all_reported_claims_grounded": 1.0,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_source_faithful",
       "contradiction_detection_correct": 0.13333333333333333,
       "designed_repair_target_match": null,
@@ -213,6 +228,7 @@
     {
       "all_reported_claims_grounded": 1.0,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_source_faithful",
       "contradiction_detection_correct": 0.9333333333333333,
       "designed_repair_target_match": null,
@@ -231,6 +247,7 @@
     {
       "all_reported_claims_grounded": null,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_repair_capable",
       "contradiction_detection_correct": null,
       "designed_repair_target_match": 0.9,
@@ -244,6 +261,7 @@
     {
       "all_reported_claims_grounded": 0.9583333333333334,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_source_faithful",
       "contradiction_detection_correct": 0.6833333333333333,
       "designed_repair_target_match": null,

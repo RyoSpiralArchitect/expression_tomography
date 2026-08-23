@@ -136,8 +136,12 @@ python3 -m expression_tomography.tasks.rule_z.audit_calibration_compare \
   --output-dir results/expression_tomography/rule_z_audit_prompt_comparison
 ```
 
-The comparison fails closed when identities, source hashes, or provider
-configuration hashes differ. The first live Luna calibration is documented in
+The runner fails closed when a logical trial collides with changed execution
+provenance. The comparison reconstructs both prompts and scores, then fails
+closed when identities, source payloads, provider configuration, prompt
+contracts, rubric-only normalization, or score schemas differ. Existing raw
+responses can be upgraded without provider calls using
+`--revalidate-existing-only`. The first live Luna calibration is documented in
 `docs/live_rule_z_audit_reader_calibration_luna_note_2026_08_22.md`.
 
 ## Metaphor Transfer Smoke

@@ -58,15 +58,25 @@ more than one coherent repair can exist.
 - Cases: 120
 - Replicates: 1
 - Canonical trials: 360
-- Implementation commit: `e530c989f3f262543b7339c27569a25aeba9acc9`
+- Implementation commit: `71056104d935cc5581f0b5ccd77266a90a619360`
+- Prompt contract: `rule_z_audit_calibration.prompt.v1`
+- Score schema: `rule_z_audit_calibration.score.v2`
 
 The 360 canonical trials comprise 120 legacy faithful audits, 120
 repair-capable audits, and 120 invariant-rubric faithful audits. Preliminary
 12-case smoke runs are not included in the frozen asset.
 
 Both canonical SQLite stores pass `integrity_check`, contain no duplicate trial
-identities, and have no parse failures. Exact reruns inserted zero rows and
-skipped all 240 legacy identities and all 120 invariant identities.
+identities, and have no parse or schema failures. Exact reruns inserted zero
+rows and skipped all 240 legacy identities and all 120 invariant identities.
+
+After review, all 360 stored raw responses were reparsed and rescored without
+provider calls. Execution identities now include provider configuration, exact
+prompt, prompt-contract version, and score-schema version. All responses were
+schema-valid, and the revalidation changed no headline metric. The paired
+comparison also reconstructs both prompts, proves that their normalized delta
+is limited to the invariant rubric, and reproduces every stored score with the
+declared scorer before calculating transitions.
 
 ## Primary Result
 

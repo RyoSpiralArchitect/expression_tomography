@@ -3,6 +3,7 @@
     {
       "all_reported_claims_grounded": 1.0,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_source_faithful_invariants",
       "contradiction_detection_correct": 1.0,
       "designed_repair_target_match": null,
@@ -17,6 +18,7 @@
     {
       "all_reported_claims_grounded": 1.0,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_source_faithful_invariants",
       "contradiction_detection_correct": 1.0,
       "designed_repair_target_match": null,
@@ -31,6 +33,7 @@
     {
       "all_reported_claims_grounded": 0.8,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_source_faithful_invariants",
       "contradiction_detection_correct": 1.0,
       "designed_repair_target_match": null,
@@ -45,6 +48,7 @@
     {
       "all_reported_claims_grounded": 1.0,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_source_faithful_invariants",
       "contradiction_detection_correct": 1.0,
       "designed_repair_target_match": null,
@@ -59,6 +63,7 @@
     {
       "all_reported_claims_grounded": 1.0,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_source_faithful_invariants",
       "contradiction_detection_correct": 0.0,
       "designed_repair_target_match": null,
@@ -73,6 +78,7 @@
     {
       "all_reported_claims_grounded": 1.0,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_source_faithful_invariants",
       "contradiction_detection_correct": 1.0,
       "designed_repair_target_match": null,
@@ -87,6 +93,7 @@
     {
       "all_reported_claims_grounded": 1.0,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_source_faithful_invariants",
       "contradiction_detection_correct": 1.0,
       "designed_repair_target_match": null,
@@ -101,6 +108,7 @@
     {
       "all_reported_claims_grounded": 1.0,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_source_faithful_invariants",
       "contradiction_detection_correct": 0.0,
       "designed_repair_target_match": null,
@@ -119,6 +127,7 @@
     {
       "all_reported_claims_grounded": 0.975,
       "audit_parse_ok": 1.0,
+      "audit_schema_valid": 1.0,
       "condition": "I_source_faithful_invariants",
       "contradiction_detection_correct": 0.75,
       "designed_repair_target_match": null,
