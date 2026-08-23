@@ -59,7 +59,7 @@ def _validate_trial_contract(
     case: dict[str, Any],
     *,
     include_rule_z_invariants: bool,
-) -> None:
+) -> dict[str, Any]:
     metadata = row["metadata"]
     if (
         metadata.get("prompt_contract_version")
@@ -74,6 +74,18 @@ def _validate_trial_contract(
     ):
         raise RuntimeError(
             f"Score schema version mismatch in trial {row['id']}"
+        )
+    provider_config = metadata.get("provider_config")
+    if not isinstance(provider_config, dict) or not {
+        "device",
+        "dtype",
+    } <= provider_config.keys():
+        raise RuntimeError(
+            f"Provider configuration is incomplete in trial {row['id']}"
+        )
+    if metadata.get("provider_config_sha256") != content_hash(provider_config):
+        raise RuntimeError(
+            f"Provider configuration hash mismatch in trial {row['id']}"
         )
     payload = case["payload"]
     source_artifact = str(payload["source_artifact"])
@@ -96,6 +108,7 @@ def _validate_trial_contract(
     )
     if stable_json(row["score"]) != stable_json(expected_score):
         raise RuntimeError(f"Stored score is not reproducible in trial {row['id']}")
+    return provider_config
 
 
 def _identity(row: dict[str, Any]) -> tuple[str, str, int]:
@@ -198,12 +211,12 @@ def compare_audit_calibrations(
             raise RuntimeError(f"Missing comparison case for {identity}")
         if before_case != after_case:
             raise RuntimeError(f"Case payload changed for {identity}")
-        _validate_trial_contract(
+        before_provider_config = _validate_trial_contract(
             before,
             before_case,
             include_rule_z_invariants=False,
         )
-        _validate_trial_contract(
+        after_provider_config = _validate_trial_contract(
             after,
             after_case,
             include_rule_z_invariants=True,
@@ -217,10 +230,7 @@ def compare_audit_calibrations(
             != after["metadata"].get("source_artifact_sha256")
         ):
             raise RuntimeError(f"Source artifact changed for {identity}")
-        if (
-            before["metadata"].get("provider_config_sha256")
-            != after["metadata"].get("provider_config_sha256")
-        ):
+        if before_provider_config != after_provider_config:
             raise RuntimeError(f"Provider configuration changed for {identity}")
         before_pass = bool(before["score"]["source_faithful_calibrated"])
         after_pass = bool(after["score"]["source_faithful_calibrated"])

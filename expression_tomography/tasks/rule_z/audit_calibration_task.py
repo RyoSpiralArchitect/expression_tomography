@@ -96,6 +96,20 @@ def _stored_execution_identity(row: dict[str, Any]) -> str:
             f"provenance ({row['id']} missing {', '.join(missing)}); run "
             "--revalidate-existing-only before resuming"
         )
+    provider_config = metadata.get("provider_config")
+    if not isinstance(provider_config, dict) or not {
+        "device",
+        "dtype",
+    } <= provider_config.keys():
+        raise RuntimeError(
+            "Audit calibration store contains provider provenance without "
+            f"execution settings in trial {row['id']}; run "
+            "--revalidate-existing-only before resuming"
+        )
+    if content_hash(provider_config) != metadata["provider_config_sha256"]:
+        raise RuntimeError(
+            f"Stored provider configuration hash mismatch in trial {row['id']}"
+        )
     if (
         metadata["prompt_contract_version"]
         != AUDIT_CALIBRATION_PROMPT_CONTRACT_VERSION
@@ -146,13 +160,15 @@ def _make_audit_prompt(
 
 def _provider_provenance(provider: Provider) -> dict:
     spec = getattr(provider, "spec", None)
+    provider_type = (
+        str(getattr(spec, "type"))
+        if spec is not None
+        else "mock"
+    )
+    is_hf_local = provider_type == "hf_local"
     config = {
         "name": provider.name,
-        "type": (
-            str(getattr(spec, "type"))
-            if spec is not None
-            else "mock"
-        ),
+        "type": provider_type,
         "model": (
             str(getattr(spec, "model"))
             if spec is not None
@@ -163,6 +179,8 @@ def _provider_provenance(provider: Provider) -> dict:
         "max_tokens": getattr(spec, "max_tokens", None),
         "temperature": getattr(spec, "temperature", None),
         "reasoning_effort": getattr(spec, "reasoning_effort", None),
+        "device": getattr(spec, "device", None) if is_hf_local else None,
+        "dtype": getattr(spec, "dtype", None) if is_hf_local else None,
     }
     return {
         "provider_config": config,
@@ -222,13 +240,32 @@ def revalidate_audit_calibration_store(
         score_changes += stable_json(score) != stable_json(row["score"])
 
         metadata = dict(row["metadata"])
-        provider_config_sha256 = str(
+        stored_provider_config_sha256 = str(
             metadata.get("provider_config_sha256", "")
         )
-        if not provider_config_sha256:
+        provider_config = metadata.get("provider_config")
+        if not stored_provider_config_sha256 or not isinstance(
+            provider_config,
+            dict,
+        ):
             raise RuntimeError(
-                f"Missing provider configuration hash in trial {row['id']}"
+                f"Missing provider configuration provenance in trial {row['id']}"
             )
+        if content_hash(provider_config) != stored_provider_config_sha256:
+            raise RuntimeError(
+                f"Provider configuration hash mismatch in trial {row['id']}"
+            )
+        provider_type = str(provider_config.get("type", ""))
+        provider_config = dict(provider_config)
+        provider_config.setdefault(
+            "device",
+            "auto" if provider_type == "hf_local" else None,
+        )
+        provider_config.setdefault(
+            "dtype",
+            "auto" if provider_type == "hf_local" else None,
+        )
+        provider_config_sha256 = content_hash(provider_config)
         source_sha256 = content_hash(source_artifact)
         if metadata.get("source_artifact_sha256") != source_sha256:
             raise RuntimeError(
@@ -261,6 +298,8 @@ def revalidate_audit_calibration_store(
         metadata.update(
             {
                 "audit_mode": audit_mode,
+                "provider_config": provider_config,
+                "provider_config_sha256": provider_config_sha256,
                 "prompt_sha256": prompt_sha256,
                 "prompt_contract_version": (
                     AUDIT_CALIBRATION_PROMPT_CONTRACT_VERSION

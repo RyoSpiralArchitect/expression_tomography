@@ -8,6 +8,7 @@ from collections import Counter
 from pathlib import Path
 
 from expression_tomography.core.providers import ProviderSpec
+from expression_tomography.core.schema import content_hash
 from expression_tomography.core.store import ExperimentStore
 from expression_tomography.tasks.rule_z.audit_calibration import (
     AUDIT_CALIBRATION_FAMILIES,
@@ -35,13 +36,22 @@ from expression_tomography.tasks.rule_z.prompts import (
 
 
 class ConfiguredRuleZMockProvider:
-    def __init__(self, max_tokens: int):
+    def __init__(
+        self,
+        max_tokens: int,
+        *,
+        provider_type: str = "mock",
+        device: str = "auto",
+        dtype: str = "auto",
+    ):
         self.name = "configured-mock"
         self.spec = ProviderSpec(
             name=self.name,
-            type="mock",
+            type=provider_type,
             model="rule-z-mock",
             max_tokens=max_tokens,
+            device=device,
+            dtype=dtype,
         )
         self._delegate = RuleZMockProvider(name=self.name)
 
@@ -154,6 +164,38 @@ class AuditCalibrationTests(unittest.TestCase):
         self.assertFalse(repair_score["audit_schema_valid"])
         self.assertFalse(repair_score["designed_repair_target_match"])
 
+    def test_grounding_requires_evidence_for_the_claimed_field_and_item(self) -> None:
+        case = make_audit_calibration_cases(1, seed=53)[0]
+        source = case.payload["source_artifact"]
+        prompt = make_source_faithful_audit_prompt(
+            case.case_id,
+            source,
+            "audit_calibration:clean",
+        )
+        parsed = json.loads(RuleZMockProvider().complete(prompt))
+        wrong_quote = next(
+            line for line in source.splitlines() if line.startswith("Fired rules:")
+        )
+        for field in (
+            "fired_priority_edges",
+            "suppressed_rules",
+            "active_rules",
+            "active_conclusions",
+        ):
+            for item in parsed[field]["items"]:
+                item["evidence"] = wrong_quote
+
+        score = score_source_faithful_calibration(parsed, source, case.payload)
+
+        self.assertTrue(
+            all(result["values_exact"] for result in score["field_results"].values())
+        )
+        self.assertFalse(score["field_results"]["fired_priority_edges"]["grounding_ok"])
+        self.assertFalse(score["field_results"]["suppressed_rules"]["grounding_ok"])
+        self.assertFalse(score["literal_state_exact"])
+        self.assertFalse(score["all_reported_claims_grounded"])
+        self.assertFalse(score["source_faithful_calibrated"])
+
     def test_resume_rejects_provider_configuration_drift(self) -> None:
         cases = make_audit_calibration_cases(1, seed=53)
         with tempfile.TemporaryDirectory() as td:
@@ -178,6 +220,40 @@ class AuditCalibrationTests(unittest.TestCase):
             finally:
                 store.close()
 
+    def test_resume_rejects_hf_execution_setting_drift(self) -> None:
+        cases = make_audit_calibration_cases(1, seed=53)
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "calibration.sqlite")
+            try:
+                run_audit_calibration_experiment(
+                    cases,
+                    ConfiguredRuleZMockProvider(
+                        max_tokens=700,
+                        provider_type="hf_local",
+                        device="cpu",
+                        dtype="float32",
+                    ),
+                    store,
+                    audit_modes=("source_faithful_invariants",),
+                )
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "execution provenance drift",
+                ):
+                    run_audit_calibration_experiment(
+                        cases,
+                        ConfiguredRuleZMockProvider(
+                            max_tokens=700,
+                            provider_type="hf_local",
+                            device="mps",
+                            dtype="float16",
+                        ),
+                        store,
+                        audit_modes=("source_faithful_invariants",),
+                    )
+            finally:
+                store.close()
+
     def test_legacy_metadata_can_be_revalidated_without_provider_calls(self) -> None:
         cases = make_audit_calibration_cases(1, seed=53)
         with tempfile.TemporaryDirectory() as td:
@@ -195,6 +271,10 @@ class AuditCalibrationTests(unittest.TestCase):
                 ).fetchall()
                 for row_id, value in raw_metadata:
                     metadata = json.loads(value)
+                    provider_config = metadata["provider_config"]
+                    provider_config.pop("device", None)
+                    provider_config.pop("dtype", None)
+                    metadata["provider_config_sha256"] = content_hash(provider_config)
                     for key in (
                         "prompt_contract_version",
                         "score_schema_version",
@@ -226,6 +306,20 @@ class AuditCalibrationTests(unittest.TestCase):
             self.assertTrue(
                 all(
                     row["metadata"]["revalidated_from_stored_raw_response"]
+                    for row in rows
+                )
+            )
+            self.assertTrue(
+                all(
+                    {"device", "dtype"}
+                    <= row["metadata"]["provider_config"].keys()
+                    for row in rows
+                )
+            )
+            self.assertTrue(
+                all(
+                    row["metadata"]["provider_config_sha256"]
+                    == content_hash(row["metadata"]["provider_config"])
                     for row in rows
                 )
             )
@@ -354,7 +448,7 @@ class AuditCalibrationTests(unittest.TestCase):
             try:
                 with self.assertRaisesRegex(
                     RuntimeError,
-                    "Provider configuration changed",
+                    "Provider configuration",
                 ):
                     compare_audit_calibrations(legacy, invariant)
             finally:

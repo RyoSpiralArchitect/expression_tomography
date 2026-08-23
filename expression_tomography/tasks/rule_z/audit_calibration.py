@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 import random
+import re
 from collections import Counter
 from typing import Any
 
@@ -19,7 +20,7 @@ AUDIT_CALIBRATION_TASK_TYPE = "rule_z_audit_calibration"
 AUDIT_CALIBRATION_PROMPT_CONTRACT_VERSION = (
     "rule_z_audit_calibration.prompt.v1"
 )
-AUDIT_CALIBRATION_SCORE_SCHEMA_VERSION = "rule_z_audit_calibration.score.v2"
+AUDIT_CALIBRATION_SCORE_SCHEMA_VERSION = "rule_z_audit_calibration.score.v3"
 AUDIT_CALIBRATION_FAMILIES = (
     "clean",
     "omitted_field",
@@ -387,6 +388,63 @@ def _quote_is_grounded(source_artifact: str, quote: Any) -> bool:
     return bool(value) and value in source_artifact
 
 
+def _claim_token_is_present(text: str, claim: str) -> bool:
+    if not claim:
+        return False
+    return bool(
+        re.search(
+            rf"(?<![A-Za-z0-9_]){re.escape(claim)}(?![A-Za-z0-9_])",
+            text,
+        )
+    )
+
+
+def _field_claim_grounding(
+    parsed: dict[str, Any],
+    source_artifact: str,
+    field: str,
+) -> dict[str, Any]:
+    raw = parsed[field]
+    status = str(raw["status"])
+    field_marker = f"{FIELD_LABELS[field]}:"
+    item_checks = []
+    for item in raw["items"]:
+        quote = str(item["evidence"])
+        grounded = _quote_is_grounded(source_artifact, quote)
+        field_matched = field_marker in quote
+        if field == "fired_priority_edges":
+            higher = str(item["higher_priority_rule"])
+            lower = str(item["lower_priority_rule"])
+            claim_matched = bool(
+                re.search(
+                    rf"(?<![A-Za-z0-9_]){re.escape(higher)}\s*>\s*"
+                    rf"{re.escape(lower)}(?![A-Za-z0-9_])",
+                    quote,
+                )
+            )
+        else:
+            claim_matched = _claim_token_is_present(quote, str(item["value"]))
+        item_checks.append(grounded and field_matched and claim_matched)
+
+    field_evidence = str(raw["field_evidence"])
+    field_evidence_present = bool(field_evidence)
+    field_evidence_grounded = (
+        _quote_is_grounded(source_artifact, field_evidence)
+        and field_marker in field_evidence
+    )
+    if status in {"asserted", "contradictory"}:
+        source_supported = bool(item_checks) and all(item_checks)
+    elif status == "explicit_none":
+        source_supported = not item_checks and field_evidence_grounded
+    else:
+        source_supported = False
+    return {
+        "source_supported": source_supported,
+        "claim_count": len(item_checks) + int(field_evidence_present),
+        "grounded_claim_count": sum(item_checks) + int(field_evidence_grounded),
+    }
+
+
 def _contradiction_score(
     parsed: dict[str, Any] | None,
     source_artifact: str,
@@ -447,6 +505,21 @@ def score_source_faithful_calibration(
             parsed,
             source_artifact,
         )
+    if schema_valid:
+        assert parsed is not None
+        claim_grounding = {
+            field: _field_claim_grounding(parsed, source_artifact, field)
+            for field in AUDIT_STATE_FIELDS
+        }
+    else:
+        claim_grounding = {
+            field: {
+                "source_supported": False,
+                "claim_count": 0,
+                "grounded_claim_count": 0,
+            }
+            for field in AUDIT_STATE_FIELDS
+        }
 
     literal_private = payload["literal_private"]
     repair_private = payload["repair_private"]
@@ -466,7 +539,7 @@ def score_source_faithful_calibration(
         multiplicity_exact = Counter(reported_items) == Counter(expected_items)
         grounding_ok = (
             expected["status"] == "not_stated"
-            or bool(details[field]["source_supported"])
+            or bool(claim_grounding[field]["source_supported"])
         )
         literal_exact = (
             status_exact
@@ -517,10 +590,13 @@ def score_source_faithful_calibration(
         source_artifact,
         bool(payload.get("contradiction_expected")),
     )
-    claim_count = sum(int(item["claim_count"]) for item in details.values())
+    claim_count = sum(
+        int(item["claim_count"])
+        for item in claim_grounding.values()
+    )
     grounded_claim_count = sum(
         int(item["grounded_claim_count"])
-        for item in details.values()
+        for item in claim_grounding.values()
     )
     claim_count += int(contradiction["contradiction_claim_count"])
     grounded_claim_count += int(
