@@ -196,6 +196,63 @@ class AuditCalibrationTests(unittest.TestCase):
         self.assertFalse(score["all_reported_claims_grounded"])
         self.assertFalse(score["source_faithful_calibrated"])
 
+    def test_contradiction_requires_the_designed_two_sided_evidence(self) -> None:
+        case = make_audit_calibration_cases(5, seed=53)[4]
+        source = case.payload["source_artifact"]
+        prompt = make_source_faithful_audit_prompt(
+            case.case_id,
+            source,
+            "audit_calibration:equal_tier_reinterpretation",
+        )
+        parsed = json.loads(RuleZMockProvider().complete(prompt))
+        fired_line = next(
+            line for line in source.splitlines() if line.startswith("Fired rules:")
+        )
+        suppressed_line = next(
+            line
+            for line in source.splitlines()
+            if line.startswith("Suppressed rules:")
+        )
+        parsed["contradictions"] = [
+            {
+                "topic": "fired and suppressed rule",
+                "evidence": [fired_line, suppressed_line],
+            }
+        ]
+
+        score = score_source_faithful_calibration(parsed, source, case.payload)
+
+        self.assertTrue(score["literal_state_exact"])
+        self.assertTrue(score["contradiction_reported"])
+        self.assertFalse(score["contradiction_detected"])
+        self.assertFalse(score["contradiction_detection_correct"])
+        self.assertEqual(score["valid_contradiction_count"], 0)
+        self.assertEqual(score["irrelevant_contradiction_count"], 1)
+        self.assertFalse(score["contradiction_quotes_grounded"])
+        self.assertFalse(score["source_faithful_calibrated"])
+
+    def test_duplicate_repair_attraction_preserves_multiplicity(self) -> None:
+        case = make_audit_calibration_cases(4, seed=53)[3]
+        source = case.payload["source_artifact"]
+        prompt = make_source_faithful_audit_prompt(
+            case.case_id,
+            source,
+            "audit_calibration:duplicated_edge",
+        )
+        parsed = json.loads(RuleZMockProvider().complete(prompt))
+        parsed["fired_priority_edges"]["items"] = parsed[
+            "fired_priority_edges"
+        ]["items"][:1]
+
+        score = score_source_faithful_calibration(parsed, source, case.payload)
+
+        edge = score["field_results"]["fired_priority_edges"]
+        self.assertTrue(edge["values_exact"])
+        self.assertFalse(edge["multiplicity_exact"])
+        self.assertTrue(edge["repair_target_match"])
+        self.assertTrue(edge["repair_attraction"])
+        self.assertIn("fired_priority_edges", score["repair_attraction_fields"])
+
     def test_resume_rejects_provider_configuration_drift(self) -> None:
         cases = make_audit_calibration_cases(1, seed=53)
         with tempfile.TemporaryDirectory() as td:
@@ -251,6 +308,54 @@ class AuditCalibrationTests(unittest.TestCase):
                         store,
                         audit_modes=("source_faithful_invariants",),
                     )
+            finally:
+                store.close()
+
+    def test_hf_legacy_migration_rejects_missing_execution_settings(self) -> None:
+        cases = make_audit_calibration_cases(1, seed=53)
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "calibration.sqlite"
+            store = ExperimentStore(path)
+            try:
+                run_audit_calibration_experiment(
+                    cases,
+                    ConfiguredRuleZMockProvider(
+                        max_tokens=700,
+                        provider_type="hf_local",
+                        device="cpu",
+                        dtype="float32",
+                    ),
+                    store,
+                    audit_modes=("source_faithful_invariants",),
+                )
+            finally:
+                store.close()
+
+            connection = sqlite3.connect(path)
+            try:
+                row_id, raw_metadata = connection.execute(
+                    "SELECT id, metadata_json FROM trials"
+                ).fetchone()
+                metadata = json.loads(raw_metadata)
+                provider_config = metadata["provider_config"]
+                provider_config.pop("device")
+                provider_config.pop("dtype")
+                metadata["provider_config_sha256"] = content_hash(provider_config)
+                connection.execute(
+                    "UPDATE trials SET metadata_json = ? WHERE id = ?",
+                    (json.dumps(metadata, sort_keys=True), row_id),
+                )
+                connection.commit()
+            finally:
+                connection.close()
+
+            store = ExperimentStore(path)
+            try:
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "Cannot recover missing hf_local device/dtype",
+                ):
+                    revalidate_audit_calibration_store(store)
             finally:
                 store.close()
 

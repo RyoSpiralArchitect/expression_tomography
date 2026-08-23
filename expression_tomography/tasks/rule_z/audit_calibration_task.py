@@ -257,13 +257,22 @@ def revalidate_audit_calibration_store(
             )
         provider_type = str(provider_config.get("type", ""))
         provider_config = dict(provider_config)
+        if provider_type == "hf_local" and not {
+            "device",
+            "dtype",
+        } <= provider_config.keys():
+            raise RuntimeError(
+                "Cannot recover missing hf_local device/dtype provenance in "
+                f"trial {row['id']}; revalidate from a store that recorded "
+                "the original execution settings"
+            )
         provider_config.setdefault(
             "device",
-            "auto" if provider_type == "hf_local" else None,
+            None,
         )
         provider_config.setdefault(
             "dtype",
-            "auto" if provider_type == "hf_local" else None,
+            None,
         )
         provider_config_sha256 = content_hash(provider_config)
         source_sha256 = content_hash(source_artifact)

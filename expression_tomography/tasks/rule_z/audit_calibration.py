@@ -10,9 +10,7 @@ from expression_tomography.core.schema import Case
 
 from .intermediate import (
     AUDIT_STATE_FIELDS,
-    edge_set,
     normalize_source_faithful_audit,
-    string_set,
 )
 
 
@@ -20,7 +18,7 @@ AUDIT_CALIBRATION_TASK_TYPE = "rule_z_audit_calibration"
 AUDIT_CALIBRATION_PROMPT_CONTRACT_VERSION = (
     "rule_z_audit_calibration.prompt.v1"
 )
-AUDIT_CALIBRATION_SCORE_SCHEMA_VERSION = "rule_z_audit_calibration.score.v3"
+AUDIT_CALIBRATION_SCORE_SCHEMA_VERSION = "rule_z_audit_calibration.score.v4"
 AUDIT_CALIBRATION_FAMILIES = (
     "clean",
     "omitted_field",
@@ -445,16 +443,157 @@ def _field_claim_grounding(
     }
 
 
+def _designed_contradiction_groups(
+    payload: dict[str, Any],
+) -> list[dict[str, Any]]:
+    family = str(payload.get("mutation_family", ""))
+    if family not in {
+        "reversed_edge",
+        "equal_tier_reinterpretation",
+        "contradictory_edge",
+        "contradictory_integration",
+    }:
+        return []
+
+    repair = payload["repair_private"]
+    literal = payload["literal_private"]
+    winner, loser = repair["fired_priority_edges"][0]
+    winner_conclusion = repair["active_conclusions"][0]
+    loser_conclusion = (
+        "not_eligible" if winner_conclusion == "eligible" else "eligible"
+    )
+    if family == "contradictory_edge":
+        edges = literal["fired_priority_edges"]["items"]
+        return [
+            {
+                "name": "opposed_priority_edges",
+                "required_quotes": tuple(
+                    _field_line("fired_priority_edges", [edge])
+                    for edge in edges
+                ),
+                "topic_terms": ("priority", "edge"),
+            }
+        ]
+    if family == "contradictory_integration":
+        return [
+            {
+                "name": "opposed_suppression",
+                "required_quotes": (
+                    _field_line("suppressed_rules", [loser]),
+                    _field_line("suppressed_rules", [winner]),
+                ),
+                "topic_terms": ("suppress",),
+            },
+            {
+                "name": "opposed_active_rules",
+                "required_quotes": (
+                    _field_line("active_rules", [winner]),
+                    _field_line("active_rules", [loser]),
+                ),
+                "topic_terms": ("active",),
+            },
+            {
+                "name": "opposed_active_conclusions",
+                "required_quotes": (
+                    _field_line("active_conclusions", [winner_conclusion]),
+                    _field_line("active_conclusions", [loser_conclusion]),
+                ),
+                "topic_terms": ("conclusion", "outcome", "eligibility"),
+            },
+        ]
+
+    edge_line = _field_line(
+        "fired_priority_edges",
+        literal["fired_priority_edges"]["items"],
+    )
+    topic_terms = (
+        "priority",
+        "edge",
+        "active",
+        "suppress",
+        "integration",
+        "tier",
+        "orientation",
+    )
+    return [
+        {
+            "name": f"{family}_vs_suppression",
+            "required_quotes": (
+                edge_line,
+                _field_line("suppressed_rules", [loser]),
+            ),
+            "topic_terms": topic_terms,
+        },
+        {
+            "name": f"{family}_vs_active_rule",
+            "required_quotes": (
+                edge_line,
+                _field_line("active_rules", [winner]),
+            ),
+            "topic_terms": topic_terms,
+        },
+        {
+            "name": f"{family}_vs_active_conclusion",
+            "required_quotes": (
+                edge_line,
+                _field_line("active_conclusions", [winner_conclusion]),
+            ),
+            "topic_terms": topic_terms,
+        },
+    ]
+
+
+def _normalized_topic(value: Any) -> str:
+    return " ".join(re.findall(r"[a-z0-9]+", str(value).lower()))
+
+
+def _match_contradiction_group(
+    topic: Any,
+    quotes: list[str],
+    groups: list[dict[str, Any]],
+) -> dict[str, Any] | None:
+    normalized_topic = _normalized_topic(topic)
+    all_designed_quotes = tuple(
+        required_quote
+        for group in groups
+        for required_quote in group["required_quotes"]
+    )
+    for group in groups:
+        required = group["required_quotes"]
+        topic_matches = any(
+            term in normalized_topic
+            for term in group["topic_terms"]
+        )
+        both_sides_supported = all(
+            any(required_quote in quote for quote in quotes)
+            for required_quote in required
+        )
+        no_irrelevant_quotes = all(
+            any(
+                designed_quote in quote
+                for designed_quote in all_designed_quotes
+            )
+            for quote in quotes
+        )
+        if topic_matches and both_sides_supported and no_irrelevant_quotes:
+            return group
+    return None
+
+
 def _contradiction_score(
     parsed: dict[str, Any] | None,
     source_artifact: str,
-    expected: bool,
+    payload: dict[str, Any],
 ) -> dict[str, Any]:
+    expected = bool(payload.get("contradiction_expected"))
+    groups = _designed_contradiction_groups(payload)
     raw = (parsed or {}).get("contradictions")
     if not isinstance(raw, list):
         raw = []
     quote_checks = []
     count = 0
+    valid_count = 0
+    claim_results = []
     for item in raw:
         if not isinstance(item, dict):
             continue
@@ -462,19 +601,55 @@ def _contradiction_score(
         evidence = item.get("evidence")
         if not isinstance(evidence, list) or not evidence:
             quote_checks.append(False)
+            claim_results.append(
+                {
+                    "topic": str(item.get("topic", "")),
+                    "valid": False,
+                    "matched_group": "",
+                    "evidence_count": 0,
+                }
+            )
             continue
-        quote_checks.extend(
-            _quote_is_grounded(source_artifact, quote)
-            for quote in evidence
+        quotes = [str(quote) for quote in evidence]
+        matched_group = _match_contradiction_group(
+            item.get("topic"),
+            quotes,
+            groups,
         )
-    detected = count > 0
+        source_grounded = all(
+            _quote_is_grounded(source_artifact, quote)
+            for quote in quotes
+        )
+        valid = matched_group is not None and source_grounded
+        quote_checks.extend(valid for _quote in quotes)
+        valid_count += int(valid)
+        claim_results.append(
+            {
+                "topic": str(item.get("topic", "")),
+                "valid": valid,
+                "matched_group": (
+                    str(matched_group["name"])
+                    if matched_group is not None
+                    else ""
+                ),
+                "evidence_count": len(quotes),
+            }
+        )
+    reported = count > 0
+    detected = valid_count > 0 if expected else reported
+    detection_correct = valid_count > 0 if expected else not reported
     return {
         "contradiction_expected": expected,
+        "contradiction_reported": reported,
         "contradiction_detected": detected,
-        "contradiction_detection_correct": detected == expected,
+        "contradiction_detection_correct": detection_correct,
         "contradiction_count": count,
+        "valid_contradiction_count": valid_count,
+        "irrelevant_contradiction_count": count - valid_count,
+        "all_contradiction_claims_relevant": count == valid_count,
+        "contradiction_claim_results": claim_results,
         "contradiction_quotes_grounded": (
-            not detected or (bool(quote_checks) and all(quote_checks))
+            not reported or (bool(quote_checks) and all(quote_checks))
         ),
         "contradiction_claim_count": len(quote_checks),
         "contradiction_grounded_claim_count": sum(quote_checks),
@@ -533,10 +708,12 @@ def score_source_faithful_calibration(
         repair_items = _hashable_items(field, repair_private.get(field, []))
         expected_set = set(expected_items)
         reported_set = set(reported_items)
-        repair_set = set(repair_items)
+        expected_counter = Counter(expected_items)
+        reported_counter = Counter(reported_items)
+        repair_counter = Counter(repair_items)
         status_exact = details[field]["status"] == expected["status"]
         values_exact = reported_set == expected_set
-        multiplicity_exact = Counter(reported_items) == Counter(expected_items)
+        multiplicity_exact = reported_counter == expected_counter
         grounding_ok = (
             expected["status"] == "not_stated"
             or bool(claim_grounding[field]["source_supported"])
@@ -549,9 +726,9 @@ def score_source_faithful_calibration(
         )
         attracted = (
             field in target_fields
-            and expected_set != repair_set
-            and reported_set == repair_set
-            and reported_set != expected_set
+            and expected_counter != repair_counter
+            and reported_counter == repair_counter
+            and reported_counter != expected_counter
         )
         if attracted:
             repair_attraction_fields.append(field)
@@ -563,7 +740,7 @@ def score_source_faithful_calibration(
             "multiplicity_exact": multiplicity_exact,
             "grounding_ok": grounding_ok,
             "literal_exact": literal_exact,
-            "repair_target_match": reported_set == repair_set,
+            "repair_target_match": reported_counter == repair_counter,
             "repair_attraction": attracted,
             "expected_items": expected_items,
             "reported_items": reported_items,
@@ -588,7 +765,7 @@ def score_source_faithful_calibration(
     contradiction = _contradiction_score(
         parsed,
         source_artifact,
-        bool(payload.get("contradiction_expected")),
+        payload,
     )
     claim_count = sum(
         int(item["claim_count"])
@@ -654,13 +831,19 @@ def score_repair_calibration(
     schema_errors = validate_repair_response(parsed)
     schema_valid = not schema_errors
     if not schema_valid:
-        reported = {field: set() for field in AUDIT_STATE_FIELDS}
+        reported = {field: [] for field in AUDIT_STATE_FIELDS}
     else:
         assert parsed is not None
         reported = {
-            "fired_priority_edges": edge_set(parsed.get("fired_priority_edges")),
+            "fired_priority_edges": [
+                (
+                    str(item["higher_priority_rule"]),
+                    str(item["lower_priority_rule"]),
+                )
+                for item in parsed["fired_priority_edges"]
+            ],
             **{
-                field: string_set(parsed.get(field))
+                field: [str(item) for item in parsed[field]]
                 for field in AUDIT_STATE_FIELDS
                 if field != "fired_priority_edges"
             },
@@ -670,12 +853,15 @@ def score_repair_calibration(
     literal_value_exact = {}
     reported_state = {}
     for field in AUDIT_STATE_FIELDS:
-        expected = set(_hashable_items(field, repair_private.get(field, [])))
-        literal = set(
+        expected = Counter(
+            _hashable_items(field, repair_private.get(field, []))
+        )
+        literal = Counter(
             _hashable_items(field, literal_private[field].get("items", []))
         )
-        field_exact[field] = schema_valid and reported[field] == expected
-        literal_value_exact[field] = schema_valid and reported[field] == literal
+        reported_counter = Counter(reported[field])
+        field_exact[field] = schema_valid and reported_counter == expected
+        literal_value_exact[field] = schema_valid and reported_counter == literal
         reported_state[field] = sorted(reported[field])
     return {
         "audit_parse_ok": parsed is not None,
