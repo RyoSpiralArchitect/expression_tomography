@@ -6,7 +6,11 @@ from collections import Counter
 from pathlib import Path
 from typing import Any, Iterable
 
-from expression_tomography.core.providers import Provider, parse_json_lenient
+from expression_tomography.core.providers import (
+    Provider,
+    materialize_unique_providers,
+    parse_json_lenient,
+)
 from expression_tomography.core.schema import Case, TrialResult, content_hash, stable_json
 from expression_tomography.core.store import ExperimentStore
 
@@ -565,7 +569,7 @@ def run_audit_calibration_provider_suite(
     progress_every: int = 0,
 ) -> list[dict]:
     case_list = list(cases)
-    provider_list = list(providers)
+    provider_list = materialize_unique_providers(providers)
     common_options = {
         "audit_modes": audit_modes,
         "repetitions": repetitions,

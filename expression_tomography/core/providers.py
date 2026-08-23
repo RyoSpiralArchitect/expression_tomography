@@ -8,7 +8,7 @@ import urllib.error
 import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable, Protocol
+from typing import Callable, Iterable, Protocol
 
 
 class ProviderError(RuntimeError):
@@ -66,6 +66,22 @@ class ProviderSpec:
 MockProviderFactory = Callable[[ProviderSpec], Provider]
 
 
+def materialize_unique_providers(providers: Iterable[Provider]) -> list[Provider]:
+    provider_list = list(providers)
+    seen = set()
+    duplicates = set()
+    for provider in provider_list:
+        if provider.name in seen:
+            duplicates.add(provider.name)
+        seen.add(provider.name)
+    if duplicates:
+        raise ProviderError(
+            "Provider names must be unique; duplicate provider names: "
+            + ", ".join(sorted(duplicates))
+        )
+    return provider_list
+
+
 def load_provider_specs(path: str | Path) -> list[ProviderSpec]:
     with open(path, "r", encoding="utf-8") as f:
         obj = json.load(f)
@@ -100,10 +116,10 @@ def build_providers_from_config(
     *,
     mock_factory: MockProviderFactory | None = None,
 ) -> list[Provider]:
-    return [
+    return materialize_unique_providers(
         build_provider(spec, mock_factory=mock_factory)
         for spec in load_provider_specs(path)
-    ]
+    )
 
 
 def parse_json_lenient(raw: str) -> dict | None:

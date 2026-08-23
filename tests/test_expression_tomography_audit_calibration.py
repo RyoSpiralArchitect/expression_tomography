@@ -366,6 +366,27 @@ class AuditCalibrationTests(unittest.TestCase):
                     len(store.fetch_cases(task_type=AUDIT_CALIBRATION_TASK_TYPE)),
                     case_count,
                 )
+
+                duplicate_a = ConfiguredRuleZMockProvider(
+                    max_tokens=700,
+                    name="duplicate",
+                )
+                duplicate_b = ConfiguredRuleZMockProvider(
+                    max_tokens=701,
+                    name="duplicate",
+                )
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "duplicate provider names",
+                ):
+                    run_audit_calibration_provider_suite(
+                        cases,
+                        [duplicate_a, duplicate_b],
+                        store,
+                        audit_modes=("source_faithful_invariants",),
+                    )
+                self.assertEqual(duplicate_a.call_count, 0)
+                self.assertEqual(duplicate_b.call_count, 0)
             finally:
                 store.close()
 

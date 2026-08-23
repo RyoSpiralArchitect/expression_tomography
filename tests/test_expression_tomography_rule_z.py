@@ -1104,6 +1104,22 @@ class RuleZSmokeTests(unittest.TestCase):
                     case_count_before_drift,
                 )
 
+                duplicate_a = CountingMockProvider(name="duplicate")
+                duplicate_b = CountingMockProvider(name="duplicate")
+                duplicate_b.request_contract_version = "changed.request.v2"
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "duplicate provider names",
+                ):
+                    run_rule_z_provider_suite(
+                        [missing_case, case],
+                        [duplicate_a, duplicate_b],
+                        store,
+                        transmission_modes=modes,
+                    )
+                self.assertEqual(duplicate_a.call_count, 0)
+                self.assertEqual(duplicate_b.call_count, 0)
+
                 duplicate_source = rows[0]
                 store.insert_trial(
                     TrialResult(

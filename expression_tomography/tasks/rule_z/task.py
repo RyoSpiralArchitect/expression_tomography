@@ -7,6 +7,7 @@ from typing import Iterable
 
 from expression_tomography.core.providers import (
     Provider,
+    materialize_unique_providers,
     parse_json_lenient,
 )
 from expression_tomography.core.report import write_rule_z_report
@@ -902,7 +903,7 @@ def run_rule_z_provider_suite(
     audit_intermediates: bool = False,
 ) -> list[dict]:
     case_list = list(cases)
-    provider_list = list(providers)
+    provider_list = materialize_unique_providers(providers)
     common_options = {
         "transmission_modes": transmission_modes,
         "direct_probe_modes": direct_probe_modes,

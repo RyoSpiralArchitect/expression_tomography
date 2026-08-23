@@ -16,6 +16,7 @@ from expression_tomography.core.providers import (
     ProviderSpec,
     build_provider,
     build_providers_from_config,
+    materialize_unique_providers,
     parse_json_lenient,
 )
 
@@ -48,6 +49,33 @@ class ProviderTests(unittest.TestCase):
         spec = ProviderSpec(name="mock-a", type="mock")
         with self.assertRaisesRegex(ProviderError, "task-specific"):
             build_provider(spec)
+
+    def test_provider_names_must_be_unique(self) -> None:
+        providers_with_duplicate_names = [
+            StubMockProvider("same-name"),
+            StubMockProvider("same-name"),
+        ]
+        with self.assertRaisesRegex(ProviderError, "duplicate provider names"):
+            materialize_unique_providers(providers_with_duplicate_names)
+
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "providers.json"
+            path.write_text(
+                json.dumps(
+                    {
+                        "providers": [
+                            {"name": "same-name", "type": "mock"},
+                            {"name": "same-name", "type": "mock"},
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(ProviderError, "duplicate provider names"):
+                build_providers_from_config(
+                    path,
+                    mock_factory=lambda spec: StubMockProvider(spec.name),
+                )
 
     def test_provider_config_loads_reasoning_effort(self) -> None:
         with tempfile.TemporaryDirectory() as td:
