@@ -122,7 +122,7 @@ python3 -m expression_tomography.tasks.rule_z.audit_calibration_task \
 The eight balanced mutation families cover clean ledgers, omitted fields,
 reversed, duplicated, equal-tier, and contradictory priority claims,
 contradictory integration, and fluent artifacts with no case-specific claims.
-Source-faithful quote-grounded calibration is the primary endpoint. A
+Source-faithful field-and-claim-matched quote grounding is the primary endpoint. A
 repair-capable reader is reported separately against one designed repair target
 because coherent repair can be non-identifiable.
 
@@ -138,7 +138,8 @@ python3 -m expression_tomography.tasks.rule_z.audit_calibration_compare \
 
 The runner fails closed when a logical trial collides with changed execution
 provenance. The comparison reconstructs both prompts and scores, then fails
-closed when identities, source payloads, provider configuration, prompt
+closed when identities, source payloads, provider configuration (including HF
+device and dtype), prompt
 contracts, rubric-only normalization, or score schemas differ. Existing raw
 responses can be upgraded without provider calls using
 `--revalidate-existing-only`. The first live Luna calibration is documented in

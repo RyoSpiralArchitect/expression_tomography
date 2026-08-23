@@ -38,7 +38,8 @@ payload and are never placed in the reader prompt.
 The source-faithful score is primary. A calibrated row requires:
 
 - exact field status and values, including duplicate multiplicity;
-- exact contiguous quote support for every reported claim;
+- exact contiguous quote support matched to the reported field and item; a
+  priority edge additionally requires the quoted directed pair;
 - no inferred final answer when none is stated;
 - correct contradiction presence or absence with grounded evidence.
 
@@ -58,9 +59,9 @@ more than one coherent repair can exist.
 - Cases: 120
 - Replicates: 1
 - Canonical trials: 360
-- Implementation commit: `71056104d935cc5581f0b5ccd77266a90a619360`
+- Implementation commit: `2fbaae21b399af8a54786205db2717f9c27e3d59`
 - Prompt contract: `rule_z_audit_calibration.prompt.v1`
-- Score schema: `rule_z_audit_calibration.score.v2`
+- Score schema: `rule_z_audit_calibration.score.v3`
 
 The 360 canonical trials comprise 120 legacy faithful audits, 120
 repair-capable audits, and 120 invariant-rubric faithful audits. Preliminary
@@ -71,12 +72,15 @@ identities, and have no parse or schema failures. Exact reruns inserted zero
 rows and skipped all 240 legacy identities and all 120 invariant identities.
 
 After review, all 360 stored raw responses were reparsed and rescored without
-provider calls. Execution identities now include provider configuration, exact
-prompt, prompt-contract version, and score-schema version. All responses were
-schema-valid, and the revalidation changed no headline metric. The paired
-comparison also reconstructs both prompts, proves that their normalized delta
-is limited to the invariant rubric, and reproduces every stored score with the
-declared scorer before calculating transitions.
+provider calls. Execution identities now include provider configuration,
+including HF-local device and dtype where applicable, exact prompt,
+prompt-contract version, and score-schema version. All responses were
+schema-valid. The v3 revalidation left both primary calibrated endpoints and
+all paired transitions unchanged, but correctly reclassified eight rows whose
+quotes occurred in the artifact without supporting the claimed field or item.
+The paired comparison also reconstructs both prompts, proves that their
+normalized delta is limited to the invariant rubric, and reproduces every
+stored score with the declared scorer before calculating transitions.
 
 ## Primary Result
 
@@ -91,7 +95,7 @@ incompatible claims.
 | Parse success | 1.000 | 1.000 |
 | Source-faithful calibrated | 0.508 | 0.700 |
 | Literal state exact | 0.833 | 0.975 |
-| All reported claims grounded | 0.958 | 0.975 |
+| All reported claims grounded | 0.900 | 0.967 |
 | Contradiction classification correct | 0.683 | 0.750 |
 | Contradiction sensitivity | 0.983 | 0.500 |
 | Contradiction specificity | 0.383 | 1.000 |
@@ -142,8 +146,11 @@ source quality with the reader's prompt-dependent operating point.
 | `reversed_edge` | 0.800 | 0.000 | 0 | 12 |
 
 The three remaining invariant literal failures consist of two omitted-field
-cases and one contradictory-edge case. Three invariant reports also fail exact
-quote grounding. Those are small enough for a quote-level human audit rather
+cases and one contradictory-edge case. Four invariant reports also fail the
+field-and-item quote-grounding check. The stricter v3 scorer changes grounding
+on seven legacy rows and one invariant row; all eight already failed the
+primary calibrated endpoint, so calibrated rates and pair transitions remain
+unchanged. Those rows are small enough for a quote-level human audit rather
 than another automatic aggregate.
 
 ## Repair Is a Separate Estimand
@@ -197,6 +204,8 @@ it to the writer.
   experiment, but it is not a randomized human trial or a model-internal
   intervention.
 - High literal extraction does not imply correct semantic integration.
+- The grounding check verifies exact lexical support for the named field and
+  item on this generated format; it is not a general entailment evaluator.
 - Designed repair-target match is non-identifiable where multiple coherent
   repairs exist.
 - These data calibrate one Luna reader configuration and are not a provider

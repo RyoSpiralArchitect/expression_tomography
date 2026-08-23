@@ -1,12 +1,12 @@
 {
-  "manifest_version": "rule_z_audit_reader_calibration.run.v2",
+  "manifest_version": "rule_z_audit_reader_calibration.run.v3",
   "status": "complete",
   "local_run_date": "2026-08-22",
   "secrets_stored": false,
   "implementation": {
     "branch": "SpiralReality/audit-reader-calibration",
     "base_commit": "469bd461eb4fca84041a5a16d8c8ec7c7c0e0e15",
-    "implementation_commit": "71056104d935cc5581f0b5ccd77266a90a619360"
+    "implementation_commit": "2fbaae21b399af8a54786205db2717f9c27e3d59"
   },
   "generator": {
     "task_type": "rule_z_audit_calibration",
@@ -30,7 +30,7 @@
     "type": "openai_compatible",
     "config_file": "provider_config.json",
     "config_file_sha256": "8ae602fcb0987398372a1d28e67c841964194192d05236fc7e3feb7414597e64",
-    "stored_metadata_config_sha256": "13bf18fe10a760f8663643e1",
+    "stored_metadata_config_sha256": "e3b4d7f0571c20d44cfda429",
     "max_tokens": 1400,
     "temperature": 0.0,
     "reasoning_effort": "low",
@@ -38,11 +38,14 @@
   },
   "provenance_hardening": {
     "prompt_contract_version": "rule_z_audit_calibration.prompt.v1",
-    "score_schema_version": "rule_z_audit_calibration.score.v2",
+    "score_schema_version": "rule_z_audit_calibration.score.v3",
     "stored_raw_responses_revalidated": 360,
     "provider_calls_during_revalidation": 0,
     "schema_valid_responses": 360,
-    "headline_metrics_changed": false,
+    "score_rows_changed": 360,
+    "claim_grounding_rows_changed": 8,
+    "primary_endpoint_metrics_changed": false,
+    "claim_grounding_metric_changed": true,
     "execution_identity_includes": [
       "logical_trial_identity",
       "provider_config_sha256",
@@ -53,7 +56,7 @@
   },
   "legacy_run": {
     "database": "legacy/trials.sqlite",
-    "sha256": "fcd6eccc29afb81dce1df9a99167844762da6e222218368fa2f50306149a6e2b",
+    "sha256": "1f2b86bbd37bed80d5f26d3e6293c99ef37f39f02dce23d95ef2c9406f959ff5",
     "sqlite_integrity_check": "ok",
     "case_count": 120,
     "trial_count": 240,
@@ -74,7 +77,7 @@
     "primary_source_faithful": {
       "source_faithful_calibrated": 0.5083333333333333,
       "literal_state_exact": 0.8333333333333334,
-      "all_reported_claims_grounded": 0.9583333333333334,
+      "all_reported_claims_grounded": 0.9,
       "contradiction_detection_correct": 0.6833333333333333,
       "repair_attraction_any": 0.008333333333333333
     },
@@ -85,7 +88,7 @@
   },
   "invariant_run": {
     "database": "invariants/trials.sqlite",
-    "sha256": "f05320fc1761d22ceb87e85f70bcf0d4af12f80276f9cae4b2b29bf4db3b1715",
+    "sha256": "3473ec3c417d5b505786eccebce817d2dd8b269e33eb2346ee1f9317a619463f",
     "sqlite_integrity_check": "ok",
     "case_count": 120,
     "trial_count": 120,
@@ -105,7 +108,7 @@
     "primary_source_faithful": {
       "source_faithful_calibrated": 0.7,
       "literal_state_exact": 0.975,
-      "all_reported_claims_grounded": 0.975,
+      "all_reported_claims_grounded": 0.9666666666666667,
       "contradiction_detection_correct": 0.75,
       "repair_attraction_any": 0.008333333333333333
     }
@@ -128,21 +131,22 @@
   },
   "frozen_artifacts": {
     "invariants/rule_z_audit_calibration_report.md": "496355eecde2290370ebfb69c5c0b7b3727c197633c43e83b3f4172d2ec937ba",
-    "invariants/rule_z_audit_calibration_summary.csv": "0cd33728f4a1d7dd500273f6a69468b6bed85d606a801863a7bb1580d7d8457b",
-    "invariants/rule_z_audit_calibration_summary.json": "2bcdcf8c83afb0e2d3b521f252941bab13a2c1073a04a6392d38e62140dbed8b",
-    "invariants/rule_z_audit_calibration_trials.csv": "36bc1e0693b9f24518efe51328b624709d5ebd1a96aad680b05985543ad5e972",
+    "invariants/rule_z_audit_calibration_summary.csv": "d5a43f29d0986bdaa2be821e8a654f1bfa13ed9bcd90724d163ede663cea6be7",
+    "invariants/rule_z_audit_calibration_summary.json": "832454803e7930978543d7d502d95c1b3fe00abb7c667a4c43be3de578915299",
+    "invariants/rule_z_audit_calibration_trials.csv": "5df45ebdb68e803c628cb25f32a172886d843fc6588d23cb43a2ded9c9f67e8c",
     "legacy/rule_z_audit_calibration_report.md": "811bdfbc32f550ab3900540949b45e0c483f57ae587ef7603195c8816cec84eb",
-    "legacy/rule_z_audit_calibration_summary.csv": "05d2a9eb82a6d517bba76ca3f1f63874f31045b5ea17ec892495dc432cb4e8c6",
-    "legacy/rule_z_audit_calibration_summary.json": "854452c8c4c72742a6a019a8390a9fd42b670c3926790d523eab87e673a09c33",
-    "legacy/rule_z_audit_calibration_trials.csv": "406126c41ff350ed7591994d274a65d7f3144fb0a763d01bca36dbdf69997eaa",
-    "prompt_comparison/rule_z_audit_calibration_prompt_comparison.json": "483ef5e5e585b1d74b57578a999aa2e7c289c48c3d3a65a96568ea85db31fe09",
+    "legacy/rule_z_audit_calibration_summary.csv": "88e4c2fef292737aa0c87b6071d647a87219a80b1ef9dd444e8bf1619346da56",
+    "legacy/rule_z_audit_calibration_summary.json": "41b1a41859435fe1d9c58fa5715d1eb78d23827a95689f6c56180456c6a34d52",
+    "legacy/rule_z_audit_calibration_trials.csv": "efe3fc9a935fd594f7d7cd2203da2ac5c3d891ce9f0506994902de828af71ec7",
+    "prompt_comparison/rule_z_audit_calibration_prompt_comparison.json": "bcf873661b5a43345543b15d9be08544b8c88ba60c256c14fa63dfbb00f655ea",
     "prompt_comparison/rule_z_audit_calibration_prompt_comparison.md": "b0d7ffe61635efa7567e43571241729f8592ed5d7a46a6fd71a4814d7c72ec08",
-    "prompt_comparison/rule_z_audit_calibration_prompt_pairs.csv": "1b840b48e66c2e72b963ca47cdd76f5971a1f35f0ceb390f5ecfb7791345109f"
+    "prompt_comparison/rule_z_audit_calibration_prompt_pairs.csv": "9ff9ca54f2c3657b195439a59aed3732fdc24c8548ee6876b5ee33e4ae1449cd"
   },
   "interpretation_boundaries": [
     "Source-faithful quote-grounded calibration is the primary endpoint.",
     "Designed repair-target match is exploratory because coherent repairs can be non-identifiable.",
     "The prompt comparison has one response per artifact and does not estimate response stochasticity.",
+    "Claim grounding is a field-and-item lexical exact-quote check on these fielded phantoms, not a general semantic-entailment judgment.",
     "The invariant rubric improves specificity but loses all reversed-edge and equal-tier contradiction detections on this surface.",
     "This run calibrates a named reader and contract; it is not evidence of a pre-expression latent state or a provider leaderboard."
   ]

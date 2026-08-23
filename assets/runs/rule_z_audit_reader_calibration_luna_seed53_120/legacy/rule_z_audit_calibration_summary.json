@@ -196,7 +196,7 @@
       "source_faithful_calibrated": 1.0
     },
     {
-      "all_reported_claims_grounded": 1.0,
+      "all_reported_claims_grounded": 0.6666666666666666,
       "audit_parse_ok": 1.0,
       "audit_schema_valid": 1.0,
       "condition": "I_source_faithful",
@@ -211,7 +211,7 @@
       "source_faithful_calibrated": 0.6666666666666666
     },
     {
-      "all_reported_claims_grounded": 1.0,
+      "all_reported_claims_grounded": 0.8666666666666667,
       "audit_parse_ok": 1.0,
       "audit_schema_valid": 1.0,
       "condition": "I_source_faithful",
@@ -259,7 +259,7 @@
       "source_faithful_calibrated": null
     },
     {
-      "all_reported_claims_grounded": 0.9583333333333334,
+      "all_reported_claims_grounded": 0.9,
       "audit_parse_ok": 1.0,
       "audit_schema_valid": 1.0,
       "condition": "I_source_faithful",

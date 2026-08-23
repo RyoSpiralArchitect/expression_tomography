@@ -130,7 +130,7 @@
       "invariant_literal_state_exact": 1.0,
       "invariant_repair_attraction_any": 0.0,
       "invariant_source_faithful_calibrated": 1.0,
-      "legacy_all_reported_claims_grounded": 1.0,
+      "legacy_all_reported_claims_grounded": 0.6666666666666666,
       "legacy_audit_schema_valid": 1.0,
       "legacy_contradiction_detection_correct": 1.0,
       "legacy_contradiction_sensitivity": null,
@@ -146,7 +146,7 @@
     },
     {
       "improved": 12,
-      "invariant_all_reported_claims_grounded": 1.0,
+      "invariant_all_reported_claims_grounded": 0.9333333333333333,
       "invariant_audit_schema_valid": 1.0,
       "invariant_contradiction_detection_correct": 1.0,
       "invariant_contradiction_sensitivity": null,
@@ -154,7 +154,7 @@
       "invariant_literal_state_exact": 0.8666666666666667,
       "invariant_repair_attraction_any": 0.06666666666666667,
       "invariant_source_faithful_calibrated": 0.8666666666666667,
-      "legacy_all_reported_claims_grounded": 1.0,
+      "legacy_all_reported_claims_grounded": 0.8666666666666667,
       "legacy_audit_schema_valid": 1.0,
       "legacy_contradiction_detection_correct": 0.13333333333333333,
       "legacy_contradiction_sensitivity": null,
@@ -196,7 +196,7 @@
   "n_pairs": 120,
   "overall": {
     "improved": 50,
-    "invariant_all_reported_claims_grounded": 0.975,
+    "invariant_all_reported_claims_grounded": 0.9666666666666667,
     "invariant_audit_schema_valid": 1.0,
     "invariant_contradiction_detection_correct": 0.75,
     "invariant_contradiction_sensitivity": 0.5,
@@ -204,7 +204,7 @@
     "invariant_literal_state_exact": 0.975,
     "invariant_repair_attraction_any": 0.008333333333333333,
     "invariant_source_faithful_calibrated": 0.7,
-    "legacy_all_reported_claims_grounded": 0.9583333333333334,
+    "legacy_all_reported_claims_grounded": 0.9,
     "legacy_audit_schema_valid": 1.0,
     "legacy_contradiction_detection_correct": 0.6833333333333333,
     "legacy_contradiction_sensitivity": 0.9833333333333333,
@@ -223,7 +223,7 @@
     "prompt_contract_version": "rule_z_audit_calibration.prompt.v1",
     "prompt_delta_limited_to_invariant_rubric": true,
     "provider_configurations_matched": true,
-    "score_schema_version": "rule_z_audit_calibration.score.v2",
+    "score_schema_version": "rule_z_audit_calibration.score.v3",
     "stored_scores_reproduced": true
   },
   "task_type": "rule_z_audit_calibration"
