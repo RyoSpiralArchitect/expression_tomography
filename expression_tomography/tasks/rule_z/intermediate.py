@@ -265,6 +265,22 @@ def _grounded_edge_field(
     }
 
 
+def normalize_source_faithful_audit(
+    parsed: dict[str, Any],
+    source_artifact: str,
+) -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
+    normalized: dict[str, Any] = {}
+    field_details: dict[str, dict[str, Any]] = {}
+    for field in AUDIT_LIST_FIELDS:
+        values, details = _grounded_list_field(parsed, field, source_artifact)
+        normalized[field] = values
+        field_details[field] = details
+    edges, edge_details = _grounded_edge_field(parsed, source_artifact)
+    normalized["fired_priority_edges"] = edges
+    field_details["fired_priority_edges"] = edge_details
+    return normalized, field_details
+
+
 def score_source_faithful_audit(
     parsed: dict[str, Any] | None,
     source_artifact: str,
@@ -301,15 +317,10 @@ def score_source_faithful_audit(
             "contradiction_quotes_grounded": False,
         }
 
-    normalized: dict[str, Any] = {}
-    field_details: dict[str, dict[str, Any]] = {}
-    for field in AUDIT_LIST_FIELDS:
-        values, details = _grounded_list_field(parsed, field, source_artifact)
-        normalized[field] = values
-        field_details[field] = details
-    edges, edge_details = _grounded_edge_field(parsed, source_artifact)
-    normalized["fired_priority_edges"] = edges
-    field_details["fired_priority_edges"] = edge_details
+    normalized, field_details = normalize_source_faithful_audit(
+        parsed,
+        source_artifact,
+    )
 
     base = score_intermediate_audit(normalized, oracle)
     oracle_exact = {

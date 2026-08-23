@@ -174,13 +174,27 @@ def make_source_faithful_audit_prompt(
     case_id: str,
     source_artifact: str,
     source_condition: str,
+    *,
+    include_rule_z_invariants: bool = False,
 ) -> str:
+    invariant_lines = (
+        [
+            "Rule-Z invariant: a rule may be both fired and suppressed because suppression is applied after firing; that pairing is not a contradiction.",
+            "Rule-Z invariant: only active rules contribute active conclusions; a suppressed rule's outcome may differ from an active conclusion without contradiction.",
+            "Do not infer an omitted ledger field from rule outcomes or from other ledger fields.",
+            "Preserve repeated identical claims as repeated items, but do not label repetition alone as contradictory.",
+            "Mark contradictory only when the source asserts incompatible values for the same field or its fields cannot coexist under these invariants.",
+        ]
+        if include_rule_z_invariants
+        else []
+    )
     return "\n".join(
         [
             "TASK: rule_z_source_faithful_audit",
             "CONDITION: I_SOURCE_FAITHFUL",
             f"SOURCE_CONDITION: {source_condition}",
             f"CASE_ID: {case_id}",
+            *invariant_lines,
             "Extract only claims explicitly asserted by the source artifact.",
             "Do not solve the Rule-Z case, repair the artifact, or select the claim that seems most likely to be correct.",
             "You do not receive the authoritative structured case.",
