@@ -202,7 +202,11 @@ def write_audit_calibration_comparison(
         encoding="utf-8",
         newline="",
     ) as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(paired_rows[0]))
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=list(paired_rows[0]),
+            lineterminator="\n",
+        )
         writer.writeheader()
         writer.writerows(paired_rows)
 

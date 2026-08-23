@@ -141,6 +141,12 @@ class AuditCalibrationTests(unittest.TestCase):
             self.assertTrue(
                 (root / "reports/rule_z_audit_calibration_summary.json").is_file()
             )
+            self.assertNotIn(
+                b"\r\n",
+                (
+                    root / "reports/rule_z_audit_calibration_trials.csv"
+                ).read_bytes(),
+            )
 
     def test_prompt_comparison_pairs_identical_sources(self) -> None:
         cases = make_audit_calibration_cases(8, seed=53)
@@ -185,6 +191,13 @@ class AuditCalibrationTests(unittest.TestCase):
                     root
                     / "comparison/rule_z_audit_calibration_prompt_comparison.json"
                 ).is_file()
+            )
+            self.assertNotIn(
+                b"\r\n",
+                (
+                    root
+                    / "comparison/rule_z_audit_calibration_prompt_pairs.csv"
+                ).read_bytes(),
             )
 
     def test_prompt_comparison_rejects_provider_config_drift(self) -> None:

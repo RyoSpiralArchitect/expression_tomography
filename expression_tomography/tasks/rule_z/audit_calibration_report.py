@@ -134,7 +134,11 @@ def write_audit_calibration_report(
         *REPORT_METRICS,
     ]
     with summary_path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=summary_fields)
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=summary_fields,
+            lineterminator="\n",
+        )
         writer.writeheader()
         for row in summary["by_family"]:
             writer.writerow(
@@ -151,7 +155,11 @@ def write_audit_calibration_report(
     trials_path = output / "rule_z_audit_calibration_trials.csv"
     if trials:
         with trials_path.open("w", encoding="utf-8", newline="") as handle:
-            writer = csv.DictWriter(handle, fieldnames=list(trials[0]))
+            writer = csv.DictWriter(
+                handle,
+                fieldnames=list(trials[0]),
+                lineterminator="\n",
+            )
             writer.writeheader()
             writer.writerows(trials)
 

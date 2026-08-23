@@ -104,6 +104,42 @@ The first live reader checkpoint and its completion boundary are documented in
 `docs/live_rule_z_posthoc_readers_note_2026_07_25.md`. Its Claude side is
 complete; GPT-5.5 remains an explicitly partial, resumable quota checkpoint.
 
+## Rule-Z Audit Reader Calibration
+
+Controlled source artifacts calibrate the post-hoc audit reader before it is
+used as a measurement instrument over model-written derivations:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.audit_calibration_task \
+  --cases 120 \
+  --seed 53 \
+  --audit-modes source_faithful_invariants,repair_capable \
+  --provider-config expression_tomography/config/providers.openai_gpt_5_6_luna.json \
+  --db results/expression_tomography/rule_z_audit_calibration.sqlite \
+  --report-dir results/expression_tomography/rule_z_audit_calibration_reports
+```
+
+The eight balanced mutation families cover clean ledgers, omitted fields,
+reversed, duplicated, equal-tier, and contradictory priority claims,
+contradictory integration, and fluent artifacts with no case-specific claims.
+Source-faithful quote-grounded calibration is the primary endpoint. A
+repair-capable reader is reported separately against one designed repair target
+because coherent repair can be non-identifiable.
+
+Run `source_faithful` and `source_faithful_invariants` into separate databases,
+then compare their fixed source artifacts with:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.audit_calibration_compare \
+  --legacy-db results/expression_tomography/rule_z_audit_legacy.sqlite \
+  --invariant-db results/expression_tomography/rule_z_audit_invariants.sqlite \
+  --output-dir results/expression_tomography/rule_z_audit_prompt_comparison
+```
+
+The comparison fails closed when identities, source hashes, or provider
+configuration hashes differ. The first live Luna calibration is documented in
+`docs/live_rule_z_audit_reader_calibration_luna_note_2026_08_22.md`.
+
 ## Metaphor Transfer Smoke
 
 ```bash
@@ -134,6 +170,14 @@ A stronger OpenAI config is available for model-equalized ear red-team runs:
 ```bash
 python3 -m expression_tomography.tasks.rule_z.task \
   --provider-config expression_tomography/config/providers.openai_gpt_5_5.json
+```
+
+The lower-cost OpenAI audit-calibration config uses GPT-5.6 Luna with low
+reasoning effort:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.audit_calibration_task \
+  --provider-config expression_tomography/config/providers.openai_gpt_5_6_luna.json
 ```
 
 The matching clean Anthropic priority/compute probe uses:
