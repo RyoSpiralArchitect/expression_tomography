@@ -403,14 +403,13 @@ def run_audit_calibration_experiment(
             )
         existing_by_logical[logical_identity] = execution_identity
     provider_provenance = _provider_provenance(provider)
-    inserted = 0
+    case_list = list(cases)
+    execution_plan = {}
+    requested_logical_identities = set()
     skipped = 0
     planned = 0
 
-    for case in cases:
-        store.upsert_case(case)
-        source_artifact = str(case.payload["source_artifact"])
-        family = str(case.payload["mutation_family"])
+    for case in case_list:
         for replicate_index in range(
             replicate_start,
             replicate_start + repetitions,
@@ -424,6 +423,12 @@ def run_audit_calibration_experiment(
                     condition,
                     replicate_index,
                 )
+                if logical_identity in requested_logical_identities:
+                    raise RuntimeError(
+                        "Audit calibration request contains a duplicate logical "
+                        f"trial identity: {logical_identity}"
+                    )
+                requested_logical_identities.add(logical_identity)
                 prompt = _make_audit_prompt(case.case_hash, case.payload, audit_mode)
                 prompt_sha256 = content_hash(prompt)
                 execution_identity = _execution_trial_identity(
@@ -438,7 +443,36 @@ def run_audit_calibration_experiment(
                             "Audit calibration execution provenance drift for "
                             f"{logical_identity}; use a fresh database"
                         )
+                execution_plan[(case.case_hash, replicate_index, audit_mode)] = (
+                    prompt,
+                    prompt_sha256,
+                    execution_identity,
+                    stored_execution is not None,
+                )
+                if stored_execution is not None:
                     skipped += 1
+
+    inserted = 0
+    for case in case_list:
+        store.upsert_case(case)
+        source_artifact = str(case.payload["source_artifact"])
+        family = str(case.payload["mutation_family"])
+        for replicate_index in range(
+            replicate_start,
+            replicate_start + repetitions,
+        ):
+            for audit_mode in audit_modes:
+                condition = AUDIT_MODE_TO_CONDITION[audit_mode]
+                logical_identity = (
+                    provider.name,
+                    case.case_hash,
+                    condition,
+                    replicate_index,
+                )
+                prompt, prompt_sha256, execution_identity, should_skip = (
+                    execution_plan[(case.case_hash, replicate_index, audit_mode)]
+                )
+                if should_skip:
                     continue
                 raw = provider.complete(prompt)
                 parsed = parse_json_lenient(raw)

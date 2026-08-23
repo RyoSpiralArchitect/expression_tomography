@@ -58,8 +58,10 @@ class ConfiguredRuleZMockProvider:
             dtype=dtype,
         )
         self._delegate = RuleZMockProvider(name=self.name)
+        self.call_count = 0
 
     def complete(self, prompt: str) -> str:
+        self.call_count += 1
         return self._delegate.complete(prompt)
 
 
@@ -275,26 +277,42 @@ class AuditCalibrationTests(unittest.TestCase):
         self.assertIn("fired_priority_edges", score["repair_attraction_fields"])
 
     def test_resume_rejects_provider_configuration_drift(self) -> None:
-        cases = make_audit_calibration_cases(1, seed=53)
+        cases = make_audit_calibration_cases(2, seed=53)
         with tempfile.TemporaryDirectory() as td:
             store = ExperimentStore(Path(td) / "calibration.sqlite")
             try:
                 run_audit_calibration_experiment(
-                    cases,
+                    [cases[1]],
                     ConfiguredRuleZMockProvider(max_tokens=700),
                     store,
                     audit_modes=("source_faithful_invariants",),
                 )
+                trial_count_before_drift = len(
+                    store.fetch_trials(task_type=AUDIT_CALIBRATION_TASK_TYPE)
+                )
+                case_count_before_drift = len(
+                    store.fetch_cases(task_type=AUDIT_CALIBRATION_TASK_TYPE)
+                )
+                changed_provider = ConfiguredRuleZMockProvider(max_tokens=701)
                 with self.assertRaisesRegex(
                     RuntimeError,
                     "execution provenance drift",
                 ):
                     run_audit_calibration_experiment(
                         cases,
-                        ConfiguredRuleZMockProvider(max_tokens=701),
+                        changed_provider,
                         store,
                         audit_modes=("source_faithful_invariants",),
                     )
+                self.assertEqual(changed_provider.call_count, 0)
+                self.assertEqual(
+                    len(store.fetch_trials(task_type=AUDIT_CALIBRATION_TASK_TYPE)),
+                    trial_count_before_drift,
+                )
+                self.assertEqual(
+                    len(store.fetch_cases(task_type=AUDIT_CALIBRATION_TASK_TYPE)),
+                    case_count_before_drift,
+                )
             finally:
                 store.close()
 
