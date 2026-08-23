@@ -16,6 +16,10 @@ from .intermediate import (
 
 
 AUDIT_CALIBRATION_TASK_TYPE = "rule_z_audit_calibration"
+AUDIT_CALIBRATION_PROMPT_CONTRACT_VERSION = (
+    "rule_z_audit_calibration.prompt.v1"
+)
+AUDIT_CALIBRATION_SCORE_SCHEMA_VERSION = "rule_z_audit_calibration.score.v2"
 AUDIT_CALIBRATION_FAMILIES = (
     "clean",
     "omitted_field",
@@ -33,6 +37,131 @@ FIELD_LABELS = {
     "active_rules": "Active rules",
     "active_conclusions": "Active conclusions",
 }
+AUDIT_FIELD_STATUSES = {
+    "asserted",
+    "explicit_none",
+    "not_stated",
+    "contradictory",
+}
+
+
+def _validate_text(value: Any, path: str, errors: list[str]) -> None:
+    if not isinstance(value, str):
+        errors.append(f"{path} must be a string")
+
+
+def validate_source_faithful_response(
+    parsed: dict[str, Any] | None,
+) -> list[str]:
+    if not isinstance(parsed, dict):
+        return ["response must be a JSON object"]
+
+    errors: list[str] = []
+    for field in AUDIT_STATE_FIELDS:
+        payload = parsed.get(field)
+        if not isinstance(payload, dict):
+            errors.append(f"{field} must be an object")
+            continue
+        if payload.get("status") not in AUDIT_FIELD_STATUSES:
+            errors.append(f"{field}.status is invalid")
+        items = payload.get("items")
+        if not isinstance(items, list):
+            errors.append(f"{field}.items must be an array")
+        else:
+            for index, item in enumerate(items):
+                path = f"{field}.items[{index}]"
+                if not isinstance(item, dict):
+                    errors.append(f"{path} must be an object")
+                    continue
+                if field == "fired_priority_edges":
+                    _validate_text(
+                        item.get("higher_priority_rule"),
+                        f"{path}.higher_priority_rule",
+                        errors,
+                    )
+                    _validate_text(
+                        item.get("lower_priority_rule"),
+                        f"{path}.lower_priority_rule",
+                        errors,
+                    )
+                else:
+                    _validate_text(item.get("value"), f"{path}.value", errors)
+                _validate_text(item.get("evidence"), f"{path}.evidence", errors)
+        _validate_text(
+            payload.get("field_evidence"),
+            f"{field}.field_evidence",
+            errors,
+        )
+
+    source_final = parsed.get("source_final_answer")
+    if not isinstance(source_final, dict):
+        errors.append("source_final_answer must be an object")
+    else:
+        if source_final.get("status") not in AUDIT_FIELD_STATUSES:
+            errors.append("source_final_answer.status is invalid")
+        _validate_text(
+            source_final.get("value"),
+            "source_final_answer.value",
+            errors,
+        )
+        _validate_text(
+            source_final.get("evidence"),
+            "source_final_answer.evidence",
+            errors,
+        )
+
+    contradictions = parsed.get("contradictions")
+    if not isinstance(contradictions, list):
+        errors.append("contradictions must be an array")
+    else:
+        for index, item in enumerate(contradictions):
+            path = f"contradictions[{index}]"
+            if not isinstance(item, dict):
+                errors.append(f"{path} must be an object")
+                continue
+            _validate_text(item.get("topic"), f"{path}.topic", errors)
+            evidence = item.get("evidence")
+            if not isinstance(evidence, list):
+                errors.append(f"{path}.evidence must be an array")
+            else:
+                for quote_index, quote in enumerate(evidence):
+                    _validate_text(
+                        quote,
+                        f"{path}.evidence[{quote_index}]",
+                        errors,
+                    )
+    return errors
+
+
+def validate_repair_response(parsed: dict[str, Any] | None) -> list[str]:
+    if not isinstance(parsed, dict):
+        return ["response must be a JSON object"]
+
+    errors: list[str] = []
+    for field in AUDIT_STATE_FIELDS:
+        items = parsed.get(field)
+        if not isinstance(items, list):
+            errors.append(f"{field} must be an array")
+            continue
+        for index, item in enumerate(items):
+            path = f"{field}[{index}]"
+            if field == "fired_priority_edges":
+                if not isinstance(item, dict):
+                    errors.append(f"{path} must be an object")
+                    continue
+                _validate_text(
+                    item.get("higher_priority_rule"),
+                    f"{path}.higher_priority_rule",
+                    errors,
+                )
+                _validate_text(
+                    item.get("lower_priority_rule"),
+                    f"{path}.lower_priority_rule",
+                    errors,
+                )
+            else:
+                _validate_text(item, path, errors)
+    return errors
 
 
 def _literal_field(status: str, items: list[Any]) -> dict[str, Any]:
@@ -299,7 +428,9 @@ def score_source_faithful_calibration(
     source_artifact: str,
     payload: dict[str, Any],
 ) -> dict[str, Any]:
-    if parsed is None:
+    schema_errors = validate_source_faithful_response(parsed)
+    schema_valid = not schema_errors
+    if not schema_valid:
         normalized = {field: [] for field in AUDIT_STATE_FIELDS}
         details = {
             field: {
@@ -311,6 +442,7 @@ def score_source_faithful_calibration(
             for field in AUDIT_STATE_FIELDS
         }
     else:
+        assert parsed is not None
         normalized, details = normalize_source_faithful_audit(
             parsed,
             source_artifact,
@@ -402,11 +534,13 @@ def score_source_faithful_calibration(
     all_reported_claims_grounded = (
         claim_count == 0 or grounded_claim_count == claim_count
     )
-    literal_state_exact = all(
-        result["literal_exact"] for result in field_results.values()
-    ) and source_final_not_stated_exact
+    literal_state_exact = (
+        schema_valid
+        and all(result["literal_exact"] for result in field_results.values())
+        and source_final_not_stated_exact
+    )
     calibrated = (
-        parsed is not None
+        schema_valid
         and literal_state_exact
         and bool(contradiction["contradiction_detection_correct"])
         and bool(contradiction["contradiction_quotes_grounded"])
@@ -414,7 +548,10 @@ def score_source_faithful_calibration(
     )
     return {
         "audit_parse_ok": parsed is not None,
+        "audit_schema_valid": schema_valid,
+        "audit_schema_errors": schema_errors,
         "audit_mode": "source_faithful",
+        "score_schema_version": AUDIT_CALIBRATION_SCORE_SCHEMA_VERSION,
         "literal_state_exact": literal_state_exact,
         "source_faithful_calibrated": calibrated,
         "source_final_not_stated_exact": source_final_not_stated_exact,
@@ -438,9 +575,12 @@ def score_repair_calibration(
 ) -> dict[str, Any]:
     repair_private = payload["repair_private"]
     literal_private = payload["literal_private"]
-    if parsed is None:
+    schema_errors = validate_repair_response(parsed)
+    schema_valid = not schema_errors
+    if not schema_valid:
         reported = {field: set() for field in AUDIT_STATE_FIELDS}
     else:
+        assert parsed is not None
         reported = {
             "fired_priority_edges": edge_set(parsed.get("fired_priority_edges")),
             **{
@@ -458,12 +598,15 @@ def score_repair_calibration(
         literal = set(
             _hashable_items(field, literal_private[field].get("items", []))
         )
-        field_exact[field] = parsed is not None and reported[field] == expected
-        literal_value_exact[field] = parsed is not None and reported[field] == literal
+        field_exact[field] = schema_valid and reported[field] == expected
+        literal_value_exact[field] = schema_valid and reported[field] == literal
         reported_state[field] = sorted(reported[field])
     return {
         "audit_parse_ok": parsed is not None,
+        "audit_schema_valid": schema_valid,
+        "audit_schema_errors": schema_errors,
         "audit_mode": "repair_capable",
+        "score_schema_version": AUDIT_CALIBRATION_SCORE_SCHEMA_VERSION,
         "designed_repair_target_match": all(field_exact.values()),
         "literal_value_state_exact": all(literal_value_exact.values()),
         "repair_field_exact": field_exact,

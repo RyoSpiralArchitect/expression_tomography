@@ -7,6 +7,13 @@ from .oracle import OracleAnswer
 
 
 PRIORITY_NOTATIONS = ("pair_list", "explicit_edges")
+RULE_Z_AUDIT_INVARIANT_RUBRIC = (
+    "Rule-Z invariant: a rule may be both fired and suppressed because suppression is applied after firing; that pairing is not a contradiction.",
+    "Rule-Z invariant: only active rules contribute active conclusions; a suppressed rule's outcome may differ from an active conclusion without contradiction.",
+    "Do not infer an omitted ledger field from rule outcomes or from other ledger fields.",
+    "Preserve repeated identical claims as repeated items, but do not label repetition alone as contradictory.",
+    "Mark contradictory only when the source asserts incompatible values for the same field or its fields cannot coexist under these invariants.",
+)
 
 
 def _json_block(marker: str, obj: dict[str, Any]) -> str:
@@ -178,15 +185,9 @@ def make_source_faithful_audit_prompt(
     include_rule_z_invariants: bool = False,
 ) -> str:
     invariant_lines = (
-        [
-            "Rule-Z invariant: a rule may be both fired and suppressed because suppression is applied after firing; that pairing is not a contradiction.",
-            "Rule-Z invariant: only active rules contribute active conclusions; a suppressed rule's outcome may differ from an active conclusion without contradiction.",
-            "Do not infer an omitted ledger field from rule outcomes or from other ledger fields.",
-            "Preserve repeated identical claims as repeated items, but do not label repetition alone as contradictory.",
-            "Mark contradictory only when the source asserts incompatible values for the same field or its fields cannot coexist under these invariants.",
-        ]
+        RULE_Z_AUDIT_INVARIANT_RUBRIC
         if include_rule_z_invariants
-        else []
+        else ()
     )
     return "\n".join(
         [

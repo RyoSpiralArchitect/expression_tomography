@@ -14,6 +14,7 @@ from .audit_calibration import AUDIT_CALIBRATION_TASK_TYPE
 
 REPORT_METRICS = (
     "audit_parse_ok",
+    "audit_schema_valid",
     "source_faithful_calibrated",
     "literal_state_exact",
     "all_reported_claims_grounded",
@@ -173,17 +174,18 @@ def write_audit_calibration_report(
         "",
         "## Overall",
         "",
-        "| Provider | Condition | n | Parse | Calibrated | Literal | Repair attraction | Repair target |",
-        "|---|---:|---:|---:|---:|---:|---:|---:|",
+        "| Provider | Condition | n | Parse | Schema | Calibrated | Literal | Repair attraction | Repair target |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for row in summary["overall"]:
         markdown.append(
-            "| {provider} | {condition} | {n_trials} | {parse} | {calibrated} | "
+            "| {provider} | {condition} | {n_trials} | {parse} | {schema} | {calibrated} | "
             "{literal} | {attraction} | {repair} |".format(
                 provider=row["provider"],
                 condition=row["condition"],
                 n_trials=row["n_trials"],
                 parse=_format_rate(row.get("audit_parse_ok")),
+                schema=_format_rate(row.get("audit_schema_valid")),
                 calibrated=_format_rate(row.get("source_faithful_calibrated")),
                 literal=_format_rate(row.get("literal_state_exact")),
                 attraction=_format_rate(row.get("repair_attraction_any")),
@@ -196,19 +198,20 @@ def write_audit_calibration_report(
             "",
             "## By Mutation Family",
             "",
-            "| Provider | Condition | Family | n | Parse | Calibrated | Literal | Contradiction | Attraction | Repair target |",
-            "|---|---|---|---:|---:|---:|---:|---:|---:|---:|",
+            "| Provider | Condition | Family | n | Parse | Schema | Calibrated | Literal | Contradiction | Attraction | Repair target |",
+            "|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|",
         ]
     )
     for row in summary["by_family"]:
         markdown.append(
-            "| {provider} | {condition} | {family} | {n_trials} | {parse} | "
+            "| {provider} | {condition} | {family} | {n_trials} | {parse} | {schema} | "
             "{calibrated} | {literal} | {contradiction} | {attraction} | {repair} |".format(
                 provider=row["provider"],
                 condition=row["condition"],
                 family=row["mutation_family"],
                 n_trials=row["n_trials"],
                 parse=_format_rate(row.get("audit_parse_ok")),
+                schema=_format_rate(row.get("audit_schema_valid")),
                 calibrated=_format_rate(row.get("source_faithful_calibrated")),
                 literal=_format_rate(row.get("literal_state_exact")),
                 contradiction=_format_rate(

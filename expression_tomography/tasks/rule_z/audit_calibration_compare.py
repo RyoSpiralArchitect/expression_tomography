@@ -8,20 +8,94 @@ from pathlib import Path
 from statistics import mean
 from typing import Any
 
+from expression_tomography.core.schema import content_hash, stable_json
 from expression_tomography.core.store import ExperimentStore
 
-from .audit_calibration import AUDIT_CALIBRATION_TASK_TYPE
+from .audit_calibration import (
+    AUDIT_CALIBRATION_PROMPT_CONTRACT_VERSION,
+    AUDIT_CALIBRATION_SCORE_SCHEMA_VERSION,
+    AUDIT_CALIBRATION_TASK_TYPE,
+    score_source_faithful_calibration,
+)
+from .prompts import (
+    RULE_Z_AUDIT_INVARIANT_RUBRIC,
+    make_source_faithful_audit_prompt,
+)
 
 
 LEGACY_CONDITION = "I_source_faithful"
 INVARIANT_CONDITION = "I_source_faithful_invariants"
 PAIRED_METRICS = (
+    "audit_schema_valid",
     "source_faithful_calibrated",
     "literal_state_exact",
     "all_reported_claims_grounded",
     "contradiction_detection_correct",
     "repair_attraction_any",
 )
+
+
+def _case_rows(store: ExperimentStore) -> dict[str, dict[str, Any]]:
+    return {
+        row["case_hash"]: row
+        for row in store.fetch_cases(task_type=AUDIT_CALIBRATION_TASK_TYPE)
+    }
+
+
+def _without_invariant_rubric(prompt: str) -> str:
+    lines = prompt.splitlines()
+    for rubric_line in RULE_Z_AUDIT_INVARIANT_RUBRIC:
+        if lines.count(rubric_line) != 1:
+            raise RuntimeError(
+                "Invariant prompt does not contain exactly one expected "
+                f"rubric line: {rubric_line}"
+            )
+        lines.remove(rubric_line)
+    return "\n".join(lines)
+
+
+def _validate_trial_contract(
+    row: dict[str, Any],
+    case: dict[str, Any],
+    *,
+    include_rule_z_invariants: bool,
+) -> None:
+    metadata = row["metadata"]
+    if (
+        metadata.get("prompt_contract_version")
+        != AUDIT_CALIBRATION_PROMPT_CONTRACT_VERSION
+    ):
+        raise RuntimeError(
+            f"Prompt contract version mismatch in trial {row['id']}"
+        )
+    if (
+        metadata.get("score_schema_version")
+        != AUDIT_CALIBRATION_SCORE_SCHEMA_VERSION
+    ):
+        raise RuntimeError(
+            f"Score schema version mismatch in trial {row['id']}"
+        )
+    payload = case["payload"]
+    source_artifact = str(payload["source_artifact"])
+    expected_prompt = make_source_faithful_audit_prompt(
+        row["case_id"],
+        source_artifact,
+        f"audit_calibration:{payload['mutation_family']}",
+        include_rule_z_invariants=include_rule_z_invariants,
+    )
+    if row["prompt"] != expected_prompt:
+        raise RuntimeError(f"Unexpected prompt implementation in trial {row['id']}")
+    if metadata.get("prompt_sha256") != content_hash(expected_prompt):
+        raise RuntimeError(f"Prompt hash mismatch in trial {row['id']}")
+    if metadata.get("source_artifact_sha256") != content_hash(source_artifact):
+        raise RuntimeError(f"Source artifact hash mismatch in trial {row['id']}")
+    expected_score = score_source_faithful_calibration(
+        row["parsed_response"],
+        source_artifact,
+        payload,
+    )
+    if stable_json(row["score"]) != stable_json(expected_score):
+        raise RuntimeError(f"Stored score is not reproducible in trial {row['id']}")
 
 
 def _identity(row: dict[str, Any]) -> tuple[str, str, int]:
@@ -101,6 +175,8 @@ def compare_audit_calibrations(
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     legacy = _condition_rows(legacy_store, LEGACY_CONDITION)
     invariant = _condition_rows(invariant_store, INVARIANT_CONDITION)
+    legacy_cases = _case_rows(legacy_store)
+    invariant_cases = _case_rows(invariant_store)
     if not legacy and not invariant:
         raise RuntimeError("No paired audit calibration rows found")
     if set(legacy) != set(invariant):
@@ -116,6 +192,26 @@ def compare_audit_calibrations(
     for identity in sorted(legacy):
         before = legacy[identity]
         after = invariant[identity]
+        before_case = legacy_cases.get(before["case_hash"])
+        after_case = invariant_cases.get(after["case_hash"])
+        if before_case is None or after_case is None:
+            raise RuntimeError(f"Missing comparison case for {identity}")
+        if before_case != after_case:
+            raise RuntimeError(f"Case payload changed for {identity}")
+        _validate_trial_contract(
+            before,
+            before_case,
+            include_rule_z_invariants=False,
+        )
+        _validate_trial_contract(
+            after,
+            after_case,
+            include_rule_z_invariants=True,
+        )
+        if _without_invariant_rubric(after["prompt"]) != before["prompt"]:
+            raise RuntimeError(
+                f"Prompt delta is not limited to the invariant rubric for {identity}"
+            )
         if (
             before["metadata"].get("source_artifact_sha256")
             != after["metadata"].get("source_artifact_sha256")
@@ -172,6 +268,16 @@ def compare_audit_calibrations(
     summary = {
         "task_type": AUDIT_CALIBRATION_TASK_TYPE,
         "n_pairs": len(paired_rows),
+        "provenance_validation": {
+            "prompt_contract_version": (
+                AUDIT_CALIBRATION_PROMPT_CONTRACT_VERSION
+            ),
+            "score_schema_version": AUDIT_CALIBRATION_SCORE_SCHEMA_VERSION,
+            "case_payloads_matched": True,
+            "provider_configurations_matched": True,
+            "prompt_delta_limited_to_invariant_rubric": True,
+            "stored_scores_reproduced": True,
+        },
         "overall": _group_summary(paired_rows, "ALL"),
         "by_family": [
             _group_summary(rows, family)
@@ -222,6 +328,7 @@ def write_audit_calibration_comparison(
         f"- Paired artifacts: {summary['n_pairs']}",
         "- Source artifacts, provider configuration, seed, and scoring are fixed.",
         "- The only intended factor is the Rule-Z invariant rubric in the audit prompt.",
+        "- Exact prompt reconstruction, rubric-only normalization, score-schema versions, and stored-score replay passed.",
         "",
         "| Family | n | Improved | Regressed | Legacy calibrated | Invariant calibrated | Legacy sensitivity | Invariant sensitivity | Legacy specificity | Invariant specificity |",
         "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|",

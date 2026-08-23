@@ -7,11 +7,13 @@ import unittest
 from collections import Counter
 from pathlib import Path
 
+from expression_tomography.core.providers import ProviderSpec
 from expression_tomography.core.store import ExperimentStore
 from expression_tomography.tasks.rule_z.audit_calibration import (
     AUDIT_CALIBRATION_FAMILIES,
     AUDIT_CALIBRATION_TASK_TYPE,
     make_audit_calibration_cases,
+    score_repair_calibration,
     score_source_faithful_calibration,
 )
 from expression_tomography.tasks.rule_z.audit_calibration_report import (
@@ -23,12 +25,28 @@ from expression_tomography.tasks.rule_z.audit_calibration_compare import (
     write_audit_calibration_comparison,
 )
 from expression_tomography.tasks.rule_z.audit_calibration_task import (
+    revalidate_audit_calibration_store,
     run_audit_calibration_experiment,
 )
 from expression_tomography.tasks.rule_z.mock_provider import RuleZMockProvider
 from expression_tomography.tasks.rule_z.prompts import (
     make_source_faithful_audit_prompt,
 )
+
+
+class ConfiguredRuleZMockProvider:
+    def __init__(self, max_tokens: int):
+        self.name = "configured-mock"
+        self.spec = ProviderSpec(
+            name=self.name,
+            type="mock",
+            model="rule-z-mock",
+            max_tokens=max_tokens,
+        )
+        self._delegate = RuleZMockProvider(name=self.name)
+
+    def complete(self, prompt: str) -> str:
+        return self._delegate.complete(prompt)
 
 
 class AuditCalibrationTests(unittest.TestCase):
@@ -120,6 +138,97 @@ class AuditCalibrationTests(unittest.TestCase):
         self.assertFalse(score["literal_state_exact"])
         self.assertTrue(score["repair_attraction_any"])
         self.assertIn("fired_priority_edges", score["repair_attraction_fields"])
+
+    def test_schema_incomplete_objects_cannot_receive_endpoint_credit(self) -> None:
+        case = make_audit_calibration_cases(8, seed=53)[7]
+        source_score = score_source_faithful_calibration(
+            {},
+            case.payload["source_artifact"],
+            case.payload,
+        )
+        repair_score = score_repair_calibration({}, case.payload)
+        self.assertTrue(source_score["audit_parse_ok"])
+        self.assertFalse(source_score["audit_schema_valid"])
+        self.assertFalse(source_score["literal_state_exact"])
+        self.assertFalse(source_score["source_faithful_calibrated"])
+        self.assertFalse(repair_score["audit_schema_valid"])
+        self.assertFalse(repair_score["designed_repair_target_match"])
+
+    def test_resume_rejects_provider_configuration_drift(self) -> None:
+        cases = make_audit_calibration_cases(1, seed=53)
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "calibration.sqlite")
+            try:
+                run_audit_calibration_experiment(
+                    cases,
+                    ConfiguredRuleZMockProvider(max_tokens=700),
+                    store,
+                    audit_modes=("source_faithful_invariants",),
+                )
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "execution provenance drift",
+                ):
+                    run_audit_calibration_experiment(
+                        cases,
+                        ConfiguredRuleZMockProvider(max_tokens=701),
+                        store,
+                        audit_modes=("source_faithful_invariants",),
+                    )
+            finally:
+                store.close()
+
+    def test_legacy_metadata_can_be_revalidated_without_provider_calls(self) -> None:
+        cases = make_audit_calibration_cases(1, seed=53)
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "calibration.sqlite"
+            store = ExperimentStore(path)
+            try:
+                run_audit_calibration_experiment(cases, RuleZMockProvider(), store)
+            finally:
+                store.close()
+
+            connection = sqlite3.connect(path)
+            try:
+                raw_metadata = connection.execute(
+                    "SELECT id, metadata_json FROM trials"
+                ).fetchall()
+                for row_id, value in raw_metadata:
+                    metadata = json.loads(value)
+                    for key in (
+                        "prompt_contract_version",
+                        "score_schema_version",
+                        "logical_trial_identity_sha256",
+                    ):
+                        metadata.pop(key, None)
+                    connection.execute(
+                        "UPDATE trials SET metadata_json = ? WHERE id = ?",
+                        (json.dumps(metadata, sort_keys=True), row_id),
+                    )
+                connection.commit()
+            finally:
+                connection.close()
+
+            store = ExperimentStore(path)
+            try:
+                migration = revalidate_audit_calibration_store(store)
+                resumed = run_audit_calibration_experiment(
+                    cases,
+                    RuleZMockProvider(),
+                    store,
+                )
+                rows = store.fetch_trials(task_type=AUDIT_CALIBRATION_TASK_TYPE)
+            finally:
+                store.close()
+            self.assertEqual(migration["revalidated_trials"], 2)
+            self.assertEqual(resumed["inserted_trials"], 0)
+            self.assertEqual(resumed["skipped_existing_trials"], 2)
+            self.assertTrue(
+                all(
+                    row["metadata"]["revalidated_from_stored_raw_response"]
+                    for row in rows
+                )
+            )
 
     def test_report_writes_raw_and_summary_artifacts(self) -> None:
         cases = make_audit_calibration_cases(8, seed=53)
@@ -246,6 +355,53 @@ class AuditCalibrationTests(unittest.TestCase):
                 with self.assertRaisesRegex(
                     RuntimeError,
                     "Provider configuration changed",
+                ):
+                    compare_audit_calibrations(legacy, invariant)
+            finally:
+                legacy.close()
+                invariant.close()
+
+    def test_prompt_comparison_rejects_non_rubric_prompt_drift(self) -> None:
+        cases = make_audit_calibration_cases(1, seed=53)
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            legacy_path = root / "legacy.sqlite"
+            invariant_path = root / "invariant.sqlite"
+            legacy = ExperimentStore(legacy_path)
+            invariant = ExperimentStore(invariant_path)
+            try:
+                run_audit_calibration_experiment(
+                    cases,
+                    RuleZMockProvider(),
+                    legacy,
+                    audit_modes=("source_faithful",),
+                )
+                run_audit_calibration_experiment(
+                    cases,
+                    RuleZMockProvider(),
+                    invariant,
+                    audit_modes=("source_faithful_invariants",),
+                )
+            finally:
+                legacy.close()
+                invariant.close()
+
+            connection = sqlite3.connect(invariant_path)
+            try:
+                connection.execute(
+                    "UPDATE trials SET prompt = prompt || ?",
+                    ("\nUNPLANNED_PROMPT_DRIFT",),
+                )
+                connection.commit()
+            finally:
+                connection.close()
+
+            legacy = ExperimentStore(legacy_path, read_only=True)
+            invariant = ExperimentStore(invariant_path, read_only=True)
+            try:
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "Unexpected prompt implementation",
                 ):
                     compare_audit_calibrations(legacy, invariant)
             finally:
