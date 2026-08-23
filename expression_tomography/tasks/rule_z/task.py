@@ -766,11 +766,15 @@ def run_rule_z_experiment(
             + ", ".join(duplicate_executions[:3])
         )
     provider_provenance = _provider_provenance(provider)
-    inserted = 0
+    case_list = list(cases)
+    execution_plan = {}
+    requested_logical_identities = set()
     skipped_existing = 0
-    for case in cases:
-        store.upsert_case(case)
-        for replicate_index in range(replicate_start, replicate_start + repetitions):
+    for case in case_list:
+        for replicate_index in range(
+            replicate_start,
+            replicate_start + repetitions,
+        ):
             expected_by_condition = {}
             skip_conditions = set()
             for condition in planned_conditions:
@@ -780,6 +784,12 @@ def run_rule_z_experiment(
                     condition,
                     replicate_index,
                 )
+                if logical_identity in requested_logical_identities:
+                    raise RuntimeError(
+                        "Rule-Z request contains a duplicate logical trial "
+                        f"identity: {logical_identity}"
+                    )
+                requested_logical_identities.add(logical_identity)
                 condition_config = _condition_execution_config(
                     condition,
                     prompt_style,
@@ -805,7 +815,19 @@ def run_rule_z_experiment(
                             f"{logical_identity}; resume into a fresh database"
                         )
                     skip_conditions.add(condition)
+            execution_plan[(case.case_hash, replicate_index)] = (
+                expected_by_condition,
+                skip_conditions,
+            )
             skipped_existing += len(skip_conditions)
+
+    inserted = 0
+    for case in case_list:
+        store.upsert_case(case)
+        for replicate_index in range(replicate_start, replicate_start + repetitions):
+            expected_by_condition, skip_conditions = execution_plan[
+                (case.case_hash, replicate_index)
+            ]
             for trial in run_rule_z_case(
                 case,
                 provider,

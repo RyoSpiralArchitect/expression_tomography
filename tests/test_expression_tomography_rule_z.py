@@ -1051,17 +1051,30 @@ class RuleZSmokeTests(unittest.TestCase):
                 changed_contract_provider.request_contract_version = (
                     "changed.request.v2"
                 )
+                missing_case = make_rule_z_cases(2, seed=43)[1]
+                row_count_before_drift = len(rows)
+                case_count_before_drift = len(
+                    store.fetch_cases(task_type="rule_z")
+                )
                 with self.assertRaisesRegex(
                     RuntimeError,
                     "execution provenance drift",
                 ):
                     run_rule_z_experiment(
-                        [case],
+                        [missing_case, case],
                         changed_contract_provider,
                         store,
                         transmission_modes=modes,
                     )
                 self.assertEqual(changed_contract_provider.call_count, 0)
+                self.assertEqual(
+                    len(store.fetch_trials(task_type="rule_z")),
+                    row_count_before_drift,
+                )
+                self.assertEqual(
+                    len(store.fetch_cases(task_type="rule_z")),
+                    case_count_before_drift,
+                )
 
                 duplicate_source = rows[0]
                 store.insert_trial(
