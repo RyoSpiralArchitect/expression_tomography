@@ -8,8 +8,9 @@ import shutil
 import sqlite3
 import tempfile
 from collections import Counter
+from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, Iterator
 
 from expression_tomography.core.providers import (
     Provider,
@@ -68,6 +69,42 @@ def _provider_config_without_request_change(config: dict[str, Any]) -> dict[str,
     comparable.pop("temperature", None)
     comparable.pop("request_contract_version", None)
     return comparable
+
+
+@contextmanager
+def _hold_stable_input_checkpoint(input_path: Path) -> Iterator[None]:
+    try:
+        connection = sqlite3.connect(
+            f"{input_path.resolve().as_uri()}?mode=ro",
+            uri=True,
+        )
+    except sqlite3.DatabaseError as exc:
+        raise RuntimeError(f"Could not lock input checkpoint: {exc}") from exc
+    try:
+        try:
+            connection.execute("BEGIN")
+            connection.execute("SELECT COUNT(*) FROM sqlite_master").fetchone()
+            journal_mode = str(
+                connection.execute("PRAGMA journal_mode").fetchone()[0]
+            ).lower()
+        except sqlite3.DatabaseError as exc:
+            raise RuntimeError(f"Could not lock input checkpoint: {exc}") from exc
+        if journal_mode == "wal":
+            raise RuntimeError(
+                "Input checkpoint uses WAL journal mode; checkpoint or convert "
+                "it to rollback-journal mode before migration"
+            )
+        for suffix in ("-wal", "-shm"):
+            sidecar = Path(f"{input_path}{suffix}")
+            if sidecar.exists():
+                raise RuntimeError(
+                    f"Input checkpoint gained an active SQLite sidecar: {sidecar}"
+                )
+        yield
+    finally:
+        if connection.in_transaction:
+            connection.rollback()
+        connection.close()
 
 
 def _immutable_trial_rows(rows: Iterable[sqlite3.Row]) -> list[list[Any]]:
@@ -304,67 +341,83 @@ def migrate_legacy_provider_default_probe_checkpoint(
     if _sha256_file(input_path) != input_hash:
         raise RuntimeError("Input checkpoint changed during migration preflight")
 
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    temporary_handle = tempfile.NamedTemporaryFile(
-        dir=output_path.parent,
-        prefix=f".{output_path.name}.",
-        suffix=".migrating",
-        delete=False,
-    )
-    temporary_path = Path(temporary_handle.name)
-    temporary_handle.close()
-    output_published = False
-    try:
-        shutil.copyfile(input_path, temporary_path)
-        if _sha256_file(temporary_path) != input_hash:
-            raise RuntimeError("Temporary checkpoint copy does not match the input")
-        output_connection = sqlite3.connect(temporary_path)
-        output_connection.row_factory = sqlite3.Row
+    with _hold_stable_input_checkpoint(input_path):
+        if _sha256_file(input_path) != input_hash:
+            raise RuntimeError("Input checkpoint changed before locked migration")
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        temporary_handle = tempfile.NamedTemporaryFile(
+            dir=output_path.parent,
+            prefix=f".{output_path.name}.",
+            suffix=".migrating",
+            delete=False,
+        )
+        temporary_path = Path(temporary_handle.name)
+        temporary_handle.close()
+        output_published = False
         try:
-            output_connection.execute("BEGIN IMMEDIATE")
-            output_connection.executemany(
-                "UPDATE trials SET metadata_json = ? WHERE id = ?",
-                updates,
-            )
-            output_connection.commit()
-            output_integrity = output_connection.execute(
-                "PRAGMA integrity_check"
-            ).fetchone()[0]
-            if output_integrity != "ok":
-                raise RuntimeError(
-                    f"Migrated checkpoint integrity check failed: {output_integrity}"
+            shutil.copyfile(input_path, temporary_path)
+            if _sha256_file(temporary_path) != input_hash:
+                raise RuntimeError("Temporary checkpoint copy does not match the input")
+            output_connection = sqlite3.connect(temporary_path)
+            output_connection.row_factory = sqlite3.Row
+            try:
+                output_connection.execute("BEGIN IMMEDIATE")
+                output_connection.executemany(
+                    "UPDATE trials SET metadata_json = ? WHERE id = ?",
+                    updates,
                 )
-            output_rows = output_connection.execute(
-                "SELECT * FROM trials ORDER BY id"
-            ).fetchall()
-            output_case_rows = output_connection.execute(
-                "SELECT * FROM cases ORDER BY case_hash"
-            ).fetchall()
+                output_connection.commit()
+                output_integrity = output_connection.execute(
+                    "PRAGMA integrity_check"
+                ).fetchone()[0]
+                if output_integrity != "ok":
+                    raise RuntimeError(
+                        "Migrated checkpoint integrity check failed: "
+                        f"{output_integrity}"
+                    )
+                output_rows = output_connection.execute(
+                    "SELECT * FROM trials ORDER BY id"
+                ).fetchall()
+                output_case_rows = output_connection.execute(
+                    "SELECT * FROM cases ORDER BY case_hash"
+                ).fetchall()
+            finally:
+                output_connection.close()
+            if (
+                _sha256_object(_immutable_trial_rows(output_rows))
+                != immutable_trial_hash
+            ):
+                raise RuntimeError("Migration changed immutable trial content")
+            if (
+                _sha256_object([list(row) for row in output_case_rows])
+                != immutable_case_hash
+            ):
+                raise RuntimeError("Migration changed case content")
+            migrated_stored_identities = {
+                json.loads(row["metadata_json"]).get("probe_identity")
+                for row in output_rows
+            }
+            if migrated_stored_identities != migrated_identities:
+                raise RuntimeError(
+                    "Migrated probe identities failed post-write validation"
+                )
+            if _sha256_file(input_path) != input_hash:
+                raise RuntimeError(
+                    "Input checkpoint changed before migration publication"
+                )
+            os.link(temporary_path, output_path)
+            output_published = True
+            if _sha256_file(input_path) != input_hash:
+                raise RuntimeError(
+                    "Input checkpoint changed while publishing the migration"
+                )
+            output_hash = _sha256_file(output_path)
+        except Exception:
+            if output_published:
+                output_path.unlink(missing_ok=True)
+            raise
         finally:
-            output_connection.close()
-        if _sha256_object(_immutable_trial_rows(output_rows)) != immutable_trial_hash:
-            raise RuntimeError("Migration changed immutable trial content")
-        if _sha256_object([list(row) for row in output_case_rows]) != immutable_case_hash:
-            raise RuntimeError("Migration changed case content")
-        migrated_stored_identities = {
-            json.loads(row["metadata_json"]).get("probe_identity")
-            for row in output_rows
-        }
-        if migrated_stored_identities != migrated_identities:
-            raise RuntimeError("Migrated probe identities failed post-write validation")
-        if _sha256_file(input_path) != input_hash:
-            raise RuntimeError("Input checkpoint changed before migration publication")
-        os.link(temporary_path, output_path)
-        output_published = True
-        if _sha256_file(input_path) != input_hash:
-            raise RuntimeError("Input checkpoint changed while publishing the migration")
-        output_hash = _sha256_file(output_path)
-    except Exception:
-        if output_published:
-            output_path.unlink(missing_ok=True)
-        raise
-    finally:
-        temporary_path.unlink(missing_ok=True)
+            temporary_path.unlink(missing_ok=True)
 
     return {
         "migration_version": MIGRATION_VERSION,

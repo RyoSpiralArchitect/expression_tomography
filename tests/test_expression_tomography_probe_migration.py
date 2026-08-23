@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import io
+import sqlite3
 import sys
 import tempfile
 import unittest
@@ -376,7 +377,7 @@ class ProbeMigrationTests(unittest.TestCase):
                 nonlocal input_hash_calls
                 if Path(path) == input_path:
                     input_hash_calls += 1
-                    if input_hash_calls == 4:
+                    if input_hash_calls == 5:
                         return "0" * 64
                 return real_sha256_file(path)
 
@@ -398,7 +399,37 @@ class ProbeMigrationTests(unittest.TestCase):
                     expected_input_sha256=input_hash,
                     legacy_provider_config_sha256=legacy_hashes,
                 )
-            self.assertEqual(input_hash_calls, 4)
+            self.assertEqual(input_hash_calls, 5)
+            self.assertFalse(output_path.exists())
+            self.assertEqual(sha256_file(input_path), input_hash)
+
+    def test_migration_rejects_persistent_wal_without_sidecars(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            input_path = root / "checkpoint.sqlite"
+            output_path = root / "completed.sqlite"
+            providers, legacy_hashes = self._make_legacy_checkpoint(input_path)
+            connection = sqlite3.connect(input_path)
+            try:
+                journal_mode = connection.execute(
+                    "PRAGMA journal_mode=WAL"
+                ).fetchone()[0]
+                self.assertEqual(journal_mode.lower(), "wal")
+                connection.execute("PRAGMA wal_checkpoint(TRUNCATE)").fetchone()
+            finally:
+                connection.close()
+            Path(f"{input_path}-wal").unlink(missing_ok=True)
+            Path(f"{input_path}-shm").unlink(missing_ok=True)
+            input_hash = sha256_file(input_path)
+
+            with self.assertRaisesRegex(RuntimeError, "uses WAL journal mode"):
+                migrate_legacy_provider_default_probe_checkpoint(
+                    input_path,
+                    output_path,
+                    providers,
+                    expected_input_sha256=input_hash,
+                    legacy_provider_config_sha256=legacy_hashes,
+                )
             self.assertFalse(output_path.exists())
             self.assertEqual(sha256_file(input_path), input_hash)
 
