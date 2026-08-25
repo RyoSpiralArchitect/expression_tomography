@@ -149,6 +149,55 @@ responses can be upgraded without provider calls using
 `--revalidate-existing-only`. The first live Luna calibration is documented in
 `docs/live_rule_z_audit_reader_calibration_luna_note_2026_08_22.md`.
 
+## Rule-Z Extraction / Intervention Factorial
+
+The extraction/intervention factorial separates literal extraction from
+intervention computation and keeps source-supported truth distinct from private
+world truth:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.extraction_intervention_task \
+  --worlds 4 \
+  --seed 67 \
+  --repetitions 2 \
+  --order-seed 9701 \
+  --max-new-calls 704 \
+  --provider-config expression_tomography/config/providers.openai_gpt_5_6_luna.json \
+  --db results/expression_tomography/rule_z_extraction_intervention.sqlite \
+  --report-dir results/expression_tomography/rule_z_extraction_intervention_reports
+```
+
+Four paired artifacts hold the current ledger fixed while making the
+counterfactual dependency complete, absent by design, selectively omitted, or
+contradictory. Eight literal fields are queried in independent calls. Fresh
+compute calls then compare direct source reading, perfect source-literal
+extraction, and model-extracted typed ledgers. Every field and compute path has
+an uncued versus target-preannounced pair with deterministic randomized order.
+The pilot, score hierarchy, privacy boundary, stop criteria, and exact resume
+contract are frozen in
+`docs/rule_z_extraction_intervention_protocol_2026_08_23.md`. The completed
+704-call Luna pilot and its bounded interpretation are documented in
+`docs/live_rule_z_extraction_intervention_luna_note_2026_08_23.md`; canonical
+and pre-canonical stores are preserved in
+`assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/`.
+After a run, add `--revalidate-existing-only` with the same database and report
+paths to reconstruct every prompt, upstream typed ledger, parse, score, and
+execution identity without making provider calls. This mode requires an existing
+database and opens it read-only.
+Score-v1 or score-v2 stores created before value completeness and field/item
+grounding were separated can be copied, rescored, and rekeyed without provider
+calls using
+`expression_tomography.tasks.rule_z.extraction_intervention_migration`. The
+input database and all stored provider responses remain unchanged.
+
+`--max-new-calls` is one global cost ceiling across the complete provider
+suite. Every configured provider is preflighted before any case write or
+provider call. If the sum of their new-call upper bounds exceeds the ceiling,
+the suite stops with zero calls.
+
+Resume also binds the complete task case surface. Changing `--seed`, `--worlds`,
+or stored case content fails before planning calls and requires a fresh database.
+
 ## Metaphor Transfer Smoke
 
 ```bash

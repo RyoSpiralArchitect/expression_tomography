@@ -1,0 +1,21 @@
+{
+  "cases": 16,
+  "from_score_schema_version": "rule_z_extraction_intervention.score.v2",
+  "identity_rows_rekeyed": 704,
+  "input_db": "/Users/ryospiralarchitect/expression_tomography/results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2_score_v2.sqlite",
+  "input_db_sha256": "9741c8bc88b2306b4c0c094409909df14ef9defb7612d2da07bce3c5120ae772",
+  "migration_schema_version": "rule_z_extraction_intervention.score_migration.v2",
+  "output_db": "/Users/ryospiralarchitect/expression_tomography/results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2_score_v3.sqlite",
+  "output_db_sha256": "6213fb1cb99cbac2bb25b1eeab52060bbb411fe3a00b723c33bbd47e1eea23a2",
+  "score_rows_changed": 13,
+  "to_score_schema_version": "rule_z_extraction_intervention.score.v3",
+  "trials": 704,
+  "validation": {
+    "parse_matches": 704,
+    "prompt_matches": 704,
+    "score_matches": 704,
+    "validated_cases": 16,
+    "validated_model_upstream_references": 512,
+    "validated_trials": 704
+  }
+}

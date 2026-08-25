@@ -304,6 +304,27 @@ stability claim narrower than deterministic internal dynamics: under the
 observed provider pipeline, weak binding permits more variable output
 trajectories, while the controlled paths are stable on these samples.
 
+### 8. Dependency access and target binding act at multiple boundaries
+
+The 704-call Luna extraction/intervention pilot holds one Rule-Z world fixed
+while making the intervention dependency complete, omitted, or contradictory.
+Complete counterfactual artifacts reach 1.000 source-supported accuracy through
+direct-source, oracle-literal, and model-literal paths. Selective omissions and
+contradictions separate those paths.
+
+Across both cue modes, direct-source accuracy is 0.906, oracle-literal accuracy
+is 0.844, and model-literal accuracy is 0.688. A typed normalization is
+therefore not uniformly easier than source prose under the current reader
+contract. Among 24 model-literal rows with all eight upstream values exact,
+four still fail downstream, all on one omitted-dependency fact-removal case.
+This is a small but direct post-extraction failure localization.
+
+Target preannouncement is anisotropic. It improves paired active-conclusion
+calibration in 13 cases with no regressions, while active-rule calibration has
+one improvement and seven regressions. Binding can redistribute which
+distinctions survive toward a named consequence rather than uniformly expand
+the fidelity of the whole ledger.
+
 ## Stability And Measurement Reactivity
 
 Mean accuracy is not enough. Report at least:
@@ -369,9 +390,11 @@ Status: locally supported by compact-pair versus explicit-edge interventions.
 An expressed artifact can contain cues that a later computation fails to
 reconstruct or keep active.
 
-Status: suggestive. Receiver ladders and the `stress_0008_semantic` integration
-failure motivate it, but source encoding and re-entry are not yet cleanly
-separated.
+Status: locally observed but not generalized. Receiver ladders and the
+`stress_0008_semantic` packet motivate it, and the Luna intervention pilot adds
+four rows in which all eight supplied typed values are exact but downstream
+source-supported computation fails. The sample is small and concentrated in
+one omitted-dependency case.
 
 ### H4: Verification compensation
 
@@ -490,6 +513,12 @@ Construct derivations with:
 Use quote-grounded model audits, cross-provider audits, and a small human
 annotation set. This estimates repair bias and source-fidelity error.
 
+Status on 2026-08-22: the first 120-artifact Luna calibration is complete. The
+Rule-Z-invariant reader contract improves source-faithful calibration from
+0.258 to 0.633 on paired opaque artifacts, but valid contradiction sensitivity
+remains 0.500 and cross-field conflicts remain difficult. See
+`docs/live_rule_z_audit_reader_calibration_luna_note_2026_08_22.md`.
+
 ### 3. Add Prospective Reactivity Conditions
 
 After the post-hoc reader is calibrated, compare:
@@ -562,14 +591,21 @@ Train or adapt only after the measurement is calibrated. Contrast:
 Evaluate on held-out structures and notations to distinguish memorized scaffold
 imitation from improved binding and encoding.
 
+### 11. Scale The Extraction / Intervention Factorial
+
+Keep the score-v3, prompt-v1, artifact-v1, and provider request contracts
+frozen while adding new worlds. Estimate omission and contradiction effects
+separately, retain paired replicates, and cross provider identities at the
+literal and compute boundaries. Add a length-matched null cue before treating
+target-preannouncement gains as semantic binding rather than generic attention.
+
 ## Evidence Ledger
 
 ### Operationalized, Not Yet Live Evidence
 
-- Controlled omission, reversal, and contradiction artifacts for audit-reader
-  calibration have not yet been run live.
 - Prospective pre-answer declarations remain outside the current evidence.
-- Independent one-query-per-call delivery remains unimplemented.
+- The current independent one-field-per-call surface covers Rule-Z literals,
+  but not open-domain expression or reader-state probes.
 
 ### Observed
 
@@ -592,6 +628,18 @@ imitation from improved binding and encoding.
   0.961 current-state utility in both separately delivered batteries.
 - GPT-5.5 has 81 valid, resumable rows but remains an unbalanced partial
   checkpoint after `insufficient_quota`; its aggregates are not comparative.
+- The 120-artifact Luna audit calibration reaches 0.633 source-faithful
+  calibration under the invariant contract, with contradiction sensitivity
+  0.500 and specificity 1.000.
+- The 704-call Luna extraction/intervention surface is complete, parse-valid,
+  schema-valid, and exactly resumable. Direct-source, oracle-literal, and
+  model-literal source-supported accuracies are 0.906, 0.844, and 0.688.
+- All three paths reach 1.000 on complete counterfactual artifacts and abstain
+  correctly on current-only artifacts. Path differences emerge under selective
+  dependency omission and contradiction.
+- Of 24 model-literal rows with all eight upstream values exact, four still
+  fail downstream. Target cues improve active-conclusion calibration while
+  reducing active-rule calibration on the same paired surface.
 
 ### Inferred
 
@@ -603,6 +651,10 @@ imitation from improved binding and encoding.
   especially for global state.
 - Current-state recoverability and counterfactual reuse are distinct
   reliability axes on the fixed-message interface.
+- Literal extraction loss and post-extraction epistemic integration are both
+  observable failure boundaries in the Luna pilot.
+- Target binding acts selectively on the represented ledger; its measured
+  effect is not equivalent to a uniform increase in expression capacity.
 
 ### Unidentified
 
