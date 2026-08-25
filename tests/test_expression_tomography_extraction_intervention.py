@@ -70,6 +70,18 @@ class CountingRuleZMockProvider(RuleZMockProvider):
         return super().complete(prompt)
 
 
+class BlankAfterRuleZMockProvider(CountingRuleZMockProvider):
+    def __init__(self, *, blank_after: int):
+        super().__init__()
+        self.blank_after = blank_after
+
+    def complete(self, prompt: str) -> str:
+        if self.call_count >= self.blank_after:
+            self.call_count += 1
+            return " \n\t"
+        return super().complete(prompt)
+
+
 class ExtractionInterventionTests(unittest.TestCase):
     def setUp(self) -> None:
         self.cases = make_extraction_intervention_cases(2, seed=67)
@@ -431,6 +443,48 @@ class ExtractionInterventionTests(unittest.TestCase):
             ),
             88,
         )
+
+    def test_blank_completion_stops_before_commit_and_retries_on_resume(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "trials.sqlite")
+            try:
+                blank = BlankAfterRuleZMockProvider(blank_after=3)
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "blank completion.*no trial was committed",
+                ):
+                    run_extraction_intervention_experiment(
+                        self.pair_cases,
+                        blank,
+                        store,
+                        repetitions=1,
+                        max_new_calls=88,
+                        progress_every=0,
+                    )
+                checkpoint = store.fetch_trials(task_type=TASK_TYPE)
+                self.assertEqual(blank.call_count, 4)
+                self.assertEqual(len(checkpoint), 3)
+                self.assertTrue(
+                    all(row["raw_response"].strip() for row in checkpoint)
+                )
+
+                resumed = CountingRuleZMockProvider()
+                result = run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    resumed,
+                    store,
+                    repetitions=1,
+                    max_new_calls=85,
+                    progress_every=0,
+                )
+                rows = store.fetch_trials(task_type=TASK_TYPE)
+            finally:
+                store.close()
+
+        self.assertEqual(result["inserted_trials"], 85)
+        self.assertEqual(result["skipped_existing_trials"], 3)
+        self.assertEqual(resumed.call_count, 85)
+        self.assertEqual(len(rows), 88)
 
     def test_provider_suite_enforces_one_global_call_cap(self) -> None:
         first = CountingRuleZMockProvider(name="suite-mock-a")

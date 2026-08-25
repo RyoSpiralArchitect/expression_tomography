@@ -8,6 +8,7 @@ from typing import Any, Iterable
 
 from expression_tomography.core.providers import (
     Provider,
+    ProviderError,
     materialize_unique_providers,
     parse_json_lenient,
 )
@@ -543,6 +544,12 @@ def _execute_calls(
             skipped += 1
             continue
         raw = provider.complete(call.prompt)
+        if not isinstance(raw, str) or not raw.strip():
+            raise ProviderError(
+                f"Provider {provider.name} returned a blank completion for "
+                f"case {call.case.case_id}, condition {call.condition}; "
+                "no trial was committed"
+            )
         parsed = parse_json_lenient(raw)
         payload = call.case.payload
         if call.trial_type == "literal_extraction":
