@@ -11,6 +11,9 @@ from pathlib import Path
 from typing import Callable, Iterable, Protocol
 
 
+JSON_OBJECT_PARSE_CONTRACT_VERSION = "expression_tomography.parse_json_lenient.object.v1"
+
+
 class ProviderError(RuntimeError):
     pass
 
