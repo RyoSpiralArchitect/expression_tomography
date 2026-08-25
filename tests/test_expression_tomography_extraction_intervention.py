@@ -574,7 +574,7 @@ class ExtractionInterventionTests(unittest.TestCase):
                 changed_config = CountingRuleZMockProvider(max_tokens=701)
                 with self.assertRaisesRegex(
                     RuntimeError,
-                    "Execution provenance drift",
+                    "Provider provenance drift",
                 ):
                     run_extraction_intervention_experiment(
                         self.pair_cases,
@@ -589,7 +589,7 @@ class ExtractionInterventionTests(unittest.TestCase):
                 changed_order = CountingRuleZMockProvider(max_tokens=700)
                 with self.assertRaisesRegex(
                     RuntimeError,
-                    "Execution provenance drift",
+                    "Execution order provenance drift",
                 ):
                     run_extraction_intervention_experiment(
                         self.pair_cases,
@@ -603,6 +603,77 @@ class ExtractionInterventionTests(unittest.TestCase):
                 self.assertEqual(changed_order.call_count, 0)
             finally:
                 store.close()
+
+    def test_appended_replicates_reject_provider_provenance_drift(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "trials.sqlite")
+            try:
+                initial = CountingRuleZMockProvider(max_tokens=700)
+                run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    initial,
+                    store,
+                    repetitions=1,
+                    replicate_start=0,
+                    max_new_calls=88,
+                    progress_every=0,
+                )
+
+                changed = CountingRuleZMockProvider(max_tokens=701)
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "Provider provenance drift.*distinct provider name",
+                ):
+                    run_extraction_intervention_experiment(
+                        self.pair_cases,
+                        changed,
+                        store,
+                        repetitions=1,
+                        replicate_start=1,
+                        max_new_calls=88,
+                        progress_every=0,
+                    )
+                self.assertEqual(changed.call_count, 0)
+                self.assertEqual(
+                    len(store.fetch_trials(task_type=TASK_TYPE)),
+                    88,
+                )
+
+                changed_order = CountingRuleZMockProvider(max_tokens=700)
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "Execution order provenance drift.*fresh database",
+                ):
+                    run_extraction_intervention_experiment(
+                        self.pair_cases,
+                        changed_order,
+                        store,
+                        repetitions=1,
+                        replicate_start=1,
+                        order_seed=9702,
+                        max_new_calls=88,
+                        progress_every=0,
+                    )
+                self.assertEqual(changed_order.call_count, 0)
+
+                appended = CountingRuleZMockProvider(max_tokens=700)
+                result = run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    appended,
+                    store,
+                    repetitions=1,
+                    replicate_start=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                )
+                rows = store.fetch_trials(task_type=TASK_TYPE)
+            finally:
+                store.close()
+
+        self.assertEqual(result["inserted_trials"], 88)
+        self.assertEqual(result["skipped_existing_trials"], 0)
+        self.assertEqual(appended.call_count, 88)
+        self.assertEqual(len(rows), 176)
 
     def test_preflight_rejects_case_surface_drift_before_provider_calls(self) -> None:
         with tempfile.TemporaryDirectory() as td:

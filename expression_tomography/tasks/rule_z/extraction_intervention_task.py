@@ -415,6 +415,32 @@ def _validate_requested_case_surface(
     return len(stored_rows)
 
 
+def _validate_provider_resume_contract(
+    existing_by_logical: dict[LogicalIdentity, tuple[str, dict[str, Any]]],
+    provider_provenance: dict[str, Any],
+    order_seed: int,
+) -> None:
+    provider_name = str(provider_provenance["provider_config"]["name"])
+    requested_hash = str(provider_provenance["provider_config_sha256"])
+    for logical, (_execution_identity, row) in existing_by_logical.items():
+        if logical[0] != provider_name:
+            continue
+        stored_hash = str(row["metadata"]["provider_config_sha256"])
+        if stored_hash != requested_hash:
+            raise RuntimeError(
+                f"Provider provenance drift for stored provider {provider_name}; "
+                "use a fresh database or a distinct provider name"
+            )
+        expected_order_seed = order_seed + int(
+            row["metadata"].get("compute_path") == "model_literal"
+        )
+        if int(row["metadata"]["execution_order_seed"]) != expected_order_seed:
+            raise RuntimeError(
+                f"Execution order provenance drift for stored provider "
+                f"{provider_name}; use a fresh database"
+            )
+
+
 def _validate_plan(
     calls: list[PlannedCall],
     existing_by_logical: dict[LogicalIdentity, tuple[str, dict[str, Any]]],
@@ -904,6 +930,11 @@ def run_extraction_intervention_experiment(
     provider_provenance = _provider_provenance(provider)
     stored_case_count = _validate_requested_case_surface(case_list, store)
     existing_by_logical, _execution_seen = _existing_indexes(store)
+    _validate_provider_resume_contract(
+        existing_by_logical,
+        provider_provenance,
+        order_seed,
+    )
     if existing_by_logical and stored_case_count == 0:
         raise RuntimeError(
             "Stored extraction/intervention trials have no case surface; "
