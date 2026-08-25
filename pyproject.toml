@@ -19,6 +19,7 @@ keywords = [
 ]
 
 [project.optional-dependencies]
+dev = ["pytest==9.0.2", "ruff==0.15.2"]
 hf = ["torch", "transformers"]
 
 [project.scripts]

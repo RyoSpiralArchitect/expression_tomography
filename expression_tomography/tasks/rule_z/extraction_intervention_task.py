@@ -967,15 +967,56 @@ def run_provider_suite(
 ) -> list[dict[str, Any]]:
     case_list = list(cases)
     provider_list = materialize_unique_providers(providers)
-    for provider in provider_list:
-        run_extraction_intervention_experiment(
+    preflight_runs = preflight_provider_suite(
+        case_list,
+        provider_list,
+        store,
+        **options,
+    )
+    remaining_calls = int(options.get("max_new_calls", 1000))
+    runs = []
+    for provider, preflight in zip(provider_list, preflight_runs):
+        provider_bound = int(preflight["new_call_upper_bound"])
+        if provider_bound > remaining_calls:
+            raise RuntimeError(
+                "Provider suite shared call budget changed after preflight"
+            )
+        provider_options = dict(options)
+        provider_options["max_new_calls"] = provider_bound
+        result = run_extraction_intervention_experiment(
             case_list,
             provider,
             store,
-            **options,
-            preflight_only=True,
+            **provider_options,
         )
-    return [
+        inserted = int(result["inserted_trials"])
+        if inserted > provider_bound or inserted > remaining_calls:
+            raise RuntimeError(
+                "Provider suite exceeded its shared call budget"
+            )
+        remaining_calls -= inserted
+        runs.append(
+            {
+                "provider": provider.name,
+                **result,
+                "suite_remaining_new_calls": remaining_calls,
+            }
+        )
+    return runs
+
+
+def preflight_provider_suite(
+    cases: Iterable[Case],
+    providers: Iterable[Provider],
+    store: ExperimentStore,
+    **options: Any,
+) -> list[dict[str, Any]]:
+    case_list = list(cases)
+    provider_list = materialize_unique_providers(providers)
+    max_new_calls = int(options.get("max_new_calls", 1000))
+    if max_new_calls < 0:
+        raise ValueError("max_new_calls must be non-negative")
+    runs = [
         {
             "provider": provider.name,
             **run_extraction_intervention_experiment(
@@ -983,10 +1024,23 @@ def run_provider_suite(
                 provider,
                 store,
                 **options,
+                preflight_only=True,
             ),
         }
         for provider in provider_list
     ]
+    suite_upper_bound = sum(int(run["new_call_upper_bound"]) for run in runs)
+    if suite_upper_bound > max_new_calls:
+        breakdown = ", ".join(
+            f"{run['provider']}={run['new_call_upper_bound']}"
+            for run in runs
+        )
+        raise RuntimeError(
+            "Provider suite preflight planned at most "
+            f"{suite_upper_bound} new calls, exceeding "
+            f"max_new_calls={max_new_calls} ({breakdown})"
+        )
+    return runs
 
 
 def main() -> None:
@@ -1000,7 +1054,12 @@ def main() -> None:
     parser.add_argument("--repetitions", type=int, default=2)
     parser.add_argument("--replicate-start", type=int, default=0)
     parser.add_argument("--order-seed", type=int, default=9701)
-    parser.add_argument("--max-new-calls", type=int, default=1000)
+    parser.add_argument(
+        "--max-new-calls",
+        type=int,
+        default=1000,
+        help="Global upper bound across all configured providers.",
+    )
     parser.add_argument("--progress-every", type=int, default=20)
     parser.add_argument("--preflight-only", action="store_true")
     parser.add_argument(
@@ -1064,25 +1123,23 @@ def main() -> None:
             "progress_every": args.progress_every,
         }
         if args.preflight_only:
-            runs = [
-                {
-                    "provider": provider.name,
-                    **run_extraction_intervention_experiment(
-                        cases,
-                        provider,
-                        store,
-                        **options,
-                        preflight_only=True,
-                    ),
-                }
-                for provider in materialize_unique_providers(providers)
-            ]
+            runs = preflight_provider_suite(
+                cases,
+                providers,
+                store,
+                **options,
+            )
             print(
                 stable_json(
                     {
                         "task_type": TASK_TYPE,
                         "preflight_only": True,
                         "n_cases": len(cases),
+                        "max_new_calls": args.max_new_calls,
+                        "new_call_upper_bound": sum(
+                            int(run["new_call_upper_bound"])
+                            for run in runs
+                        ),
                         "runs": runs,
                     }
                 )
@@ -1098,6 +1155,11 @@ def main() -> None:
                 {
                     "task_type": TASK_TYPE,
                     "runs": runs,
+                    "max_new_calls": args.max_new_calls,
+                    "new_call_upper_bound": sum(
+                        int(run["new_call_upper_bound"])
+                        for run in runs
+                    ),
                     "n_cases": summary["n_cases"],
                     "n_trials": summary["n_trials"],
                     "report_dir": str(Path(args.report_dir)),

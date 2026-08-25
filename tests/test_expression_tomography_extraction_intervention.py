@@ -30,7 +30,9 @@ from expression_tomography.tasks.rule_z.extraction_intervention_migration import
 )
 from expression_tomography.tasks.rule_z.extraction_intervention_task import (
     make_execution_identity,
+    preflight_provider_suite,
     run_extraction_intervention_experiment,
+    run_provider_suite,
     validate_extraction_intervention_store,
 )
 from expression_tomography.tasks.rule_z.mock_provider import RuleZMockProvider
@@ -423,6 +425,65 @@ class ExtractionInterventionTests(unittest.TestCase):
                 }
             ),
             88,
+        )
+
+    def test_provider_suite_enforces_one_global_call_cap(self) -> None:
+        first = CountingRuleZMockProvider(name="suite-mock-a")
+        second = CountingRuleZMockProvider(name="suite-mock-b")
+        providers = [first, second]
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "trials.sqlite")
+            try:
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    r"Provider suite preflight planned at most 176 .*max_new_calls=88",
+                ):
+                    run_provider_suite(
+                        self.pair_cases,
+                        providers,
+                        store,
+                        repetitions=1,
+                        max_new_calls=88,
+                        progress_every=0,
+                    )
+                self.assertEqual(first.call_count, 0)
+                self.assertEqual(second.call_count, 0)
+                self.assertEqual(store.fetch_cases(task_type=TASK_TYPE), [])
+                self.assertEqual(store.fetch_trials(task_type=TASK_TYPE), [])
+
+                preflight = preflight_provider_suite(
+                    self.pair_cases,
+                    providers,
+                    store,
+                    repetitions=1,
+                    max_new_calls=176,
+                    progress_every=0,
+                )
+                self.assertEqual(
+                    [run["new_call_upper_bound"] for run in preflight],
+                    [88, 88],
+                )
+                self.assertEqual(first.call_count, 0)
+                self.assertEqual(second.call_count, 0)
+
+                runs = run_provider_suite(
+                    self.pair_cases,
+                    providers,
+                    store,
+                    repetitions=1,
+                    max_new_calls=176,
+                    progress_every=0,
+                )
+                rows = store.fetch_trials(task_type=TASK_TYPE)
+            finally:
+                store.close()
+
+        self.assertEqual(first.call_count, 88)
+        self.assertEqual(second.call_count, 88)
+        self.assertEqual(len(rows), 176)
+        self.assertEqual(
+            [run["suite_remaining_new_calls"] for run in runs],
+            [88, 0],
         )
 
     def test_preflight_and_resume_fail_closed_on_contract_drift(self) -> None:

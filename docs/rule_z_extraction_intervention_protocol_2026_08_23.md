@@ -191,6 +191,9 @@ Operational stops:
 
 - any case-balance, prompt-privacy, identity, provider-provenance, or call-budget
   preflight failure makes zero provider calls;
+- `max_new_calls` is a provider-suite ceiling: every provider is preflighted,
+  and their aggregate new-call upper bound must fit before the first case write
+  or provider call;
 - blank completions and provider errors stop at the last committed row;
 - no performance-dependent early stopping or selective case replacement is
   allowed;

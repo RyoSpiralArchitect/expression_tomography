@@ -189,6 +189,11 @@ calls using
 `expression_tomography.tasks.rule_z.extraction_intervention_migration`. The
 input database and all stored provider responses remain unchanged.
 
+`--max-new-calls` is one global cost ceiling across the complete provider
+suite. Every configured provider is preflighted before any case write or
+provider call. If the sum of their new-call upper bounds exceeds the ceiling,
+the suite stops with zero calls.
+
 ## Metaphor Transfer Smoke
 
 ```bash

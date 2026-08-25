@@ -143,9 +143,10 @@ Across both cue modes and all artifact families, source-supported accuracy is:
 | Model literal | 44 / 64 | 0.688 |
 
 The oracle-normalized ledger is not uniformly easier than the source prose.
-On this contract, normalization removes prose affordances but does not supply
-missing dependencies. This is a representation-and-reader effect, not evidence
-that the source contains more task-relevant facts than its normalization.
+On this contract, normalization changes the cues available to the reader but
+does not supply missing dependencies. The contrast identifies
+representation-conditioned behavior; it does not identify which serialization,
+framing, or prose feature caused the difference.
 
 ## Target Cue Is Selective
 
