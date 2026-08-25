@@ -15,6 +15,8 @@ from .extraction_intervention import (
     CUE_MODES,
     LITERAL_FIELDS,
     TASK_TYPE,
+    compute_condition,
+    literal_condition,
 )
 
 
@@ -49,34 +51,55 @@ def _completion_summary(
 ) -> dict[str, Any]:
     providers = sorted({str(row["provider"]) for row in trials})
     replicate_sets: dict[str, set[int]] = defaultdict(set)
-    observed = Counter()
+    observed: dict[tuple[str, str, int], Counter[str]] = defaultdict(Counter)
     for row in trials:
         replicate = int(row["metadata"].get("replicate_index", 0))
         metadata = row["metadata"]
         declared_start = int(metadata.get("requested_replicate_start", replicate))
         declared_repetitions = int(metadata.get("requested_repetitions", 1))
+        replicate_sets[str(row["provider"])].add(replicate)
         replicate_sets[str(row["provider"])].update(
             range(declared_start, declared_start + declared_repetitions)
         )
-        observed[(str(row["provider"]), str(row["case_hash"]), replicate)] += 1
+        observed[
+            (str(row["provider"]), str(row["case_hash"]), replicate)
+        ][str(row["condition"])] += 1
 
-    expected_per_identity = (
-        len(CUE_MODES) * len(LITERAL_FIELDS)
-        + len(CUE_MODES) * len(COMPUTE_PATHS)
-    )
+    expected_conditions = {
+        literal_condition(field, cue_mode)
+        for cue_mode in CUE_MODES
+        for field in LITERAL_FIELDS
+    } | {
+        compute_condition(path, cue_mode)
+        for cue_mode in CUE_MODES
+        for path in COMPUTE_PATHS
+    }
+    expected_counts = Counter({condition: 1 for condition in expected_conditions})
+    expected_per_identity = len(expected_conditions)
     incomplete = []
     for provider in providers:
         for case in cases:
             for replicate in sorted(replicate_sets[provider]):
-                count = observed[(provider, str(case["case_hash"]), replicate)]
-                if count != expected_per_identity:
+                counts = observed[(provider, str(case["case_hash"]), replicate)]
+                if counts != expected_counts:
                     incomplete.append(
                         {
                             "provider": provider,
                             "case_hash": case["case_hash"],
                             "replicate_index": replicate,
-                            "observed": count,
+                            "observed": sum(counts.values()),
                             "expected": expected_per_identity,
+                            "missing_conditions": sorted(
+                                expected_conditions - set(counts)
+                            ),
+                            "duplicate_conditions": {
+                                condition: counts[condition]
+                                for condition in sorted(counts)
+                                if counts[condition] > 1
+                            },
+                            "unexpected_conditions": sorted(
+                                set(counts) - expected_conditions
+                            ),
                         }
                     )
     return {

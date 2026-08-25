@@ -22,6 +22,8 @@ from .extraction_intervention import (
     PROMPT_CONTRACT_VERSION,
     SCORE_SCHEMA_VERSION,
     TASK_TYPE,
+    compute_condition,
+    literal_condition,
     make_extraction_intervention_cases,
     make_intervention_prompt,
     make_literal_extraction_prompt,
@@ -64,14 +66,6 @@ def _sha256_text(value: str) -> str:
 
 def _sha256_json(value: Any) -> str:
     return _sha256_text(stable_json(value))
-
-
-def literal_condition(field: str, cue_mode: str) -> str:
-    return f"E_literal:{field}:{cue_mode}"
-
-
-def compute_condition(path: str, cue_mode: str) -> str:
-    return f"C_intervention:{path}:{cue_mode}"
 
 
 def _request_contract_version(provider: Provider) -> str:

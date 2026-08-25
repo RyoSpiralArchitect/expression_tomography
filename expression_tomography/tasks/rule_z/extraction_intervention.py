@@ -11,7 +11,6 @@ from typing import Any
 from expression_tomography.core.schema import Case, stable_json
 
 from .generator import FACT_POOL, public_payload_from_facts
-from .intermediate import edge_set, string_set
 from .oracle import OracleAnswer, answer_rule_z, priority_edges_from_public
 
 
@@ -69,6 +68,14 @@ _ANSWERS = {"yes", "no", "conflict", "unknown"}
 
 def public_case_id(case_hash: str) -> str:
     return f"xcf_case_{case_hash}"
+
+
+def literal_condition(field: str, cue_mode: str) -> str:
+    return f"E_literal:{field}:{cue_mode}"
+
+
+def compute_condition(path: str, cue_mode: str) -> str:
+    return f"C_intervention:{path}:{cue_mode}"
 
 
 def oracle_state(oracle: OracleAnswer) -> dict[str, Any]:
@@ -889,7 +896,13 @@ def _literal_values_exact(
         wanted = Counter(str(item["value"]) for item in expected["items"])
         return reported == wanted
     if field == "fired_priority_edges":
-        return Counter(edge_set(_reported_edges(parsed))) == Counter(
+        return Counter(
+            (
+                str(item.get("higher_priority_rule", "")).strip(),
+                str(item.get("lower_priority_rule", "")).strip(),
+            )
+            for item in _reported_edges(parsed)
+        ) == Counter(
             (
                 str(item["higher_priority_rule"]),
                 str(item["lower_priority_rule"]),
@@ -1129,24 +1142,23 @@ def score_intervention(
     support = str(reported.get("support", "")).strip().lower()
     answer = str(reported.get("answer", "")).strip().lower()
     active = reported.get("active_conclusions")
+    active_is_valid_list = (
+        isinstance(active, list)
+        and all(isinstance(item, str) for item in active)
+        and set(active) <= {"eligible", "not_eligible"}
+        and len(active) == len(set(active))
+    )
     schema_valid = (
         support in _SUPPORT_STATUSES
         and answer in _ANSWERS
-        and (
-            active is None
-            or (
-                isinstance(active, list)
-                and all(isinstance(item, str) for item in active)
-                and set(active) <= {"eligible", "not_eligible"}
-            )
-        )
+        and (active is None or active_is_valid_list)
     )
     expected_active = source_supported["active_conclusions"]
     source_active_exact = (
         active is None
         if expected_active is None
         else isinstance(active, list)
-        and string_set(active) == set(expected_active)
+        and Counter(active) == Counter(expected_active)
     )
     support_exact = support == source_supported["status"]
     source_answer_exact = answer == source_supported["answer"]
@@ -1159,8 +1171,7 @@ def score_intervention(
     world_answer_exact = answer == world_counterfactual["answer"]
     world_active_exact = (
         isinstance(active, list)
-        and string_set(active)
-        == set(world_counterfactual["active_conclusions"])
+        and Counter(active) == Counter(world_counterfactual["active_conclusions"])
     )
     expected_unknown = source_supported["answer"] == "unknown"
     return {

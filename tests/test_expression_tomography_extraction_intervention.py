@@ -243,6 +243,26 @@ class ExtractionInterventionTests(unittest.TestCase):
         self.assertTrue(score["literal_exact"])
         self.assertFalse(score["all_claims_grounded"])
 
+    def test_literal_edge_exactness_preserves_duplicate_multiplicity(self) -> None:
+        case = next(
+            case
+            for case in self.cases
+            if case.payload["literal_private"]["fired_priority_edges"]["items"]
+        )
+        expected = case.payload["literal_private"]["fired_priority_edges"]
+        reported = copy.deepcopy(expected)
+        reported["items"].append(copy.deepcopy(reported["items"][0]))
+        score = score_literal_extraction(
+            "fired_priority_edges",
+            reported,
+            expected,
+            case.payload["source_artifact"],
+        )
+        self.assertTrue(score["schema_valid"])
+        self.assertFalse(score["literal_exact"])
+        self.assertTrue(score["all_claims_grounded"])
+        self.assertFalse(score["correct"])
+
     def test_grounding_rejects_bare_tokens_without_field_context(self) -> None:
         source = "Observed facts: p_01.\nRule r_01: if p_01 then eligible."
         expected = {
@@ -337,6 +357,26 @@ class ExtractionInterventionTests(unittest.TestCase):
         self.assertTrue(abstention["source_supported_exact"])
         self.assertFalse(abstention["world_answer_exact"])
 
+    def test_intervention_exactness_rejects_duplicate_active_conclusions(self) -> None:
+        payload = self.pair_cases[1].payload
+        expected = payload["source_supported_private"]
+        active = list(expected["active_conclusions"])
+        reported = {
+            "support": expected["status"],
+            "answer": expected["answer"],
+            "active_conclusions": [*active, active[0]],
+        }
+        score = score_intervention(
+            reported,
+            expected,
+            payload["world_private"]["counterfactual"],
+        )
+        self.assertFalse(score["schema_valid"])
+        self.assertFalse(score["source_active_conclusions_exact"])
+        self.assertFalse(score["world_active_conclusions_exact"])
+        self.assertFalse(score["source_supported_exact"])
+        self.assertFalse(score["correct"])
+
     def test_mock_run_is_complete_independent_and_exactly_resumable(self) -> None:
         provider = CountingRuleZMockProvider()
         with tempfile.TemporaryDirectory() as td:
@@ -396,6 +436,61 @@ class ExtractionInterventionTests(unittest.TestCase):
             self.assertNotIn("SOURCE_ARTIFACT", row["prompt"])
             self.assertNotIn('"evidence"', row["prompt"])
             self.assertIn("LITERAL_LEDGER_JSON", row["prompt"])
+
+    def test_report_completion_requires_each_condition_exactly_once(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "trials.sqlite")
+            try:
+                run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    CountingRuleZMockProvider(),
+                    store,
+                    repetitions=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                )
+                rows = store.fetch_trials(task_type=TASK_TYPE)
+                grouped: dict[tuple[str, str, int], list[dict]] = {}
+                for row in rows:
+                    key = (
+                        str(row["provider"]),
+                        str(row["case_hash"]),
+                        int(row["metadata"]["replicate_index"]),
+                    )
+                    grouped.setdefault(key, []).append(row)
+                block = next(values for values in grouped.values() if len(values) > 1)
+                duplicate = block[0]
+                replaced = block[1]
+                store.conn.execute(
+                    "UPDATE trials SET condition = ? WHERE id = ?",
+                    (duplicate["condition"], replaced["id"]),
+                )
+                store.conn.commit()
+
+                summary = write_extraction_intervention_report(
+                    store,
+                    Path(td) / "reports",
+                )
+            finally:
+                store.close()
+
+        self.assertEqual(summary["n_trials"], 88)
+        self.assertFalse(summary["completion"]["surface_complete"])
+        incomplete = summary["completion"]["incomplete_case_replicates"]
+        affected = next(
+            row
+            for row in incomplete
+            if row["case_hash"] == duplicate["case_hash"]
+        )
+        self.assertEqual(affected["observed"], affected["expected"])
+        self.assertEqual(
+            affected["duplicate_conditions"],
+            {duplicate["condition"]: 2},
+        )
+        self.assertEqual(
+            affected["missing_conditions"],
+            [replaced["condition"]],
+        )
 
     def test_interrupted_provider_resumes_without_replaying_rows(self) -> None:
         with tempfile.TemporaryDirectory() as td:
