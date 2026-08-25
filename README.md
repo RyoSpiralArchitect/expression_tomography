@@ -182,7 +182,8 @@ and pre-canonical stores are preserved in
 `assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/`.
 After a run, add `--revalidate-existing-only` with the same database and report
 paths to reconstruct every prompt, upstream typed ledger, parse, score, and
-execution identity without making provider calls.
+execution identity without making provider calls. This mode requires an existing
+database and opens it read-only.
 Score-v1 or score-v2 stores created before value completeness and field/item
 grounding were separated can be copied, rescored, and rekeyed without provider
 calls using
@@ -193,6 +194,9 @@ input database and all stored provider responses remain unchanged.
 suite. Every configured provider is preflighted before any case write or
 provider call. If the sum of their new-call upper bounds exceeds the ceiling,
 the suite stops with zero calls.
+
+Resume also binds the complete task case surface. Changing `--seed`, `--worlds`,
+or stored case content fails before planning calls and requires a fresh database.
 
 ## Metaphor Transfer Smoke
 

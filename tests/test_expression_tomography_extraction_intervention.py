@@ -2,11 +2,15 @@ from __future__ import annotations
 
 import copy
 import hashlib
+import io
 import json
+import sys
 import tempfile
 import unittest
 from collections import Counter
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
+from unittest.mock import patch
 
 from expression_tomography.core.providers import ProviderSpec
 from expression_tomography.core.store import ExperimentStore
@@ -29,6 +33,7 @@ from expression_tomography.tasks.rule_z.extraction_intervention_migration import
     migrate_score_v1_store,
 )
 from expression_tomography.tasks.rule_z.extraction_intervention_task import (
+    main as extraction_intervention_main,
     make_execution_identity,
     preflight_provider_suite,
     run_extraction_intervention_experiment,
@@ -544,6 +549,126 @@ class ExtractionInterventionTests(unittest.TestCase):
                 self.assertEqual(changed_order.call_count, 0)
             finally:
                 store.close()
+
+    def test_preflight_rejects_case_surface_drift_before_provider_calls(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "trials.sqlite")
+            try:
+                for case in self.pair_cases:
+                    store.upsert_case(case)
+                original_hashes = {
+                    row["case_hash"]
+                    for row in store.fetch_cases(task_type=TASK_TYPE)
+                }
+                changed_surfaces = {
+                    "seed": make_extraction_intervention_cases(2, seed=68)[:4],
+                    "worlds": make_extraction_intervention_cases(4, seed=67),
+                }
+                for label, changed_cases in changed_surfaces.items():
+                    with self.subTest(label=label):
+                        provider = CountingRuleZMockProvider()
+                        with self.assertRaisesRegex(
+                            RuntimeError,
+                            "Case surface drift.*use a fresh database",
+                        ):
+                            run_extraction_intervention_experiment(
+                                changed_cases,
+                                provider,
+                                store,
+                                repetitions=1,
+                                max_new_calls=1000,
+                                progress_every=0,
+                            )
+                        self.assertEqual(provider.call_count, 0)
+                self.assertEqual(
+                    {
+                        row["case_hash"]
+                        for row in store.fetch_cases(task_type=TASK_TYPE)
+                    },
+                    original_hashes,
+                )
+                self.assertEqual(store.fetch_trials(task_type=TASK_TYPE), [])
+            finally:
+                store.close()
+
+    def test_preflight_rejects_stored_case_content_drift(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "trials.sqlite")
+            try:
+                for case in self.pair_cases:
+                    store.upsert_case(case)
+                first = self.pair_cases[0]
+                changed_payload = copy.deepcopy(first.payload)
+                changed_payload["source_artifact"] += "\nTampered."
+                store.conn.execute(
+                    "UPDATE cases SET payload_json = ? WHERE case_hash = ?",
+                    (json.dumps(changed_payload, sort_keys=True), first.case_hash),
+                )
+                store.conn.commit()
+
+                provider = CountingRuleZMockProvider()
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "Stored case content drift.*use a fresh database",
+                ):
+                    run_extraction_intervention_experiment(
+                        self.pair_cases,
+                        provider,
+                        store,
+                        repetitions=1,
+                        max_new_calls=88,
+                        progress_every=0,
+                    )
+                self.assertEqual(provider.call_count, 0)
+                self.assertEqual(store.fetch_trials(task_type=TASK_TYPE), [])
+            finally:
+                store.close()
+
+    def test_revalidation_requires_existing_read_only_database(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            missing_db = root / "missing.sqlite"
+            missing_reports = root / "missing-reports"
+            argv = [
+                "extraction_intervention_task",
+                "--revalidate-existing-only",
+                "--db",
+                str(missing_db),
+                "--report-dir",
+                str(missing_reports),
+            ]
+            stderr = io.StringIO()
+            with patch.object(sys, "argv", argv), redirect_stderr(stderr):
+                with self.assertRaises(SystemExit) as raised:
+                    extraction_intervention_main()
+            self.assertEqual(raised.exception.code, 2)
+            self.assertIn("requires an existing --db file", stderr.getvalue())
+            self.assertFalse(missing_db.exists())
+            self.assertFalse(missing_reports.exists())
+
+            existing_db = root / "existing.sqlite"
+            existing_store = ExperimentStore(existing_db)
+            existing_store.close()
+            before_sha256 = hashlib.sha256(existing_db.read_bytes()).hexdigest()
+            existing_reports = root / "existing-reports"
+            argv = [
+                "extraction_intervention_task",
+                "--revalidate-existing-only",
+                "--db",
+                str(existing_db),
+                "--report-dir",
+                str(existing_reports),
+            ]
+            stdout = io.StringIO()
+            with patch.object(sys, "argv", argv), redirect_stdout(stdout):
+                extraction_intervention_main()
+            self.assertEqual(
+                hashlib.sha256(existing_db.read_bytes()).hexdigest(),
+                before_sha256,
+            )
+            self.assertTrue(
+                json.loads(stdout.getvalue())["revalidate_existing_only"]
+            )
 
     def test_score_v1_migration_rekeys_upstream_identities_without_calls(self) -> None:
         with tempfile.TemporaryDirectory() as td:

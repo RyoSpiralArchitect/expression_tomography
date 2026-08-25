@@ -373,6 +373,47 @@ def _existing_indexes(
     return by_logical, execution_seen
 
 
+def _validate_requested_case_surface(
+    cases: list[Case],
+    store: ExperimentStore,
+) -> int:
+    requested_by_hash = {case.case_hash: case for case in cases}
+    if len(requested_by_hash) != len(cases):
+        raise RuntimeError("Requested case surface contains duplicate case hashes")
+
+    stored_rows = store.fetch_cases(task_type=TASK_TYPE)
+    if not stored_rows:
+        return 0
+
+    stored_by_hash = {str(row["case_hash"]): row for row in stored_rows}
+    requested_hashes = set(requested_by_hash)
+    stored_hashes = set(stored_by_hash)
+    if requested_hashes != stored_hashes:
+        missing_stored = requested_hashes - stored_hashes
+        extra_stored = stored_hashes - requested_hashes
+        raise RuntimeError(
+            "Case surface drift for stored extraction/intervention task "
+            f"(requested={len(requested_hashes)}, stored={len(stored_hashes)}, "
+            f"missing_stored={len(missing_stored)}, "
+            f"extra_stored={len(extra_stored)}); use a fresh database"
+        )
+
+    for case_hash, case in requested_by_hash.items():
+        stored = stored_by_hash[case_hash]
+        stored_contract = {
+            "case_hash": str(stored["case_hash"]),
+            "case_id": str(stored["case_id"]),
+            "task_type": str(stored["task_type"]),
+            "seed": int(stored["seed"]),
+            "payload": stored["payload"],
+        }
+        if stable_json(stored_contract) != stable_json(case.to_dict()):
+            raise RuntimeError(
+                f"Stored case content drift for {case_hash}; use a fresh database"
+            )
+    return len(stored_rows)
+
+
 def _validate_plan(
     calls: list[PlannedCall],
     existing_by_logical: dict[LogicalIdentity, tuple[str, dict[str, Any]]],
@@ -854,7 +895,13 @@ def run_extraction_intervention_experiment(
         raise ValueError("Cases must contain complete four-family artifact blocks")
     validate_case_surface(case_list, expected_worlds=len(case_list) // 4)
     provider_provenance = _provider_provenance(provider)
+    stored_case_count = _validate_requested_case_surface(case_list, store)
     existing_by_logical, _execution_seen = _existing_indexes(store)
+    if existing_by_logical and stored_case_count == 0:
+        raise RuntimeError(
+            "Stored extraction/intervention trials have no case surface; "
+            "use a fresh database"
+        )
     static_calls = _static_plan(
         case_list,
         provider,
@@ -1091,7 +1138,16 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    store = ExperimentStore(args.db)
+    db_path = Path(args.db)
+    if args.revalidate_existing_only and not db_path.is_file():
+        parser.error(
+            "--revalidate-existing-only requires an existing --db file: "
+            f"{db_path}"
+        )
+    store = ExperimentStore(
+        db_path,
+        read_only=args.revalidate_existing_only,
+    )
     try:
         if args.revalidate_existing_only:
             validation = validate_extraction_intervention_store(store)

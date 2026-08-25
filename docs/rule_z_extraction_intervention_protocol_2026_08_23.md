@@ -149,10 +149,13 @@ Every trial identity binds:
 - all upstream extraction identities for `model_literal`.
 
 All cases and all configured providers preflight before a provider call or case
-write. A logical collision with changed provenance fails closed. Each
-successful response is committed as one SQLite row. A provider, quota, or
-power interruption therefore leaves an append-only checkpoint, and an exact
-rerun can be required to pass with `--max-new-calls 0`.
+write. A stored task case surface must exactly match the requested hashes and
+case content; changing the seed, world count, or stored payload requires a fresh
+database. A logical collision with changed provenance also fails closed. Each
+successful response is committed as one SQLite row. A provider, quota, or power
+interruption therefore leaves an append-only checkpoint, and an exact rerun can
+be required to pass with `--max-new-calls 0`. Revalidation-only mode requires an
+existing database and opens it read-only.
 
 The deterministic task mock receives a private structured hint solely to test
 plumbing. Live providers never receive that hint. Metadata records whether the
@@ -189,8 +192,9 @@ The call count is fixed before inspection:
 
 Operational stops:
 
-- any case-balance, prompt-privacy, identity, provider-provenance, or call-budget
-  preflight failure makes zero provider calls;
+- any case-balance, case-surface, prompt-privacy, identity,
+  provider-provenance, or call-budget preflight failure makes zero provider
+  calls;
 - `max_new_calls` is a provider-suite ceiling: every provider is preflighted,
   and their aggregate new-call upper bound must fit before the first case write
   or provider call;
