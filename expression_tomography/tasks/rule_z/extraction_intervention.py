@@ -28,6 +28,8 @@ ARTIFACT_FAMILIES = (
 )
 INTERVENTION_KINDS = ("fact_removal", "edge_reversal")
 CUE_MODES = ("uncued", "target_preannounced")
+LENGTH_MATCHED_NULL_CUE_MODE = "length_matched_null"
+SUPPORTED_CUE_MODES = (*CUE_MODES, LENGTH_MATCHED_NULL_CUE_MODE)
 COMPUTE_PATHS = ("direct_source", "oracle_literal", "model_literal")
 LITERAL_FIELDS = (
     "facts",
@@ -76,6 +78,18 @@ def literal_condition(field: str, cue_mode: str) -> str:
 
 def compute_condition(path: str, cue_mode: str) -> str:
     return f"C_intervention:{path}:{cue_mode}"
+
+
+def normalize_cue_modes(cue_modes: Any) -> tuple[str, ...]:
+    normalized = tuple(str(value) for value in cue_modes)
+    if not normalized:
+        raise ValueError("At least one cue mode is required")
+    if len(set(normalized)) != len(normalized):
+        raise ValueError("Cue modes must be unique")
+    unknown = sorted(set(normalized) - set(SUPPORTED_CUE_MODES))
+    if unknown:
+        raise ValueError("Unknown cue modes: " + ", ".join(unknown))
+    return normalized
 
 
 def oracle_state(oracle: OracleAnswer) -> dict[str, Any]:
@@ -602,6 +616,53 @@ def intervention_text(intervention: dict[str, Any]) -> str:
     )
 
 
+def literal_focus_cue(intervention: dict[str, Any]) -> str:
+    return (
+        "FOCUS_CUE: A later independent query will ask what follows if we "
+        + intervention_text(intervention)
+        + "."
+    )
+
+
+def compute_focus_cue(intervention: dict[str, Any]) -> str:
+    return (
+        "FOCUS_CUE: Track the dependency needed when we "
+        + intervention_text(intervention)
+        + "."
+    )
+
+
+def _focus_cue_for_mode(
+    cue_mode: str,
+    intervention: dict[str, Any],
+    channel: str,
+    cue_text_override: str | None,
+) -> str | None:
+    if cue_mode not in SUPPORTED_CUE_MODES:
+        raise ValueError(f"Unknown cue mode: {cue_mode}")
+    if cue_mode == "uncued":
+        if cue_text_override is not None:
+            raise ValueError("Uncued prompts cannot accept a cue override")
+        return None
+    if cue_mode == "target_preannounced":
+        if cue_text_override is not None:
+            raise ValueError("Target cue text is fixed by the prompt contract")
+        return (
+            literal_focus_cue(intervention)
+            if channel == "literal"
+            else compute_focus_cue(intervention)
+        )
+    if not isinstance(cue_text_override, str) or not cue_text_override.strip():
+        raise ValueError(
+            "length_matched_null requires a nonempty cue text override"
+        )
+    if not cue_text_override.startswith("FOCUS_CUE: "):
+        raise ValueError("Cue text override must begin with FOCUS_CUE: ")
+    if "\n" in cue_text_override or "\r" in cue_text_override:
+        raise ValueError("Cue text override must be exactly one line")
+    return cue_text_override
+
+
 def _literal_schema(field: str) -> str:
     if field in _LIST_FIELDS:
         return (
@@ -640,24 +701,25 @@ def make_literal_extraction_prompt(
     cue_mode: str,
     intervention: dict[str, Any],
     *,
+    cue_text_override: str | None = None,
     mock_expected: dict[str, Any] | None = None,
 ) -> str:
     if field not in LITERAL_FIELDS:
         raise ValueError(f"Unknown literal field: {field}")
-    if cue_mode not in CUE_MODES:
-        raise ValueError(f"Unknown cue mode: {cue_mode}")
+    focus_cue = _focus_cue_for_mode(
+        cue_mode,
+        intervention,
+        "literal",
+        cue_text_override,
+    )
     lines = [
         "TASK: rule_z_literal_field_extract",
         f"CONDITION: E_LITERAL_{field.upper()}_{cue_mode.upper()}",
         f"SOURCE_CONDITION: {SOURCE_CONDITION}",
         f"CASE_ID: {public_case_id(case_hash)}",
     ]
-    if cue_mode == "target_preannounced":
-        lines.append(
-            "FOCUS_CUE: A later independent query will ask what follows if we "
-            + intervention_text(intervention)
-            + "."
-        )
+    if focus_cue is not None:
+        lines.append(focus_cue)
     lines.extend(
         [
             f"Extract only the source's literal {field} field.",
@@ -692,12 +754,17 @@ def make_intervention_prompt(
     cue_mode: str,
     intervention: dict[str, Any],
     *,
+    cue_text_override: str | None = None,
     mock_expected: dict[str, Any] | None = None,
 ) -> str:
     if path not in COMPUTE_PATHS:
         raise ValueError(f"Unknown compute path: {path}")
-    if cue_mode not in CUE_MODES:
-        raise ValueError(f"Unknown cue mode: {cue_mode}")
+    focus_cue = _focus_cue_for_mode(
+        cue_mode,
+        intervention,
+        "compute",
+        cue_text_override,
+    )
     lines = [
         "TASK: rule_z_intervention_compute",
         f"CONDITION: C_{path.upper()}_{cue_mode.upper()}",
@@ -707,12 +774,8 @@ def make_intervention_prompt(
         "Use only the supplied representation. Apply exactly the requested intervention and keep every other represented relation fixed.",
         "Return unknown when the representation omits or contradicts a dependency needed to determine the intervention result. Do not guess from the current answer.",
     ]
-    if cue_mode == "target_preannounced":
-        lines.append(
-            "FOCUS_CUE: Track the dependency needed when we "
-            + intervention_text(intervention)
-            + "."
-        )
+    if focus_cue is not None:
+        lines.append(focus_cue)
     marker = "SOURCE_ARTIFACT" if path == "direct_source" else "LITERAL_LEDGER_JSON"
     lines.extend(
         [

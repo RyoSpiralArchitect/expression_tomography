@@ -19,14 +19,24 @@ from expression_tomography.core.providers import ProviderSpec
 from expression_tomography.core.store import ExperimentStore
 from expression_tomography.tasks.rule_z.extraction_intervention import (
     ARTIFACT_FAMILIES,
+    CUE_MODES,
+    LENGTH_MATCHED_NULL_CUE_MODE,
     LITERAL_FIELDS,
     SOURCE_CONDITION,
     TASK_TYPE,
+    compute_focus_cue,
     make_extraction_intervention_cases,
+    make_intervention_prompt,
     make_literal_extraction_prompt,
+    literal_focus_cue,
     public_case_id,
     score_intervention,
     score_literal_extraction,
+)
+from expression_tomography.tasks.rule_z.extraction_intervention_null_cue import (
+    cue_text_override,
+    generate_null_cue_surface,
+    validate_cue_surface_contract,
 )
 from expression_tomography.tasks.rule_z.extraction_intervention_report import (
     write_extraction_intervention_report,
@@ -99,6 +109,17 @@ class ExtractionInterventionTests(unittest.TestCase):
     def setUp(self) -> None:
         self.cases = make_extraction_intervention_cases(2, seed=67)
         self.pair_cases = self.cases[:4]
+
+    def _null_cue_surface(self) -> dict:
+        return generate_null_cue_surface(
+            self.pair_cases,
+            encode=lambda text: [ord(character) for character in text],
+            tokenizer={
+                "library": "test-character-tokenizer",
+                "version": "1",
+                "encoding": "unicode-codepoint",
+            },
+        )
 
     def _write_legacy_lineage_store(
         self,
@@ -284,6 +305,69 @@ class ExtractionInterventionTests(unittest.TestCase):
         self.assertIn(SOURCE_CONDITION, uncued)
         self.assertNotIn(payload["artifact_family"], uncued)
         self.assertNotIn("world_private", uncued)
+
+    def test_null_cue_surface_matches_target_without_naming_intervention(self) -> None:
+        surface = self._null_cue_surface()
+        validate_cue_surface_contract(surface, self.pair_cases)
+
+        for case in self.pair_cases:
+            intervention = case.payload["intervention"]
+            identifiers = [
+                str(value)
+                for key, value in intervention.items()
+                if key != "kind"
+            ]
+            for channel, target in (
+                ("literal", literal_focus_cue(intervention)),
+                ("compute", compute_focus_cue(intervention)),
+            ):
+                null = cue_text_override(
+                    surface,
+                    case.case_hash,
+                    LENGTH_MATCHED_NULL_CUE_MODE,
+                    channel,
+                )
+                self.assertIsNotNone(null)
+                self.assertNotEqual(null, target)
+                self.assertEqual(len(null), len(target))
+                self.assertEqual(
+                    len(null.encode("utf-8")),
+                    len(target.encode("utf-8")),
+                )
+                self.assertEqual(len(null.split()), len(target.split()))
+                self.assertTrue(
+                    all(identifier not in null for identifier in identifiers)
+                )
+
+    def test_null_cue_prompt_requires_a_run_scoped_override(self) -> None:
+        case = self.pair_cases[0]
+        payload = case.payload
+        with self.assertRaisesRegex(ValueError, "requires a nonempty cue"):
+            make_literal_extraction_prompt(
+                case.case_hash,
+                payload["source_artifact"],
+                "facts",
+                LENGTH_MATCHED_NULL_CUE_MODE,
+                payload["intervention"],
+            )
+
+        surface = self._null_cue_surface()
+        override = cue_text_override(
+            surface,
+            case.case_hash,
+            LENGTH_MATCHED_NULL_CUE_MODE,
+            "compute",
+        )
+        prompt = make_intervention_prompt(
+            case.case_hash,
+            payload["source_artifact"],
+            "direct_source",
+            LENGTH_MATCHED_NULL_CUE_MODE,
+            payload["intervention"],
+            cue_text_override=override,
+        )
+        self.assertIn(str(override), prompt)
+        self.assertIn("C_DIRECT_SOURCE_LENGTH_MATCHED_NULL", prompt)
 
     def test_literal_score_requires_exact_source_grounding(self) -> None:
         case = self.pair_cases[0]
@@ -520,6 +604,106 @@ class ExtractionInterventionTests(unittest.TestCase):
             self.assertNotIn("SOURCE_ARTIFACT", row["prompt"])
             self.assertNotIn('"evidence"', row["prompt"])
             self.assertIn("LITERAL_LEDGER_JSON", row["prompt"])
+
+    def test_mock_target_vs_null_run_is_complete_and_drift_closed(self) -> None:
+        cue_modes = ("target_preannounced", LENGTH_MATCHED_NULL_CUE_MODE)
+        surface = self._null_cue_surface()
+        provider = CountingRuleZMockProvider()
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "trials.sqlite")
+            try:
+                result = run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    provider,
+                    store,
+                    repetitions=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                    cue_modes=cue_modes,
+                    cue_surface_contract=surface,
+                )
+                summary = write_extraction_intervention_report(
+                    store,
+                    Path(td) / "reports",
+                )
+                validation = validate_extraction_intervention_store(store)
+                rows = store.fetch_trials(task_type=TASK_TYPE)
+                runs = store.fetch_experiment_runs(task_type=TASK_TYPE)
+
+                drifted_surface = copy.deepcopy(surface)
+                case_hash = self.pair_cases[0].case_hash
+                old_text = drifted_surface["cue_text_overrides"][case_hash][
+                    LENGTH_MATCHED_NULL_CUE_MODE
+                ]["literal"]
+                new_text = old_text[:-1] + ("!" if old_text[-1] != "!" else ".")
+                drifted_surface["cue_text_overrides"][case_hash][
+                    LENGTH_MATCHED_NULL_CUE_MODE
+                ]["literal"] = new_text
+                drifted_surface["surface_audit"][case_hash]["literal"][
+                    "null_cue_sha256"
+                ] = hashlib.sha256(new_text.encode("utf-8")).hexdigest()
+                resumed = CountingRuleZMockProvider()
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "Execution provenance drift",
+                ):
+                    run_extraction_intervention_experiment(
+                        self.pair_cases,
+                        resumed,
+                        store,
+                        repetitions=1,
+                        max_new_calls=0,
+                        progress_every=0,
+                        cue_modes=cue_modes,
+                        cue_surface_contract=drifted_surface,
+                    )
+            finally:
+                store.close()
+
+        self.assertEqual(result["inserted_trials"], 88)
+        self.assertEqual(provider.call_count, 88)
+        self.assertEqual(resumed.call_count, 0)
+        self.assertEqual(len(rows), 88)
+        self.assertEqual(validation["validated_trials"], 88)
+        self.assertTrue(summary["completion"]["surface_complete"])
+        self.assertEqual(
+            summary["completion"]["cue_modes_by_provider"],
+            {"counting-mock": list(cue_modes)},
+        )
+        self.assertEqual(summary["paired_cue_summary"], [])
+        self.assertEqual(len(summary["target_vs_null_summary"]), 11)
+        self.assertEqual(
+            len(summary["target_vs_null_by_artifact_summary"]),
+            44,
+        )
+        self.assertEqual(len(runs), 1)
+        self.assertEqual(runs[0]["contract"]["cue_modes"], list(cue_modes))
+        self.assertEqual(runs[0]["contract"]["cue_surface_contract"], surface)
+        self.assertTrue(
+            all(
+                row["metadata"]["requested_cue_modes"] == list(cue_modes)
+                for row in rows
+            )
+        )
+
+    def test_default_run_keeps_the_frozen_two_cue_contract(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "trials.sqlite")
+            try:
+                run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    CountingRuleZMockProvider(),
+                    store,
+                    repetitions=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                )
+                run = store.fetch_experiment_runs(task_type=TASK_TYPE)[0]
+            finally:
+                store.close()
+
+        self.assertEqual(run["contract"]["cue_modes"], list(CUE_MODES))
+        self.assertNotIn("cue_surface_contract", run["contract"])
 
     def test_report_emits_artifact_cue_and_replicate_views(self) -> None:
         with tempfile.TemporaryDirectory() as td:

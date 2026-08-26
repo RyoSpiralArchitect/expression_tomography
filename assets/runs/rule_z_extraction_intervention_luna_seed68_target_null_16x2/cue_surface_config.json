@@ -1,0 +1,2584 @@
+{
+  "contract_version": "rule_z_extraction_intervention.null_cue_surface.v1",
+  "cue_modes": [
+    "target_preannounced",
+    "length_matched_null"
+  ],
+  "cue_text_overrides": {
+    "01fda85696debe9e6ae1d2e5": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 69brc56qv2 and 6d5xr4n7r then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 2ptv4qqn8lk and 4wtq8q32b beside source layout spacing and alignment in this record."
+      }
+    },
+    "054974d91160834ecd4958c7": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker 7n3yh8cdb7 and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9xcvkl9m5cc and source layout spacing in this record."
+      }
+    },
+    "0b4db967c5788a288fc335ed": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 69brc56qv2 and 6d5xr4n7r then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 2ptv4qqn8lk and 4wtq8q32b beside source layout spacing and alignment in this record."
+      }
+    },
+    "0d721f381423dc54889af810": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 69brc56qv2 and 6d5xr4n7r then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 2ptv4qqn8lk and 4wtq8q32b beside source layout spacing and alignment in this record."
+      }
+    },
+    "0d7a2a65e7841c034785ceaf": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 4l2mjd2z2l and k3p5d8b3g then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 3r2x5w8wlr7 and 7mv8sr5l5 beside source layout spacing and alignment in this record."
+      }
+    },
+    "13f3ad1fdadb4d24c5bbede4": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 69brc56qv2 and 6d5xr4n7r then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 2ptv4qqn8lk and 4wtq8q32b beside source layout spacing and alignment in this record."
+      }
+    },
+    "16a0dbc2bca4c82c02637a38": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker 7n3yh8cdb7 and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9xcvkl9m5cc and source layout spacing in this record."
+      }
+    },
+    "1876e29c1bc9cf8d5799e08b": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 69brc56qv2 and 6d5xr4n7r then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 2ptv4qqn8lk and 4wtq8q32b beside source layout spacing and alignment in this record."
+      }
+    },
+    "1c07521ecfe5ccb9636b2c96": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker 7n3yh8cdb7 and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9xcvkl9m5cc and source layout spacing in this record."
+      }
+    },
+    "1d3310a4f7dfb3dd4bc9bc39": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker q2vyt5m9mc and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9zgsznfvzqr and source layout spacing in this record."
+      }
+    },
+    "1e6551de031ebdf078bb3656": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker 7n3yh8cdb7 and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9xcvkl9m5cc and source layout spacing in this record."
+      }
+    },
+    "21363e8b0c1d14ffac887b4d": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker q2vyt5m9mc and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9zgsznfvzqr and source layout spacing in this record."
+      }
+    },
+    "337e81510513f0279f5acd85": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker 7n3yh8cdb7 and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9xcvkl9m5cc and source layout spacing in this record."
+      }
+    },
+    "343a75d9a681d248fadbb52c": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker q2vyt5m9mc and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9zgsznfvzqr and source layout spacing in this record."
+      }
+    },
+    "38ee75fc1ff1ccbeb8313691": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker q2vyt5m9mc and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9zgsznfvzqr and source layout spacing in this record."
+      }
+    },
+    "488648341bdc6bb9a03979d8": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker q2vyt5m9mc and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9zgsznfvzqr and source layout spacing in this record."
+      }
+    },
+    "50123d900a75b8cb38c41384": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker 7n3yh8cdb7 and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9xcvkl9m5cc and source layout spacing in this record."
+      }
+    },
+    "54e540f266e4befda1aef8bd": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker q2vyt5m9mc and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9zgsznfvzqr and source layout spacing in this record."
+      }
+    },
+    "58ffbbe7185994f470b5bf71": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 4l2mjd2z2l and k3p5d8b3g then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 3r2x5w8wlr7 and 7mv8sr5l5 beside source layout spacing and alignment in this record."
+      }
+    },
+    "6135e0476bf56548086b8c93": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker q2vyt5m9mc and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9zgsznfvzqr and source layout spacing in this record."
+      }
+    },
+    "663a9473d1d0092471598fdb": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 69brc56qv2 and 6d5xr4n7r then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 2ptv4qqn8lk and 4wtq8q32b beside source layout spacing and alignment in this record."
+      }
+    },
+    "6739ee39ac7832e60488a5e3": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker q2vyt5m9mc and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9zgsznfvzqr and source layout spacing in this record."
+      }
+    },
+    "678157708615be8d6e8bc236": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 4l2mjd2z2l and k3p5d8b3g then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 3r2x5w8wlr7 and 7mv8sr5l5 beside source layout spacing and alignment in this record."
+      }
+    },
+    "6afa1a10fbec022ecb03301f": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker q2vyt5m9mc and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9zgsznfvzqr and source layout spacing in this record."
+      }
+    },
+    "6eadd1a3877ab3ee4486b8e9": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 69brc56qv2 and 6d5xr4n7r then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 2ptv4qqn8lk and 4wtq8q32b beside source layout spacing and alignment in this record."
+      }
+    },
+    "7169210fe1c11beeda4948ba": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 4l2mjd2z2l and k3p5d8b3g then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 3r2x5w8wlr7 and 7mv8sr5l5 beside source layout spacing and alignment in this record."
+      }
+    },
+    "76269b22a142ffdf69fc702f": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker q2vyt5m9mc and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9zgsznfvzqr and source layout spacing in this record."
+      }
+    },
+    "78f4655b73f24d10ea5b1a16": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 69brc56qv2 and 6d5xr4n7r then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 2ptv4qqn8lk and 4wtq8q32b beside source layout spacing and alignment in this record."
+      }
+    },
+    "7d106b27bb9d50fef82486b5": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 69brc56qv2 and 6d5xr4n7r then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 2ptv4qqn8lk and 4wtq8q32b beside source layout spacing and alignment in this record."
+      }
+    },
+    "81aa2d2e6cf581454432b085": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 4l2mjd2z2l and k3p5d8b3g then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 3r2x5w8wlr7 and 7mv8sr5l5 beside source layout spacing and alignment in this record."
+      }
+    },
+    "888d30cbc3f507bc153d0969": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 4l2mjd2z2l and k3p5d8b3g then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 3r2x5w8wlr7 and 7mv8sr5l5 beside source layout spacing and alignment in this record."
+      }
+    },
+    "8e201be1991b87c3bfd10659": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 69brc56qv2 and 6d5xr4n7r then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 2ptv4qqn8lk and 4wtq8q32b beside source layout spacing and alignment in this record."
+      }
+    },
+    "8e62f0339df2c6798f144bc1": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 69brc56qv2 and 6d5xr4n7r then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 2ptv4qqn8lk and 4wtq8q32b beside source layout spacing and alignment in this record."
+      }
+    },
+    "8f0d62979a02c919130bbd40": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker q2vyt5m9mc and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9zgsznfvzqr and source layout spacing in this record."
+      }
+    },
+    "8f9c2611be6c78d669033d1d": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 4l2mjd2z2l and k3p5d8b3g then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 3r2x5w8wlr7 and 7mv8sr5l5 beside source layout spacing and alignment in this record."
+      }
+    },
+    "9290d6de5191b01f481bf44b": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 69brc56qv2 and 6d5xr4n7r then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 2ptv4qqn8lk and 4wtq8q32b beside source layout spacing and alignment in this record."
+      }
+    },
+    "92fde01a8064f1703e1e68de": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 4l2mjd2z2l and k3p5d8b3g then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 3r2x5w8wlr7 and 7mv8sr5l5 beside source layout spacing and alignment in this record."
+      }
+    },
+    "93736d2b24c0e9cffe69b19b": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 4l2mjd2z2l and k3p5d8b3g then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 3r2x5w8wlr7 and 7mv8sr5l5 beside source layout spacing and alignment in this record."
+      }
+    },
+    "96626376dcca5a9c00da6ece": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker 7n3yh8cdb7 and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9xcvkl9m5cc and source layout spacing in this record."
+      }
+    },
+    "989d9d6275ee1767402dacb0": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 4l2mjd2z2l and k3p5d8b3g then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 3r2x5w8wlr7 and 7mv8sr5l5 beside source layout spacing and alignment in this record."
+      }
+    },
+    "9cd4dc9ccbf0f008db59c17b": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 69brc56qv2 and 6d5xr4n7r then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 2ptv4qqn8lk and 4wtq8q32b beside source layout spacing and alignment in this record."
+      }
+    },
+    "9d4ba9e026680ad54b6bf358": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 4l2mjd2z2l and k3p5d8b3g then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 3r2x5w8wlr7 and 7mv8sr5l5 beside source layout spacing and alignment in this record."
+      }
+    },
+    "a25e520f5908e960305a21f2": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 69brc56qv2 and 6d5xr4n7r then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 2ptv4qqn8lk and 4wtq8q32b beside source layout spacing and alignment in this record."
+      }
+    },
+    "a33534c77219b0bbaf694eff": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 4l2mjd2z2l and k3p5d8b3g then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 3r2x5w8wlr7 and 7mv8sr5l5 beside source layout spacing and alignment in this record."
+      }
+    },
+    "a3e8587c70c7b9867172ba98": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker q2vyt5m9mc and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9zgsznfvzqr and source layout spacing in this record."
+      }
+    },
+    "a992c60464da771f55bef9c6": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker q2vyt5m9mc and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9zgsznfvzqr and source layout spacing in this record."
+      }
+    },
+    "ab2d81034584e770112f5206": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 4l2mjd2z2l and k3p5d8b3g then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 3r2x5w8wlr7 and 7mv8sr5l5 beside source layout spacing and alignment in this record."
+      }
+    },
+    "abdd761aef6a2f908785595e": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker q2vyt5m9mc and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9zgsznfvzqr and source layout spacing in this record."
+      }
+    },
+    "b07ccd2e2036f4268aa83dfd": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 4l2mjd2z2l and k3p5d8b3g then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 3r2x5w8wlr7 and 7mv8sr5l5 beside source layout spacing and alignment in this record."
+      }
+    },
+    "b5baa6b8a8eee858ab87ae4d": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker 7n3yh8cdb7 and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9xcvkl9m5cc and source layout spacing in this record."
+      }
+    },
+    "ba3108c6a6f154f35dbbce9c": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker 7n3yh8cdb7 and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9xcvkl9m5cc and source layout spacing in this record."
+      }
+    },
+    "bc168ae97eec92267b84321f": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 4l2mjd2z2l and k3p5d8b3g then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 3r2x5w8wlr7 and 7mv8sr5l5 beside source layout spacing and alignment in this record."
+      }
+    },
+    "be4d3619ff22465ab8fc6140": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker 7n3yh8cdb7 and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9xcvkl9m5cc and source layout spacing in this record."
+      }
+    },
+    "c53b84f8f7e801332c0055bb": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker q2vyt5m9mc and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9zgsznfvzqr and source layout spacing in this record."
+      }
+    },
+    "c59e97bcca9de921e831b49c": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 69brc56qv2 and 6d5xr4n7r then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 2ptv4qqn8lk and 4wtq8q32b beside source layout spacing and alignment in this record."
+      }
+    },
+    "c5fa9ccbda639d0408e5bc4c": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker q2vyt5m9mc and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9zgsznfvzqr and source layout spacing in this record."
+      }
+    },
+    "c83dd6900132d5b5688abae6": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker q2vyt5m9mc and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9zgsznfvzqr and source layout spacing in this record."
+      }
+    },
+    "cad2b9c85e755431195b0aab": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker 7n3yh8cdb7 and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9xcvkl9m5cc and source layout spacing in this record."
+      }
+    },
+    "d34b86c6aba9694e5ff1fa0a": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker 7n3yh8cdb7 and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9xcvkl9m5cc and source layout spacing in this record."
+      }
+    },
+    "de7c09560b29c22b313c6c46": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 4l2mjd2z2l and k3p5d8b3g then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 3r2x5w8wlr7 and 7mv8sr5l5 beside source layout spacing and alignment in this record."
+      }
+    },
+    "e522b6817e533b6f827ce939": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker q2vyt5m9mc and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9zgsznfvzqr and source layout spacing in this record."
+      }
+    },
+    "ec6b04b1863d52d2b6a942d2": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker q2vyt5m9mc and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9zgsznfvzqr and source layout spacing in this record."
+      }
+    },
+    "f2f387793de3c377f078dabf": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format marker q2vyt5m9mc and keep its spacing exactly here.",
+        "literal": "FOCUS_CUE: A later check will inspect format marker 9zgsznfvzqr and source layout spacing in this record."
+      }
+    },
+    "f87e36db5b7750d2f057e8bc": {
+      "length_matched_null": {
+        "compute": "FOCUS_CUE: Inspect response format markers 69brc56qv2 and 6d5xr4n7r then retain spacing and line alignment exactly same.",
+        "literal": "FOCUS_CUE: A later review will inspect format markers 2ptv4qqn8lk and 4wtq8q32b beside source layout spacing and alignment in this record."
+      }
+    }
+  },
+  "matching_contract": {
+    "characters": "exact",
+    "encoding_tokens": "exact",
+    "position": "same prompt line",
+    "semantic_control": "formatting-only cue with opaque neutral markers",
+    "utf8_bytes": "exact",
+    "whitespace_words": "exact"
+  },
+  "surface_audit": {
+    "01fda85696debe9e6ae1d2e5": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "3bb6c7d55248e9a0387422407d471a84237e30314a7415a7edb7036e46c54f05",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "128a47a7d9521b64f95ba67a00357c488422c1166eebaa4e3bcbafe7a2d2bf24"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "1028c326e9e176d49ed3e00fa3f9cdb7c3c9a344d21dda54970e204c6e4f9ae9",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "79e476ad4946314dad0dcecb972691e911ac654e269259a8895c39b8d59e0a19"
+      }
+    },
+    "054974d91160834ecd4958c7": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "d3bcb70694c745ae90e02c20235ee2592e1c7e96f2e420bc87465551aa1d8b03",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "f708c4be9547c2ffbec589867b11b478a5622b72e36b51554e4a3fda38f81946"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "5103c38c5e465c28de4a04eadf85b23abbf67360e423f387631ff19a0a93b83f",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "b4b6bd4933d50919592bdb6e45f012882f3cda90bd4066ec33ce9e5fc1b5f412"
+      }
+    },
+    "0b4db967c5788a288fc335ed": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "3bb6c7d55248e9a0387422407d471a84237e30314a7415a7edb7036e46c54f05",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "7d792384adb3436208a1bad41c76f0bbe7afca1c399029e53059bee6f15a18a6"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "1028c326e9e176d49ed3e00fa3f9cdb7c3c9a344d21dda54970e204c6e4f9ae9",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "3ecfa5a966e7a802f9185cbebeb08be9e73777d2c4657e60ff4fd2e16470b61e"
+      }
+    },
+    "0d721f381423dc54889af810": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "3bb6c7d55248e9a0387422407d471a84237e30314a7415a7edb7036e46c54f05",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "0aa57161481cf1f69e0deae8ab55d591ee4e25f5b9e1e4c1192ee2cbaf42a50c"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "1028c326e9e176d49ed3e00fa3f9cdb7c3c9a344d21dda54970e204c6e4f9ae9",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "80f6d01f689a38841119defafdfbf9df41aa1f164617143d91df8e7296bd3a6d"
+      }
+    },
+    "0d7a2a65e7841c034785ceaf": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "9e7a6aeba61c588d1f754550c2a43737bcc1cefb545c787f04dba796bb6ff46d",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "06e0955e46515bebb8a58c49692ebfebc7657d2a224f060613878e5681b02e0b"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "8701dbcfef0d41f913fefdfb7d7dd54cf6dc1f3ba8903544a3276d7165c2891e",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "7da1ffe69d698071d930af70281a929fbddc4bbc7b37772a930a9f0696be1b9a"
+      }
+    },
+    "13f3ad1fdadb4d24c5bbede4": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "3bb6c7d55248e9a0387422407d471a84237e30314a7415a7edb7036e46c54f05",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "0aa57161481cf1f69e0deae8ab55d591ee4e25f5b9e1e4c1192ee2cbaf42a50c"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "1028c326e9e176d49ed3e00fa3f9cdb7c3c9a344d21dda54970e204c6e4f9ae9",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "80f6d01f689a38841119defafdfbf9df41aa1f164617143d91df8e7296bd3a6d"
+      }
+    },
+    "16a0dbc2bca4c82c02637a38": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "d3bcb70694c745ae90e02c20235ee2592e1c7e96f2e420bc87465551aa1d8b03",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "7b89eac0a00b70c80a19cf23c1f5a02ddb12d92134541323468b42ebcdcc016c"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "5103c38c5e465c28de4a04eadf85b23abbf67360e423f387631ff19a0a93b83f",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "54b3d5f46a81d363112a7d1f054891274ac5446615eedf97a2e26a29088b4ad5"
+      }
+    },
+    "1876e29c1bc9cf8d5799e08b": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "3bb6c7d55248e9a0387422407d471a84237e30314a7415a7edb7036e46c54f05",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "0aa57161481cf1f69e0deae8ab55d591ee4e25f5b9e1e4c1192ee2cbaf42a50c"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "1028c326e9e176d49ed3e00fa3f9cdb7c3c9a344d21dda54970e204c6e4f9ae9",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "80f6d01f689a38841119defafdfbf9df41aa1f164617143d91df8e7296bd3a6d"
+      }
+    },
+    "1c07521ecfe5ccb9636b2c96": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "d3bcb70694c745ae90e02c20235ee2592e1c7e96f2e420bc87465551aa1d8b03",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "f7570053550ba7793d8e96fd41ac4fbb97c488936c72ff62934aa396284a1dc3"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "5103c38c5e465c28de4a04eadf85b23abbf67360e423f387631ff19a0a93b83f",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "536afd3a175dec8ccb9a5db097526601ee1d32a80c1e9d0ee14f1927597f1c90"
+      }
+    },
+    "1d3310a4f7dfb3dd4bc9bc39": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "f3bd33806fe5350d8b7fe2584f4c0ffadf826bccac8ad1672e7a81399541f2bf",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "b1602937c62a6864339aeed6af09a4d5d0c290b54815d6f357e7bff74d6d6408"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "b3f3ba4ed61770bafc363fb8d5714ec3f38f825aa9be0061c61bf308b28443f8",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "845ac911341e9ea7c78e245f5565d4aa7d7f0b5453d68a7a8dc77fd09f1d055b"
+      }
+    },
+    "1e6551de031ebdf078bb3656": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "d3bcb70694c745ae90e02c20235ee2592e1c7e96f2e420bc87465551aa1d8b03",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "f708c4be9547c2ffbec589867b11b478a5622b72e36b51554e4a3fda38f81946"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "5103c38c5e465c28de4a04eadf85b23abbf67360e423f387631ff19a0a93b83f",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "b4b6bd4933d50919592bdb6e45f012882f3cda90bd4066ec33ce9e5fc1b5f412"
+      }
+    },
+    "21363e8b0c1d14ffac887b4d": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "f3bd33806fe5350d8b7fe2584f4c0ffadf826bccac8ad1672e7a81399541f2bf",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "907bb26193baa7e7c3818df0b8752e0734c984a2cf80dc3ab3645327525b19cd"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "b3f3ba4ed61770bafc363fb8d5714ec3f38f825aa9be0061c61bf308b28443f8",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "b1217c75d7e1cdfcc6dca8f5530756b4c992c4d09b0ea211a67cefb93e1a879a"
+      }
+    },
+    "337e81510513f0279f5acd85": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "d3bcb70694c745ae90e02c20235ee2592e1c7e96f2e420bc87465551aa1d8b03",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "f708c4be9547c2ffbec589867b11b478a5622b72e36b51554e4a3fda38f81946"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "5103c38c5e465c28de4a04eadf85b23abbf67360e423f387631ff19a0a93b83f",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "b4b6bd4933d50919592bdb6e45f012882f3cda90bd4066ec33ce9e5fc1b5f412"
+      }
+    },
+    "343a75d9a681d248fadbb52c": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "f3bd33806fe5350d8b7fe2584f4c0ffadf826bccac8ad1672e7a81399541f2bf",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "c2e4ede7478c82926735fd0071a8ff159b7cea6e9348d1bcb3431a4b08658ef3"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "b3f3ba4ed61770bafc363fb8d5714ec3f38f825aa9be0061c61bf308b28443f8",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "a0d4a57ffd25ed0dec9d044e8f1a9a9bd9e517de3254405b5ec415c8d4fd22b9"
+      }
+    },
+    "38ee75fc1ff1ccbeb8313691": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "f3bd33806fe5350d8b7fe2584f4c0ffadf826bccac8ad1672e7a81399541f2bf",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "c2e4ede7478c82926735fd0071a8ff159b7cea6e9348d1bcb3431a4b08658ef3"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "b3f3ba4ed61770bafc363fb8d5714ec3f38f825aa9be0061c61bf308b28443f8",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "a0d4a57ffd25ed0dec9d044e8f1a9a9bd9e517de3254405b5ec415c8d4fd22b9"
+      }
+    },
+    "488648341bdc6bb9a03979d8": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "f3bd33806fe5350d8b7fe2584f4c0ffadf826bccac8ad1672e7a81399541f2bf",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "c2e4ede7478c82926735fd0071a8ff159b7cea6e9348d1bcb3431a4b08658ef3"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "b3f3ba4ed61770bafc363fb8d5714ec3f38f825aa9be0061c61bf308b28443f8",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "a0d4a57ffd25ed0dec9d044e8f1a9a9bd9e517de3254405b5ec415c8d4fd22b9"
+      }
+    },
+    "50123d900a75b8cb38c41384": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "d3bcb70694c745ae90e02c20235ee2592e1c7e96f2e420bc87465551aa1d8b03",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "f7570053550ba7793d8e96fd41ac4fbb97c488936c72ff62934aa396284a1dc3"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "5103c38c5e465c28de4a04eadf85b23abbf67360e423f387631ff19a0a93b83f",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "536afd3a175dec8ccb9a5db097526601ee1d32a80c1e9d0ee14f1927597f1c90"
+      }
+    },
+    "54e540f266e4befda1aef8bd": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "f3bd33806fe5350d8b7fe2584f4c0ffadf826bccac8ad1672e7a81399541f2bf",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "4c7492e35e7a9bea9462489aa451c69ffbf14081f7ceda8e45b1adab0cf6dfd9"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "b3f3ba4ed61770bafc363fb8d5714ec3f38f825aa9be0061c61bf308b28443f8",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "de05a079f8c3c20bdf5cf5757cdc04052110e03f30a3b1c5f84bbeefa1b090ac"
+      }
+    },
+    "58ffbbe7185994f470b5bf71": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "9e7a6aeba61c588d1f754550c2a43737bcc1cefb545c787f04dba796bb6ff46d",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "6865d83189d803c40b425dca47ff5def7d07a29d517ef4555b09e1a15498c8ce"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "8701dbcfef0d41f913fefdfb7d7dd54cf6dc1f3ba8903544a3276d7165c2891e",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "0bb36222f88ab249e0062bedad4b3d9b57dbf89f609c390c69ab0496ffb4e075"
+      }
+    },
+    "6135e0476bf56548086b8c93": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "f3bd33806fe5350d8b7fe2584f4c0ffadf826bccac8ad1672e7a81399541f2bf",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "c2e4ede7478c82926735fd0071a8ff159b7cea6e9348d1bcb3431a4b08658ef3"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "b3f3ba4ed61770bafc363fb8d5714ec3f38f825aa9be0061c61bf308b28443f8",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "a0d4a57ffd25ed0dec9d044e8f1a9a9bd9e517de3254405b5ec415c8d4fd22b9"
+      }
+    },
+    "663a9473d1d0092471598fdb": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "3bb6c7d55248e9a0387422407d471a84237e30314a7415a7edb7036e46c54f05",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "7d792384adb3436208a1bad41c76f0bbe7afca1c399029e53059bee6f15a18a6"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "1028c326e9e176d49ed3e00fa3f9cdb7c3c9a344d21dda54970e204c6e4f9ae9",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "3ecfa5a966e7a802f9185cbebeb08be9e73777d2c4657e60ff4fd2e16470b61e"
+      }
+    },
+    "6739ee39ac7832e60488a5e3": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "f3bd33806fe5350d8b7fe2584f4c0ffadf826bccac8ad1672e7a81399541f2bf",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "907bb26193baa7e7c3818df0b8752e0734c984a2cf80dc3ab3645327525b19cd"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "b3f3ba4ed61770bafc363fb8d5714ec3f38f825aa9be0061c61bf308b28443f8",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "b1217c75d7e1cdfcc6dca8f5530756b4c992c4d09b0ea211a67cefb93e1a879a"
+      }
+    },
+    "678157708615be8d6e8bc236": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "9e7a6aeba61c588d1f754550c2a43737bcc1cefb545c787f04dba796bb6ff46d",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "6865d83189d803c40b425dca47ff5def7d07a29d517ef4555b09e1a15498c8ce"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "8701dbcfef0d41f913fefdfb7d7dd54cf6dc1f3ba8903544a3276d7165c2891e",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "0bb36222f88ab249e0062bedad4b3d9b57dbf89f609c390c69ab0496ffb4e075"
+      }
+    },
+    "6afa1a10fbec022ecb03301f": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "f3bd33806fe5350d8b7fe2584f4c0ffadf826bccac8ad1672e7a81399541f2bf",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "b1602937c62a6864339aeed6af09a4d5d0c290b54815d6f357e7bff74d6d6408"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "b3f3ba4ed61770bafc363fb8d5714ec3f38f825aa9be0061c61bf308b28443f8",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "845ac911341e9ea7c78e245f5565d4aa7d7f0b5453d68a7a8dc77fd09f1d055b"
+      }
+    },
+    "6eadd1a3877ab3ee4486b8e9": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "3bb6c7d55248e9a0387422407d471a84237e30314a7415a7edb7036e46c54f05",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "128a47a7d9521b64f95ba67a00357c488422c1166eebaa4e3bcbafe7a2d2bf24"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "1028c326e9e176d49ed3e00fa3f9cdb7c3c9a344d21dda54970e204c6e4f9ae9",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "79e476ad4946314dad0dcecb972691e911ac654e269259a8895c39b8d59e0a19"
+      }
+    },
+    "7169210fe1c11beeda4948ba": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "9e7a6aeba61c588d1f754550c2a43737bcc1cefb545c787f04dba796bb6ff46d",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "6865d83189d803c40b425dca47ff5def7d07a29d517ef4555b09e1a15498c8ce"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "8701dbcfef0d41f913fefdfb7d7dd54cf6dc1f3ba8903544a3276d7165c2891e",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "0bb36222f88ab249e0062bedad4b3d9b57dbf89f609c390c69ab0496ffb4e075"
+      }
+    },
+    "76269b22a142ffdf69fc702f": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "f3bd33806fe5350d8b7fe2584f4c0ffadf826bccac8ad1672e7a81399541f2bf",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "b1602937c62a6864339aeed6af09a4d5d0c290b54815d6f357e7bff74d6d6408"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "b3f3ba4ed61770bafc363fb8d5714ec3f38f825aa9be0061c61bf308b28443f8",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "845ac911341e9ea7c78e245f5565d4aa7d7f0b5453d68a7a8dc77fd09f1d055b"
+      }
+    },
+    "78f4655b73f24d10ea5b1a16": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "3bb6c7d55248e9a0387422407d471a84237e30314a7415a7edb7036e46c54f05",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "0aa57161481cf1f69e0deae8ab55d591ee4e25f5b9e1e4c1192ee2cbaf42a50c"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "1028c326e9e176d49ed3e00fa3f9cdb7c3c9a344d21dda54970e204c6e4f9ae9",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "80f6d01f689a38841119defafdfbf9df41aa1f164617143d91df8e7296bd3a6d"
+      }
+    },
+    "7d106b27bb9d50fef82486b5": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "3bb6c7d55248e9a0387422407d471a84237e30314a7415a7edb7036e46c54f05",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "128a47a7d9521b64f95ba67a00357c488422c1166eebaa4e3bcbafe7a2d2bf24"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "1028c326e9e176d49ed3e00fa3f9cdb7c3c9a344d21dda54970e204c6e4f9ae9",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "79e476ad4946314dad0dcecb972691e911ac654e269259a8895c39b8d59e0a19"
+      }
+    },
+    "81aa2d2e6cf581454432b085": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "9e7a6aeba61c588d1f754550c2a43737bcc1cefb545c787f04dba796bb6ff46d",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "06e0955e46515bebb8a58c49692ebfebc7657d2a224f060613878e5681b02e0b"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "8701dbcfef0d41f913fefdfb7d7dd54cf6dc1f3ba8903544a3276d7165c2891e",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "7da1ffe69d698071d930af70281a929fbddc4bbc7b37772a930a9f0696be1b9a"
+      }
+    },
+    "888d30cbc3f507bc153d0969": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "9e7a6aeba61c588d1f754550c2a43737bcc1cefb545c787f04dba796bb6ff46d",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "0e0b0fb887c771e80fc0893a46846fd0eadc263725d010e86eeb4d9125c48257"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "8701dbcfef0d41f913fefdfb7d7dd54cf6dc1f3ba8903544a3276d7165c2891e",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "f92e33893597de1ee4b35ccd2b8efbe962e28d796d39c56f8693d060b9be2b47"
+      }
+    },
+    "8e201be1991b87c3bfd10659": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "3bb6c7d55248e9a0387422407d471a84237e30314a7415a7edb7036e46c54f05",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "3024c832ac245ffbb47e9967f43096cfb6b761cdbbfc5309a149875a56b13244"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "1028c326e9e176d49ed3e00fa3f9cdb7c3c9a344d21dda54970e204c6e4f9ae9",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "6825ead8b7af1a1be41a8206bb774f723f6596ceb4b82b6d24f92127ab0f78f0"
+      }
+    },
+    "8e62f0339df2c6798f144bc1": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "3bb6c7d55248e9a0387422407d471a84237e30314a7415a7edb7036e46c54f05",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "128a47a7d9521b64f95ba67a00357c488422c1166eebaa4e3bcbafe7a2d2bf24"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "1028c326e9e176d49ed3e00fa3f9cdb7c3c9a344d21dda54970e204c6e4f9ae9",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "79e476ad4946314dad0dcecb972691e911ac654e269259a8895c39b8d59e0a19"
+      }
+    },
+    "8f0d62979a02c919130bbd40": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "f3bd33806fe5350d8b7fe2584f4c0ffadf826bccac8ad1672e7a81399541f2bf",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "e6fa89eec0d7f858bf25043c19d1bfaf7aeec16ce512318b53566041a1430193"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "b3f3ba4ed61770bafc363fb8d5714ec3f38f825aa9be0061c61bf308b28443f8",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "dd76a4af9e749de0a1407098f5f99d2ceffcec124914ff572b45286db9a25592"
+      }
+    },
+    "8f9c2611be6c78d669033d1d": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "9e7a6aeba61c588d1f754550c2a43737bcc1cefb545c787f04dba796bb6ff46d",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "efc2575f3dadcad42c2ae67b1900b4b608c89e7b7e06a1d9dd9f21df845bf953"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "8701dbcfef0d41f913fefdfb7d7dd54cf6dc1f3ba8903544a3276d7165c2891e",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "d7b181a7166aaf217dad600a367882e2a7f2c14e454bee3f0c513b314c4b8e4f"
+      }
+    },
+    "9290d6de5191b01f481bf44b": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "3bb6c7d55248e9a0387422407d471a84237e30314a7415a7edb7036e46c54f05",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "3024c832ac245ffbb47e9967f43096cfb6b761cdbbfc5309a149875a56b13244"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "1028c326e9e176d49ed3e00fa3f9cdb7c3c9a344d21dda54970e204c6e4f9ae9",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "6825ead8b7af1a1be41a8206bb774f723f6596ceb4b82b6d24f92127ab0f78f0"
+      }
+    },
+    "92fde01a8064f1703e1e68de": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "9e7a6aeba61c588d1f754550c2a43737bcc1cefb545c787f04dba796bb6ff46d",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "0e0b0fb887c771e80fc0893a46846fd0eadc263725d010e86eeb4d9125c48257"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "8701dbcfef0d41f913fefdfb7d7dd54cf6dc1f3ba8903544a3276d7165c2891e",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "f92e33893597de1ee4b35ccd2b8efbe962e28d796d39c56f8693d060b9be2b47"
+      }
+    },
+    "93736d2b24c0e9cffe69b19b": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "9e7a6aeba61c588d1f754550c2a43737bcc1cefb545c787f04dba796bb6ff46d",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "06e0955e46515bebb8a58c49692ebfebc7657d2a224f060613878e5681b02e0b"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "8701dbcfef0d41f913fefdfb7d7dd54cf6dc1f3ba8903544a3276d7165c2891e",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "7da1ffe69d698071d930af70281a929fbddc4bbc7b37772a930a9f0696be1b9a"
+      }
+    },
+    "96626376dcca5a9c00da6ece": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "d3bcb70694c745ae90e02c20235ee2592e1c7e96f2e420bc87465551aa1d8b03",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "f7570053550ba7793d8e96fd41ac4fbb97c488936c72ff62934aa396284a1dc3"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "5103c38c5e465c28de4a04eadf85b23abbf67360e423f387631ff19a0a93b83f",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "536afd3a175dec8ccb9a5db097526601ee1d32a80c1e9d0ee14f1927597f1c90"
+      }
+    },
+    "989d9d6275ee1767402dacb0": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "9e7a6aeba61c588d1f754550c2a43737bcc1cefb545c787f04dba796bb6ff46d",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "0e0b0fb887c771e80fc0893a46846fd0eadc263725d010e86eeb4d9125c48257"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "8701dbcfef0d41f913fefdfb7d7dd54cf6dc1f3ba8903544a3276d7165c2891e",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "f92e33893597de1ee4b35ccd2b8efbe962e28d796d39c56f8693d060b9be2b47"
+      }
+    },
+    "9cd4dc9ccbf0f008db59c17b": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "3bb6c7d55248e9a0387422407d471a84237e30314a7415a7edb7036e46c54f05",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "3024c832ac245ffbb47e9967f43096cfb6b761cdbbfc5309a149875a56b13244"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "1028c326e9e176d49ed3e00fa3f9cdb7c3c9a344d21dda54970e204c6e4f9ae9",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "6825ead8b7af1a1be41a8206bb774f723f6596ceb4b82b6d24f92127ab0f78f0"
+      }
+    },
+    "9d4ba9e026680ad54b6bf358": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "9e7a6aeba61c588d1f754550c2a43737bcc1cefb545c787f04dba796bb6ff46d",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "efc2575f3dadcad42c2ae67b1900b4b608c89e7b7e06a1d9dd9f21df845bf953"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "8701dbcfef0d41f913fefdfb7d7dd54cf6dc1f3ba8903544a3276d7165c2891e",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "d7b181a7166aaf217dad600a367882e2a7f2c14e454bee3f0c513b314c4b8e4f"
+      }
+    },
+    "a25e520f5908e960305a21f2": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "3bb6c7d55248e9a0387422407d471a84237e30314a7415a7edb7036e46c54f05",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "7d792384adb3436208a1bad41c76f0bbe7afca1c399029e53059bee6f15a18a6"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "1028c326e9e176d49ed3e00fa3f9cdb7c3c9a344d21dda54970e204c6e4f9ae9",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "3ecfa5a966e7a802f9185cbebeb08be9e73777d2c4657e60ff4fd2e16470b61e"
+      }
+    },
+    "a33534c77219b0bbaf694eff": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "9e7a6aeba61c588d1f754550c2a43737bcc1cefb545c787f04dba796bb6ff46d",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "6865d83189d803c40b425dca47ff5def7d07a29d517ef4555b09e1a15498c8ce"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "8701dbcfef0d41f913fefdfb7d7dd54cf6dc1f3ba8903544a3276d7165c2891e",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "0bb36222f88ab249e0062bedad4b3d9b57dbf89f609c390c69ab0496ffb4e075"
+      }
+    },
+    "a3e8587c70c7b9867172ba98": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "f3bd33806fe5350d8b7fe2584f4c0ffadf826bccac8ad1672e7a81399541f2bf",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "e6fa89eec0d7f858bf25043c19d1bfaf7aeec16ce512318b53566041a1430193"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "b3f3ba4ed61770bafc363fb8d5714ec3f38f825aa9be0061c61bf308b28443f8",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "dd76a4af9e749de0a1407098f5f99d2ceffcec124914ff572b45286db9a25592"
+      }
+    },
+    "a992c60464da771f55bef9c6": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "f3bd33806fe5350d8b7fe2584f4c0ffadf826bccac8ad1672e7a81399541f2bf",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "4c7492e35e7a9bea9462489aa451c69ffbf14081f7ceda8e45b1adab0cf6dfd9"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "b3f3ba4ed61770bafc363fb8d5714ec3f38f825aa9be0061c61bf308b28443f8",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "de05a079f8c3c20bdf5cf5757cdc04052110e03f30a3b1c5f84bbeefa1b090ac"
+      }
+    },
+    "ab2d81034584e770112f5206": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "9e7a6aeba61c588d1f754550c2a43737bcc1cefb545c787f04dba796bb6ff46d",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "efc2575f3dadcad42c2ae67b1900b4b608c89e7b7e06a1d9dd9f21df845bf953"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "8701dbcfef0d41f913fefdfb7d7dd54cf6dc1f3ba8903544a3276d7165c2891e",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "d7b181a7166aaf217dad600a367882e2a7f2c14e454bee3f0c513b314c4b8e4f"
+      }
+    },
+    "abdd761aef6a2f908785595e": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "f3bd33806fe5350d8b7fe2584f4c0ffadf826bccac8ad1672e7a81399541f2bf",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "b1602937c62a6864339aeed6af09a4d5d0c290b54815d6f357e7bff74d6d6408"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "b3f3ba4ed61770bafc363fb8d5714ec3f38f825aa9be0061c61bf308b28443f8",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "845ac911341e9ea7c78e245f5565d4aa7d7f0b5453d68a7a8dc77fd09f1d055b"
+      }
+    },
+    "b07ccd2e2036f4268aa83dfd": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "9e7a6aeba61c588d1f754550c2a43737bcc1cefb545c787f04dba796bb6ff46d",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "06e0955e46515bebb8a58c49692ebfebc7657d2a224f060613878e5681b02e0b"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "8701dbcfef0d41f913fefdfb7d7dd54cf6dc1f3ba8903544a3276d7165c2891e",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "7da1ffe69d698071d930af70281a929fbddc4bbc7b37772a930a9f0696be1b9a"
+      }
+    },
+    "b5baa6b8a8eee858ab87ae4d": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "d3bcb70694c745ae90e02c20235ee2592e1c7e96f2e420bc87465551aa1d8b03",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "f708c4be9547c2ffbec589867b11b478a5622b72e36b51554e4a3fda38f81946"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "5103c38c5e465c28de4a04eadf85b23abbf67360e423f387631ff19a0a93b83f",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "b4b6bd4933d50919592bdb6e45f012882f3cda90bd4066ec33ce9e5fc1b5f412"
+      }
+    },
+    "ba3108c6a6f154f35dbbce9c": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "d3bcb70694c745ae90e02c20235ee2592e1c7e96f2e420bc87465551aa1d8b03",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "f7570053550ba7793d8e96fd41ac4fbb97c488936c72ff62934aa396284a1dc3"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "5103c38c5e465c28de4a04eadf85b23abbf67360e423f387631ff19a0a93b83f",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "536afd3a175dec8ccb9a5db097526601ee1d32a80c1e9d0ee14f1927597f1c90"
+      }
+    },
+    "bc168ae97eec92267b84321f": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "9e7a6aeba61c588d1f754550c2a43737bcc1cefb545c787f04dba796bb6ff46d",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "0e0b0fb887c771e80fc0893a46846fd0eadc263725d010e86eeb4d9125c48257"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "8701dbcfef0d41f913fefdfb7d7dd54cf6dc1f3ba8903544a3276d7165c2891e",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "f92e33893597de1ee4b35ccd2b8efbe962e28d796d39c56f8693d060b9be2b47"
+      }
+    },
+    "be4d3619ff22465ab8fc6140": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "d3bcb70694c745ae90e02c20235ee2592e1c7e96f2e420bc87465551aa1d8b03",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "7b89eac0a00b70c80a19cf23c1f5a02ddb12d92134541323468b42ebcdcc016c"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "5103c38c5e465c28de4a04eadf85b23abbf67360e423f387631ff19a0a93b83f",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "54b3d5f46a81d363112a7d1f054891274ac5446615eedf97a2e26a29088b4ad5"
+      }
+    },
+    "c53b84f8f7e801332c0055bb": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "f3bd33806fe5350d8b7fe2584f4c0ffadf826bccac8ad1672e7a81399541f2bf",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "e6fa89eec0d7f858bf25043c19d1bfaf7aeec16ce512318b53566041a1430193"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "b3f3ba4ed61770bafc363fb8d5714ec3f38f825aa9be0061c61bf308b28443f8",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "dd76a4af9e749de0a1407098f5f99d2ceffcec124914ff572b45286db9a25592"
+      }
+    },
+    "c59e97bcca9de921e831b49c": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "3bb6c7d55248e9a0387422407d471a84237e30314a7415a7edb7036e46c54f05",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "7d792384adb3436208a1bad41c76f0bbe7afca1c399029e53059bee6f15a18a6"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "1028c326e9e176d49ed3e00fa3f9cdb7c3c9a344d21dda54970e204c6e4f9ae9",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "3ecfa5a966e7a802f9185cbebeb08be9e73777d2c4657e60ff4fd2e16470b61e"
+      }
+    },
+    "c5fa9ccbda639d0408e5bc4c": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "f3bd33806fe5350d8b7fe2584f4c0ffadf826bccac8ad1672e7a81399541f2bf",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "4c7492e35e7a9bea9462489aa451c69ffbf14081f7ceda8e45b1adab0cf6dfd9"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "b3f3ba4ed61770bafc363fb8d5714ec3f38f825aa9be0061c61bf308b28443f8",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "de05a079f8c3c20bdf5cf5757cdc04052110e03f30a3b1c5f84bbeefa1b090ac"
+      }
+    },
+    "c83dd6900132d5b5688abae6": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "f3bd33806fe5350d8b7fe2584f4c0ffadf826bccac8ad1672e7a81399541f2bf",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "907bb26193baa7e7c3818df0b8752e0734c984a2cf80dc3ab3645327525b19cd"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "b3f3ba4ed61770bafc363fb8d5714ec3f38f825aa9be0061c61bf308b28443f8",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "b1217c75d7e1cdfcc6dca8f5530756b4c992c4d09b0ea211a67cefb93e1a879a"
+      }
+    },
+    "cad2b9c85e755431195b0aab": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "d3bcb70694c745ae90e02c20235ee2592e1c7e96f2e420bc87465551aa1d8b03",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "7b89eac0a00b70c80a19cf23c1f5a02ddb12d92134541323468b42ebcdcc016c"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "5103c38c5e465c28de4a04eadf85b23abbf67360e423f387631ff19a0a93b83f",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "54b3d5f46a81d363112a7d1f054891274ac5446615eedf97a2e26a29088b4ad5"
+      }
+    },
+    "d34b86c6aba9694e5ff1fa0a": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "d3bcb70694c745ae90e02c20235ee2592e1c7e96f2e420bc87465551aa1d8b03",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 25,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "7b89eac0a00b70c80a19cf23c1f5a02ddb12d92134541323468b42ebcdcc016c"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "5103c38c5e465c28de4a04eadf85b23abbf67360e423f387631ff19a0a93b83f",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 29,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "54b3d5f46a81d363112a7d1f054891274ac5446615eedf97a2e26a29088b4ad5"
+      }
+    },
+    "de7c09560b29c22b313c6c46": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "9e7a6aeba61c588d1f754550c2a43737bcc1cefb545c787f04dba796bb6ff46d",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 38,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "efc2575f3dadcad42c2ae67b1900b4b608c89e7b7e06a1d9dd9f21df845bf953"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "8701dbcfef0d41f913fefdfb7d7dd54cf6dc1f3ba8903544a3276d7165c2891e",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 42,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "d7b181a7166aaf217dad600a367882e2a7f2c14e454bee3f0c513b314c4b8e4f"
+      }
+    },
+    "e522b6817e533b6f827ce939": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "f3bd33806fe5350d8b7fe2584f4c0ffadf826bccac8ad1672e7a81399541f2bf",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "4c7492e35e7a9bea9462489aa451c69ffbf14081f7ceda8e45b1adab0cf6dfd9"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "b3f3ba4ed61770bafc363fb8d5714ec3f38f825aa9be0061c61bf308b28443f8",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "de05a079f8c3c20bdf5cf5757cdc04052110e03f30a3b1c5f84bbeefa1b090ac"
+      }
+    },
+    "ec6b04b1863d52d2b6a942d2": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "f3bd33806fe5350d8b7fe2584f4c0ffadf826bccac8ad1672e7a81399541f2bf",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "907bb26193baa7e7c3818df0b8752e0734c984a2cf80dc3ab3645327525b19cd"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "b3f3ba4ed61770bafc363fb8d5714ec3f38f825aa9be0061c61bf308b28443f8",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "b1217c75d7e1cdfcc6dca8f5530756b4c992c4d09b0ea211a67cefb93e1a879a"
+      }
+    },
+    "f2f387793de3c377f078dabf": {
+      "compute": {
+        "null": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "null_cue_sha256": "f3bd33806fe5350d8b7fe2584f4c0ffadf826bccac8ad1672e7a81399541f2bf",
+        "target": {
+          "characters": 87,
+          "encoding_tokens": 24,
+          "utf8_bytes": 87,
+          "whitespace_words": 12
+        },
+        "target_cue_sha256": "e6fa89eec0d7f858bf25043c19d1bfaf7aeec16ce512318b53566041a1430193"
+      },
+      "literal": {
+        "null": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "b3f3ba4ed61770bafc363fb8d5714ec3f38f825aa9be0061c61bf308b28443f8",
+        "target": {
+          "characters": 105,
+          "encoding_tokens": 28,
+          "utf8_bytes": 105,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "dd76a4af9e749de0a1407098f5f99d2ceffcec124914ff572b45286db9a25592"
+      }
+    },
+    "f87e36db5b7750d2f057e8bc": {
+      "compute": {
+        "null": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "null_cue_sha256": "3bb6c7d55248e9a0387422407d471a84237e30314a7415a7edb7036e46c54f05",
+        "target": {
+          "characters": 120,
+          "encoding_tokens": 36,
+          "utf8_bytes": 120,
+          "whitespace_words": 16
+        },
+        "target_cue_sha256": "3024c832ac245ffbb47e9967f43096cfb6b761cdbbfc5309a149875a56b13244"
+      },
+      "literal": {
+        "null": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "null_cue_sha256": "1028c326e9e176d49ed3e00fa3f9cdb7c3c9a344d21dda54970e204c6e4f9ae9",
+        "target": {
+          "characters": 138,
+          "encoding_tokens": 40,
+          "utf8_bytes": 138,
+          "whitespace_words": 20
+        },
+        "target_cue_sha256": "6825ead8b7af1a1be41a8206bb774f723f6596ceb4b82b6d24f92127ab0f78f0"
+      }
+    }
+  },
+  "tokenizer": {
+    "encoding": "o200k_base",
+    "library": "tiktoken",
+    "version": "0.12.0"
+  }
+}

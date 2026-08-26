@@ -185,6 +185,29 @@ paths to reconstruct every prompt, upstream typed ledger, parse, score, and
 legacy execution identity plus any DB-backed generation/assessment lineage,
 without making provider calls. This mode requires an existing database and opens
 it read-only.
+
+Length-matched null cues are selected per run and never change the frozen
+default two-cue surface. Generate and commit the cue contract before live calls,
+then pass both the selected modes and contract to a fresh database:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.extraction_intervention_null_cue \
+  --worlds 16 --seed 68 --encoding o200k_base \
+  --output path/to/cue_surface_config.json
+
+python3 -m expression_tomography.tasks.rule_z.extraction_intervention_task \
+  --worlds 16 --seed 68 --repetitions 2 --order-seed 9801 \
+  --cue-modes target_preannounced length_matched_null \
+  --cue-surface-config path/to/cue_surface_config.json \
+  --max-new-calls 2816 --provider-config path/to/provider_config.json \
+  --db results/rule_z_target_null.sqlite \
+  --report-dir results/rule_z_target_null_reports
+```
+
+The experiment-run identity embeds the full cue contract. Revalidation rebuilds
+null-cued prompts from the database alone, and a changed cue surface fails
+closed before any provider call.
+
 Score-v1 or score-v2 stores created before value completeness and field/item
 grounding were separated can be copied, rescored, and rekeyed without provider
 calls using

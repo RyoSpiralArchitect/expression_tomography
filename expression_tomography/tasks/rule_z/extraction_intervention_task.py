@@ -24,9 +24,11 @@ from expression_tomography.core.store import ExperimentStore
 from .extraction_intervention import (
     ARTIFACT_SCHEMA_VERSION,
     CUE_MODES,
+    LENGTH_MATCHED_NULL_CUE_MODE,
     LITERAL_FIELDS,
     PROMPT_CONTRACT_VERSION,
     SCORE_SCHEMA_VERSION,
+    SUPPORTED_CUE_MODES,
     TASK_TYPE,
     compute_condition,
     literal_condition,
@@ -35,11 +37,17 @@ from .extraction_intervention import (
     make_literal_extraction_prompt,
     mock_intervention_expected,
     normalize_literal_for_compute,
+    normalize_cue_modes,
     oracle_literal_packet,
     score_intervention,
     score_literal_extraction,
     stable_literal_packet,
     validate_case_surface,
+)
+from .extraction_intervention_null_cue import (
+    cue_text_override,
+    load_cue_surface_contract,
+    validate_cue_surface_contract,
 )
 from .extraction_intervention_report import write_extraction_intervention_report
 from .extraction_intervention_lineage import (
@@ -398,6 +406,8 @@ def _static_plan(
     repetitions: int,
     replicate_start: int,
     order_seed: int,
+    cue_modes: tuple[str, ...],
+    cue_surface_contract: dict[str, Any] | None,
 ) -> list[PlannedCall]:
     include_mock_hint = isinstance(provider, RuleZMockProvider)
     calls = []
@@ -408,7 +418,7 @@ def _static_plan(
             replicate_start,
             replicate_start + repetitions,
         ):
-            for cue_mode in CUE_MODES:
+            for cue_mode in cue_modes:
                 for field in LITERAL_FIELDS:
                     prompt = make_literal_extraction_prompt(
                         case.case_hash,
@@ -416,6 +426,12 @@ def _static_plan(
                         field,
                         cue_mode,
                         payload["intervention"],
+                        cue_text_override=cue_text_override(
+                            cue_surface_contract,
+                            case.case_hash,
+                            cue_mode,
+                            "literal",
+                        ),
                         mock_expected=(
                             payload["literal_private"][field]
                             if include_mock_hint
@@ -450,6 +466,12 @@ def _static_plan(
                         path,
                         cue_mode,
                         payload["intervention"],
+                        cue_text_override=cue_text_override(
+                            cue_surface_contract,
+                            case.case_hash,
+                            cue_mode,
+                            "compute",
+                        ),
                         mock_expected=(
                             mock_intervention_expected(payload)
                             if include_mock_hint
@@ -744,6 +766,7 @@ def _trial_metadata(
         "execution_order_rank": order_rank,
         "requested_repetitions": requested_repetitions,
         "requested_replicate_start": replicate_start,
+        "requested_cue_modes": list(experiment_run.contract["cue_modes"]),
         "private_artifact_family_not_in_prompt_fields": True,
         "mock_structured_hint_included": call.mock_structured_hint_included,
     }
@@ -894,6 +917,8 @@ def _model_literal_plan(
     repetitions: int,
     replicate_start: int,
     order_seed: int,
+    cue_modes: tuple[str, ...],
+    cue_surface_contract: dict[str, Any] | None,
 ) -> list[PlannedCall]:
     include_mock_hint = isinstance(provider, RuleZMockProvider)
     calls = []
@@ -903,7 +928,7 @@ def _model_literal_plan(
             replicate_start,
             replicate_start + repetitions,
         ):
-            for cue_mode in CUE_MODES:
+            for cue_mode in cue_modes:
                 packet = {}
                 upstream_identities = []
                 upstream_generation_identities = []
@@ -943,6 +968,12 @@ def _model_literal_plan(
                     path,
                     cue_mode,
                     payload["intervention"],
+                    cue_text_override=cue_text_override(
+                        cue_surface_contract,
+                        case.case_hash,
+                        cue_mode,
+                        "compute",
+                    ),
                     mock_expected=(
                         mock_intervention_expected(payload)
                         if include_mock_hint
@@ -981,6 +1012,7 @@ def _all_literal_rows_available(
     existing_by_logical: dict[LogicalIdentity, StoredCall],
     repetitions: int,
     replicate_start: int,
+    cue_modes: tuple[str, ...],
 ) -> bool:
     return all(
         _logical_identity(
@@ -995,7 +1027,7 @@ def _all_literal_rows_available(
             replicate_start,
             replicate_start + repetitions,
         )
-        for cue_mode in CUE_MODES
+        for cue_mode in cue_modes
         for field in LITERAL_FIELDS
     )
 
@@ -1009,6 +1041,10 @@ def validate_extraction_intervention_store(
     }
     rows = store.fetch_trials(task_type=TASK_TYPE)
     existing_by_logical, _resume_seen = _existing_indexes(store)
+    runs_by_identity = {
+        str(run["experiment_run_identity_sha256"]): run
+        for run in store.fetch_experiment_runs(task_type=TASK_TYPE)
+    }
     stored_calls = list(existing_by_logical.values())
     by_execution = {
         stored.legacy_execution_identity: stored.row for stored in stored_calls
@@ -1058,6 +1094,15 @@ def validate_extraction_intervention_store(
         parse_matches += 1
 
         cue_mode = str(metadata.get("cue_mode", ""))
+        run_identity = row.get("experiment_run_identity_sha256")
+        cue_surface_contract = None
+        if run_identity is not None:
+            run = runs_by_identity.get(str(run_identity))
+            if run is None:
+                raise RuntimeError(
+                    f"Stored trial {row['id']} references an unknown experiment run"
+                )
+            cue_surface_contract = run["contract"].get("cue_surface_contract")
         mock_hint = bool(metadata.get("mock_structured_hint_included"))
         trial_type = str(metadata.get("trial_type", ""))
         representation = None
@@ -1070,6 +1115,12 @@ def validate_extraction_intervention_store(
                 field,
                 cue_mode,
                 payload["intervention"],
+                cue_text_override=cue_text_override(
+                    cue_surface_contract,
+                    str(row["case_hash"]),
+                    cue_mode,
+                    "literal",
+                ),
                 mock_expected=(
                     payload["literal_private"][field] if mock_hint else None
                 ),
@@ -1186,6 +1237,12 @@ def validate_extraction_intervention_store(
                 path,
                 cue_mode,
                 payload["intervention"],
+                cue_text_override=cue_text_override(
+                    cue_surface_contract,
+                    str(row["case_hash"]),
+                    cue_mode,
+                    "compute",
+                ),
                 mock_expected=(
                     mock_intervention_expected(payload) if mock_hint else None
                 ),
@@ -1242,6 +1299,8 @@ def run_extraction_intervention_experiment(
     max_new_calls: int = 1000,
     progress_every: int = 20,
     preflight_only: bool = False,
+    cue_modes: Iterable[str] = CUE_MODES,
+    cue_surface_contract: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     if repetitions < 1:
         raise ValueError("repetitions must be positive")
@@ -1254,11 +1313,29 @@ def run_extraction_intervention_experiment(
     if not case_list or len(case_list) % 4:
         raise ValueError("Cases must contain complete four-family artifact blocks")
     validate_case_surface(case_list, expected_worlds=len(case_list) // 4)
+    normalized_cue_modes = normalize_cue_modes(cue_modes)
+    has_null_cue = LENGTH_MATCHED_NULL_CUE_MODE in normalized_cue_modes
+    if has_null_cue:
+        if cue_surface_contract is None:
+            raise ValueError(
+                "length_matched_null requires a cue surface contract"
+            )
+        validate_cue_surface_contract(cue_surface_contract, case_list)
+        if cue_surface_contract.get("cue_modes") != list(normalized_cue_modes):
+            raise ValueError(
+                "Cue surface modes must exactly match the requested cue modes"
+            )
+    elif cue_surface_contract is not None:
+        raise ValueError(
+            "A cue surface contract may only be used with length_matched_null"
+        )
     provider_provenance = _provider_provenance(provider)
     experiment_run = make_experiment_run(
         case_list,
         provider_provenance,
         order_seed,
+        cue_modes=normalized_cue_modes,
+        cue_surface_contract=cue_surface_contract,
     )
     stored_case_count = _validate_requested_case_surface(case_list, store)
     existing_by_logical, _execution_seen = _existing_indexes(store)
@@ -1279,13 +1356,17 @@ def run_extraction_intervention_experiment(
         repetitions,
         replicate_start,
         order_seed,
+        normalized_cue_modes,
+        cue_surface_contract,
     )
     static_planned, static_skipped, static_matched_runs = _validate_plan(
         static_calls,
         existing_by_logical,
         provider.name,
     )
-    dynamic_upper_bound = len(case_list) * repetitions * len(CUE_MODES)
+    dynamic_upper_bound = (
+        len(case_list) * repetitions * len(normalized_cue_modes)
+    )
     preflight_model_calls: list[PlannedCall] | None = None
     dynamic_skipped = 0
     if _all_literal_rows_available(
@@ -1294,6 +1375,7 @@ def run_extraction_intervention_experiment(
         existing_by_logical,
         repetitions,
         replicate_start,
+        normalized_cue_modes,
     ):
         preflight_model_calls = _model_literal_plan(
             case_list,
@@ -1303,6 +1385,8 @@ def run_extraction_intervention_experiment(
             repetitions,
             replicate_start,
             order_seed + 1,
+            normalized_cue_modes,
+            cue_surface_contract,
         )
         (
             dynamic_upper_bound,
@@ -1379,6 +1463,8 @@ def run_extraction_intervention_experiment(
         repetitions,
         replicate_start,
         order_seed + 1,
+        normalized_cue_modes,
+        cue_surface_contract,
     )
     model_planned, model_skipped, model_matched_runs = _validate_plan(
         model_calls,
@@ -1517,6 +1603,18 @@ def main() -> None:
     parser.add_argument("--replicate-start", type=int, default=0)
     parser.add_argument("--order-seed", type=int, default=9701)
     parser.add_argument(
+        "--cue-modes",
+        nargs="+",
+        choices=SUPPORTED_CUE_MODES,
+        default=list(CUE_MODES),
+        help="Run-scoped cue conditions. Defaults to the frozen two-cue surface.",
+    )
+    parser.add_argument(
+        "--cue-surface-config",
+        default=None,
+        help="JSON cue surface contract required by length_matched_null.",
+    )
+    parser.add_argument(
         "--max-new-calls",
         type=int,
         default=1000,
@@ -1586,12 +1684,19 @@ def main() -> None:
 
         cases = make_extraction_intervention_cases(args.worlds, args.seed)
         providers = load_rule_z_providers(args.provider_config)
+        cue_surface_contract = (
+            load_cue_surface_contract(args.cue_surface_config)
+            if args.cue_surface_config
+            else None
+        )
         options = {
             "repetitions": args.repetitions,
             "replicate_start": args.replicate_start,
             "order_seed": args.order_seed,
             "max_new_calls": args.max_new_calls,
             "progress_every": args.progress_every,
+            "cue_modes": args.cue_modes,
+            "cue_surface_contract": cue_surface_contract,
         }
         if args.preflight_only:
             runs = preflight_provider_suite(
