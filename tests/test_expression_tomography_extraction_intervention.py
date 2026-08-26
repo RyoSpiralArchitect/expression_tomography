@@ -795,6 +795,66 @@ class ExtractionInterventionTests(unittest.TestCase):
         self.assertEqual(prior_hash_after, prior_hash)
         self.assertEqual(current_hash_after, current_hash)
 
+    def test_cross_run_comparison_rejects_shared_missing_case_block(self) -> None:
+        cue_modes = ("target_preannounced", LENGTH_MATCHED_NULL_CUE_MODE)
+        surface = self._null_cue_surface()
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            prior_store = ExperimentStore(root / "prior.sqlite")
+            current_store = ExperimentStore(root / "current.sqlite")
+            try:
+                run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    CountingRuleZMockProvider(),
+                    prior_store,
+                    repetitions=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                )
+                run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    CountingRuleZMockProvider(),
+                    current_store,
+                    repetitions=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                    cue_modes=cue_modes,
+                    cue_surface_contract=surface,
+                )
+                missing_hash = self.pair_cases[0].case_hash
+                prior_store.conn.execute(
+                    "DELETE FROM trials WHERE case_hash=?",
+                    (missing_hash,),
+                )
+                current_store.conn.execute(
+                    "DELETE FROM trials WHERE case_hash=?",
+                    (missing_hash,),
+                )
+                prior_store.conn.commit()
+                current_store.conn.commit()
+            finally:
+                prior_store.close()
+                current_store.close()
+
+            prior_read_only = ExperimentStore(root / "prior.sqlite", read_only=True)
+            current_read_only = ExperimentStore(
+                root / "current.sqlite",
+                read_only=True,
+            )
+            try:
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "block coverage drift: missing=1",
+                ):
+                    write_extraction_intervention_cross_run_comparison(
+                        prior_read_only,
+                        current_read_only,
+                        root / "comparison",
+                    )
+            finally:
+                prior_read_only.close()
+                current_read_only.close()
+
     def test_default_run_keeps_the_frozen_two_cue_contract(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             store = ExperimentStore(Path(td) / "trials.sqlite")

@@ -79,7 +79,7 @@ def _case_index(store: ExperimentStore) -> dict[str, dict[str, Any]]:
 def _validate_case_surface(
     prior_store: ExperimentStore,
     current_store: ExperimentStore,
-) -> int:
+) -> tuple[str, ...]:
     prior = _case_index(prior_store)
     current = _case_index(current_store)
     if not prior or not current:
@@ -95,7 +95,37 @@ def _validate_case_surface(
             raise RuntimeError(
                 f"Cross-run case payload differs for {case_hash}"
             )
-    return len(prior)
+    return tuple(sorted(prior))
+
+
+def _declared_replicate_indices(rows: list[dict[str, Any]]) -> tuple[int, ...]:
+    declared: set[int] = set()
+    for row in rows:
+        metadata = row["metadata"]
+        replicate_start = metadata.get("requested_replicate_start")
+        repetitions = metadata.get("requested_repetitions")
+        if (
+            not isinstance(replicate_start, int)
+            or isinstance(replicate_start, bool)
+            or replicate_start < 0
+            or not isinstance(repetitions, int)
+            or isinstance(repetitions, bool)
+            or repetitions < 1
+        ):
+            raise RuntimeError(
+                "Run has invalid requested replicate-range metadata"
+            )
+        declared.update(range(replicate_start, replicate_start + repetitions))
+    if not declared:
+        raise RuntimeError("Run declares no replicate indices")
+    observed = {
+        int(row["metadata"].get("replicate_index", -1)) for row in rows
+    }
+    if not observed.issubset(declared):
+        raise RuntimeError(
+            "Run contains replicate indices outside its declared ranges"
+        )
+    return tuple(sorted(declared))
 
 
 def _uniform_metadata_signature(
@@ -141,6 +171,7 @@ def _run_descriptor(
         "model_literal_execution_order_seed": run["contract"].get(
             "model_literal_execution_order_seed"
         ),
+        "replicate_indices": list(_declared_replicate_indices(rows)),
         "trial_count": len(rows),
         "contract_metadata": _uniform_metadata_signature(rows),
     }
@@ -162,6 +193,7 @@ def _target_and_metric(row: dict[str, Any]) -> tuple[str, str]:
 def _cue_index(
     rows: list[dict[str, Any]],
     cue_mode: str,
+    expected_blocks: set[tuple[str, str, int]],
 ) -> dict[tuple[str, str, int, str], tuple[dict[str, Any], str]]:
     indexed = {}
     for row in rows:
@@ -186,6 +218,15 @@ def _cue_index(
     targets_by_identity: dict[tuple[str, str, int], set[str]] = defaultdict(set)
     for provider, case_hash, replicate_index, target in indexed:
         targets_by_identity[(provider, case_hash, replicate_index)].add(target)
+    observed_blocks = set(targets_by_identity)
+    missing_blocks = expected_blocks - observed_blocks
+    unexpected_blocks = observed_blocks - expected_blocks
+    if missing_blocks or unexpected_blocks:
+        raise RuntimeError(
+            f"Cue mode {cue_mode} has block coverage drift: "
+            f"missing={len(missing_blocks)}, "
+            f"unexpected={len(unexpected_blocks)}"
+        )
     incomplete = [
         identity
         for identity, targets in targets_by_identity.items()
@@ -210,11 +251,20 @@ def _transition(before: bool, after: bool) -> str:
 def _pair_rows(
     prior_rows: list[dict[str, Any]],
     current_rows: list[dict[str, Any]],
+    expected_blocks: set[tuple[str, str, int]],
 ) -> list[dict[str, Any]]:
     paired_rows = []
     for comparison in COMPARISONS:
-        before = _cue_index(prior_rows, comparison["before_cue"])
-        after = _cue_index(current_rows, comparison["after_cue"])
+        before = _cue_index(
+            prior_rows,
+            comparison["before_cue"],
+            expected_blocks,
+        )
+        after = _cue_index(
+            current_rows,
+            comparison["after_cue"],
+            expected_blocks,
+        )
         if set(before) != set(after):
             raise RuntimeError(
                 f"Comparison identities differ for "
@@ -373,7 +423,7 @@ def compare_extraction_intervention_runs(
     list[dict[str, Any]],
     list[dict[str, Any]],
 ]:
-    case_count = _validate_case_surface(prior_store, current_store)
+    case_hashes = _validate_case_surface(prior_store, current_store)
     prior_rows = prior_store.fetch_trials(task_type=TASK_TYPE)
     current_rows = current_store.fetch_trials(task_type=TASK_TYPE)
     if not prior_rows or not current_rows:
@@ -396,6 +446,8 @@ def compare_extraction_intervention_runs(
     current_providers = sorted({str(row["provider"]) for row in current_rows})
     if prior_providers != current_providers:
         raise RuntimeError("Cross-run provider names differ")
+    if prior_run["replicate_indices"] != current_run["replicate_indices"]:
+        raise RuntimeError("Cross-run declared replicate ranges differ")
     for comparison in COMPARISONS:
         if comparison["before_cue"] not in prior_run["cue_modes"]:
             raise RuntimeError(
@@ -406,7 +458,13 @@ def compare_extraction_intervention_runs(
                 f"Current run does not declare cue {comparison['after_cue']}"
             )
 
-    pairs = _pair_rows(prior_rows, current_rows)
+    expected_blocks = {
+        (provider, case_hash, replicate_index)
+        for provider in prior_providers
+        for case_hash in case_hashes
+        for replicate_index in prior_run["replicate_indices"]
+    }
+    pairs = _pair_rows(prior_rows, current_rows, expected_blocks)
     comparison_overview = _grouped_summary(pairs, ("comparison_id",))
     target_summary = _grouped_summary(
         pairs,
@@ -424,7 +482,7 @@ def compare_extraction_intervention_runs(
     summary = {
         "comparison_version": CROSS_RUN_COMPARISON_VERSION,
         "task_type": TASK_TYPE,
-        "case_count": case_count,
+        "case_count": len(case_hashes),
         "providers": prior_providers,
         "pair_rows": len(pairs),
         "provenance_validation": {
