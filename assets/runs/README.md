@@ -199,6 +199,16 @@ rule_z_extraction_intervention_luna_seed68_16x2
   exact-upstream failure cases, and matched replicate pairs without changing
   the declared case, prompt, request, parser, or score contracts.
 
+rule_z_extraction_intervention_luna_seed68_target_null_16x2
+  Prospectively registered 2,816-trial Luna rerun pairing the exact target cue
+  with an exactly character-, byte-, word-, token-, and position-matched
+  irrelevant formatting cue. Includes the complete cue contract, canonical
+  database, target-versus-null decomposition, replicate stability, and a
+  read-only comparison with the frozen prior seed-68 run. The manifest keeps
+  the primary contemporaneous contrast separate from descriptive cross-run
+  checks and treats the formatting cue as a competing control, not an inert
+  placebo.
+
 metaphor_transfer_openai_live
   First OpenAI live metaphor-transfer smoke run.
 

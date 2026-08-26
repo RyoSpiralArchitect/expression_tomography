@@ -1,0 +1,12 @@
+provider,reference_cue,comparison_cue,target,n_pairs,improved,regressed,both_correct,both_wrong,net_cue_delta
+openai-gpt-5.6-luna-low,length_matched_null,target_preannounced,compute:direct_source,128,17,8,88,15,9
+openai-gpt-5.6-luna-low,length_matched_null,target_preannounced,compute:model_literal,128,9,4,75,40,5
+openai-gpt-5.6-luna-low,length_matched_null,target_preannounced,compute:oracle_literal,128,18,3,95,12,15
+openai-gpt-5.6-luna-low,length_matched_null,target_preannounced,literal:active_conclusions,128,14,1,113,0,13
+openai-gpt-5.6-luna-low,length_matched_null,target_preannounced,literal:active_rules,128,38,12,70,8,26
+openai-gpt-5.6-luna-low,length_matched_null,target_preannounced,literal:current_answer,128,0,0,128,0,0
+openai-gpt-5.6-luna-low,length_matched_null,target_preannounced,literal:facts,128,17,11,10,90,6
+openai-gpt-5.6-luna-low,length_matched_null,target_preannounced,literal:fired_priority_edges,128,19,6,87,16,13
+openai-gpt-5.6-luna-low,length_matched_null,target_preannounced,literal:fired_rules,128,28,8,88,4,20
+openai-gpt-5.6-luna-low,length_matched_null,target_preannounced,literal:rule_definitions,128,1,4,96,27,-3
+openai-gpt-5.6-luna-low,length_matched_null,target_preannounced,literal:suppressed_rules,128,11,5,111,1,6

@@ -208,6 +208,21 @@ The experiment-run identity embeds the full cue contract. Revalidation rebuilds
 null-cued prompts from the database alone, and a changed cue surface fails
 closed before any provider call.
 
+When the case surface and provider, artifact, prompt, and score contracts match,
+the frozen uncued/target run can be compared read-only with a target/null rerun:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.extraction_intervention_compare \
+  --prior-db path/to/prior_uncued_target.sqlite \
+  --current-db path/to/current_target_null.sqlite \
+  --output-dir path/to/current_target_null_reports
+```
+
+The comparison emits pair-level, target-level, and artifact-level views. It
+labels target-to-target as a descriptive rerun check and prior-uncued to
+current-null as a noncontemporaneous descriptive comparison; neither replaces
+the current run's paired target-versus-null estimand.
+
 Score-v1 or score-v2 stores created before value completeness and field/item
 grounding were separated can be copied, rescored, and rekeyed without provider
 calls using

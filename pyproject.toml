@@ -30,6 +30,7 @@ et-rule-z-intermediate-probe-migrate = "expression_tomography.tasks.rule_z.inter
 et-rule-z-audit-calibration = "expression_tomography.tasks.rule_z.audit_calibration_task:main"
 et-rule-z-audit-calibration-compare = "expression_tomography.tasks.rule_z.audit_calibration_compare:main"
 et-rule-z-extraction-intervention = "expression_tomography.tasks.rule_z.extraction_intervention_task:main"
+et-rule-z-extraction-intervention-compare = "expression_tomography.tasks.rule_z.extraction_intervention_compare:main"
 et-rule-z-extraction-intervention-migrate = "expression_tomography.tasks.rule_z.extraction_intervention_migration:main"
 et-rule-z-extraction-intervention-lineage-migrate = "expression_tomography.tasks.rule_z.extraction_intervention_lineage_migration:main"
 et-rule-z-null-cue-surface = "expression_tomography.tasks.rule_z.extraction_intervention_null_cue:main"

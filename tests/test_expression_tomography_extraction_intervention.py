@@ -38,6 +38,9 @@ from expression_tomography.tasks.rule_z.extraction_intervention_null_cue import 
     generate_null_cue_surface,
     validate_cue_surface_contract,
 )
+from expression_tomography.tasks.rule_z.extraction_intervention_compare import (
+    write_extraction_intervention_cross_run_comparison,
+)
 from expression_tomography.tasks.rule_z.extraction_intervention_report import (
     write_extraction_intervention_report,
 )
@@ -685,6 +688,102 @@ class ExtractionInterventionTests(unittest.TestCase):
                 for row in rows
             )
         )
+
+    def test_cross_run_comparison_is_read_only_complete_and_bounded(self) -> None:
+        cue_modes = ("target_preannounced", LENGTH_MATCHED_NULL_CUE_MODE)
+        surface = self._null_cue_surface()
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            prior_path = root / "prior.sqlite"
+            current_path = root / "current.sqlite"
+            prior_store = ExperimentStore(prior_path)
+            current_store = ExperimentStore(current_path)
+            try:
+                run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    CountingRuleZMockProvider(),
+                    prior_store,
+                    repetitions=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                )
+                run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    CountingRuleZMockProvider(),
+                    current_store,
+                    repetitions=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                    cue_modes=cue_modes,
+                    cue_surface_contract=surface,
+                )
+            finally:
+                prior_store.close()
+                current_store.close()
+
+            prior_hash = hashlib.sha256(prior_path.read_bytes()).hexdigest()
+            current_hash = hashlib.sha256(current_path.read_bytes()).hexdigest()
+            output = root / "comparison"
+            prior_read_only = ExperimentStore(prior_path, read_only=True)
+            current_read_only = ExperimentStore(current_path, read_only=True)
+            try:
+                summary = write_extraction_intervention_cross_run_comparison(
+                    prior_read_only,
+                    current_read_only,
+                    output,
+                )
+            finally:
+                prior_read_only.close()
+                current_read_only.close()
+
+            output_files = {
+                path.name for path in output.iterdir() if path.is_file()
+            }
+            prior_hash_after = hashlib.sha256(
+                prior_path.read_bytes()
+            ).hexdigest()
+            current_hash_after = hashlib.sha256(
+                current_path.read_bytes()
+            ).hexdigest()
+
+        self.assertEqual(summary["case_count"], 4)
+        self.assertEqual(summary["pair_rows"], 88)
+        self.assertEqual(len(summary["comparison_overview"]), 2)
+        self.assertEqual(len(summary["target_summary"]), 22)
+        self.assertEqual(summary["artifact_summary_rows"], 88)
+        self.assertEqual(
+            summary["provenance_validation"]["provider_calls"], 0
+        )
+        target_rows = [
+            row
+            for row in summary["target_summary"]
+            if row["comparison_id"] == "prior_target_to_current_target"
+        ]
+        null_rows = [
+            row
+            for row in summary["target_summary"]
+            if row["comparison_id"]
+            == "prior_uncued_to_current_length_matched_null"
+        ]
+        self.assertTrue(
+            all(row["prompt_identical"] == row["n_pairs"] for row in target_rows)
+        )
+        self.assertTrue(all(row["prompt_identical"] == 0 for row in null_rows))
+        self.assertTrue(
+            all(row["raw_response_identical"] == row["n_pairs"] for row in target_rows + null_rows)
+        )
+        self.assertEqual(
+            output_files,
+            {
+                "rule_z_cross_run_comparison.json",
+                "rule_z_cross_run_comparison.md",
+                "rule_z_cross_run_pairs.csv",
+                "rule_z_cross_run_summary.csv",
+                "rule_z_cross_run_summary_by_artifact.csv",
+            },
+        )
+        self.assertEqual(prior_hash_after, prior_hash)
+        self.assertEqual(current_hash_after, current_hash)
 
     def test_default_run_keeps_the_frozen_two_cue_contract(self) -> None:
         with tempfile.TemporaryDirectory() as td:
