@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 from collections import Counter, defaultdict
+from itertools import combinations
 from pathlib import Path
 from statistics import mean
 from typing import Any, Iterable
@@ -419,6 +421,343 @@ def _paired_cue_summary(trials: list[dict[str, Any]]) -> list[dict[str, Any]]:
     ]
 
 
+def _paired_cue_summary_by_artifact(
+    trials: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    groups: dict[
+        tuple[str, str, str, int], dict[str, dict[str, Any]]
+    ] = defaultdict(dict)
+    for row in trials:
+        metadata = row["metadata"]
+        if metadata.get("trial_type") == "literal_extraction":
+            target = f"literal:{metadata.get('literal_field', '')}"
+            metric = "correct"
+        elif metadata.get("trial_type") == "intervention_compute":
+            target = f"compute:{metadata.get('compute_path', '')}"
+            metric = "source_supported_exact"
+        else:
+            continue
+        key = (
+            str(row["provider"]),
+            str(row["case_hash"]),
+            target,
+            int(metadata.get("replicate_index", 0)),
+        )
+        groups[key][str(metadata.get("cue_mode", ""))] = {
+            "row": row,
+            "metric": metric,
+        }
+
+    summary_groups: dict[tuple[str, str, str, str], Counter[str]] = defaultdict(
+        Counter
+    )
+    for (provider, _case_hash, target, _replicate), pair in groups.items():
+        if set(pair) != set(CUE_MODES):
+            continue
+        uncued_row = pair["uncued"]["row"]
+        cued_row = pair["target_preannounced"]["row"]
+        uncued_metadata = uncued_row["metadata"]
+        cued_metadata = cued_row["metadata"]
+        context = (
+            str(uncued_metadata.get("artifact_family", "")),
+            str(uncued_metadata.get("intervention_kind", "")),
+        )
+        if context != (
+            str(cued_metadata.get("artifact_family", "")),
+            str(cued_metadata.get("intervention_kind", "")),
+        ):
+            raise RuntimeError("Cue pair has inconsistent artifact metadata")
+        uncued = bool(uncued_row["score"].get(pair["uncued"]["metric"]))
+        cued = bool(
+            cued_row["score"].get(pair["target_preannounced"]["metric"])
+        )
+        transition = (
+            "improved"
+            if not uncued and cued
+            else "regressed"
+            if uncued and not cued
+            else "both_correct"
+            if uncued and cued
+            else "both_wrong"
+        )
+        summary_groups[(provider, *context, target)][transition] += 1
+
+    return [
+        {
+            "provider": key[0],
+            "artifact_family": key[1],
+            "intervention_kind": key[2],
+            "target": key[3],
+            "n_pairs": sum(counts.values()),
+            "improved": counts["improved"],
+            "regressed": counts["regressed"],
+            "both_correct": counts["both_correct"],
+            "both_wrong": counts["both_wrong"],
+            "net_cue_delta": counts["improved"] - counts["regressed"],
+        }
+        for key, counts in sorted(summary_groups.items())
+    ]
+
+
+def _replicate_pair_rows(trials: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    groups: dict[
+        tuple[str, str, str, str], dict[int, tuple[dict[str, Any], str]]
+    ] = defaultdict(dict)
+    for row in trials:
+        metadata = row["metadata"]
+        if metadata.get("trial_type") == "literal_extraction":
+            target = f"literal:{metadata.get('literal_field', '')}"
+            metric = "correct"
+        elif metadata.get("trial_type") == "intervention_compute":
+            target = f"compute:{metadata.get('compute_path', '')}"
+            metric = "source_supported_exact"
+        else:
+            continue
+        key = (
+            str(row["provider"]),
+            str(row["case_hash"]),
+            target,
+            str(metadata.get("cue_mode", "")),
+        )
+        replicate_index = int(metadata.get("replicate_index", 0))
+        groups[key][replicate_index] = (row, metric)
+
+    rows = []
+    for (provider, case_hash, target, cue_mode), replicates in sorted(
+        groups.items()
+    ):
+        for (replicate_a, item_a), (replicate_b, item_b) in combinations(
+            sorted(replicates.items()), 2
+        ):
+            row_a, metric_a = item_a
+            row_b, metric_b = item_b
+            metadata_a = row_a["metadata"]
+            metadata_b = row_b["metadata"]
+            context_a = (
+                str(row_a["case_id"]),
+                str(metadata_a.get("base_pair_id", "")),
+                str(metadata_a.get("artifact_family", "")),
+                str(metadata_a.get("intervention_kind", "")),
+            )
+            context_b = (
+                str(row_b["case_id"]),
+                str(metadata_b.get("base_pair_id", "")),
+                str(metadata_b.get("artifact_family", "")),
+                str(metadata_b.get("intervention_kind", "")),
+            )
+            if context_a != context_b or metric_a != metric_b:
+                raise RuntimeError("Replicate pair has inconsistent metadata")
+            correct_a = bool(row_a["score"].get(metric_a))
+            correct_b = bool(row_b["score"].get(metric_b))
+            response_a = str(row_a["raw_response"])
+            response_b = str(row_b["raw_response"])
+            rows.append(
+                {
+                    "provider": provider,
+                    "case_id": context_a[0],
+                    "case_hash": case_hash,
+                    "base_pair_id": context_a[1],
+                    "artifact_family": context_a[2],
+                    "intervention_kind": context_a[3],
+                    "target": target,
+                    "cue_mode": cue_mode,
+                    "replicate_a": replicate_a,
+                    "replicate_b": replicate_b,
+                    "replicate_a_correct": int(correct_a),
+                    "replicate_b_correct": int(correct_b),
+                    "correctness_agree": int(correct_a == correct_b),
+                    "correctness_disagree": int(correct_a != correct_b),
+                    "both_correct": int(correct_a and correct_b),
+                    "both_wrong": int(not correct_a and not correct_b),
+                    "response_byte_identical": int(response_a == response_b),
+                    "response_a_sha256": hashlib.sha256(
+                        response_a.encode("utf-8")
+                    ).hexdigest(),
+                    "response_b_sha256": hashlib.sha256(
+                        response_b.encode("utf-8")
+                    ).hexdigest(),
+                }
+            )
+    return rows
+
+
+def _replicate_summary(
+    replicate_rows: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    groups: dict[tuple[str, str, str, str, str], list[dict[str, Any]]] = (
+        defaultdict(list)
+    )
+    for row in replicate_rows:
+        key = (
+            str(row["provider"]),
+            str(row["artifact_family"]),
+            str(row["intervention_kind"]),
+            str(row["target"]),
+            str(row["cue_mode"]),
+        )
+        groups[key].append(row)
+    return [
+        {
+            "provider": key[0],
+            "artifact_family": key[1],
+            "intervention_kind": key[2],
+            "target": key[3],
+            "cue_mode": key[4],
+            "n_pairs": len(rows),
+            "response_byte_identical": sum(
+                int(row["response_byte_identical"]) for row in rows
+            ),
+            "response_byte_different": sum(
+                1 - int(row["response_byte_identical"]) for row in rows
+            ),
+            "correctness_agree": sum(
+                int(row["correctness_agree"]) for row in rows
+            ),
+            "correctness_disagree": sum(
+                int(row["correctness_disagree"]) for row in rows
+            ),
+            "both_correct": sum(int(row["both_correct"]) for row in rows),
+            "both_wrong": sum(int(row["both_wrong"]) for row in rows),
+        }
+        for key, rows in sorted(groups.items())
+    ]
+
+
+def _replicate_overview(
+    replicate_rows: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in replicate_rows:
+        groups[str(row["provider"])].append(row)
+    return [
+        {
+            "provider": provider,
+            "n_pairs": len(rows),
+            "response_byte_identical": sum(
+                int(row["response_byte_identical"]) for row in rows
+            ),
+            "response_byte_different": sum(
+                1 - int(row["response_byte_identical"]) for row in rows
+            ),
+            "response_byte_identical_rate": _format_rate(
+                mean(float(row["response_byte_identical"]) for row in rows)
+            ),
+            "correctness_disagree": sum(
+                int(row["correctness_disagree"]) for row in rows
+            ),
+            "correctness_disagreement_rate": _format_rate(
+                mean(float(row["correctness_disagree"]) for row in rows)
+            ),
+            "both_correct": sum(int(row["both_correct"]) for row in rows),
+            "both_wrong": sum(int(row["both_wrong"]) for row in rows),
+        }
+        for provider, rows in sorted(groups.items())
+    ]
+
+
+def _model_failure_case_summary(
+    intervention_rows: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    groups: dict[tuple[str, str, str, str, str, str], list[dict[str, Any]]] = (
+        defaultdict(list)
+    )
+    for row in intervention_rows:
+        if (
+            row["compute_path"] != "model_literal"
+            or not row["value_exact_compute_failed"]
+        ):
+            continue
+        key = (
+            str(row["provider"]),
+            str(row["case_id"]),
+            str(row["case_hash"]),
+            str(row["base_pair_id"]),
+            str(row["artifact_family"]),
+            str(row["intervention_kind"]),
+        )
+        groups[key].append(row)
+    return [
+        {
+            "provider": key[0],
+            "case_id": key[1],
+            "case_hash": key[2],
+            "base_pair_id": key[3],
+            "artifact_family": key[4],
+            "intervention_kind": key[5],
+            "n_failure_rows": len(rows),
+            "support_inexact_rows": sum(
+                1 - int(row["support_exact"]) for row in rows
+            ),
+            "answer_inexact_rows": sum(
+                1 - int(row["source_answer_exact"]) for row in rows
+            ),
+            "active_conclusions_inexact_rows": sum(
+                1 - int(row["source_active_conclusions_exact"])
+                for row in rows
+            ),
+            "support_only_failure_rows": sum(
+                int(
+                    not row["support_exact"]
+                    and row["source_answer_exact"]
+                    and row["source_active_conclusions_exact"]
+                )
+                for row in rows
+            ),
+            "replicate_indices": ";".join(
+                str(value)
+                for value in sorted({int(row["replicate_index"]) for row in rows})
+            ),
+            "cue_modes": ";".join(
+                sorted({str(row["cue_mode"]) for row in rows})
+            ),
+        }
+        for key, rows in sorted(groups.items())
+    ]
+
+
+def _model_failure_overview(
+    intervention_rows: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in intervention_rows:
+        if row["compute_path"] == "model_literal":
+            groups[str(row["provider"])].append(row)
+    overview = []
+    for provider, rows in sorted(groups.items()):
+        exact = [row for row in rows if row["upstream_all_value_exact"] == 1]
+        failed = [row for row in exact if row["value_exact_compute_failed"]]
+        overview.append(
+            {
+                "provider": provider,
+                "model_literal_rows": len(rows),
+                "upstream_all_value_exact_rows": len(exact),
+                "value_exact_compute_failed_rows": len(failed),
+                "support_only_failure_rows": sum(
+                    int(
+                        not row["support_exact"]
+                        and row["source_answer_exact"]
+                        and row["source_active_conclusions_exact"]
+                    )
+                    for row in failed
+                ),
+                "answer_or_active_failure_rows": sum(
+                    int(
+                        not row["source_answer_exact"]
+                        or not row["source_active_conclusions_exact"]
+                    )
+                    for row in failed
+                ),
+                "unique_failure_cases": len(
+                    {str(row["case_hash"]) for row in failed}
+                ),
+                "unique_failure_base_pairs": len(
+                    {str(row["base_pair_id"]) for row in failed}
+                ),
+            }
+        )
+    return overview
+
+
 def _model_decomposition_summary(
     intervention_rows: list[dict[str, Any]],
 ) -> list[dict[str, Any]]:
@@ -502,6 +841,55 @@ def _markdown_report(summary: dict[str, Any]) -> str:
             "| {provider} | {target} | {n_pairs} | {improved} | {regressed} | "
             "{both_correct} | {both_wrong} | {net_cue_delta} |".format(**row)
         )
+    lines.extend(
+        [
+            "",
+            "## Cue Pairs By Artifact",
+            "",
+            "| Provider | Artifact | Intervention | Target | n | Improved | Regressed | Both correct | Both wrong | Net |",
+            "| --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+        ]
+    )
+    for row in summary["paired_cue_by_artifact_summary"]:
+        lines.append(
+            "| {provider} | {artifact_family} | {intervention_kind} | "
+            "{target} | {n_pairs} | {improved} | {regressed} | "
+            "{both_correct} | {both_wrong} | {net_cue_delta} |".format(**row)
+        )
+    lines.extend(
+        [
+            "",
+            "## Model-Literal Exact-Upstream Failures",
+            "",
+            "| Provider | Model rows | Exact upstream | Compute failed | Support only | Answer/active failed | Cases | Base pairs |",
+            "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+        ]
+    )
+    for row in summary["model_literal_failure_overview"]:
+        lines.append(
+            "| {provider} | {model_literal_rows} | "
+            "{upstream_all_value_exact_rows} | "
+            "{value_exact_compute_failed_rows} | {support_only_failure_rows} | "
+            "{answer_or_active_failure_rows} | {unique_failure_cases} | "
+            "{unique_failure_base_pairs} |".format(**row)
+        )
+    lines.extend(
+        [
+            "",
+            "## Replicate Stability",
+            "",
+            "Every unordered pair of available replicates is compared within the same case, cue, and target.",
+            "",
+            "| Provider | Pairs | Byte identical | Byte different | Correctness disagree | Both correct | Both wrong |",
+            "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+        ]
+    )
+    for row in summary["replicate_overview"]:
+        lines.append(
+            "| {provider} | {n_pairs} | {response_byte_identical} | "
+            "{response_byte_different} | {correctness_disagree} | "
+            "{both_correct} | {both_wrong} |".format(**row)
+        )
     if summary["completion"]["incomplete_case_replicates"]:
         lines.extend(
             [
@@ -539,9 +927,17 @@ def write_extraction_intervention_report(
     literal_summary = _literal_summary(trials)
     intervention_summary = _intervention_summary(trials)
     paired_cue_summary = _paired_cue_summary(trials)
+    paired_cue_by_artifact_summary = _paired_cue_summary_by_artifact(trials)
     model_decomposition_summary = _model_decomposition_summary(
         intervention_rows
     )
+    model_literal_failure_case_summary = _model_failure_case_summary(
+        intervention_rows
+    )
+    model_literal_failure_overview = _model_failure_overview(intervention_rows)
+    replicate_pair_rows = _replicate_pair_rows(trials)
+    replicate_summary = _replicate_summary(replicate_pair_rows)
+    replicate_overview = _replicate_overview(replicate_pair_rows)
     completion = _completion_summary(cases, trials)
     summary = {
         "task_type": TASK_TYPE,
@@ -552,7 +948,12 @@ def write_extraction_intervention_report(
         "literal_summary": literal_summary,
         "intervention_summary": intervention_summary,
         "paired_cue_summary": paired_cue_summary,
+        "paired_cue_by_artifact_summary": paired_cue_by_artifact_summary,
         "model_decomposition_summary": model_decomposition_summary,
+        "model_literal_failure_case_summary": model_literal_failure_case_summary,
+        "model_literal_failure_overview": model_literal_failure_overview,
+        "replicate_summary": replicate_summary,
+        "replicate_overview": replicate_overview,
     }
 
     _write_csv(output_dir / "rule_z_literal_extraction_trials.csv", literal_rows)
@@ -564,9 +965,19 @@ def write_extraction_intervention_report(
     _write_csv(output_dir / "rule_z_intervention_computation_summary.csv", intervention_summary)
     _write_csv(output_dir / "rule_z_target_cue_pairs.csv", paired_cue_summary)
     _write_csv(
+        output_dir / "rule_z_target_cue_pairs_by_artifact.csv",
+        paired_cue_by_artifact_summary,
+    )
+    _write_csv(
         output_dir / "rule_z_model_literal_decomposition.csv",
         model_decomposition_summary,
     )
+    _write_csv(
+        output_dir / "rule_z_model_literal_failure_cases.csv",
+        model_literal_failure_case_summary,
+    )
+    _write_csv(output_dir / "rule_z_replicate_pairs.csv", replicate_pair_rows)
+    _write_csv(output_dir / "rule_z_replicate_summary.csv", replicate_summary)
     (output_dir / "rule_z_extraction_intervention_summary.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
