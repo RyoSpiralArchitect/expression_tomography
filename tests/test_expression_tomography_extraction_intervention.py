@@ -118,7 +118,7 @@ class ExtractionInterventionTests(unittest.TestCase):
             self.pair_cases,
             encode=lambda text: [ord(character) for character in text],
             tokenizer={
-                "library": "test-character-tokenizer",
+                "library": "expression_tomography",
                 "version": "1",
                 "encoding": "unicode-codepoint",
             },
@@ -341,6 +341,16 @@ class ExtractionInterventionTests(unittest.TestCase):
                 self.assertTrue(
                     all(identifier not in null for identifier in identifiers)
                 )
+
+    def test_null_cue_validation_retokenizes_instead_of_trusting_audit(self) -> None:
+        surface = self._null_cue_surface()
+        case_hash = self.pair_cases[0].case_hash
+        channel_audit = surface["surface_audit"][case_hash]["literal"]
+        channel_audit["null"]["encoding_tokens"] += 1
+        channel_audit["target"]["encoding_tokens"] += 1
+
+        with self.assertRaisesRegex(RuntimeError, "Null cue audit mismatch"):
+            validate_cue_surface_contract(surface, self.pair_cases)
 
     def test_null_cue_prompt_requires_a_run_scoped_override(self) -> None:
         case = self.pair_cases[0]

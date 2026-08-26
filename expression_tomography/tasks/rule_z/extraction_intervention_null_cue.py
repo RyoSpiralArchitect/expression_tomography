@@ -35,6 +35,11 @@ _METRIC_KEYS = {
     "whitespace_words",
     "encoding_tokens",
 }
+_BUILTIN_TOKENIZER = {
+    "library": "expression_tomography",
+    "version": "1",
+    "encoding": "unicode-codepoint",
+}
 
 
 @dataclass(frozen=True)
@@ -89,6 +94,37 @@ def _surface_metrics(
         "whitespace_words": len(text.split()),
         "encoding_tokens": len(encode(text)),
     }
+
+
+def _resolve_tokenizer_encoder(
+    tokenizer: dict[str, str],
+) -> Callable[[str], list[int]]:
+    if tokenizer == _BUILTIN_TOKENIZER:
+        return lambda text: [ord(character) for character in text]
+    if tokenizer["library"] != "tiktoken":
+        raise RuntimeError(
+            "Unsupported null cue tokenizer provenance: "
+            f"{stable_json(tokenizer)}"
+        )
+    try:
+        import tiktoken
+    except ImportError as exc:
+        raise RuntimeError(
+            "Null cue validation requires the recorded tiktoken runtime"
+        ) from exc
+    if str(tiktoken.__version__) != tokenizer["version"]:
+        raise RuntimeError(
+            "Null cue tokenizer version drift: "
+            f"expected {tokenizer['version']}, found {tiktoken.__version__}"
+        )
+    try:
+        encoding = tiktoken.get_encoding(tokenizer["encoding"])
+    except ValueError as exc:
+        raise RuntimeError(
+            "Null cue tokenizer encoding is unavailable: "
+            f"{tokenizer['encoding']}"
+        ) from exc
+    return encoding.encode
 
 
 def _render_template(template: _NullTemplate, nonces: list[str]) -> str:
@@ -233,6 +269,7 @@ def validate_cue_surface_contract(
         for key in ("library", "version", "encoding")
     ):
         raise RuntimeError("Null cue surface lacks tokenizer provenance")
+    encode = _resolve_tokenizer_encoder(tokenizer)
     if contract.get("matching_contract") != _MATCHING_CONTRACT:
         raise RuntimeError("Null cue matching contract drift")
     overrides = contract.get("cue_text_overrides")
@@ -286,26 +323,16 @@ def validate_cue_surface_contract(
                 or null_metrics != target_metrics
             ):
                 raise RuntimeError(f"Invalid null cue metrics for {case_hash}")
-            measured_null = {
-                "characters": len(text),
-                "utf8_bytes": len(text.encode("utf-8")),
-                "whitespace_words": len(text.split()),
-            }
-            if any(null_metrics[key] != value for key, value in measured_null.items()):
+            measured_null = _surface_metrics(text, encode)
+            if null_metrics != measured_null:
                 raise RuntimeError(f"Null cue audit mismatch for {case_hash}")
             if channel_audit.get("null_cue_sha256") != _sha256_text(text):
                 raise RuntimeError(f"Null cue hash mismatch for {case_hash}")
             if case is None:
                 continue
             target = _target_cue(case, channel)
-            measured_target = {
-                "characters": len(target),
-                "utf8_bytes": len(target.encode("utf-8")),
-                "whitespace_words": len(target.split()),
-            }
-            if any(
-                target_metrics[key] != value for key, value in measured_target.items()
-            ):
+            measured_target = _surface_metrics(target, encode)
+            if target_metrics != measured_target:
                 raise RuntimeError(f"Target cue audit mismatch for {case_hash}")
             if channel_audit.get("target_cue_sha256") != _sha256_text(target):
                 raise RuntimeError(f"Target cue hash mismatch for {case_hash}")
