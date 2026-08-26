@@ -56,6 +56,14 @@ class Condition:
     description: str = ""
 
 
+@dataclass(frozen=True)
+class ExperimentRun:
+    experiment_run_identity_sha256: str
+    task_type: str
+    contract: dict[str, Any]
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+
 @dataclass
 class TrialResult:
     case_id: str
@@ -68,6 +76,10 @@ class TrialResult:
     parsed_response: dict[str, Any] | None
     score: dict[str, Any]
     metadata: dict[str, Any] = field(default_factory=dict)
+    experiment_run_identity_sha256: str | None = None
+    logical_trial_identity_sha256: str | None = None
+    generation_identity_sha256: str | None = None
+    assessment_identity_sha256: str | None = None
 
     def to_row(self) -> dict[str, Any]:
         return {
@@ -81,4 +93,12 @@ class TrialResult:
             "parsed_response": self.parsed_response,
             "score": self.score,
             "metadata": self.metadata,
+            "experiment_run_identity_sha256": (
+                self.experiment_run_identity_sha256
+            ),
+            "logical_trial_identity_sha256": (
+                self.logical_trial_identity_sha256
+            ),
+            "generation_identity_sha256": self.generation_identity_sha256,
+            "assessment_identity_sha256": self.assessment_identity_sha256,
         }

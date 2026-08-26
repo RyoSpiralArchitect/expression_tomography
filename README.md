@@ -182,13 +182,33 @@ and pre-canonical stores are preserved in
 `assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/`.
 After a run, add `--revalidate-existing-only` with the same database and report
 paths to reconstruct every prompt, upstream typed ledger, parse, score, and
-execution identity without making provider calls. This mode requires an existing
-database and opens it read-only.
+legacy execution identity plus any DB-backed generation/assessment lineage,
+without making provider calls. This mode requires an existing database and opens
+it read-only.
 Score-v1 or score-v2 stores created before value completeness and field/item
 grounding were separated can be copied, rescored, and rekeyed without provider
 calls using
 `expression_tomography.tasks.rule_z.extraction_intervention_migration`. The
 input database and all stored provider responses remain unchanged.
+
+New extraction/intervention databases also persist experiment-run, logical,
+generation, and assessment identities in dedicated SQLite columns with unique
+indexes. A legacy store can be upgraded only through an explicit copy:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.extraction_intervention_lineage_migration \
+  --input-db path/to/frozen.sqlite \
+  --output-db path/to/lineage.sqlite \
+  --migration-report path/to/lineage_migration.json
+```
+
+Opening a legacy database does not alter its schema. The migration preserves
+every prompt, raw response, parsed response, score, timestamp, and legacy
+identity while backfilling DB-enforced lineage. Its identity definitions and
+current one-assessment-per-copy boundary are documented in
+`docs/experiment_lineage_v1_2026_08_25.md`.
+Close and checkpoint the input database first; persistent SQLite sidecars are
+rejected so the recorded main-file hash cannot omit pending WAL state.
 
 `--max-new-calls` is one global cost ceiling across the complete provider
 suite. Every configured provider is preflighted before any case write or

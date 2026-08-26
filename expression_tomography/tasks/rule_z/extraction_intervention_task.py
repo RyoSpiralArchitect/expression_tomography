@@ -7,12 +7,18 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from expression_tomography.core.providers import (
+    JSON_OBJECT_PARSE_CONTRACT_VERSION,
     Provider,
     ProviderError,
     materialize_unique_providers,
     parse_json_lenient,
 )
-from expression_tomography.core.schema import Case, TrialResult, stable_json
+from expression_tomography.core.schema import (
+    Case,
+    ExperimentRun,
+    TrialResult,
+    stable_json,
+)
 from expression_tomography.core.store import ExperimentStore
 
 from .extraction_intervention import (
@@ -36,6 +42,15 @@ from .extraction_intervention import (
     validate_case_surface,
 )
 from .extraction_intervention_report import write_extraction_intervention_report
+from .extraction_intervention_lineage import (
+    LINEAGE_SCHEMA_VERSION,
+    assessment_hashes,
+    make_assessment_identity,
+    make_experiment_run,
+    make_generation_identity,
+    make_logical_trial_identity,
+    validate_experiment_run_record_for_cases,
+)
 from .mock_provider import RuleZMockProvider, load_rule_z_providers
 
 
@@ -50,6 +65,8 @@ class PlannedCall:
     prompt: str
     prompt_sha256: str
     execution_identity: str
+    logical_identity_sha256: str
+    generation_identity_sha256: str
     order_seed: int
     trial_type: str
     cue_mode: str
@@ -57,7 +74,21 @@ class PlannedCall:
     path: str | None = None
     representation_sha256: str | None = None
     upstream_extraction_identities: tuple[str, ...] = ()
+    upstream_generation_identities: tuple[str, ...] = ()
+    upstream_assessment_identities: tuple[str, ...] = ()
     mock_structured_hint_included: bool = False
+
+
+@dataclass(frozen=True)
+class StoredCall:
+    legacy_execution_identity: str
+    generation_identity_sha256: str | None
+    assessment_identity_sha256: str | None
+    row: dict[str, Any]
+
+    @property
+    def resume_identity(self) -> str:
+        return self.generation_identity_sha256 or self.legacy_execution_identity
 
 
 def _sha256_text(value: str) -> str:
@@ -204,6 +235,100 @@ def _stored_execution_identity(
     return identity
 
 
+def _stored_lineage_identities(
+    row: dict[str, Any],
+) -> tuple[str | None, str | None]:
+    metadata = row.get("metadata", {})
+    column_keys = (
+        "experiment_run_identity_sha256",
+        "logical_trial_identity_sha256",
+        "generation_identity_sha256",
+        "assessment_identity_sha256",
+    )
+    column_values = [row.get(key) for key in column_keys]
+    metadata_values = [metadata.get(key) for key in column_keys]
+    metadata_lineage_keys = (
+        "lineage_schema_version",
+        "experiment_run_identity_sha256",
+        "generation_identity_sha256",
+        "assessment_identity_sha256",
+    )
+    # Legacy Rule-Z rows already carry their logical identity in metadata.
+    has_lineage_marker = any(value is not None for value in column_values) or any(
+        key in metadata for key in metadata_lineage_keys
+    )
+    if not has_lineage_marker:
+        return None, None
+    if not all(column_values) or not all(metadata_values):
+        raise RuntimeError(
+            f"Stored trial {row['id']} has incomplete lineage identities"
+        )
+    for key, column_value, metadata_value in zip(
+        column_keys,
+        column_values,
+        metadata_values,
+    ):
+        if column_value != metadata_value:
+            raise RuntimeError(
+                f"Stored trial {row['id']} has mismatched {key}"
+            )
+    if metadata.get("lineage_schema_version") != LINEAGE_SCHEMA_VERSION:
+        raise RuntimeError(f"Lineage schema drift in stored trial {row['id']}")
+
+    logical_identity = make_logical_trial_identity(
+        str(row["provider"]),
+        str(row["case_hash"]),
+        str(row["condition"]),
+        int(metadata.get("replicate_index", 0)),
+    )
+    if logical_identity != metadata["logical_trial_identity_sha256"]:
+        raise RuntimeError(f"Logical identity mismatch in stored trial {row['id']}")
+    generation_identity = make_generation_identity(
+        logical_trial_identity_sha256=logical_identity,
+        provider_config_sha256=str(metadata["provider_config_sha256"]),
+        prompt_sha256=str(metadata["prompt_sha256"]),
+        execution_order_seed=int(metadata["execution_order_seed"]),
+        representation_sha256=metadata.get("representation_sha256"),
+        upstream_generation_identities=(
+            str(value)
+            for value in metadata.get("upstream_generation_identities", [])
+        ),
+    )
+    if generation_identity != metadata["generation_identity_sha256"]:
+        raise RuntimeError(
+            f"Generation identity mismatch in stored trial {row['id']}"
+        )
+
+    hashes = assessment_hashes(
+        row["raw_response"],
+        row["parsed_response"],
+        row["score"],
+    )
+    for key, value in hashes.items():
+        if metadata.get(key) != value:
+            raise RuntimeError(f"{key} mismatch in stored trial {row['id']}")
+    if (
+        metadata.get("parser_contract_version")
+        != JSON_OBJECT_PARSE_CONTRACT_VERSION
+    ):
+        raise RuntimeError(f"Parser contract drift in stored trial {row['id']}")
+    assessment_identity = make_assessment_identity(
+        generation_identity_sha256=generation_identity,
+        score_schema_version=str(metadata["score_schema_version"]),
+        parser_contract_version=str(metadata["parser_contract_version"]),
+        upstream_assessment_identities=(
+            str(value)
+            for value in metadata.get("upstream_assessment_identities", [])
+        ),
+        **hashes,
+    )
+    if assessment_identity != metadata["assessment_identity_sha256"]:
+        raise RuntimeError(
+            f"Assessment identity mismatch in stored trial {row['id']}"
+        )
+    return generation_identity, assessment_identity
+
+
 def _planned_call(
     *,
     case: Case,
@@ -218,6 +343,8 @@ def _planned_call(
     path: str | None = None,
     representation_sha256: str | None = None,
     upstream_extraction_identities: tuple[str, ...] = (),
+    upstream_generation_identities: tuple[str, ...] = (),
+    upstream_assessment_identities: tuple[str, ...] = (),
     order_seed: int,
     mock_structured_hint_included: bool = False,
 ) -> PlannedCall:
@@ -228,6 +355,7 @@ def _planned_call(
         condition,
         replicate_index,
     )
+    logical_identity_sha256 = make_logical_trial_identity(*logical)
     return PlannedCall(
         case=case,
         replicate_index=replicate_index,
@@ -241,6 +369,15 @@ def _planned_call(
             order_seed,
             upstream_extraction_identities,
         ),
+        logical_identity_sha256=logical_identity_sha256,
+        generation_identity_sha256=make_generation_identity(
+            logical_trial_identity_sha256=logical_identity_sha256,
+            provider_config_sha256=provider_config_sha256,
+            prompt_sha256=prompt_sha256,
+            execution_order_seed=order_seed,
+            representation_sha256=representation_sha256,
+            upstream_generation_identities=upstream_generation_identities,
+        ),
         order_seed=order_seed,
         trial_type=trial_type,
         cue_mode=cue_mode,
@@ -248,6 +385,8 @@ def _planned_call(
         path=path,
         representation_sha256=representation_sha256,
         upstream_extraction_identities=upstream_extraction_identities,
+        upstream_generation_identities=upstream_generation_identities,
+        upstream_assessment_identities=upstream_assessment_identities,
         mock_structured_hint_included=mock_structured_hint_included,
     )
 
@@ -342,7 +481,7 @@ def _randomized_order(calls: list[PlannedCall]) -> list[PlannedCall]:
         key=lambda call: _sha256_json(
             {
                 "order_seed": call.order_seed,
-                "execution_identity": call.execution_identity,
+                "generation_identity": call.generation_identity_sha256,
             }
         ),
     )
@@ -350,22 +489,70 @@ def _randomized_order(calls: list[PlannedCall]) -> list[PlannedCall]:
 
 def _existing_indexes(
     store: ExperimentStore,
-) -> tuple[dict[LogicalIdentity, tuple[str, dict[str, Any]]], set[str]]:
+) -> tuple[dict[LogicalIdentity, StoredCall], set[str]]:
     rows = store.fetch_trials(task_type=TASK_TYPE)
-    by_logical: dict[LogicalIdentity, tuple[str, dict[str, Any]]] = {}
-    execution_seen = set()
+    stored_cases = [
+        Case(
+            case_id=str(row["case_id"]),
+            task_type=str(row["task_type"]),
+            payload=row["payload"],
+            seed=int(row["seed"]),
+            case_hash=str(row["case_hash"]),
+        )
+        for row in store.fetch_cases(task_type=TASK_TYPE)
+    ]
+    runs = {
+        str(run["experiment_run_identity_sha256"]): run
+        for run in store.fetch_experiment_runs(task_type=TASK_TYPE)
+    }
+    for run in runs.values():
+        validate_experiment_run_record_for_cases(run, stored_cases)
+    by_logical: dict[LogicalIdentity, StoredCall] = {}
+    resume_seen = set()
     for row in rows:
         execution_identity = _stored_execution_identity(row)
+        generation_identity, assessment_identity = _stored_lineage_identities(row)
+        if generation_identity is not None:
+            run_identity = str(row["experiment_run_identity_sha256"])
+            if run_identity not in runs:
+                raise RuntimeError(
+                    f"Stored trial {row['id']} references an unknown experiment run"
+                )
+            run_contract = runs[run_identity]["contract"]
+            if (
+                run_contract["provider_config_sha256"]
+                != row["metadata"]["provider_config_sha256"]
+            ):
+                raise RuntimeError(
+                    f"Stored trial {row['id']} does not match its run provider"
+                )
+            expected_order_seed = int(
+                run_contract[
+                    "model_literal_execution_order_seed"
+                    if row["metadata"].get("compute_path") == "model_literal"
+                    else "static_execution_order_seed"
+                ]
+            )
+            if int(row["metadata"]["execution_order_seed"]) != expected_order_seed:
+                raise RuntimeError(
+                    f"Stored trial {row['id']} does not match its run order seed"
+                )
         logical = _row_logical_identity(row)
         if logical in by_logical:
             raise RuntimeError(f"Duplicate stored logical identity: {logical}")
-        if execution_identity in execution_seen:
+        stored = StoredCall(
+            legacy_execution_identity=execution_identity,
+            generation_identity_sha256=generation_identity,
+            assessment_identity_sha256=assessment_identity,
+            row=row,
+        )
+        if stored.resume_identity in resume_seen:
             raise RuntimeError(
-                f"Duplicate stored execution identity: {execution_identity}"
+                f"Duplicate stored resume identity: {stored.resume_identity}"
             )
-        by_logical[logical] = (execution_identity, row)
-        execution_seen.add(execution_identity)
-    return by_logical, execution_seen
+        by_logical[logical] = stored
+        resume_seen.add(stored.resume_identity)
+    return by_logical, resume_seen
 
 
 def _validate_requested_case_surface(
@@ -410,15 +597,16 @@ def _validate_requested_case_surface(
 
 
 def _validate_provider_resume_contract(
-    existing_by_logical: dict[LogicalIdentity, tuple[str, dict[str, Any]]],
+    existing_by_logical: dict[LogicalIdentity, StoredCall],
     provider_provenance: dict[str, Any],
     order_seed: int,
 ) -> None:
     provider_name = str(provider_provenance["provider_config"]["name"])
     requested_hash = str(provider_provenance["provider_config_sha256"])
-    for logical, (_execution_identity, row) in existing_by_logical.items():
+    for logical, stored in existing_by_logical.items():
         if logical[0] != provider_name:
             continue
+        row = stored.row
         stored_hash = str(row["metadata"]["provider_config_sha256"])
         if stored_hash != requested_hash:
             raise RuntimeError(
@@ -435,13 +623,31 @@ def _validate_provider_resume_contract(
             )
 
 
+def _require_lineage_for_new_calls(
+    existing_by_logical: dict[LogicalIdentity, StoredCall],
+) -> None:
+    legacy_rows = [
+        stored
+        for stored in existing_by_logical.values()
+        if stored.generation_identity_sha256 is None
+        or stored.assessment_identity_sha256 is None
+    ]
+    if legacy_rows:
+        raise RuntimeError(
+            "Extraction/intervention store contains legacy trials without "
+            "DB-backed generation and assessment lineage; run the explicit "
+            "copy-only lineage migration before making new provider calls"
+        )
+
+
 def _validate_plan(
     calls: list[PlannedCall],
-    existing_by_logical: dict[LogicalIdentity, tuple[str, dict[str, Any]]],
+    existing_by_logical: dict[LogicalIdentity, StoredCall],
     provider_name: str,
-) -> tuple[int, int]:
+) -> tuple[int, int, set[str]]:
     requested: dict[LogicalIdentity, str] = {}
     skipped = 0
+    matched_run_identities = set()
     for call in calls:
         payload = call.case.payload
         private_tokens = (
@@ -473,28 +679,42 @@ def _validate_plan(
         requested[logical] = call.execution_identity
         stored = existing_by_logical.get(logical)
         if stored is not None:
-            if stored[0] != call.execution_identity:
+            planned_identity = (
+                call.generation_identity_sha256
+                if stored.generation_identity_sha256 is not None
+                else call.execution_identity
+            )
+            if stored.resume_identity != planned_identity:
                 raise RuntimeError(
                     "Execution provenance drift for logical identity "
                     f"{logical}; use a fresh database"
                 )
+            run_identity = stored.row.get("experiment_run_identity_sha256")
+            if run_identity:
+                matched_run_identities.add(str(run_identity))
             skipped += 1
-    return len(calls), skipped
+    return len(calls), skipped, matched_run_identities
 
 
 def _trial_metadata(
     call: PlannedCall,
     provider_provenance: dict[str, Any],
+    experiment_run: ExperimentRun,
     order_rank: int,
     requested_repetitions: int,
     replicate_start: int,
+    raw_response: str,
+    parsed_response: dict[str, Any] | None,
+    score: dict[str, Any],
 ) -> dict[str, Any]:
     payload = call.case.payload
-    logical = _logical_identity(
-        str(provider_provenance["provider_config"]["name"]),
-        call.case.case_hash,
-        call.condition,
-        call.replicate_index,
+    hashes = assessment_hashes(raw_response, parsed_response, score)
+    assessment_identity = make_assessment_identity(
+        generation_identity_sha256=call.generation_identity_sha256,
+        score_schema_version=SCORE_SCHEMA_VERSION,
+        parser_contract_version=JSON_OBJECT_PARSE_CONTRACT_VERSION,
+        upstream_assessment_identities=call.upstream_assessment_identities,
+        **hashes,
     )
     metadata = {
         **provider_provenance,
@@ -510,14 +730,15 @@ def _trial_metadata(
         "prompt_contract_version": PROMPT_CONTRACT_VERSION,
         "score_schema_version": SCORE_SCHEMA_VERSION,
         "prompt_sha256": call.prompt_sha256,
-        "logical_trial_identity_sha256": _sha256_json(
-            {
-                "provider": logical[0],
-                "case_hash": logical[1],
-                "condition": logical[2],
-                "replicate_index": logical[3],
-            }
+        "lineage_schema_version": LINEAGE_SCHEMA_VERSION,
+        "experiment_run_identity_sha256": (
+            experiment_run.experiment_run_identity_sha256
         ),
+        "logical_trial_identity_sha256": call.logical_identity_sha256,
+        "generation_identity_sha256": call.generation_identity_sha256,
+        "assessment_identity_sha256": assessment_identity,
+        "parser_contract_version": JSON_OBJECT_PARSE_CONTRACT_VERSION,
+        **hashes,
         "trial_identity_sha256": call.execution_identity,
         "execution_order_seed": call.order_seed,
         "execution_order_rank": order_rank,
@@ -536,6 +757,14 @@ def _trial_metadata(
         metadata["upstream_extraction_identities"] = list(
             call.upstream_extraction_identities
         )
+    if call.upstream_generation_identities:
+        metadata["upstream_generation_identities"] = list(
+            call.upstream_generation_identities
+        )
+    if call.upstream_assessment_identities:
+        metadata["upstream_assessment_identities"] = list(
+            call.upstream_assessment_identities
+        )
     return metadata
 
 
@@ -543,8 +772,9 @@ def _execute_calls(
     calls: list[PlannedCall],
     provider: Provider,
     store: ExperimentStore,
-    existing_by_logical: dict[LogicalIdentity, tuple[str, dict[str, Any]]],
+    existing_by_logical: dict[LogicalIdentity, StoredCall],
     provider_provenance: dict[str, Any],
+    experiment_run: ExperimentRun,
     progress_every: int,
     requested_repetitions: int,
     replicate_start: int,
@@ -590,10 +820,15 @@ def _execute_calls(
         metadata = _trial_metadata(
             call,
             provider_provenance,
+            experiment_run,
             order_rank,
             requested_repetitions,
             replicate_start,
+            raw,
+            parsed,
+            score,
         )
+        assessment_identity = str(metadata["assessment_identity_sha256"])
         store.insert_trial(
             TrialResult(
                 case_id=call.case.case_id,
@@ -606,6 +841,12 @@ def _execute_calls(
                 parsed_response=parsed,
                 score=score,
                 metadata=metadata,
+                experiment_run_identity_sha256=(
+                    experiment_run.experiment_run_identity_sha256
+                ),
+                logical_trial_identity_sha256=call.logical_identity_sha256,
+                generation_identity_sha256=call.generation_identity_sha256,
+                assessment_identity_sha256=assessment_identity,
             )
         )
         row = {
@@ -615,8 +856,19 @@ def _execute_calls(
             "metadata": metadata,
             "parsed_response": parsed,
             "score": score,
+            "experiment_run_identity_sha256": (
+                experiment_run.experiment_run_identity_sha256
+            ),
+            "logical_trial_identity_sha256": call.logical_identity_sha256,
+            "generation_identity_sha256": call.generation_identity_sha256,
+            "assessment_identity_sha256": assessment_identity,
         }
-        existing_by_logical[logical] = (call.execution_identity, row)
+        existing_by_logical[logical] = StoredCall(
+            legacy_execution_identity=call.execution_identity,
+            generation_identity_sha256=call.generation_identity_sha256,
+            assessment_identity_sha256=assessment_identity,
+            row=row,
+        )
         inserted += 1
         total_inserted = inserted_start + inserted
         if progress_every and total_inserted % progress_every == 0:
@@ -638,7 +890,7 @@ def _model_literal_plan(
     cases: list[Case],
     provider: Provider,
     provider_config_sha256: str,
-    existing_by_logical: dict[LogicalIdentity, tuple[str, dict[str, Any]]],
+    existing_by_logical: dict[LogicalIdentity, StoredCall],
     repetitions: int,
     replicate_start: int,
     order_seed: int,
@@ -654,6 +906,8 @@ def _model_literal_plan(
             for cue_mode in CUE_MODES:
                 packet = {}
                 upstream_identities = []
+                upstream_generation_identities = []
+                upstream_assessment_identities = []
                 for field in LITERAL_FIELDS:
                     condition = literal_condition(field, cue_mode)
                     logical = _logical_identity(
@@ -668,10 +922,18 @@ def _model_literal_plan(
                             "Model-literal compute requires a completed extraction "
                             f"row for {logical}"
                         )
-                    upstream_identities.append(stored[0])
+                    upstream_identities.append(stored.legacy_execution_identity)
+                    upstream_generation_identities.append(
+                        stored.generation_identity_sha256
+                        or stored.legacy_execution_identity
+                    )
+                    upstream_assessment_identities.append(
+                        stored.assessment_identity_sha256
+                        or stored.legacy_execution_identity
+                    )
                     packet[field] = normalize_literal_for_compute(
                         field,
-                        stored[1].get("parsed_response"),
+                        stored.row.get("parsed_response"),
                     )
                 representation = stable_literal_packet(packet)
                 path = "model_literal"
@@ -700,6 +962,12 @@ def _model_literal_plan(
                         path=path,
                         representation_sha256=_sha256_text(representation),
                         upstream_extraction_identities=tuple(upstream_identities),
+                        upstream_generation_identities=tuple(
+                            upstream_generation_identities
+                        ),
+                        upstream_assessment_identities=tuple(
+                            upstream_assessment_identities
+                        ),
                         order_seed=order_seed,
                         mock_structured_hint_included=include_mock_hint,
                     )
@@ -710,7 +978,7 @@ def _model_literal_plan(
 def _all_literal_rows_available(
     cases: list[Case],
     provider_name: str,
-    existing_by_logical: dict[LogicalIdentity, tuple[str, dict[str, Any]]],
+    existing_by_logical: dict[LogicalIdentity, StoredCall],
     repetitions: int,
     replicate_start: int,
 ) -> bool:
@@ -740,14 +1008,21 @@ def validate_extraction_intervention_store(
         for row in store.fetch_cases(task_type=TASK_TYPE)
     }
     rows = store.fetch_trials(task_type=TASK_TYPE)
-    by_execution: dict[str, dict[str, Any]] = {}
-    for row in rows:
-        identity = _stored_execution_identity(row)
-        if identity in by_execution:
-            raise RuntimeError(
-                f"Duplicate stored execution identity: {identity}"
-            )
-        by_execution[identity] = row
+    existing_by_logical, _resume_seen = _existing_indexes(store)
+    stored_calls = list(existing_by_logical.values())
+    by_execution = {
+        stored.legacy_execution_identity: stored.row for stored in stored_calls
+    }
+    by_generation = {
+        str(stored.generation_identity_sha256): stored.row
+        for stored in stored_calls
+        if stored.generation_identity_sha256 is not None
+    }
+    by_assessment = {
+        str(stored.assessment_identity_sha256): stored.row
+        for stored in stored_calls
+        if stored.assessment_identity_sha256 is not None
+    }
 
     parse_matches = 0
     score_matches = 0
@@ -759,6 +1034,17 @@ def validate_extraction_intervention_store(
             raise RuntimeError(f"Missing case for stored trial {row['id']}")
         payload = case["payload"]
         metadata = row["metadata"]
+        is_model_literal = (
+            metadata.get("trial_type") == "intervention_compute"
+            and metadata.get("compute_path") == "model_literal"
+        )
+        if not is_model_literal and (
+            metadata.get("upstream_generation_identities")
+            or metadata.get("upstream_assessment_identities")
+        ):
+            raise RuntimeError(
+                f"Non-model trial {row['id']} unexpectedly binds DB-backed upstream lineage"
+            )
         source = str(payload["source_artifact"])
         if metadata.get("source_artifact_sha256") != _sha256_text(source):
             raise RuntimeError(
@@ -808,24 +1094,67 @@ def validate_extraction_intervention_store(
                     oracle_literal_packet(payload)
                 )
             elif path == "model_literal":
-                upstream_identities = [
+                is_lineage_row = (
+                    row.get("generation_identity_sha256") is not None
+                )
+                upstream_generation_identities = [
                     str(value)
                     for value in metadata.get(
-                        "upstream_extraction_identities",
-                        [],
+                        "upstream_generation_identities", []
                     )
                 ]
+                upstream_assessment_identities = [
+                    str(value)
+                    for value in metadata.get(
+                        "upstream_assessment_identities", []
+                    )
+                ]
+                if is_lineage_row:
+                    if len(upstream_generation_identities) != len(
+                        LITERAL_FIELDS
+                    ) or len(upstream_assessment_identities) != len(
+                        LITERAL_FIELDS
+                    ):
+                        raise RuntimeError(
+                            f"Lineage model-literal trial {row['id']} has incomplete upstream lineage"
+                        )
+                    upstream_identities = upstream_generation_identities
+                    upstream_index = by_generation
+                else:
+                    if (
+                        upstream_generation_identities
+                        or upstream_assessment_identities
+                    ):
+                        raise RuntimeError(
+                            f"Legacy model-literal trial {row['id']} unexpectedly binds DB-backed upstream lineage"
+                        )
+                    upstream_identities = [
+                        str(value)
+                        for value in metadata.get(
+                            "upstream_extraction_identities", []
+                        )
+                    ]
+                    upstream_index = by_execution
                 if len(upstream_identities) != len(LITERAL_FIELDS):
                     raise RuntimeError(
                         f"Model-literal trial {row['id']} has incomplete upstream identity coverage"
                     )
                 packet = {}
-                for field, identity in zip(LITERAL_FIELDS, upstream_identities):
-                    upstream = by_execution.get(identity)
+                for index, (field, identity) in enumerate(
+                    zip(LITERAL_FIELDS, upstream_identities)
+                ):
+                    upstream = upstream_index.get(identity)
                     if upstream is None:
                         raise RuntimeError(
                             f"Model-literal trial {row['id']} references missing upstream identity {identity}"
                         )
+                    if is_lineage_row:
+                        assessment_identity = upstream_assessment_identities[index]
+                        assessed_upstream = by_assessment.get(assessment_identity)
+                        if assessed_upstream is not upstream:
+                            raise RuntimeError(
+                                f"Model-literal trial {row['id']} binds mismatched upstream assessment lineage"
+                            )
                     upstream_metadata = upstream["metadata"]
                     expected_upstream = (
                         str(upstream["provider"]) == str(row["provider"])
@@ -895,6 +1224,10 @@ def validate_extraction_intervention_store(
         "prompt_matches": prompt_matches,
         "score_matches": score_matches,
         "validated_model_upstream_references": model_upstream_rows,
+        "validated_lineage_trials": len(by_generation),
+        "validated_experiment_runs": len(
+            store.fetch_experiment_runs(task_type=TASK_TYPE)
+        ),
     }
 
 
@@ -909,7 +1242,7 @@ def run_extraction_intervention_experiment(
     max_new_calls: int = 1000,
     progress_every: int = 20,
     preflight_only: bool = False,
-) -> dict[str, int]:
+) -> dict[str, Any]:
     if repetitions < 1:
         raise ValueError("repetitions must be positive")
     if replicate_start < 0:
@@ -922,6 +1255,11 @@ def run_extraction_intervention_experiment(
         raise ValueError("Cases must contain complete four-family artifact blocks")
     validate_case_surface(case_list, expected_worlds=len(case_list) // 4)
     provider_provenance = _provider_provenance(provider)
+    experiment_run = make_experiment_run(
+        case_list,
+        provider_provenance,
+        order_seed,
+    )
     stored_case_count = _validate_requested_case_surface(case_list, store)
     existing_by_logical, _execution_seen = _existing_indexes(store)
     _validate_provider_resume_contract(
@@ -942,7 +1280,7 @@ def run_extraction_intervention_experiment(
         replicate_start,
         order_seed,
     )
-    static_planned, static_skipped = _validate_plan(
+    static_planned, static_skipped, static_matched_runs = _validate_plan(
         static_calls,
         existing_by_logical,
         provider.name,
@@ -966,11 +1304,17 @@ def run_extraction_intervention_experiment(
             replicate_start,
             order_seed + 1,
         )
-        dynamic_upper_bound, dynamic_skipped = _validate_plan(
+        (
+            dynamic_upper_bound,
+            dynamic_skipped,
+            dynamic_matched_runs,
+        ) = _validate_plan(
             preflight_model_calls,
             existing_by_logical,
             provider.name,
         )
+    else:
+        dynamic_matched_runs = set()
     static_new = static_planned - static_skipped
     new_upper_bound = static_new + dynamic_upper_bound - dynamic_skipped
     if new_upper_bound > max_new_calls:
@@ -978,14 +1322,42 @@ def run_extraction_intervention_experiment(
             f"Preflight planned at most {new_upper_bound} new calls, exceeding "
             f"max_new_calls={max_new_calls}"
         )
+    if new_upper_bound:
+        if not store.supports_trial_lineage:
+            raise RuntimeError(
+                "Extraction/intervention store lacks DB-backed trial lineage; "
+                "migrate it explicitly before making new provider calls"
+            )
+        _require_lineage_for_new_calls(existing_by_logical)
     if preflight_only:
         return {
+            "requested_experiment_run_identity_sha256": (
+                experiment_run.experiment_run_identity_sha256
+            ),
+            "matched_experiment_run_identities": sorted(
+                static_matched_runs | dynamic_matched_runs
+            ),
             "planned_trials": static_planned + dynamic_upper_bound,
             "new_call_upper_bound": new_upper_bound,
             "inserted_trials": 0,
             "skipped_existing_trials": static_skipped + dynamic_skipped,
         }
 
+    if new_upper_bound == 0:
+        return {
+            "requested_experiment_run_identity_sha256": (
+                experiment_run.experiment_run_identity_sha256
+            ),
+            "experiment_run_identities": sorted(
+                static_matched_runs | dynamic_matched_runs
+            ),
+            "planned_trials": static_planned + dynamic_upper_bound,
+            "new_call_upper_bound": 0,
+            "inserted_trials": 0,
+            "skipped_existing_trials": static_skipped + dynamic_skipped,
+        }
+
+    store.register_experiment_run(experiment_run)
     for case in case_list:
         store.upsert_case(case)
     static_inserted, static_runtime_skipped = _execute_calls(
@@ -994,6 +1366,7 @@ def run_extraction_intervention_experiment(
         store,
         existing_by_logical,
         provider_provenance,
+        experiment_run,
         progress_every,
         repetitions,
         replicate_start,
@@ -1007,7 +1380,7 @@ def run_extraction_intervention_experiment(
         replicate_start,
         order_seed + 1,
     )
-    model_planned, model_skipped = _validate_plan(
+    model_planned, model_skipped, model_matched_runs = _validate_plan(
         model_calls,
         existing_by_logical,
         provider.name,
@@ -1023,12 +1396,22 @@ def run_extraction_intervention_experiment(
         store,
         existing_by_logical,
         provider_provenance,
+        experiment_run,
         progress_every,
         repetitions,
         replicate_start,
         inserted_start=static_inserted,
     )
+    actual_run_identities = static_matched_runs | model_matched_runs
+    if static_inserted or model_inserted:
+        actual_run_identities.add(
+            experiment_run.experiment_run_identity_sha256
+        )
     return {
+        "requested_experiment_run_identity_sha256": (
+            experiment_run.experiment_run_identity_sha256
+        ),
+        "experiment_run_identities": sorted(actual_run_identities),
         "planned_trials": static_planned + model_planned,
         "new_call_upper_bound": new_upper_bound,
         "inserted_trials": static_inserted + model_inserted,
