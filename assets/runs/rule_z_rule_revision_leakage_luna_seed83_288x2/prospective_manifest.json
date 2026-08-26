@@ -1,0 +1,62 @@
+{
+  "status": "prospectively_registered_before_live_calls",
+  "task_type": "rule_z_rule_revision_leakage",
+  "packet_schema_version": "rule_z_rule_revision_leakage.packet.v1",
+  "prompt_contract_version": "rule_z_rule_revision_leakage.prompt.v1",
+  "score_schema_version": "rule_z_rule_revision_leakage.score.v2",
+  "lineage_schema_version": "rule_z_rule_revision_leakage.lineage.v1",
+  "seed": 83,
+  "case_count": 288,
+  "case_surface_sha256": "188393c3c93ebf5f6c71c79d82f3f53e3dd3a97a7ded25e4c9caec2dc766e4a2",
+  "cases_per_cell": 4,
+  "cell_count": 72,
+  "answer_transition_counts": {
+    "conflict_to_no": 48,
+    "conflict_to_yes": 48,
+    "no_to_conflict": 48,
+    "no_to_yes": 48,
+    "yes_to_conflict": 48,
+    "yes_to_no": 48
+  },
+  "mutation_family_counts": {
+    "antecedent_rebind": 72,
+    "consequent_flip": 72,
+    "priority_reversal": 72,
+    "rule_retirement_replacement": 72
+  },
+  "history_load_counts": {
+    "8": 96,
+    "16": 96,
+    "32": 96
+  },
+  "repetitions": 2,
+  "replicate_start": 0,
+  "conditions_per_case_replicate": 7,
+  "static_calls": 2304,
+  "receiver_phase_calls": 1728,
+  "sender_dependent_receiver_calls": 1152,
+  "planned_calls": 4032,
+  "provider_suite_max_new_calls": 4032,
+  "static_execution_order_seed": 11803,
+  "receiver_execution_order_seed": 11804,
+  "provider_config_path": "expression_tomography/config/providers.openai_gpt_5_6_luna_rule_revision.json",
+  "provider": "openai-gpt-5.6-luna-low-rule-revision",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "low",
+  "temperature": null,
+  "max_tokens": 4000,
+  "surface_token_audit": {
+    "library": "tiktoken",
+    "version": "0.12.0",
+    "encoding": "o200k_base",
+    "max_oracle_packet_tokens": 2186,
+    "max_sender_prompt_tokens": 4232,
+    "max_direct_prompt_tokens": 2066,
+    "max_receiver_prompt_tokens": 2273
+  },
+  "provider_config_sha256": "23ddf7976a1520f739f0379829b44ce8379c06d38a3f7aa1e4238d9d136a4b56",
+  "experiment_run_identity_sha256": "0e1a6f342fd3d5e5b10b2b2a97ff4ff7624e6c2691c51886b8c237072a1f2c1a",
+  "preflight_provider_calls": 0,
+  "live_provider_calls_made": 0,
+  "protocol": "docs/rule_z_rule_revision_leakage_protocol_2026_08_26.md"
+}

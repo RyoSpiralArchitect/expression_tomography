@@ -34,6 +34,7 @@ et-rule-z-extraction-intervention-compare = "expression_tomography.tasks.rule_z.
 et-rule-z-extraction-intervention-migrate = "expression_tomography.tasks.rule_z.extraction_intervention_migration:main"
 et-rule-z-extraction-intervention-lineage-migrate = "expression_tomography.tasks.rule_z.extraction_intervention_lineage_migration:main"
 et-rule-z-null-cue-surface = "expression_tomography.tasks.rule_z.extraction_intervention_null_cue:main"
+et-rule-z-rule-revision-leakage = "expression_tomography.tasks.rule_z.rule_revision_leakage_task:main"
 et-metaphor-transfer = "expression_tomography.tasks.metaphor_transfer.task:main"
 
 [tool.setuptools.packages.find]

@@ -256,6 +256,36 @@ the suite stops with zero calls.
 Resume also binds the complete task case surface. Changing `--seed`, `--worlds`,
 or stored case content fails before planning calls and requires a fresh database.
 
+## Rule-Z Rule Revision Leakage
+
+The rule-revision probe tests whether a prompt-local v1 rule continues to act
+as current after an authoritative v2 update:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.rule_revision_leakage_task \
+  --seed 83 --repetitions 2 --order-seed 11803 \
+  --max-new-calls 4032 \
+  --provider-config expression_tomography/config/providers.openai_gpt_5_6_luna_rule_revision.json \
+  --db results/expression_tomography/rule_revision_luna.sqlite \
+  --report-dir results/expression_tomography/rule_revision_luna_reports
+```
+
+The fixed surface contains 288 old-to-new transitions, balanced across all six
+changed answer directions, four revision families, three rule-history loads,
+and four opaque variants. Each of two replicates makes seven calls: fresh old
+and new direct controls, delta and full-restatement sender packets, receivers
+for both packets, and an oracle-current receiver control. Sender responses are
+frozen before the dependent receiver prompt is built, and every receiver row
+is bound to its exact upstream generation and assessment identities.
+
+Strict leakage requires an old rule atom in a current packet field and an
+answer matching the old oracle. A correctly labeled historical atom inside
+`revision_record` is not leakage. Current-surface computation lag,
+mixed-version fusion, receiver-only leakage, inherited leakage, and repair by
+full restatement remain separate deterministic scores. The prospective design,
+call budget, stop rules, and interpretation boundary are frozen in
+`docs/rule_z_rule_revision_leakage_protocol_2026_08_26.md`.
+
 ## Metaphor Transfer Smoke
 
 ```bash
