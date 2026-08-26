@@ -1,0 +1,256 @@
+{
+  "manifest_version": "rule_z_extraction_intervention.run.v1",
+  "status": "complete",
+  "local_run_date": "2026-08-26",
+  "secrets_stored": false,
+  "implementation": {
+    "branch": "SpiralReality/luna-extraction-scaleup",
+    "base_commit": "2c2e1df2065a1586f956da2113ba817f19d4cdd3",
+    "preregistration_commit": "b5139bca2b918ce2c6d2ed0490aac630f195c992",
+    "post_run_analysis_commit": "33f3d44fad97c75ca0976d4da4905158d8a2192e",
+    "inherited_protocol": "docs/rule_z_extraction_intervention_protocol_2026_08_23.md",
+    "inherited_protocol_sha256": "59c299b9603ca4f6fc510d6cab1d072622dc25bdfc98ce532f58515091221119",
+    "scaleup_protocol": "docs/rule_z_extraction_intervention_scaleup_protocol_2026_08_26.md",
+    "scaleup_protocol_sha256": "1df17f5d380d200fe8a8629b91c2133e0f88b7b89cb9943f546cda5d296a60a9",
+    "research_note": "docs/live_rule_z_extraction_intervention_luna_scaleup_note_2026_08_26.md",
+    "research_note_sha256": "3b208a241d549c18d0e8076f950814fc4938ee8aae9b8849009124d9c6ea8ea2",
+    "post_run_analysis_changed_provider_contract": false,
+    "post_run_analysis_changed_prompt_parse_or_score": false
+  },
+  "generator": {
+    "task_type": "rule_z_extraction_intervention",
+    "world_seed": 68,
+    "worlds": 16,
+    "artifact_variants_per_world": 4,
+    "cases": 64,
+    "replicates": 2,
+    "replicate_start": 0,
+    "conditions_per_case_replicate": 22,
+    "planned_successful_trials": 2816,
+    "static_order_seed": 9701,
+    "model_literal_order_seed": 9702,
+    "artifact_families": {
+      "current_complete": 16,
+      "counterfactual_complete": 16,
+      "dependency_omitted": 16,
+      "dependency_contradictory": 16
+    },
+    "intervention_kinds": {
+      "fact_removal": 8,
+      "edge_reversal": 8
+    },
+    "pilot_case_hash_overlap": 0
+  },
+  "provider": {
+    "name": "openai-gpt-5.6-luna-low",
+    "model": "gpt-5.6-luna",
+    "type": "openai_compatible",
+    "config_file": "provider_config.json",
+    "config_file_sha256": "ec09af8685b21682c7e957ec78f6efb322ffe75e2b920cd1f29c47b5c796ed69",
+    "stored_provider_config_sha256": "c362b649ef693af847c2ceaf2f6b6950feddb8a0973da178e023ba59f849ec08",
+    "request_contract_version": "openai_compatible.chat_completions.temperature_optional.v3",
+    "max_tokens": 1400,
+    "temperature": null,
+    "temperature_request_mode": "provider_default",
+    "reasoning_effort": "low",
+    "api_key_env": "OPENAI_API_KEY"
+  },
+  "experiment_run": {
+    "contract_version": "rule_z_extraction_intervention.experiment_run.v1",
+    "case_surface_sha256": "861d519f03b23fbb9713dba153c3cc51b3bb1ce45d2211a830748e4662d82cc7",
+    "experiment_run_identity_sha256": "cfd74d41595c43ee9179d7f9b73ea1bd6ec2bba0d5cb49491284960059cd52fa",
+    "experiment_run_rows": 1,
+    "created_at_utc": "2026-08-26 07:27:58"
+  },
+  "execution": {
+    "created_at_utc_min": "2026-08-26 07:28:01",
+    "created_at_utc_max": "2026-08-26 09:59:13",
+    "process_boundaries": [
+      {
+        "process": 1,
+        "skipped_existing_trials": 0,
+        "inserted_trials": 1200,
+        "stop": "connection_reset"
+      },
+      {
+        "process": 2,
+        "skipped_existing_trials": 1200,
+        "inserted_trials": 39,
+        "stop": "tls_handshake_timeout"
+      },
+      {
+        "process": 3,
+        "skipped_existing_trials": 1239,
+        "inserted_trials": 6,
+        "stop": "read_timeout"
+      },
+      {
+        "process": 4,
+        "skipped_existing_trials": 1245,
+        "inserted_trials": 1571,
+        "stop": "complete"
+      }
+    ],
+    "successful_stored_trials": 2816,
+    "failed_transport_attempts": 3,
+    "observed_process_level_request_attempts": 2819,
+    "performance_dependent_early_stop": false,
+    "case_count": 64,
+    "trial_count": 2816,
+    "complete_case_replicate_blocks": 128,
+    "unique_logical_identities": 2816,
+    "unique_generation_identities": 2816,
+    "unique_assessment_identities": 2816,
+    "parse_failures": 0,
+    "schema_failures": 0,
+    "sqlite_integrity_check": "ok",
+    "canonical_database_sha256": "f1cfb931367d81d643ebb4fac748cf303ec1d280fc482b5f1a8a48a8d9fc89e3",
+    "exact_rerun": {
+      "inserted_trials": 0,
+      "skipped_existing_trials": 2816,
+      "provider_calls": 0,
+      "database_sha256_unchanged": true
+    }
+  },
+  "provenance": {
+    "artifact_schema_version": "rule_z_extraction_intervention.artifact.v1",
+    "prompt_contract_version": "rule_z_extraction_intervention.prompt.v1",
+    "score_schema_version": "rule_z_extraction_intervention.score.v3",
+    "generation_identity_version": "rule_z_extraction_intervention.generation_identity.v1",
+    "assessment_identity_version": "rule_z_extraction_intervention.assessment_identity.v1",
+    "raw_response_reparse_validation_trials": 2816,
+    "prompt_matches": 2816,
+    "parse_matches": 2816,
+    "score_matches": 2816,
+    "validated_lineage_trials": 2816,
+    "validated_experiment_runs": 1,
+    "validated_model_upstream_references": 2048,
+    "model_literal_rows_bound_to_eight_upstream_identities": 256,
+    "provider_calls_during_revalidation": 0,
+    "preexisting_report_csvs_byte_identical_after_analysis_extension": 6
+  },
+  "primary_results": {
+    "source_supported_accuracy_by_compute_path": {
+      "direct_source": {
+        "correct": 207,
+        "n": 256,
+        "accuracy": 0.80859375
+      },
+      "oracle_literal": {
+        "correct": 206,
+        "n": 256,
+        "accuracy": 0.8046875
+      },
+      "model_literal": {
+        "correct": 166,
+        "n": 256,
+        "accuracy": 0.6484375
+      }
+    },
+    "source_supported_correct_by_artifact_and_path": {
+      "current_complete": {
+        "direct_source": 64,
+        "oracle_literal": 64,
+        "model_literal": 64,
+        "n_per_path": 64
+      },
+      "counterfactual_complete": {
+        "direct_source": 42,
+        "oracle_literal": 46,
+        "model_literal": 46,
+        "n_per_path": 64
+      },
+      "dependency_omitted": {
+        "direct_source": 51,
+        "oracle_literal": 45,
+        "model_literal": 44,
+        "n_per_path": 64
+      },
+      "dependency_contradictory": {
+        "direct_source": 50,
+        "oracle_literal": 51,
+        "model_literal": 12,
+        "n_per_path": 64
+      }
+    },
+    "paired_target_cue": {
+      "compute_direct_source": {
+        "pairs": 128,
+        "improved": 10,
+        "regressed": 3,
+        "net": 7
+      },
+      "compute_oracle_literal": {
+        "pairs": 128,
+        "improved": 15,
+        "regressed": 3,
+        "net": 12
+      },
+      "compute_model_literal": {
+        "pairs": 128,
+        "improved": 15,
+        "regressed": 3,
+        "net": 12
+      },
+      "literal_active_conclusions": {
+        "pairs": 128,
+        "improved": 24,
+        "regressed": 4,
+        "net": 20
+      },
+      "literal_active_rules": {
+        "pairs": 128,
+        "improved": 5,
+        "regressed": 15,
+        "net": -10
+      }
+    },
+    "model_literal_decomposition": {
+      "rows": 256,
+      "all_upstream_values_exact": 144,
+      "all_upstream_values_exact_compute_correct": 115,
+      "all_upstream_values_exact_compute_failed": 29,
+      "support_only_failure_rows": 14,
+      "answer_or_active_failure_rows": 15,
+      "failure_case_hashes": 12,
+      "failure_base_pairs": 9,
+      "upstream_values_inexact_compute_correct": 51,
+      "counterfactual_complete_failures": 15,
+      "dependency_omitted_failures": 14
+    },
+    "replicate_response_pairs": {
+      "pairs": 1408,
+      "byte_identical": 1173,
+      "different": 235,
+      "correctness_disagree": 158,
+      "both_correct": 1037,
+      "both_wrong": 213
+    }
+  },
+  "frozen_artifacts": {
+    "prospective_manifest.json": "148eaa9f363d2c4a27416779e62f5078799cce5af434d1cd3175cbf6b2afcfc4",
+    "provider_config.json": "ec09af8685b21682c7e957ec78f6efb322ffe75e2b920cd1f29c47b5c796ed69",
+    "rule_z_extraction_intervention_report.md": "75cfa84c1cee18298bc4837ed98ec078164c07cd8de112d32257ecf6d1638879",
+    "rule_z_extraction_intervention_summary.json": "6a143b7ac1ed731fa24ca06050a7a22c3600fbfb19f065a30283d39a7bcbd66d",
+    "rule_z_intervention_computation_summary.csv": "7459e394289d9160a048241a8a35611a38f25c88c1bba48228a22e0bcc00fc29",
+    "rule_z_intervention_computation_trials.csv": "8e189f102e2276768e9d9c74650b0dd2ea546cf9a176d85b85c7691d36dce86e",
+    "rule_z_literal_extraction_summary.csv": "774065d23b8cad70b695b255f9700892681c78caf7e7f7507c986db33664bb20",
+    "rule_z_literal_extraction_trials.csv": "46623096c529bf6a1b2d4c0baa1f020c3cbf908af273521a22b70329db5fbe61",
+    "rule_z_model_literal_decomposition.csv": "ba31635371e213976659ee3a12180e6c91303497840ea3c179ab285a4d0398c7",
+    "rule_z_model_literal_failure_cases.csv": "5a00342f3dc8ebed23cadc39534e50dcc55509aace537a616df5346acdfa9375",
+    "rule_z_replicate_pairs.csv": "08107b377ae0421f3afed1cf8e9454ee2a33701a03e55afe20b9bd7bfd5709fa",
+    "rule_z_replicate_summary.csv": "e7a9731d091e15789ab71649d7819bbec8edac513b63898a3df4f0d568231251",
+    "rule_z_target_cue_pairs.csv": "cce7559fafb8a613b263550b9b538e5321cc96e3c1f5ec85e867ed32abf76fb2",
+    "rule_z_target_cue_pairs_by_artifact.csv": "71e6a809df4888e228cedb6a05af7140fcba9d7294b039a707f22372c3975425",
+    "trials.sqlite": "f1cfb931367d81d643ebb4fac748cf303ec1d280fc482b5f1a8a48a8d9fc89e3"
+  },
+  "interpretation_boundaries": [
+    "Source-supported correctness is primary; private-world agreement on incomplete or contradictory artifacts is diagnostic only.",
+    "A complete source with unresolved object-level conclusions is not a contradictory source.",
+    "Exact upstream typed values localize a failure after extraction, but do not by themselves distinguish object-level computation from support-status calibration.",
+    "The target cue has paired gains and regressions and is not interpreted as a uniform capacity increase.",
+    "Two repetitions over sixteen worlds expose case-conditioned variability but do not estimate broad provider performance.",
+    "This controlled surface does not establish a pre-expression latent state or a dominant language bottleneck for general intelligence.",
+    "Length-matched null cues, crossed providers, new relations, and local training are separate future probes and are not retroactively added to this run."
+  ]
+}
