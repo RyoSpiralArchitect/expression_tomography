@@ -699,6 +699,45 @@ class ExtractionInterventionTests(unittest.TestCase):
             )
         )
 
+    def test_populated_store_rejects_changed_cue_contract_before_calls(self) -> None:
+        cue_modes = ("target_preannounced", LENGTH_MATCHED_NULL_CUE_MODE)
+        surface = self._null_cue_surface()
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "trials.sqlite")
+            try:
+                first_provider = CountingRuleZMockProvider()
+                run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    first_provider,
+                    store,
+                    repetitions=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                )
+                second_provider = CountingRuleZMockProvider()
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "different cue-surface contract",
+                ):
+                    run_extraction_intervention_experiment(
+                        self.pair_cases,
+                        second_provider,
+                        store,
+                        repetitions=1,
+                        max_new_calls=88,
+                        progress_every=0,
+                        cue_modes=cue_modes,
+                        cue_surface_contract=surface,
+                    )
+                rows = store.fetch_trials(task_type=TASK_TYPE)
+                runs = store.fetch_experiment_runs(task_type=TASK_TYPE)
+            finally:
+                store.close()
+        self.assertEqual(first_provider.call_count, 88)
+        self.assertEqual(second_provider.call_count, 0)
+        self.assertEqual(len(rows), 88)
+        self.assertEqual(len(runs), 1)
+
     def test_cross_run_comparison_is_read_only_complete_and_bounded(self) -> None:
         cue_modes = ("target_preannounced", LENGTH_MATCHED_NULL_CUE_MODE)
         surface = self._null_cue_surface()
@@ -845,6 +884,65 @@ class ExtractionInterventionTests(unittest.TestCase):
                 with self.assertRaisesRegex(
                     RuntimeError,
                     "block coverage drift: missing=1",
+                ):
+                    write_extraction_intervention_cross_run_comparison(
+                        prior_read_only,
+                        current_read_only,
+                        root / "comparison",
+                    )
+            finally:
+                prior_read_only.close()
+                current_read_only.close()
+
+    def test_cross_run_comparison_revalidates_scores_before_reading(self) -> None:
+        cue_modes = ("target_preannounced", LENGTH_MATCHED_NULL_CUE_MODE)
+        surface = self._null_cue_surface()
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            prior_store = ExperimentStore(root / "prior.sqlite")
+            current_store = ExperimentStore(root / "current.sqlite")
+            try:
+                run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    CountingRuleZMockProvider(),
+                    prior_store,
+                    repetitions=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                )
+                run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    CountingRuleZMockProvider(),
+                    current_store,
+                    repetitions=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                    cue_modes=cue_modes,
+                    cue_surface_contract=surface,
+                )
+                row = current_store.fetch_trials(task_type=TASK_TYPE)[0]
+                corrupted_score = dict(row["score"])
+                corrupted_score["correct"] = not bool(
+                    corrupted_score.get("correct")
+                )
+                current_store.conn.execute(
+                    "UPDATE trials SET score_json=? WHERE id=?",
+                    (json.dumps(corrupted_score, sort_keys=True), row["id"]),
+                )
+                current_store.conn.commit()
+            finally:
+                prior_store.close()
+                current_store.close()
+
+            prior_read_only = ExperimentStore(root / "prior.sqlite", read_only=True)
+            current_read_only = ExperimentStore(
+                root / "current.sqlite",
+                read_only=True,
+            )
+            try:
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "(?:score_sha256|Score) mismatch",
                 ):
                     write_extraction_intervention_cross_run_comparison(
                         prior_read_only,

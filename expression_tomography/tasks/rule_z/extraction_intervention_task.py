@@ -645,6 +645,41 @@ def _validate_provider_resume_contract(
             )
 
 
+def _validate_provider_cue_surface_contract(
+    store: ExperimentStore,
+    existing_by_logical: dict[LogicalIdentity, StoredCall],
+    provider_name: str,
+    requested_run: ExperimentRun,
+) -> None:
+    runs = {
+        str(run["experiment_run_identity_sha256"]): run
+        for run in store.fetch_experiment_runs(task_type=TASK_TYPE)
+    }
+    requested_contract = {
+        "cue_modes": requested_run.contract["cue_modes"],
+        "cue_surface_contract": requested_run.contract.get(
+            "cue_surface_contract"
+        ),
+    }
+    for logical, stored in existing_by_logical.items():
+        if logical[0] != provider_name:
+            continue
+        run_identity = str(stored.row["experiment_run_identity_sha256"])
+        stored_run = runs[run_identity]
+        stored_contract = stored_run["contract"]
+        stored_cue_contract = {
+            "cue_modes": stored_contract["cue_modes"],
+            "cue_surface_contract": stored_contract.get(
+                "cue_surface_contract"
+            ),
+        }
+        if stable_json(stored_cue_contract) != stable_json(requested_contract):
+            raise RuntimeError(
+                f"Stored provider {provider_name} belongs to a different "
+                "cue-surface contract; use a fresh database"
+            )
+
+
 def _require_lineage_for_new_calls(
     existing_by_logical: dict[LogicalIdentity, StoredCall],
 ) -> None:
@@ -1413,6 +1448,12 @@ def run_extraction_intervention_experiment(
                 "migrate it explicitly before making new provider calls"
             )
         _require_lineage_for_new_calls(existing_by_logical)
+        _validate_provider_cue_surface_contract(
+            store,
+            existing_by_logical,
+            provider.name,
+            experiment_run,
+        )
     if preflight_only:
         return {
             "requested_experiment_run_identity_sha256": (

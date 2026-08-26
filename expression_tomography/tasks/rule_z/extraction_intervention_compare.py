@@ -17,6 +17,9 @@ from .extraction_intervention import (
     LITERAL_FIELDS,
     TASK_TYPE,
 )
+from .extraction_intervention_task import (
+    validate_extraction_intervention_store,
+)
 
 
 CROSS_RUN_COMPARISON_VERSION = (
@@ -423,6 +426,8 @@ def compare_extraction_intervention_runs(
     list[dict[str, Any]],
     list[dict[str, Any]],
 ]:
+    prior_validation = validate_extraction_intervention_store(prior_store)
+    current_validation = validate_extraction_intervention_store(current_store)
     case_hashes = _validate_case_surface(prior_store, current_store)
     prior_rows = prior_store.fetch_trials(task_type=TASK_TYPE)
     current_rows = current_store.fetch_trials(task_type=TASK_TYPE)
@@ -495,6 +500,12 @@ def compare_extraction_intervention_runs(
             "prompt_contracts_matched": True,
             "score_contracts_matched": True,
             "comparison_identities_complete": True,
+            "prior_store_revalidated_trials": prior_validation[
+                "validated_trials"
+            ],
+            "current_store_revalidated_trials": current_validation[
+                "validated_trials"
+            ],
             "provider_calls": 0,
         },
         "prior_run": prior_run,
