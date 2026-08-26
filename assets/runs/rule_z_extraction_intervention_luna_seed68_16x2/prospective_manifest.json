@@ -1,0 +1,107 @@
+{
+  "manifest_version": "rule_z_extraction_intervention.prospective_run.v1",
+  "status": "pre_registered",
+  "pre_registered_at_utc": "2026-08-26T07:23:28Z",
+  "observed_provider_outputs_before_registration": 0,
+  "secrets_stored": false,
+  "implementation": {
+    "branch": "SpiralReality/luna-extraction-scaleup",
+    "base_commit": "2c2e1df2065a1586f956da2113ba817f19d4cdd3",
+    "inherited_protocol": "docs/rule_z_extraction_intervention_protocol_2026_08_23.md",
+    "inherited_protocol_sha256": "59c299b9603ca4f6fc510d6cab1d072622dc25bdfc98ce532f58515091221119",
+    "scaleup_protocol": "docs/rule_z_extraction_intervention_scaleup_protocol_2026_08_26.md",
+    "scaleup_protocol_sha256": "1df17f5d380d200fe8a8629b91c2133e0f88b7b89cb9943f546cda5d296a60a9",
+    "generator_sha256": "03e2450b869089ca87fd1749a2cdf2fedb6c07dd79c191060f35480a607a8b7e",
+    "runner_sha256": "b4a2b8c19b685000e2c3acc0a4aa26ce09fe3a29b54acf85641197952c09d076"
+  },
+  "generator": {
+    "task_type": "rule_z_extraction_intervention",
+    "world_seed": 68,
+    "worlds": 16,
+    "artifact_variants_per_world": 4,
+    "cases": 64,
+    "replicates": 2,
+    "replicate_start": 0,
+    "conditions_per_case_replicate": 22,
+    "planned_trials": 2816,
+    "static_order_seed": 9701,
+    "model_literal_order_seed": 9702,
+    "artifact_families": {
+      "current_complete": 16,
+      "counterfactual_complete": 16,
+      "dependency_omitted": 16,
+      "dependency_contradictory": 16
+    },
+    "intervention_kinds": {
+      "fact_removal": 8,
+      "edge_reversal": 8
+    },
+    "answer_transitions": {
+      "conflict_to_no": 4,
+      "conflict_to_yes": 4,
+      "no_to_conflict": 2,
+      "no_to_yes": 2,
+      "yes_to_conflict": 2,
+      "yes_to_no": 2
+    },
+    "pilot_case_hash_overlap": 0
+  },
+  "provider": {
+    "name": "openai-gpt-5.6-luna-low",
+    "model": "gpt-5.6-luna",
+    "type": "openai_compatible",
+    "config_file": "provider_config.json",
+    "config_file_sha256": "ec09af8685b21682c7e957ec78f6efb322ffe75e2b920cd1f29c47b5c796ed69",
+    "stored_provider_config_sha256": "c362b649ef693af847c2ceaf2f6b6950feddb8a0973da178e023ba59f849ec08",
+    "request_contract_version": "openai_compatible.chat_completions.temperature_optional.v3",
+    "max_tokens": 1400,
+    "temperature": null,
+    "temperature_request_mode": "provider_default",
+    "reasoning_effort": "low",
+    "api_key_env": "OPENAI_API_KEY"
+  },
+  "contract": {
+    "artifact_schema_version": "rule_z_extraction_intervention.artifact.v1",
+    "prompt_contract_version": "rule_z_extraction_intervention.prompt.v1",
+    "score_schema_version": "rule_z_extraction_intervention.score.v3",
+    "experiment_run_contract_version": "rule_z_extraction_intervention.experiment_run.v1",
+    "generation_identity_version": "rule_z_extraction_intervention.generation_identity.v1",
+    "assessment_identity_version": "rule_z_extraction_intervention.assessment_identity.v1",
+    "case_surface_sha256": "861d519f03b23fbb9713dba153c3cc51b3bb1ce45d2211a830748e4662d82cc7",
+    "experiment_run_identity_sha256": "cfd74d41595c43ee9179d7f9b73ea1bd6ec2bba0d5cb49491284960059cd52fa"
+  },
+  "preflight": {
+    "preflight_only": true,
+    "n_cases": 64,
+    "planned_trials": 2816,
+    "new_call_upper_bound": 2816,
+    "max_new_calls": 2816,
+    "inserted_trials": 0,
+    "skipped_existing_trials": 0,
+    "provider_calls": 0
+  },
+  "below_cap_rejection": {
+    "max_new_calls": 2815,
+    "rejected_before_provider_calls": true,
+    "case_rows_written": 0,
+    "trial_rows_written": 0,
+    "experiment_run_rows_written": 0
+  },
+  "primary_estimands": [
+    "source-supported compute accuracy by artifact family, cue mode, and compute path",
+    "paired target-cue transitions separately for dependency omission and contradiction",
+    "count and case distribution of exact-upstream failed-compute model-literal rows",
+    "target-cue gains and regressions for active conclusions and active rules",
+    "case-conditioned replicate disagreement"
+  ],
+  "excluded_from_this_run": [
+    "length-matched null cue",
+    "wrong cue",
+    "new relation types",
+    "mixed-provider extraction and compute paths",
+    "parser changes",
+    "score changes",
+    "performance-dependent early stopping",
+    "selective replicate extension"
+  ]
+}

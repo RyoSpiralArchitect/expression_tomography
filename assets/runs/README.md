@@ -75,6 +75,13 @@ rule_z_model_literal_decomposition.csv
   Paired cue transitions and extraction-exact versus computation-exact
   localization for the composed model-literal path.
 
+rule_z_target_cue_pairs_by_artifact.csv
+rule_z_model_literal_failure_cases.csv
+rule_z_replicate_pairs.csv
+rule_z_replicate_summary.csv
+  Artifact-crossed cue transitions, case-local exact-upstream failures, and
+  matched replicate stability views for scaled extraction/intervention runs.
+
 rule_z_report.md
   Generated report from the run.
 ```
@@ -183,6 +190,14 @@ rule_z_extraction_intervention_luna_seed67_4x2
   is accompanied by raw score-v1 and score-v2 databases plus copy-only
   migration evidence; provider responses were not regenerated during scoring
   calibration.
+
+rule_z_extraction_intervention_luna_seed68_16x2
+  Completed, prospectively registered fourfold world-surface scale-up of the
+  frozen Luna extraction/intervention protocol: 16 worlds, four dependency
+  artifacts, two replicates, and 2,816 stored trials. Includes the canonical
+  database, exact resume and revalidation evidence, crossed cue summaries,
+  exact-upstream failure cases, and matched replicate pairs without changing
+  the declared case, prompt, request, parser, or score contracts.
 
 metaphor_transfer_openai_live
   First OpenAI live metaphor-transfer smoke run.

@@ -521,6 +521,77 @@ class ExtractionInterventionTests(unittest.TestCase):
             self.assertNotIn('"evidence"', row["prompt"])
             self.assertIn("LITERAL_LEDGER_JSON", row["prompt"])
 
+    def test_report_emits_artifact_cue_and_replicate_views(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            report_dir = Path(td) / "reports"
+            store = ExperimentStore(Path(td) / "trials.sqlite")
+            try:
+                result = run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    CountingRuleZMockProvider(),
+                    store,
+                    repetitions=2,
+                    max_new_calls=176,
+                    progress_every=0,
+                )
+                summary = write_extraction_intervention_report(store, report_dir)
+                report_files = {
+                    path.name for path in report_dir.iterdir() if path.is_file()
+                }
+            finally:
+                store.close()
+
+        self.assertEqual(result["inserted_trials"], 176)
+        self.assertEqual(len(summary["paired_cue_by_artifact_summary"]), 44)
+        self.assertTrue(
+            all(
+                row["n_pairs"] == 2
+                for row in summary["paired_cue_by_artifact_summary"]
+            )
+        )
+        self.assertEqual(len(summary["replicate_summary"]), 88)
+        self.assertTrue(
+            all(row["n_pairs"] == 1 for row in summary["replicate_summary"])
+        )
+        self.assertEqual(
+            summary["replicate_overview"],
+            [
+                {
+                    "provider": "counting-mock",
+                    "n_pairs": 88,
+                    "response_byte_identical": 88,
+                    "response_byte_different": 0,
+                    "response_byte_identical_rate": "1.000",
+                    "correctness_disagree": 0,
+                    "correctness_disagreement_rate": "0.000",
+                    "both_correct": 88,
+                    "both_wrong": 0,
+                }
+            ],
+        )
+        self.assertEqual(
+            summary["model_literal_failure_overview"],
+            [
+                {
+                    "provider": "counting-mock",
+                    "model_literal_rows": 16,
+                    "upstream_all_value_exact_rows": 16,
+                    "value_exact_compute_failed_rows": 0,
+                    "support_only_failure_rows": 0,
+                    "answer_or_active_failure_rows": 0,
+                    "unique_failure_cases": 0,
+                    "unique_failure_base_pairs": 0,
+                }
+            ],
+        )
+        self.assertEqual(summary["model_literal_failure_case_summary"], [])
+        self.assertIn("rule_z_replicate_pairs.csv", report_files)
+        self.assertIn("rule_z_replicate_summary.csv", report_files)
+        self.assertIn(
+            "rule_z_target_cue_pairs_by_artifact.csv",
+            report_files,
+        )
+
     def test_report_completion_requires_each_condition_exactly_once(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             store = ExperimentStore(Path(td) / "trials.sqlite")
