@@ -184,6 +184,13 @@ rule_z_extraction_intervention_luna_seed67_4x2
   migration evidence; provider responses were not regenerated during scoring
   calibration.
 
+rule_z_extraction_intervention_luna_seed68_16x2
+  Prospectively registered fourfold world-surface scale-up of the frozen Luna
+  extraction/intervention protocol: 16 worlds, four dependency artifacts, two
+  replicates, and 2,816 bounded calls. The prospective manifest and protocol
+  are committed before live provider calls; completed evidence will be added
+  without changing the declared case, prompt, request, or score contracts.
+
 metaphor_transfer_openai_live
   First OpenAI live metaphor-transfer smoke run.
 
