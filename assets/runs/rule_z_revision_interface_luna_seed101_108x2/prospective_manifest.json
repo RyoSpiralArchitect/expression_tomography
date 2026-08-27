@@ -10,6 +10,7 @@
     "yes_to_no": 12,
     "yes_to_yes": 12
   },
+  "binding_cue_contract_file_sha256": "86574a340a2392b9a939a790fb613683695562dbd2378a3d37720f71e9517ad3",
   "binding_cue_contract_path": "assets/runs/rule_z_revision_interface_luna_seed101_108x2/binding_cue_contract.json",
   "binding_cue_contract_sha256": "21944addabe33545055a988faa643c0ee11fead067610d666a770651fb072035",
   "case_class_counts": {
@@ -39,7 +40,7 @@
     "T_prose_strong_sender",
     "T_prose_neutral_sender"
   ],
-  "experiment_run_identity_sha256": "07774c8d459b1e79756a736ba688238cce5ef77bb783e221f51891e6f3e74140",
+  "experiment_run_identity_sha256": "1da089ec3be7921ed5fd31043b4c6e2ef1e9c97f70646d9879a5565e824db118",
   "lineage_schema_version": "rule_z_revision_interface.lineage.v1",
   "live_provider_calls_made": 0,
   "max_tokens": 4000,
@@ -55,7 +56,9 @@
   "preflight_provider_calls": 0,
   "prompt_contract_version": "rule_z_revision_interface.prompt.v1",
   "protocol": "docs/rule_z_revision_interface_calibration_protocol_2026_08_27.md",
+  "protocol_sha256": "6fc9676dcd2ee15ac58ea2b23ecb5e46d3dddf124f9bdc9f5760e412cb7d3290",
   "provider": "openai-gpt-5.6-luna-low-revision-interface",
+  "provider_config_file_sha256": "19caa3c1c448706cdf42dd8ffd0c2d8b10157d4382b63151df29948af5b40634",
   "provider_config_path": "expression_tomography/config/providers.openai_gpt_5_6_luna_revision_interface.json",
   "provider_config_sha256": "cbf972da5d0dac39337ea59a634f0c6bb163d6f90331e9c52d10f744f3d434ca",
   "provider_suite_max_new_calls": 3024,
@@ -64,7 +67,7 @@
   "receiver_phase_calls": 432,
   "repetitions": 2,
   "replicate_start": 0,
-  "score_schema_version": "rule_z_revision_interface.score.v1",
+  "score_schema_version": "rule_z_revision_interface.score.v2",
   "seed": 101,
   "static_calls": 2592,
   "static_conditions": [

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import copy
+import hashlib
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -143,6 +145,60 @@ class RuleRevisionSemanticDiagnosticsTests(unittest.TestCase):
                     "rule_revision_semantic_diagnostics_summary.json",
                 },
             )
+
+    def test_frozen_diagnostics_are_bound_to_source_and_generator(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        run_dir = (
+            root
+            / "assets/runs/"
+            "rule_z_rule_revision_leakage_luna_seed83_288x2"
+        )
+        manifest = json.loads(
+            (run_dir / "run_manifest.json").read_text(encoding="utf-8")
+        )
+        binding = manifest["semantic_diagnostics_v1"]
+        summary = json.loads(
+            (
+                run_dir
+                / "semantic_diagnostics_v1/"
+                "rule_revision_semantic_diagnostics_summary.json"
+            ).read_text(encoding="utf-8")
+        )
+
+        self.assertEqual(
+            binding["source_database_sha256"],
+            hashlib.sha256(
+                (run_dir / "trials.sqlite").read_bytes()
+            ).hexdigest(),
+        )
+        self.assertEqual(
+            binding["source_database_sha256"],
+            summary["source_database_sha256"],
+        )
+        self.assertEqual(
+            binding["source_run_identity_sha256"],
+            summary["source_run_identities"][0],
+        )
+        self.assertEqual(
+            binding["diagnostic_contract_version"],
+            summary["diagnostic_contract_version"],
+        )
+        self.assertEqual(
+            binding["module_sha256"],
+            hashlib.sha256(
+                (root / binding["module"]).read_bytes()
+            ).hexdigest(),
+        )
+        for relative_path, expected_sha256 in binding["artifacts"].items():
+            with self.subTest(relative_path=relative_path):
+                actual = hashlib.sha256(
+                    (run_dir / relative_path).read_bytes()
+                ).hexdigest()
+                self.assertEqual(actual, expected_sha256)
+                self.assertEqual(
+                    manifest["artifact_sha256"][relative_path],
+                    expected_sha256,
+                )
 
 
 if __name__ == "__main__":

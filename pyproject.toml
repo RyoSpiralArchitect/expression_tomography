@@ -19,7 +19,7 @@ keywords = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest==9.0.2", "ruff==0.15.2"]
+dev = ["pytest==9.0.2", "ruff==0.15.2", "tiktoken==0.12.0"]
 cue = ["tiktoken==0.12.0"]
 hf = ["torch", "transformers"]
 

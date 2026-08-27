@@ -44,6 +44,10 @@ def _sha256_json(value: Any) -> str:
     return hashlib.sha256(stable_json(value).encode("utf-8")).hexdigest()
 
 
+def _sha256_file(path: str | Path) -> str:
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
 def _token_audit(
     cases: list[Any],
     cue_contract: dict[str, Any],
@@ -234,7 +238,9 @@ def build_prospective_manifest(
         "binding_cue_contract_sha256": preflight[
             "binding_cue_contract_sha256"
         ],
+        "binding_cue_contract_file_sha256": _sha256_file(cue_path),
         "provider_config_path": str(provider_config_path),
+        "provider_config_file_sha256": _sha256_file(provider_config_path),
         "provider": providers[0].name,
         "model": provider_config.model,
         "reasoning_effort": provider_config.reasoning_effort,
@@ -248,6 +254,7 @@ def build_prospective_manifest(
         "preflight_provider_calls": 0,
         "live_provider_calls_made": 0,
         "protocol": protocol_path,
+        "protocol_sha256": _sha256_file(protocol_path),
     }
 
 

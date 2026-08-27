@@ -25,7 +25,7 @@ from .rule_revision_semantic_diagnostics import diagnose_revision_record
 TASK_TYPE = "rule_z_revision_interface_calibration"
 CASE_SURFACE_VERSION = "rule_z_revision_interface.surface.v1"
 PROMPT_CONTRACT_VERSION = "rule_z_revision_interface.prompt.v1"
-SCORE_SCHEMA_VERSION = "rule_z_revision_interface.score.v1"
+SCORE_SCHEMA_VERSION = "rule_z_revision_interface.score.v2"
 LINEAGE_SCHEMA_VERSION = "rule_z_revision_interface.lineage.v1"
 READOUT_SCHEMA_VERSION = "rule_z_revision_interface.readout.v1"
 
@@ -1039,17 +1039,64 @@ def score_history_only(
 def score_prose_sender(raw_response: str, payload: dict[str, Any]) -> dict[str, Any]:
     text = raw_response.strip()
     lines = text.splitlines()
-    labelled_line = any(
+    labelled_or_list_line = any(
         re.match(
-            r"^\s*(?:[-*]\s+|(?:current|history|facts|rules|priority)\s*:)",
+            r"^\s*(?:#{1,6}\s+|[-*+]\s+|\d+[.)]\s+|\|.*\||"
+            r"(?:current|history|historical|facts?|rules?|priority|revision|"
+            r"answer|active\s+conclusions?)\s*:)",
             line,
             flags=re.I,
         )
         for line in lines
     )
+    try:
+        decoded = json.loads(text)
+    except (json.JSONDecodeError, TypeError):
+        decoded = None
+    json_container = isinstance(decoded, (dict, list))
+    json_field_syntax = bool(
+        re.search(
+            r'"(?:current_version|current_rules|current_priority|'
+            r'revision_record|active_conclusions|answer)"\s*:',
+            text,
+            flags=re.I,
+        )
+    )
+    final_label = bool(
+        re.search(
+            r"\b(?:final\s+)?(?:answer|label|outcome|result)\s*"
+            r"(?:is|:)\s*(?:yes|no|conflict)\b",
+            text,
+            flags=re.I,
+        )
+        or re.search(
+            r"\b(?:therefore|thus)\s*,?\s*(?:yes|no|conflict)\s*[.!]?\s*$",
+            text,
+            flags=re.I,
+        )
+        or re.fullmatch(r"(?:yes|no|conflict)[.!]?", text, flags=re.I)
+    )
+    paragraph_count = len(
+        [part for part in re.split(r"\n\s*\n", text) if part.strip()]
+    )
+    ordinary_prose_shape = (
+        bool(text)
+        and paragraph_count == 1
+        and not labelled_or_list_line
+        and not json_container
+        and not json_field_syntax
+        and "```" not in text
+        and not final_label
+    )
     return {
         "message_nonempty": bool(text),
-        "ordinary_prose_shape": bool(text) and not labelled_line,
+        "ordinary_prose_shape": ordinary_prose_shape,
+        "labelled_or_list_shape": labelled_or_list_line,
+        "json_container_shape": json_container,
+        "json_field_syntax": json_field_syntax,
+        "code_fence_present": "```" in text,
+        "final_label_present": final_label,
+        "paragraph_count": paragraph_count,
         "characters": len(text),
         "whitespace_words": len(text.split()),
         "correct": None,

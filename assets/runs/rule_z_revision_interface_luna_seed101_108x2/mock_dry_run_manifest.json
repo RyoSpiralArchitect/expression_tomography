@@ -5,6 +5,8 @@
   "case_count": 108,
   "repetitions": 2,
   "conditions_per_case_replicate": 14,
+  "score_schema_version": "rule_z_revision_interface.score.v2",
+  "mock_experiment_run_identity_sha256": "79ffd71a45bbc8bf5781a1a5b015ad990b7f996b70f548dcc89c89bf8ba2979e",
   "first_run_inserted_trials": 3024,
   "exact_resume_inserted_trials": 0,
   "paired_case_replicates": 216,
@@ -28,13 +30,13 @@
     "primary_prose_sender_status": "identified"
   },
   "temporary_evidence_hashes": {
-    "trials_sqlite_sha256": "07714671250ad298e03802b7b9beb13da25755b575ccee8c7db27fa01ba006f6",
+    "trials_sqlite_sha256": "98d1177de5713d1ae2da4dacc675aaf402c71a83db294ba8afcf97370ab25334",
     "summary_json_sha256": "3593950999d55dc57a48c7a92d54b3a1ea1e5f4e202940cb736c766a9d126546",
     "report_md_sha256": "84224ece98f4bc267f485008a8e864bef5dc538a2522eda0cd2cb24044723b1b",
     "replicates_csv_sha256": "bc989de9f95d3302aece9db862ac48ba6aada7a44987e891b7a18a8270e6987c"
   },
   "temporary_evidence_sizes_bytes": {
-    "trials_sqlite": 29757440,
+    "trials_sqlite": 29839360,
     "summary_json": 15182,
     "report_md": 1489,
     "replicates_csv": 676

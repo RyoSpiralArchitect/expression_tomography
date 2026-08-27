@@ -146,6 +146,12 @@ sender comparison uses one fixed strong receiver. A sender prose outcome is
 case-level `unidentified` whenever the corresponding strong oracle-prose
 receiver fails.
 
+A sender response is prose-shaped only when it is non-empty and consists of
+one paragraph without headings, lists, tables, field labels, JSON containers or
+field syntax, code fences, or an explicit `yes`/`no`/`conflict` final label.
+This is a validity gate rather than a semantic score: invalid prose-shaped
+responses remain in the frozen trial surface and are reported as such.
+
 The provider-level prose sender estimand is promoted from `unidentified` to
 `identified` only when the strong oracle-prose receiver is perfect over the
 complete surface and separately perfect in historical-first and current-first

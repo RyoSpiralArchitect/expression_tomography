@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import tempfile
 import unittest
@@ -350,6 +351,40 @@ class RevisionInterfaceTests(unittest.TestCase):
         self.assertTrue(history_score["correct"])
         self.assertTrue(history_score["history_semantic_role_complete"])
 
+    def test_prose_shape_rejects_structured_and_final_label_shortcuts(self) -> None:
+        payload = self.changed.payload
+        valid = oracle_revision_prose(self.changed)
+        valid_score = score_sender_response(
+            "E_prose_strong_joint",
+            valid,
+            parse_json_lenient(valid),
+            payload,
+        )
+        self.assertTrue(valid_score["ordinary_prose_shape"])
+
+        shortcuts = (
+            json.dumps(
+                {
+                    "current_version": "v2",
+                    "active_conclusions": ["eligible"],
+                    "answer": "yes",
+                }
+            ),
+            "```json\n{\"current_version\": \"v2\"}\n```",
+            "Current: the revised rule is active.",
+            "The current rule now applies. The final answer is yes.",
+            "The current rule now applies.\n\nTherefore the conclusion follows.",
+        )
+        for raw in shortcuts:
+            with self.subTest(raw=raw):
+                score = score_sender_response(
+                    "E_prose_strong_joint",
+                    raw,
+                    parse_json_lenient(raw),
+                    payload,
+                )
+                self.assertFalse(score["ordinary_prose_shape"])
+
     def test_receiver_score_detects_role_swap_and_distinct_old_answer(self) -> None:
         payload = self.changed.payload
         expected = expected_receiver_readout(payload)
@@ -653,14 +688,33 @@ class RevisionInterfaceTests(unittest.TestCase):
         for key in (
             "case_surface_sha256",
             "binding_cue_contract_sha256",
+            "binding_cue_contract_file_sha256",
             "provider_config_sha256",
+            "provider_config_file_sha256",
             "experiment_run_identity_sha256",
             "planned_calls",
             "static_calls",
             "receiver_phase_calls",
             "surface_token_audit",
+            "protocol_sha256",
         ):
             self.assertEqual(frozen[key], rebuilt[key])
+        self.assertEqual(
+            frozen["binding_cue_contract_file_sha256"],
+            hashlib.sha256(
+                (asset_dir / "binding_cue_contract.json").read_bytes()
+            ).hexdigest(),
+        )
+        self.assertEqual(
+            frozen["provider_config_file_sha256"],
+            hashlib.sha256(
+                (
+                    root
+                    / "expression_tomography/config/"
+                    "providers.openai_gpt_5_6_luna_revision_interface.json"
+                ).read_bytes()
+            ).hexdigest(),
+        )
         self.assertGreaterEqual(
             frozen["max_tokens"],
             frozen["surface_token_audit"][
