@@ -1,0 +1,130 @@
+{
+  "manifest_version": "rule_z_extraction_intervention.null_cue_prospective_run.v1",
+  "status": "pre_registered",
+  "pre_registered_at_utc": "2026-08-26T14:51:54Z",
+  "observed_provider_outputs_before_registration": 0,
+  "secrets_stored": false,
+  "implementation": {
+    "branch": "SpiralReality/rule-z-null-cue-control",
+    "base_commit": "d5e82b2c061193160c41fb00e530a7bc4cb692e1",
+    "protocol": "docs/rule_z_extraction_intervention_null_cue_protocol_2026_08_26.md",
+    "protocol_sha256": "07dfbec9736541e7bc54263dade7a2b57d12128c28c61cd5c8ff757d6100e6ff",
+    "artifact_generator_sha256": "9744c8eb336208db1ca2e8e14b3470ab6789c2ce894366cab6315c2c8a47e910",
+    "null_cue_generator_sha256": "236022bfade23c59109cd3622f83cc5f39ff3666283a75fb29a29177e0722801",
+    "runner_sha256": "5a644a8cfd088156ca29cc42984e222b3d1d1c2224c4201548f644994fc05927",
+    "lineage_sha256": "d61862aba677dfec1443dcb1020215e4ef9287cd7171f0d70be225122fd33a17",
+    "report_sha256": "30c39bc0a6586ce15d967646a195fd3c02277c1738e0725a8b7aed1a0f01cda6",
+    "tests_sha256": "6e2057a385f3ac885bebe3959667ff79e75abbfac5250965d8e8e991bfae6e79"
+  },
+  "generator": {
+    "task_type": "rule_z_extraction_intervention",
+    "world_seed": 68,
+    "worlds": 16,
+    "artifact_variants_per_world": 4,
+    "cases": 64,
+    "replicates": 2,
+    "replicate_start": 0,
+    "cue_modes": [
+      "target_preannounced",
+      "length_matched_null"
+    ],
+    "conditions_per_case_replicate": 22,
+    "planned_trials": 2816,
+    "static_order_seed": 9801,
+    "model_literal_order_seed": 9802,
+    "case_surface_sha256": "861d519f03b23fbb9713dba153c3cc51b3bb1ce45d2211a830748e4662d82cc7"
+  },
+  "cue_surface": {
+    "config_file": "cue_surface_config.json",
+    "config_file_sha256": "dad34272ae783f1340d5175064473b23ece2a7208627ebd4bd313bc1d8b8c39b",
+    "canonical_contract_sha256": "67f606eb967ef3adc674d2e1f25d9daa2237b528417b9c70e5f2b3bcef68a974",
+    "contract_version": "rule_z_extraction_intervention.null_cue_surface.v1",
+    "tokenizer_library": "tiktoken",
+    "tokenizer_version": "0.12.0",
+    "tokenizer_encoding": "o200k_base",
+    "case_rows": 64,
+    "match_classes": 8,
+    "unique_null_texts": 8,
+    "exact_matches": [
+      "characters",
+      "utf8_bytes",
+      "whitespace_words",
+      "encoding_tokens",
+      "prompt_line_position"
+    ],
+    "intervention_identifiers_in_null_cues": 0
+  },
+  "provider": {
+    "name": "openai-gpt-5.6-luna-low",
+    "model": "gpt-5.6-luna",
+    "type": "openai_compatible",
+    "config_file": "provider_config.json",
+    "config_file_sha256": "ec09af8685b21682c7e957ec78f6efb322ffe75e2b920cd1f29c47b5c796ed69",
+    "stored_provider_config_sha256": "c362b649ef693af847c2ceaf2f6b6950feddb8a0973da178e023ba59f849ec08",
+    "request_contract_version": "openai_compatible.chat_completions.temperature_optional.v3",
+    "max_tokens": 1400,
+    "temperature": null,
+    "temperature_request_mode": "provider_default",
+    "reasoning_effort": "low",
+    "api_key_env": "OPENAI_API_KEY"
+  },
+  "contract": {
+    "artifact_schema_version": "rule_z_extraction_intervention.artifact.v1",
+    "prompt_contract_version": "rule_z_extraction_intervention.prompt.v1",
+    "score_schema_version": "rule_z_extraction_intervention.score.v3",
+    "experiment_run_contract_version": "rule_z_extraction_intervention.experiment_run.v1",
+    "null_cue_surface_contract_version": "rule_z_extraction_intervention.null_cue_surface.v1",
+    "generation_identity_version": "rule_z_extraction_intervention.generation_identity.v1",
+    "assessment_identity_version": "rule_z_extraction_intervention.assessment_identity.v1",
+    "experiment_run_identity_sha256": "4213bf597f8523d4bccee39ce27d0d7858078751963cc49751101ab0ee5fac81"
+  },
+  "preflight": {
+    "preflight_only": true,
+    "n_cases": 64,
+    "planned_trials": 2816,
+    "new_call_upper_bound": 2816,
+    "max_new_calls": 2816,
+    "inserted_trials": 0,
+    "skipped_existing_trials": 0,
+    "provider_calls": 0,
+    "case_rows_written": 0,
+    "trial_rows_written": 0,
+    "experiment_run_rows_written": 0
+  },
+  "below_cap_rejection": {
+    "max_new_calls": 2815,
+    "rejected_before_provider_calls": true,
+    "case_rows_written": 0,
+    "trial_rows_written": 0,
+    "experiment_run_rows_written": 0
+  },
+  "verification_before_registration": {
+    "pytest": "131 passed, 18 subtests passed",
+    "focused_pytest": "42 passed, 10 subtests passed",
+    "frozen_seed67_prompt_parse_score_matches": 704,
+    "frozen_seed68_prompt_parse_score_matches": 2816,
+    "frozen_seed68_experiment_run_identity_unchanged": true
+  },
+  "primary_estimands": [
+    "paired target-versus-null grounded literal correctness by literal field",
+    "paired target-versus-null source-supported accuracy by compute path",
+    "paired target-versus-null transitions by artifact family and intervention kind"
+  ],
+  "secondary_diagnostics": [
+    "support-status exactness separated from answer and active-conclusion exactness",
+    "model-literal exact-upstream versus downstream-compute decomposition",
+    "paired gains and regressions rather than aggregate difference alone",
+    "case-conditioned replicate response and correctness disagreement",
+    "descriptive comparison of the contemporaneous target rerun with the frozen prior target condition"
+  ],
+  "explicit_exclusions": [
+    "uncued condition in this new run",
+    "wrong or scrambled semantic cue",
+    "new world or relation types",
+    "mixed-provider extraction and compute paths",
+    "parser or score changes after provider output",
+    "appending to either frozen extraction/intervention database",
+    "performance-dependent early stopping",
+    "selective replicate extension"
+  ]
+}

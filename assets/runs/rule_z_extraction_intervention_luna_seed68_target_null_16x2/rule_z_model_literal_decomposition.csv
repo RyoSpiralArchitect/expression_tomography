@@ -1,0 +1,17 @@
+provider,artifact_family,intervention_kind,cue_mode,n,upstream_all_value_exact_rate,upstream_all_grounded_calibrated_rate,value_exact_compute_failed,value_inexact_compute_correct
+openai-gpt-5.6-luna-low,counterfactual_complete,edge_reversal,length_matched_null,16,0.625,0.125,3,5
+openai-gpt-5.6-luna-low,counterfactual_complete,edge_reversal,target_preannounced,16,0.812,0.188,2,2
+openai-gpt-5.6-luna-low,counterfactual_complete,fact_removal,length_matched_null,16,0.438,0.062,2,5
+openai-gpt-5.6-luna-low,counterfactual_complete,fact_removal,target_preannounced,16,0.875,0.188,4,0
+openai-gpt-5.6-luna-low,current_complete,edge_reversal,length_matched_null,16,0.438,0.062,0,9
+openai-gpt-5.6-luna-low,current_complete,edge_reversal,target_preannounced,16,0.562,0.062,0,7
+openai-gpt-5.6-luna-low,current_complete,fact_removal,length_matched_null,16,0.312,0.125,0,11
+openai-gpt-5.6-luna-low,current_complete,fact_removal,target_preannounced,16,0.875,0.188,0,2
+openai-gpt-5.6-luna-low,dependency_contradictory,edge_reversal,length_matched_null,16,0.188,0.000,0,0
+openai-gpt-5.6-luna-low,dependency_contradictory,edge_reversal,target_preannounced,16,0.000,0.000,0,2
+openai-gpt-5.6-luna-low,dependency_contradictory,fact_removal,length_matched_null,16,0.000,0.000,0,3
+openai-gpt-5.6-luna-low,dependency_contradictory,fact_removal,target_preannounced,16,0.062,0.000,0,2
+openai-gpt-5.6-luna-low,dependency_omitted,edge_reversal,length_matched_null,16,0.688,0.062,2,5
+openai-gpt-5.6-luna-low,dependency_omitted,edge_reversal,target_preannounced,16,0.625,0.062,0,6
+openai-gpt-5.6-luna-low,dependency_omitted,fact_removal,length_matched_null,16,0.562,0.125,4,0
+openai-gpt-5.6-luna-low,dependency_omitted,fact_removal,target_preannounced,16,0.688,0.250,5,2

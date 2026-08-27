@@ -1,0 +1,428 @@
+{
+  "manifest_version": "rule_z_extraction_intervention.run.v1",
+  "status": "complete",
+  "local_run_date": "2026-08-26",
+  "secrets_stored": false,
+  "implementation": {
+    "branch": "SpiralReality/rule-z-null-cue-control",
+    "base_commit": "d5e82b2c061193160c41fb00e530a7bc4cb692e1",
+    "preregistration_commit": "6497cd24382b63f63d6e3edc2cc7647c9d2bd000",
+    "post_run_evidence_commit": "f1ea681c950253bc5ccd84fa4e36d40158f26bec",
+    "protocol": "docs/rule_z_extraction_intervention_null_cue_protocol_2026_08_26.md",
+    "protocol_sha256": "07dfbec9736541e7bc54263dade7a2b57d12128c28c61cd5c8ff757d6100e6ff",
+    "research_note": "docs/live_rule_z_extraction_intervention_luna_null_cue_note_2026_08_26.md",
+    "research_note_sha256": "603af381bddb4557ab4505224809c8eacd580a1b7d37cf52a305cf264da4c7f5",
+    "cross_run_comparison_module": "expression_tomography/tasks/rule_z/extraction_intervention_compare.py",
+    "cross_run_comparison_module_sha256": "1fc6673ef7365ae542309eea1d4334f539f049518c6b28cdbe1481b7d2ebd154",
+    "post_run_analysis_changed_provider_contract": false,
+    "post_run_analysis_changed_prompt_parse_or_score": false
+  },
+  "generator": {
+    "task_type": "rule_z_extraction_intervention",
+    "world_seed": 68,
+    "worlds": 16,
+    "artifact_variants_per_world": 4,
+    "cases": 64,
+    "replicates": 2,
+    "replicate_start": 0,
+    "cue_modes": [
+      "target_preannounced",
+      "length_matched_null"
+    ],
+    "conditions_per_case_replicate": 22,
+    "planned_successful_trials": 2816,
+    "static_order_seed": 9801,
+    "model_literal_order_seed": 9802,
+    "artifact_families": {
+      "current_complete": 16,
+      "counterfactual_complete": 16,
+      "dependency_omitted": 16,
+      "dependency_contradictory": 16
+    },
+    "intervention_world_pairs": {
+      "fact_removal": 8,
+      "edge_reversal": 8
+    }
+  },
+  "cue_surface": {
+    "contract_version": "rule_z_extraction_intervention.null_cue_surface.v1",
+    "config_file": "cue_surface_config.json",
+    "config_file_sha256": "dad34272ae783f1340d5175064473b23ece2a7208627ebd4bd313bc1d8b8c39b",
+    "canonical_contract_sha256": "67f606eb967ef3adc674d2e1f25d9daa2237b528417b9c70e5f2b3bcef68a974",
+    "tokenizer": {
+      "library": "tiktoken",
+      "version": "0.12.0",
+      "encoding": "o200k_base"
+    },
+    "case_rows": 64,
+    "audit_rows": 128,
+    "match_classes": 8,
+    "unique_null_texts": 8,
+    "exact_matches": [
+      "characters",
+      "utf8_bytes",
+      "whitespace_words",
+      "encoding_tokens",
+      "prompt_line_position"
+    ],
+    "intervention_identifiers_in_null_cues": 0
+  },
+  "provider": {
+    "name": "openai-gpt-5.6-luna-low",
+    "model": "gpt-5.6-luna",
+    "type": "openai_compatible",
+    "config_file": "provider_config.json",
+    "config_file_sha256": "ec09af8685b21682c7e957ec78f6efb322ffe75e2b920cd1f29c47b5c796ed69",
+    "stored_provider_config_sha256": "c362b649ef693af847c2ceaf2f6b6950feddb8a0973da178e023ba59f849ec08",
+    "request_contract_version": "openai_compatible.chat_completions.temperature_optional.v3",
+    "max_tokens": 1400,
+    "temperature": null,
+    "temperature_request_mode": "provider_default",
+    "reasoning_effort": "low",
+    "api_key_env": "OPENAI_API_KEY"
+  },
+  "experiment_run": {
+    "contract_version": "rule_z_extraction_intervention.experiment_run.v1",
+    "case_surface_sha256": "861d519f03b23fbb9713dba153c3cc51b3bb1ce45d2211a830748e4662d82cc7",
+    "experiment_run_identity_sha256": "4213bf597f8523d4bccee39ce27d0d7858078751963cc49751101ab0ee5fac81",
+    "experiment_run_rows": 1,
+    "created_at_utc": "2026-08-26 14:55:13"
+  },
+  "preflight": {
+    "planned_trials": 2816,
+    "max_new_calls": 2816,
+    "new_call_upper_bound": 2816,
+    "provider_calls": 0,
+    "case_rows_written": 0,
+    "trial_rows_written": 0,
+    "experiment_run_rows_written": 0,
+    "below_cap_rejection": {
+      "max_new_calls": 2815,
+      "rejected_before_provider_calls": true,
+      "case_rows_written": 0,
+      "trial_rows_written": 0,
+      "experiment_run_rows_written": 0
+    }
+  },
+  "execution": {
+    "created_at_utc_min": "2026-08-26 14:55:18",
+    "created_at_utc_max": "2026-08-26 16:51:29",
+    "process_boundaries": [
+      {
+        "process": 1,
+        "skipped_existing_trials": 0,
+        "inserted_trials": 2816,
+        "stop": "complete"
+      }
+    ],
+    "successful_stored_trials": 2816,
+    "failed_transport_attempts": 0,
+    "observed_process_level_request_attempts": 2816,
+    "performance_dependent_early_stop": false,
+    "case_count": 64,
+    "trial_count": 2816,
+    "complete_case_replicate_blocks": 128,
+    "unique_logical_identities": 2816,
+    "unique_generation_identities": 2816,
+    "unique_assessment_identities": 2816,
+    "parse_failures": 0,
+    "schema_failures": 0,
+    "sqlite_integrity_check": "ok",
+    "canonical_database_sha256": "ad93ec8f27ec57f5916e61a339b5f541414dcdc1fcba7f296a17c61f8aac6097",
+    "exact_rerun": {
+      "inserted_trials": 0,
+      "skipped_existing_trials": 2816,
+      "provider_calls": 0,
+      "database_sha256_unchanged": true
+    }
+  },
+  "provenance": {
+    "artifact_schema_version": "rule_z_extraction_intervention.artifact.v1",
+    "prompt_contract_version": "rule_z_extraction_intervention.prompt.v1",
+    "score_schema_version": "rule_z_extraction_intervention.score.v3",
+    "generation_identity_version": "rule_z_extraction_intervention.generation_identity.v1",
+    "assessment_identity_version": "rule_z_extraction_intervention.assessment_identity.v1",
+    "raw_response_reparse_validation_trials": 2816,
+    "prompt_matches": 2816,
+    "parse_matches": 2816,
+    "score_matches": 2816,
+    "validated_lineage_trials": 2816,
+    "validated_experiment_runs": 1,
+    "validated_model_upstream_references": 2048,
+    "model_literal_rows_bound_to_eight_upstream_identities": 256,
+    "provider_calls_during_revalidation": 0,
+    "provider_calls_during_cross_run_comparison": 0,
+    "deterministic_report_files_regenerated": 14,
+    "deterministic_cross_run_files_regenerated": 5,
+    "verification": {
+      "pytest": "132 passed, 18 subtests passed",
+      "focused_pytest": "43 passed, 10 subtests passed",
+      "ruff": "passed"
+    }
+  },
+  "primary_results": {
+    "paired_target_vs_length_matched_null": {
+      "compute_direct_source": {
+        "pairs": 128,
+        "null_correct": 96,
+        "target_correct": 105,
+        "improved": 17,
+        "regressed": 8,
+        "net": 9
+      },
+      "compute_model_literal": {
+        "pairs": 128,
+        "null_correct": 79,
+        "target_correct": 84,
+        "improved": 9,
+        "regressed": 4,
+        "net": 5
+      },
+      "compute_oracle_literal": {
+        "pairs": 128,
+        "null_correct": 98,
+        "target_correct": 113,
+        "improved": 18,
+        "regressed": 3,
+        "net": 15
+      },
+      "literal_active_conclusions": {
+        "pairs": 128,
+        "null_correct": 114,
+        "target_correct": 127,
+        "improved": 14,
+        "regressed": 1,
+        "net": 13
+      },
+      "literal_active_rules": {
+        "pairs": 128,
+        "null_correct": 82,
+        "target_correct": 108,
+        "improved": 38,
+        "regressed": 12,
+        "net": 26
+      },
+      "literal_current_answer": {
+        "pairs": 128,
+        "null_correct": 128,
+        "target_correct": 128,
+        "improved": 0,
+        "regressed": 0,
+        "net": 0
+      },
+      "literal_facts": {
+        "pairs": 128,
+        "null_correct": 21,
+        "target_correct": 27,
+        "improved": 17,
+        "regressed": 11,
+        "net": 6
+      },
+      "literal_fired_priority_edges": {
+        "pairs": 128,
+        "null_correct": 93,
+        "target_correct": 106,
+        "improved": 19,
+        "regressed": 6,
+        "net": 13
+      },
+      "literal_fired_rules": {
+        "pairs": 128,
+        "null_correct": 96,
+        "target_correct": 116,
+        "improved": 28,
+        "regressed": 8,
+        "net": 20
+      },
+      "literal_rule_definitions": {
+        "pairs": 128,
+        "null_correct": 100,
+        "target_correct": 97,
+        "improved": 1,
+        "regressed": 4,
+        "net": -3
+      },
+      "literal_suppressed_rules": {
+        "pairs": 128,
+        "null_correct": 116,
+        "target_correct": 122,
+        "improved": 11,
+        "regressed": 5,
+        "net": 6
+      }
+    },
+    "compute_component_decomposition": {
+      "direct_source": {
+        "null": {
+          "n": 128,
+          "support_exact": 101,
+          "answer_exact": 112,
+          "active_conclusions_exact": 112,
+          "source_supported_exact": 96,
+          "unsupported_confident_answer": 15
+        },
+        "target": {
+          "n": 128,
+          "support_exact": 105,
+          "answer_exact": 121,
+          "active_conclusions_exact": 121,
+          "source_supported_exact": 105,
+          "unsupported_confident_answer": 7
+        }
+      },
+      "model_literal": {
+        "null": {
+          "n": 128,
+          "support_exact": 82,
+          "answer_exact": 98,
+          "active_conclusions_exact": 98,
+          "source_supported_exact": 79,
+          "unsupported_confident_answer": 30
+        },
+        "target": {
+          "n": 128,
+          "support_exact": 85,
+          "answer_exact": 115,
+          "active_conclusions_exact": 115,
+          "source_supported_exact": 84,
+          "unsupported_confident_answer": 13
+        }
+      },
+      "oracle_literal": {
+        "null": {
+          "n": 128,
+          "support_exact": 101,
+          "answer_exact": 109,
+          "active_conclusions_exact": 109,
+          "source_supported_exact": 98,
+          "unsupported_confident_answer": 19
+        },
+        "target": {
+          "n": 128,
+          "support_exact": 115,
+          "answer_exact": 120,
+          "active_conclusions_exact": 120,
+          "source_supported_exact": 113,
+          "unsupported_confident_answer": 7
+        }
+      }
+    },
+    "model_literal_exact_upstream": {
+      "rows": 256,
+      "all_upstream_values_exact": 124,
+      "all_upstream_values_exact_compute_failed": 22,
+      "support_only_failure_rows": 11,
+      "answer_or_active_failure_rows": 11,
+      "failure_case_hashes": 12,
+      "failure_base_pairs": 10,
+      "null": {
+        "rows": 128,
+        "all_upstream_values_exact": 52,
+        "compute_failed": 11,
+        "support_only_failure_rows": 5,
+        "answer_or_active_failure_rows": 6
+      },
+      "target": {
+        "rows": 128,
+        "all_upstream_values_exact": 72,
+        "compute_failed": 11,
+        "support_only_failure_rows": 6,
+        "answer_or_active_failure_rows": 5
+      }
+    },
+    "replicate_response_pairs": {
+      "pairs": 1408,
+      "byte_identical": 1149,
+      "byte_different": 259,
+      "correctness_disagree": 182,
+      "both_correct": 987,
+      "both_wrong": 239,
+      "length_matched_null": {
+        "pairs": 704,
+        "byte_identical": 549,
+        "correctness_disagree": 109,
+        "both_correct": 457,
+        "both_wrong": 138
+      },
+      "target_preannounced": {
+        "pairs": 704,
+        "byte_identical": 600,
+        "correctness_disagree": 73,
+        "both_correct": 530,
+        "both_wrong": 101
+      }
+    }
+  },
+  "cross_run_descriptive_comparison": {
+    "comparison_version": "rule_z_extraction_intervention.cross_run_comparison.v1",
+    "pair_rows": 2816,
+    "artifact_summary_rows": 176,
+    "case_payloads_matched": true,
+    "provider_configurations_matched": true,
+    "artifact_prompt_and_score_contracts_matched": true,
+    "prior_database_sha256": "f1cfb931367d81d643ebb4fac748cf303ec1d280fc482b5f1a8a48a8d9fc89e3",
+    "prior_experiment_run_identity_sha256": "cfd74d41595c43ee9179d7f9b73ea1bd6ec2bba0d5cb49491284960059cd52fa",
+    "current_database_sha256": "ad93ec8f27ec57f5916e61a339b5f541414dcdc1fcba7f296a17c61f8aac6097",
+    "current_experiment_run_identity_sha256": "4213bf597f8523d4bccee39ce27d0d7858078751963cc49751101ab0ee5fac81",
+    "prior_target_to_current_target": {
+      "pairs": 1408,
+      "prior_correct": 1143,
+      "current_correct": 1133,
+      "improved": 73,
+      "regressed": 83,
+      "net": -10,
+      "prompt_identical": 1365,
+      "raw_response_identical": 1186,
+      "changed_worlds": 16
+    },
+    "prior_uncued_to_current_length_matched_null": {
+      "pairs": 1408,
+      "prior_correct": 1089,
+      "current_correct": 1023,
+      "improved": 76,
+      "regressed": 142,
+      "net": -66,
+      "prompt_identical": 0,
+      "raw_response_identical": 1083,
+      "changed_worlds": 16,
+      "causal_interpretation_allowed": false
+    }
+  },
+  "frozen_artifacts": {
+    "cue_surface_config.json": "dad34272ae783f1340d5175064473b23ece2a7208627ebd4bd313bc1d8b8c39b",
+    "prospective_manifest.json": "933279f05f80568a37705e4d52d98a122a4842a670e5081d4705868520bca24c",
+    "provider_config.json": "ec09af8685b21682c7e957ec78f6efb322ffe75e2b920cd1f29c47b5c796ed69",
+    "rule_z_cross_run_comparison.json": "7d70bf68f2233c56aecf07b3d534ef674e9fce431a0fb381aa4d417a230ab614",
+    "rule_z_cross_run_comparison.md": "b9c2589125369992b46465720fb07f1831846f7e492162ff6e79a5e6cb8b74cb",
+    "rule_z_cross_run_pairs.csv": "bd4f21f45b32c20de9423f759cb2401cd2b6f5d8f6360829040e7d5096f679bb",
+    "rule_z_cross_run_summary.csv": "549a64e58e2b2dcff7c6e06701d18b8ff3a91cc90c1f4d51568ca6fe02a95138",
+    "rule_z_cross_run_summary_by_artifact.csv": "efd526303ff3cf423cafc550ce4648981510b71838d9c54065f3d40b0f71740e",
+    "rule_z_extraction_intervention_report.md": "82018a4d9cd9dfca26381040be5f9ee1e771462aec4a61c2601ce04493d0f90d",
+    "rule_z_extraction_intervention_summary.json": "3dceb03cad2b4dc2b9981b93b4584a09f1964ba4b125ed3bfb8955464ad19175",
+    "rule_z_intervention_computation_summary.csv": "cec98f019527d1b65f92975df1313b229865545e79d233b7f9b09936766757a4",
+    "rule_z_intervention_computation_trials.csv": "b2404c9ab398b5413941022bed4ae20ba4704654c0ab5c5ed15a6d399b16caa7",
+    "rule_z_literal_extraction_summary.csv": "8d3fcd4296ea42d8539b2ccb7ddf18505deb3ca25520550d377632b77deb8c72",
+    "rule_z_literal_extraction_trials.csv": "cc3d195a09929a118d760a6f93c8963a2e8aa78c84fb20fed9d03af2bdcd7938",
+    "rule_z_model_literal_decomposition.csv": "2897c4fc320787ebc0fa6daacdcdd41cccdafcfb693eacce17923b0233479656",
+    "rule_z_model_literal_failure_cases.csv": "c123b110389219dcbb2f87f2cc84940afb0226278a91a4c68b45cb345e23a9bc",
+    "rule_z_replicate_pairs.csv": "811affe0b2a35204f021b638eebe74a6e2fd941d5a15aedc66a7991d5cdf0067",
+    "rule_z_replicate_summary.csv": "fcd0242b4b9d5e1a61eee0cb72a126a26892e74fb835dd5671a567399f360333",
+    "rule_z_target_cue_pairs.csv": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "rule_z_target_cue_pairs_by_artifact.csv": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "rule_z_target_vs_null_pairs.csv": "51b27bc25785e907e0acc38623d10a0bb5a615e2edcc4948bca7bba04fd11fb9",
+    "rule_z_target_vs_null_pairs_by_artifact.csv": "c62c94a77a4dfff30d96e572a21b57b901f2ef2f8e1fa9eee16297cbcd595949",
+    "trials.sqlite": "ad93ec8f27ec57f5916e61a339b5f541414dcdc1fcba7f296a17c61f8aac6097"
+  },
+  "interpretation_boundaries": [
+    "The primary causal contrast is the contemporaneous paired target-preannounced versus length-matched-null comparison in this database.",
+    "The length-matched null is exactly surface matched but is an imperative irrelevant-formatting instruction, so it is treated as a competing-binding control rather than an inert placebo.",
+    "A target-versus-null difference can contain a target benefit, a competing-null cost, or both.",
+    "The frozen prior target rerun and prior uncued to current null comparisons are descriptive across execution order and time; the latter also changes cue semantics and has no causal interpretation.",
+    "Literal typed-value exactness and quote grounding are separate outcomes and can move independently.",
+    "Object-level answer and active-conclusion reconstruction can improve while source-level support calibration regresses.",
+    "Exact upstream typed values localize a failure after extraction but do not identify a single downstream mechanism and are post-treatment conditional diagnostics.",
+    "Two repetitions over sixteen fixed worlds expose case-conditioned trajectory stability but do not estimate broad provider performance.",
+    "This output-only surface does not establish a complete pre-expression latent state or a dominant language bottleneck for general intelligence.",
+    "A contemporaneous null-semantics ladder, crossed providers, hidden-state probes, and local training are separate future experiments and are not retroactively added to this run."
+  ]
+}

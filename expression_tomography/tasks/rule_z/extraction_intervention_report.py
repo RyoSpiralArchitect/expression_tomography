@@ -9,16 +9,21 @@ from pathlib import Path
 from statistics import mean
 from typing import Any, Iterable
 
+from expression_tomography.core.schema import Case
 from expression_tomography.core.store import ExperimentStore
 
 from .extraction_intervention import (
     ARTIFACT_FAMILIES,
     COMPUTE_PATHS,
-    CUE_MODES,
+    LENGTH_MATCHED_NULL_CUE_MODE,
     LITERAL_FIELDS,
     TASK_TYPE,
     compute_condition,
     literal_condition,
+    normalize_cue_modes,
+)
+from .extraction_intervention_lineage import (
+    validate_experiment_run_record_for_cases,
 )
 
 
@@ -50,36 +55,84 @@ def _write_csv(path: Path, rows: Iterable[dict[str, Any]]) -> None:
 def _completion_summary(
     cases: list[dict[str, Any]],
     trials: list[dict[str, Any]],
+    experiment_runs: list[dict[str, Any]],
 ) -> dict[str, Any]:
-    providers = sorted({str(row["provider"]) for row in trials})
+    case_records = [
+        Case(
+            case_id=str(case["case_id"]),
+            task_type=str(case["task_type"]),
+            payload=case["payload"],
+            seed=int(case["seed"]),
+            case_hash=str(case["case_hash"]),
+        )
+        for case in cases
+    ]
+    run_surfaces: dict[str, tuple[str, tuple[str, ...]]] = {}
+    cue_modes_by_provider: dict[str, tuple[str, ...]] = {}
+    for run in experiment_runs:
+        validate_experiment_run_record_for_cases(run, case_records)
+        contract = run["contract"]
+        provider_config = contract["provider_config"]
+        provider = str(provider_config["name"])
+        cue_modes = normalize_cue_modes(contract["cue_modes"])
+        previous_cue_modes = cue_modes_by_provider.setdefault(provider, cue_modes)
+        if previous_cue_modes != cue_modes:
+            raise RuntimeError(
+                f"Provider {provider} has inconsistent run-bound cue modes"
+            )
+        run_surfaces[str(run["experiment_run_identity_sha256"])] = (
+            provider,
+            cue_modes,
+        )
+
+    providers = sorted(
+        set(cue_modes_by_provider) | {str(row["provider"]) for row in trials}
+    )
     replicate_sets: dict[str, set[int]] = defaultdict(set)
     observed: dict[tuple[str, str, int], Counter[str]] = defaultdict(Counter)
     for row in trials:
+        provider = str(row["provider"])
+        run_identity = row.get("experiment_run_identity_sha256")
+        run_surface = run_surfaces.get(str(run_identity))
+        if run_surface is None:
+            raise RuntimeError(
+                f"Trial {row['id']} does not reference a validated experiment run"
+            )
+        run_provider, _cue_modes = run_surface
+        if provider != run_provider:
+            raise RuntimeError(
+                f"Trial {row['id']} provider does not match its experiment run"
+            )
         replicate = int(row["metadata"].get("replicate_index", 0))
         metadata = row["metadata"]
         declared_start = int(metadata.get("requested_replicate_start", replicate))
         declared_repetitions = int(metadata.get("requested_repetitions", 1))
-        replicate_sets[str(row["provider"])].add(replicate)
-        replicate_sets[str(row["provider"])].update(
+        replicate_sets[provider].add(replicate)
+        replicate_sets[provider].update(
             range(declared_start, declared_start + declared_repetitions)
         )
         observed[
-            (str(row["provider"]), str(row["case_hash"]), replicate)
+            (provider, str(row["case_hash"]), replicate)
         ][str(row["condition"])] += 1
 
-    expected_conditions = {
-        literal_condition(field, cue_mode)
-        for cue_mode in CUE_MODES
-        for field in LITERAL_FIELDS
-    } | {
-        compute_condition(path, cue_mode)
-        for cue_mode in CUE_MODES
-        for path in COMPUTE_PATHS
-    }
-    expected_counts = Counter({condition: 1 for condition in expected_conditions})
-    expected_per_identity = len(expected_conditions)
+    expected_per_provider: dict[str, int] = {}
     incomplete = []
     for provider in providers:
+        cue_modes = cue_modes_by_provider[provider]
+        expected_conditions = {
+            literal_condition(field, cue_mode)
+            for cue_mode in cue_modes
+            for field in LITERAL_FIELDS
+        } | {
+            compute_condition(path, cue_mode)
+            for cue_mode in cue_modes
+            for path in COMPUTE_PATHS
+        }
+        expected_counts = Counter(
+            {condition: 1 for condition in expected_conditions}
+        )
+        expected_per_identity = len(expected_conditions)
+        expected_per_provider[provider] = expected_per_identity
         for case in cases:
             for replicate in sorted(replicate_sets[provider]):
                 counts = observed[(provider, str(case["case_hash"]), replicate)]
@@ -104,11 +157,31 @@ def _completion_summary(
                             ),
                         }
                     )
+    unique_expected_counts = set(expected_per_provider.values())
+    providers_without_observed_replicates = [
+        provider for provider in providers if not replicate_sets[provider]
+    ]
     return {
         "providers": providers,
-        "expected_trials_per_case_replicate": expected_per_identity,
+        "cue_modes_by_provider": {
+            provider: list(cue_modes_by_provider[provider])
+            for provider in providers
+        },
+        "expected_trials_per_case_replicate": (
+            next(iter(unique_expected_counts))
+            if len(unique_expected_counts) == 1
+            else None
+        ),
+        "expected_trials_per_case_replicate_by_provider": expected_per_provider,
+        "providers_without_observed_replicates": (
+            providers_without_observed_replicates
+        ),
         "incomplete_case_replicates": incomplete,
-        "surface_complete": bool(providers) and not incomplete,
+        "surface_complete": (
+            bool(providers)
+            and not providers_without_observed_replicates
+            and not incomplete
+        ),
     }
 
 
@@ -362,7 +435,13 @@ def _intervention_summary(trials: list[dict[str, Any]]) -> list[dict[str, Any]]:
     ]
 
 
-def _paired_cue_summary(trials: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def _paired_cue_comparison(
+    trials: list[dict[str, Any]],
+    *,
+    reference_cue: str,
+    comparison_cue: str,
+    by_artifact: bool,
+) -> list[dict[str, Any]]:
     groups: dict[tuple[str, str, str, int], dict[str, dict[str, Any]]] = defaultdict(dict)
     for row in trials:
         metadata = row["metadata"]
@@ -385,31 +464,49 @@ def _paired_cue_summary(trials: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "metric": metric,
         }
 
-    summary_groups: dict[tuple[str, str], Counter[str]] = defaultdict(Counter)
+    summary_groups: dict[tuple[str, ...], Counter[str]] = defaultdict(Counter)
     for (provider, _case_hash, target, _replicate), pair in groups.items():
-        if set(pair) != set(CUE_MODES):
+        if not {reference_cue, comparison_cue}.issubset(pair):
             continue
-        uncued = bool(pair["uncued"]["row"]["score"].get(pair["uncued"]["metric"]))
-        cued = bool(
-            pair["target_preannounced"]["row"]["score"].get(
-                pair["target_preannounced"]["metric"]
-            )
+        reference_item = pair[reference_cue]
+        comparison_item = pair[comparison_cue]
+        reference_row = reference_item["row"]
+        comparison_row = comparison_item["row"]
+        context = (
+            str(reference_row["metadata"].get("artifact_family", "")),
+            str(reference_row["metadata"].get("intervention_kind", "")),
+        )
+        comparison_context = (
+            str(comparison_row["metadata"].get("artifact_family", "")),
+            str(comparison_row["metadata"].get("intervention_kind", "")),
+        )
+        if context != comparison_context:
+            raise RuntimeError("Cue pair has inconsistent artifact metadata")
+        reference_correct = bool(
+            reference_row["score"].get(reference_item["metric"])
+        )
+        comparison_correct = bool(
+            comparison_row["score"].get(comparison_item["metric"])
         )
         transition = (
             "improved"
-            if not uncued and cued
+            if not reference_correct and comparison_correct
             else "regressed"
-            if uncued and not cued
+            if reference_correct and not comparison_correct
             else "both_correct"
-            if uncued and cued
+            if reference_correct and comparison_correct
             else "both_wrong"
         )
-        summary_groups[(provider, target)][transition] += 1
+        key = (provider, *context, target) if by_artifact else (provider, target)
+        summary_groups[key][transition] += 1
 
-    return [
-        {
-            "provider": provider,
-            "target": target,
+    rows = []
+    for key, counts in sorted(summary_groups.items()):
+        row = {
+            "provider": key[0],
+            "reference_cue": reference_cue,
+            "comparison_cue": comparison_cue,
+            "target": key[-1],
             "n_pairs": sum(counts.values()),
             "improved": counts["improved"],
             "regressed": counts["regressed"],
@@ -417,86 +514,71 @@ def _paired_cue_summary(trials: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "both_wrong": counts["both_wrong"],
             "net_cue_delta": counts["improved"] - counts["regressed"],
         }
-        for (provider, target), counts in sorted(summary_groups.items())
+        if by_artifact:
+            row = {
+                "provider": key[0],
+                "artifact_family": key[1],
+                "intervention_kind": key[2],
+                **{name: value for name, value in row.items() if name != "provider"},
+            }
+        rows.append(row)
+    return rows
+
+
+def _without_pair_labels(row: dict[str, Any]) -> dict[str, Any]:
+    return {
+        key: value
+        for key, value in row.items()
+        if key not in {"reference_cue", "comparison_cue"}
+    }
+
+
+def _paired_cue_summary(trials: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return [
+        _without_pair_labels(row)
+        for row in _paired_cue_comparison(
+            trials,
+            reference_cue="uncued",
+            comparison_cue="target_preannounced",
+            by_artifact=False,
+        )
     ]
 
 
 def _paired_cue_summary_by_artifact(
     trials: list[dict[str, Any]],
 ) -> list[dict[str, Any]]:
-    groups: dict[
-        tuple[str, str, str, int], dict[str, dict[str, Any]]
-    ] = defaultdict(dict)
-    for row in trials:
-        metadata = row["metadata"]
-        if metadata.get("trial_type") == "literal_extraction":
-            target = f"literal:{metadata.get('literal_field', '')}"
-            metric = "correct"
-        elif metadata.get("trial_type") == "intervention_compute":
-            target = f"compute:{metadata.get('compute_path', '')}"
-            metric = "source_supported_exact"
-        else:
-            continue
-        key = (
-            str(row["provider"]),
-            str(row["case_hash"]),
-            target,
-            int(metadata.get("replicate_index", 0)),
-        )
-        groups[key][str(metadata.get("cue_mode", ""))] = {
-            "row": row,
-            "metric": metric,
-        }
-
-    summary_groups: dict[tuple[str, str, str, str], Counter[str]] = defaultdict(
-        Counter
-    )
-    for (provider, _case_hash, target, _replicate), pair in groups.items():
-        if set(pair) != set(CUE_MODES):
-            continue
-        uncued_row = pair["uncued"]["row"]
-        cued_row = pair["target_preannounced"]["row"]
-        uncued_metadata = uncued_row["metadata"]
-        cued_metadata = cued_row["metadata"]
-        context = (
-            str(uncued_metadata.get("artifact_family", "")),
-            str(uncued_metadata.get("intervention_kind", "")),
-        )
-        if context != (
-            str(cued_metadata.get("artifact_family", "")),
-            str(cued_metadata.get("intervention_kind", "")),
-        ):
-            raise RuntimeError("Cue pair has inconsistent artifact metadata")
-        uncued = bool(uncued_row["score"].get(pair["uncued"]["metric"]))
-        cued = bool(
-            cued_row["score"].get(pair["target_preannounced"]["metric"])
-        )
-        transition = (
-            "improved"
-            if not uncued and cued
-            else "regressed"
-            if uncued and not cued
-            else "both_correct"
-            if uncued and cued
-            else "both_wrong"
-        )
-        summary_groups[(provider, *context, target)][transition] += 1
-
     return [
-        {
-            "provider": key[0],
-            "artifact_family": key[1],
-            "intervention_kind": key[2],
-            "target": key[3],
-            "n_pairs": sum(counts.values()),
-            "improved": counts["improved"],
-            "regressed": counts["regressed"],
-            "both_correct": counts["both_correct"],
-            "both_wrong": counts["both_wrong"],
-            "net_cue_delta": counts["improved"] - counts["regressed"],
-        }
-        for key, counts in sorted(summary_groups.items())
+        _without_pair_labels(row)
+        for row in _paired_cue_comparison(
+            trials,
+            reference_cue="uncued",
+            comparison_cue="target_preannounced",
+            by_artifact=True,
+        )
     ]
+
+
+def _target_vs_null_summary(
+    trials: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    return _paired_cue_comparison(
+        trials,
+        reference_cue=LENGTH_MATCHED_NULL_CUE_MODE,
+        comparison_cue="target_preannounced",
+        by_artifact=False,
+    )
+
+
+def _target_vs_null_summary_by_artifact(
+    trials: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    return _paired_cue_comparison(
+        trials,
+        reference_cue=LENGTH_MATCHED_NULL_CUE_MODE,
+        comparison_cue="target_preannounced",
+        by_artifact=True,
+    )
 
 
 def _replicate_pair_rows(trials: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -856,6 +938,41 @@ def _markdown_report(summary: dict[str, Any]) -> str:
             "{target} | {n_pairs} | {improved} | {regressed} | "
             "{both_correct} | {both_wrong} | {net_cue_delta} |".format(**row)
         )
+    if summary["target_vs_null_summary"]:
+        lines.extend(
+            [
+                "",
+                "## Target Cue Versus Length-Matched Null",
+                "",
+                "Improved means the target cue was correct where the length-matched null was wrong.",
+                "",
+                "| Provider | Target | n | Improved | Regressed | Both correct | Both wrong | Net |",
+                "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+            ]
+        )
+        for row in summary["target_vs_null_summary"]:
+            lines.append(
+                "| {provider} | {target} | {n_pairs} | {improved} | "
+                "{regressed} | {both_correct} | {both_wrong} | "
+                "{net_cue_delta} |".format(**row)
+            )
+        lines.extend(
+            [
+                "",
+                "## Target Cue Versus Null By Artifact",
+                "",
+                "| Provider | Artifact | Intervention | Target | n | Improved | Regressed | Both correct | Both wrong | Net |",
+                "| --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+            ]
+        )
+        for row in summary["target_vs_null_by_artifact_summary"]:
+            lines.append(
+                "| {provider} | {artifact_family} | {intervention_kind} | "
+                "{target} | {n_pairs} | {improved} | {regressed} | "
+                "{both_correct} | {both_wrong} | {net_cue_delta} |".format(
+                    **row
+                )
+            )
     lines.extend(
         [
             "",
@@ -928,6 +1045,10 @@ def write_extraction_intervention_report(
     intervention_summary = _intervention_summary(trials)
     paired_cue_summary = _paired_cue_summary(trials)
     paired_cue_by_artifact_summary = _paired_cue_summary_by_artifact(trials)
+    target_vs_null_summary = _target_vs_null_summary(trials)
+    target_vs_null_by_artifact_summary = (
+        _target_vs_null_summary_by_artifact(trials)
+    )
     model_decomposition_summary = _model_decomposition_summary(
         intervention_rows
     )
@@ -938,7 +1059,11 @@ def write_extraction_intervention_report(
     replicate_pair_rows = _replicate_pair_rows(trials)
     replicate_summary = _replicate_summary(replicate_pair_rows)
     replicate_overview = _replicate_overview(replicate_pair_rows)
-    completion = _completion_summary(cases, trials)
+    completion = _completion_summary(
+        cases,
+        trials,
+        store.fetch_experiment_runs(task_type=TASK_TYPE),
+    )
     summary = {
         "task_type": TASK_TYPE,
         "n_cases": len(cases),
@@ -949,6 +1074,10 @@ def write_extraction_intervention_report(
         "intervention_summary": intervention_summary,
         "paired_cue_summary": paired_cue_summary,
         "paired_cue_by_artifact_summary": paired_cue_by_artifact_summary,
+        "target_vs_null_summary": target_vs_null_summary,
+        "target_vs_null_by_artifact_summary": (
+            target_vs_null_by_artifact_summary
+        ),
         "model_decomposition_summary": model_decomposition_summary,
         "model_literal_failure_case_summary": model_literal_failure_case_summary,
         "model_literal_failure_overview": model_literal_failure_overview,
@@ -967,6 +1096,14 @@ def write_extraction_intervention_report(
     _write_csv(
         output_dir / "rule_z_target_cue_pairs_by_artifact.csv",
         paired_cue_by_artifact_summary,
+    )
+    _write_csv(
+        output_dir / "rule_z_target_vs_null_pairs.csv",
+        target_vs_null_summary,
+    )
+    _write_csv(
+        output_dir / "rule_z_target_vs_null_pairs_by_artifact.csv",
+        target_vs_null_by_artifact_summary,
     )
     _write_csv(
         output_dir / "rule_z_model_literal_decomposition.csv",

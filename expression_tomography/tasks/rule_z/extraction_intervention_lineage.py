@@ -9,11 +9,14 @@ from expression_tomography.core.schema import Case, ExperimentRun, stable_json
 from .extraction_intervention import (
     ARTIFACT_SCHEMA_VERSION,
     CUE_MODES,
+    LENGTH_MATCHED_NULL_CUE_MODE,
     LITERAL_FIELDS,
     PROMPT_CONTRACT_VERSION,
     SCORE_SCHEMA_VERSION,
     TASK_TYPE,
+    normalize_cue_modes,
 )
+from .extraction_intervention_null_cue import validate_cue_surface_contract
 
 
 LINEAGE_SCHEMA_VERSION = "rule_z_extraction_intervention.lineage.v1"
@@ -127,10 +130,13 @@ def make_experiment_run_contract(
     provider_provenance: dict[str, Any],
     execution_order_seed: int,
     execution_order_contract_version: str = EXECUTION_ORDER_CONTRACT_VERSION,
+    cue_modes: Iterable[str] = CUE_MODES,
+    cue_surface_contract: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     case_list = sorted(cases, key=lambda case: case.case_hash)
     case_surface = [case.to_dict() for case in case_list]
-    return {
+    normalized_cue_modes = normalize_cue_modes(cue_modes)
+    contract = {
         "contract_version": EXPERIMENT_RUN_CONTRACT_VERSION,
         "task_type": TASK_TYPE,
         "case_surface_sha256": sha256_json(case_surface),
@@ -145,9 +151,13 @@ def make_experiment_run_contract(
         "static_execution_order_seed": execution_order_seed,
         "model_literal_execution_order_seed": execution_order_seed + 1,
         "literal_fields": list(LITERAL_FIELDS),
-        "cue_modes": list(CUE_MODES),
+        "cue_modes": list(normalized_cue_modes),
         "compute_paths": ["direct_source", "oracle_literal", "model_literal"],
     }
+    if cue_surface_contract is not None:
+        validate_cue_surface_contract(cue_surface_contract, case_list)
+        contract["cue_surface_contract"] = cue_surface_contract
+    return contract
 
 
 def make_experiment_run(
@@ -155,12 +165,16 @@ def make_experiment_run(
     provider_provenance: dict[str, Any],
     execution_order_seed: int,
     execution_order_contract_version: str = EXECUTION_ORDER_CONTRACT_VERSION,
+    cue_modes: Iterable[str] = CUE_MODES,
+    cue_surface_contract: dict[str, Any] | None = None,
 ) -> ExperimentRun:
     contract = make_experiment_run_contract(
         cases,
         provider_provenance,
         execution_order_seed,
         execution_order_contract_version,
+        cue_modes,
+        cue_surface_contract,
     )
     return ExperimentRun(
         experiment_run_identity_sha256=sha256_json(contract),
@@ -178,6 +192,7 @@ def validate_experiment_run_record_for_cases(
     run: dict[str, Any],
     cases: Iterable[Case],
 ) -> None:
+    case_list = sorted(cases, key=lambda case: case.case_hash)
     contract = run.get("contract")
     if not isinstance(contract, dict):
         raise RuntimeError("Experiment run lacks a structured contract")
@@ -213,8 +228,21 @@ def validate_experiment_run_record_for_cases(
         raise RuntimeError("Experiment run execution-order seed mismatch")
     if contract.get("literal_fields") != list(LITERAL_FIELDS):
         raise RuntimeError("Experiment run literal-field surface drift")
-    if contract.get("cue_modes") != list(CUE_MODES):
+    try:
+        cue_modes = normalize_cue_modes(contract.get("cue_modes", ()))
+    except ValueError as exc:
+        raise RuntimeError("Experiment run cue-mode surface drift") from exc
+    if list(cue_modes) != contract.get("cue_modes"):
         raise RuntimeError("Experiment run cue-mode surface drift")
+    cue_surface_contract = contract.get("cue_surface_contract")
+    if LENGTH_MATCHED_NULL_CUE_MODE in cue_modes:
+        if not isinstance(cue_surface_contract, dict):
+            raise RuntimeError("Null cue run lacks a cue surface contract")
+        validate_cue_surface_contract(cue_surface_contract, case_list)
+        if cue_surface_contract.get("cue_modes") != list(cue_modes):
+            raise RuntimeError("Null cue surface modes do not match the run")
+    elif cue_surface_contract is not None:
+        raise RuntimeError("Non-null run unexpectedly binds a cue surface")
     if contract.get("compute_paths") != [
         "direct_source",
         "oracle_literal",
@@ -222,7 +250,6 @@ def validate_experiment_run_record_for_cases(
     ]:
         raise RuntimeError("Experiment run compute-path surface drift")
 
-    case_list = sorted(cases, key=lambda case: case.case_hash)
     if case_list:
         case_surface = [case.to_dict() for case in case_list]
         if contract.get("case_hashes") != [

@@ -19,14 +19,27 @@ from expression_tomography.core.providers import ProviderSpec
 from expression_tomography.core.store import ExperimentStore
 from expression_tomography.tasks.rule_z.extraction_intervention import (
     ARTIFACT_FAMILIES,
+    CUE_MODES,
+    LENGTH_MATCHED_NULL_CUE_MODE,
     LITERAL_FIELDS,
     SOURCE_CONDITION,
     TASK_TYPE,
+    compute_focus_cue,
     make_extraction_intervention_cases,
+    make_intervention_prompt,
     make_literal_extraction_prompt,
+    literal_focus_cue,
     public_case_id,
     score_intervention,
     score_literal_extraction,
+)
+from expression_tomography.tasks.rule_z.extraction_intervention_null_cue import (
+    cue_text_override,
+    generate_null_cue_surface,
+    validate_cue_surface_contract,
+)
+from expression_tomography.tasks.rule_z.extraction_intervention_compare import (
+    write_extraction_intervention_cross_run_comparison,
 )
 from expression_tomography.tasks.rule_z.extraction_intervention_report import (
     write_extraction_intervention_report,
@@ -99,6 +112,17 @@ class ExtractionInterventionTests(unittest.TestCase):
     def setUp(self) -> None:
         self.cases = make_extraction_intervention_cases(2, seed=67)
         self.pair_cases = self.cases[:4]
+
+    def _null_cue_surface(self) -> dict:
+        return generate_null_cue_surface(
+            self.pair_cases,
+            encode=lambda text: [ord(character) for character in text],
+            tokenizer={
+                "library": "expression_tomography",
+                "version": "1",
+                "encoding": "unicode-codepoint",
+            },
+        )
 
     def _write_legacy_lineage_store(
         self,
@@ -284,6 +308,79 @@ class ExtractionInterventionTests(unittest.TestCase):
         self.assertIn(SOURCE_CONDITION, uncued)
         self.assertNotIn(payload["artifact_family"], uncued)
         self.assertNotIn("world_private", uncued)
+
+    def test_null_cue_surface_matches_target_without_naming_intervention(self) -> None:
+        surface = self._null_cue_surface()
+        validate_cue_surface_contract(surface, self.pair_cases)
+
+        for case in self.pair_cases:
+            intervention = case.payload["intervention"]
+            identifiers = [
+                str(value)
+                for key, value in intervention.items()
+                if key != "kind"
+            ]
+            for channel, target in (
+                ("literal", literal_focus_cue(intervention)),
+                ("compute", compute_focus_cue(intervention)),
+            ):
+                null = cue_text_override(
+                    surface,
+                    case.case_hash,
+                    LENGTH_MATCHED_NULL_CUE_MODE,
+                    channel,
+                )
+                self.assertIsNotNone(null)
+                self.assertNotEqual(null, target)
+                self.assertEqual(len(null), len(target))
+                self.assertEqual(
+                    len(null.encode("utf-8")),
+                    len(target.encode("utf-8")),
+                )
+                self.assertEqual(len(null.split()), len(target.split()))
+                self.assertTrue(
+                    all(identifier not in null for identifier in identifiers)
+                )
+
+    def test_null_cue_validation_retokenizes_instead_of_trusting_audit(self) -> None:
+        surface = self._null_cue_surface()
+        case_hash = self.pair_cases[0].case_hash
+        channel_audit = surface["surface_audit"][case_hash]["literal"]
+        channel_audit["null"]["encoding_tokens"] += 1
+        channel_audit["target"]["encoding_tokens"] += 1
+
+        with self.assertRaisesRegex(RuntimeError, "Null cue audit mismatch"):
+            validate_cue_surface_contract(surface, self.pair_cases)
+
+    def test_null_cue_prompt_requires_a_run_scoped_override(self) -> None:
+        case = self.pair_cases[0]
+        payload = case.payload
+        with self.assertRaisesRegex(ValueError, "requires a nonempty cue"):
+            make_literal_extraction_prompt(
+                case.case_hash,
+                payload["source_artifact"],
+                "facts",
+                LENGTH_MATCHED_NULL_CUE_MODE,
+                payload["intervention"],
+            )
+
+        surface = self._null_cue_surface()
+        override = cue_text_override(
+            surface,
+            case.case_hash,
+            LENGTH_MATCHED_NULL_CUE_MODE,
+            "compute",
+        )
+        prompt = make_intervention_prompt(
+            case.case_hash,
+            payload["source_artifact"],
+            "direct_source",
+            LENGTH_MATCHED_NULL_CUE_MODE,
+            payload["intervention"],
+            cue_text_override=override,
+        )
+        self.assertIn(str(override), prompt)
+        self.assertIn("C_DIRECT_SOURCE_LENGTH_MATCHED_NULL", prompt)
 
     def test_literal_score_requires_exact_source_grounding(self) -> None:
         case = self.pair_cases[0]
@@ -521,6 +618,360 @@ class ExtractionInterventionTests(unittest.TestCase):
             self.assertNotIn('"evidence"', row["prompt"])
             self.assertIn("LITERAL_LEDGER_JSON", row["prompt"])
 
+    def test_mock_target_vs_null_run_is_complete_and_drift_closed(self) -> None:
+        cue_modes = ("target_preannounced", LENGTH_MATCHED_NULL_CUE_MODE)
+        surface = self._null_cue_surface()
+        provider = CountingRuleZMockProvider()
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "trials.sqlite")
+            try:
+                result = run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    provider,
+                    store,
+                    repetitions=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                    cue_modes=cue_modes,
+                    cue_surface_contract=surface,
+                )
+                summary = write_extraction_intervention_report(
+                    store,
+                    Path(td) / "reports",
+                )
+                validation = validate_extraction_intervention_store(store)
+                rows = store.fetch_trials(task_type=TASK_TYPE)
+                runs = store.fetch_experiment_runs(task_type=TASK_TYPE)
+
+                drifted_surface = copy.deepcopy(surface)
+                case_hash = self.pair_cases[0].case_hash
+                old_text = drifted_surface["cue_text_overrides"][case_hash][
+                    LENGTH_MATCHED_NULL_CUE_MODE
+                ]["literal"]
+                new_text = old_text[:-1] + ("!" if old_text[-1] != "!" else ".")
+                drifted_surface["cue_text_overrides"][case_hash][
+                    LENGTH_MATCHED_NULL_CUE_MODE
+                ]["literal"] = new_text
+                drifted_surface["surface_audit"][case_hash]["literal"][
+                    "null_cue_sha256"
+                ] = hashlib.sha256(new_text.encode("utf-8")).hexdigest()
+                resumed = CountingRuleZMockProvider()
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "Execution provenance drift",
+                ):
+                    run_extraction_intervention_experiment(
+                        self.pair_cases,
+                        resumed,
+                        store,
+                        repetitions=1,
+                        max_new_calls=0,
+                        progress_every=0,
+                        cue_modes=cue_modes,
+                        cue_surface_contract=drifted_surface,
+                    )
+            finally:
+                store.close()
+
+        self.assertEqual(result["inserted_trials"], 88)
+        self.assertEqual(provider.call_count, 88)
+        self.assertEqual(resumed.call_count, 0)
+        self.assertEqual(len(rows), 88)
+        self.assertEqual(validation["validated_trials"], 88)
+        self.assertTrue(summary["completion"]["surface_complete"])
+        self.assertEqual(
+            summary["completion"]["cue_modes_by_provider"],
+            {"counting-mock": list(cue_modes)},
+        )
+        self.assertEqual(summary["paired_cue_summary"], [])
+        self.assertEqual(len(summary["target_vs_null_summary"]), 11)
+        self.assertEqual(
+            len(summary["target_vs_null_by_artifact_summary"]),
+            44,
+        )
+        self.assertEqual(len(runs), 1)
+        self.assertEqual(runs[0]["contract"]["cue_modes"], list(cue_modes))
+        self.assertEqual(runs[0]["contract"]["cue_surface_contract"], surface)
+        self.assertTrue(
+            all(
+                row["metadata"]["requested_cue_modes"] == list(cue_modes)
+                for row in rows
+            )
+        )
+
+    def test_populated_store_rejects_changed_cue_contract_before_calls(self) -> None:
+        cue_modes = ("target_preannounced", LENGTH_MATCHED_NULL_CUE_MODE)
+        surface = self._null_cue_surface()
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "trials.sqlite")
+            try:
+                first_provider = CountingRuleZMockProvider()
+                run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    first_provider,
+                    store,
+                    repetitions=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                )
+                second_provider = CountingRuleZMockProvider()
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "different cue-surface contract",
+                ):
+                    run_extraction_intervention_experiment(
+                        self.pair_cases,
+                        second_provider,
+                        store,
+                        repetitions=1,
+                        max_new_calls=88,
+                        progress_every=0,
+                        cue_modes=cue_modes,
+                        cue_surface_contract=surface,
+                    )
+                rows = store.fetch_trials(task_type=TASK_TYPE)
+                runs = store.fetch_experiment_runs(task_type=TASK_TYPE)
+            finally:
+                store.close()
+        self.assertEqual(first_provider.call_count, 88)
+        self.assertEqual(second_provider.call_count, 0)
+        self.assertEqual(len(rows), 88)
+        self.assertEqual(len(runs), 1)
+
+    def test_cross_run_comparison_is_read_only_complete_and_bounded(self) -> None:
+        cue_modes = ("target_preannounced", LENGTH_MATCHED_NULL_CUE_MODE)
+        surface = self._null_cue_surface()
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            prior_path = root / "prior.sqlite"
+            current_path = root / "current.sqlite"
+            prior_store = ExperimentStore(prior_path)
+            current_store = ExperimentStore(current_path)
+            try:
+                run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    CountingRuleZMockProvider(),
+                    prior_store,
+                    repetitions=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                )
+                run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    CountingRuleZMockProvider(),
+                    current_store,
+                    repetitions=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                    cue_modes=cue_modes,
+                    cue_surface_contract=surface,
+                )
+            finally:
+                prior_store.close()
+                current_store.close()
+
+            prior_hash = hashlib.sha256(prior_path.read_bytes()).hexdigest()
+            current_hash = hashlib.sha256(current_path.read_bytes()).hexdigest()
+            output = root / "comparison"
+            prior_read_only = ExperimentStore(prior_path, read_only=True)
+            current_read_only = ExperimentStore(current_path, read_only=True)
+            try:
+                summary = write_extraction_intervention_cross_run_comparison(
+                    prior_read_only,
+                    current_read_only,
+                    output,
+                )
+            finally:
+                prior_read_only.close()
+                current_read_only.close()
+
+            output_files = {
+                path.name for path in output.iterdir() if path.is_file()
+            }
+            prior_hash_after = hashlib.sha256(
+                prior_path.read_bytes()
+            ).hexdigest()
+            current_hash_after = hashlib.sha256(
+                current_path.read_bytes()
+            ).hexdigest()
+
+        self.assertEqual(summary["case_count"], 4)
+        self.assertEqual(summary["pair_rows"], 88)
+        self.assertEqual(len(summary["comparison_overview"]), 2)
+        self.assertEqual(len(summary["target_summary"]), 22)
+        self.assertEqual(summary["artifact_summary_rows"], 88)
+        self.assertEqual(
+            summary["provenance_validation"]["provider_calls"], 0
+        )
+        target_rows = [
+            row
+            for row in summary["target_summary"]
+            if row["comparison_id"] == "prior_target_to_current_target"
+        ]
+        null_rows = [
+            row
+            for row in summary["target_summary"]
+            if row["comparison_id"]
+            == "prior_uncued_to_current_length_matched_null"
+        ]
+        self.assertTrue(
+            all(row["prompt_identical"] == row["n_pairs"] for row in target_rows)
+        )
+        self.assertTrue(all(row["prompt_identical"] == 0 for row in null_rows))
+        self.assertTrue(
+            all(row["raw_response_identical"] == row["n_pairs"] for row in target_rows + null_rows)
+        )
+        self.assertEqual(
+            output_files,
+            {
+                "rule_z_cross_run_comparison.json",
+                "rule_z_cross_run_comparison.md",
+                "rule_z_cross_run_pairs.csv",
+                "rule_z_cross_run_summary.csv",
+                "rule_z_cross_run_summary_by_artifact.csv",
+            },
+        )
+        self.assertEqual(prior_hash_after, prior_hash)
+        self.assertEqual(current_hash_after, current_hash)
+
+    def test_cross_run_comparison_rejects_shared_missing_case_block(self) -> None:
+        cue_modes = ("target_preannounced", LENGTH_MATCHED_NULL_CUE_MODE)
+        surface = self._null_cue_surface()
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            prior_store = ExperimentStore(root / "prior.sqlite")
+            current_store = ExperimentStore(root / "current.sqlite")
+            try:
+                run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    CountingRuleZMockProvider(),
+                    prior_store,
+                    repetitions=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                )
+                run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    CountingRuleZMockProvider(),
+                    current_store,
+                    repetitions=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                    cue_modes=cue_modes,
+                    cue_surface_contract=surface,
+                )
+                missing_hash = self.pair_cases[0].case_hash
+                prior_store.conn.execute(
+                    "DELETE FROM trials WHERE case_hash=?",
+                    (missing_hash,),
+                )
+                current_store.conn.execute(
+                    "DELETE FROM trials WHERE case_hash=?",
+                    (missing_hash,),
+                )
+                prior_store.conn.commit()
+                current_store.conn.commit()
+            finally:
+                prior_store.close()
+                current_store.close()
+
+            prior_read_only = ExperimentStore(root / "prior.sqlite", read_only=True)
+            current_read_only = ExperimentStore(
+                root / "current.sqlite",
+                read_only=True,
+            )
+            try:
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "block coverage drift: missing=1",
+                ):
+                    write_extraction_intervention_cross_run_comparison(
+                        prior_read_only,
+                        current_read_only,
+                        root / "comparison",
+                    )
+            finally:
+                prior_read_only.close()
+                current_read_only.close()
+
+    def test_cross_run_comparison_revalidates_scores_before_reading(self) -> None:
+        cue_modes = ("target_preannounced", LENGTH_MATCHED_NULL_CUE_MODE)
+        surface = self._null_cue_surface()
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            prior_store = ExperimentStore(root / "prior.sqlite")
+            current_store = ExperimentStore(root / "current.sqlite")
+            try:
+                run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    CountingRuleZMockProvider(),
+                    prior_store,
+                    repetitions=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                )
+                run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    CountingRuleZMockProvider(),
+                    current_store,
+                    repetitions=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                    cue_modes=cue_modes,
+                    cue_surface_contract=surface,
+                )
+                row = current_store.fetch_trials(task_type=TASK_TYPE)[0]
+                corrupted_score = dict(row["score"])
+                corrupted_score["correct"] = not bool(
+                    corrupted_score.get("correct")
+                )
+                current_store.conn.execute(
+                    "UPDATE trials SET score_json=? WHERE id=?",
+                    (json.dumps(corrupted_score, sort_keys=True), row["id"]),
+                )
+                current_store.conn.commit()
+            finally:
+                prior_store.close()
+                current_store.close()
+
+            prior_read_only = ExperimentStore(root / "prior.sqlite", read_only=True)
+            current_read_only = ExperimentStore(
+                root / "current.sqlite",
+                read_only=True,
+            )
+            try:
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "(?:score_sha256|Score) mismatch",
+                ):
+                    write_extraction_intervention_cross_run_comparison(
+                        prior_read_only,
+                        current_read_only,
+                        root / "comparison",
+                    )
+            finally:
+                prior_read_only.close()
+                current_read_only.close()
+
+    def test_default_run_keeps_the_frozen_two_cue_contract(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "trials.sqlite")
+            try:
+                run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    CountingRuleZMockProvider(),
+                    store,
+                    repetitions=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                )
+                run = store.fetch_experiment_runs(task_type=TASK_TYPE)[0]
+            finally:
+                store.close()
+
+        self.assertEqual(run["contract"]["cue_modes"], list(CUE_MODES))
+        self.assertNotIn("cue_surface_contract", run["contract"])
+
     def test_report_emits_artifact_cue_and_replicate_views(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             report_dir = Path(td) / "reports"
@@ -645,6 +1096,63 @@ class ExtractionInterventionTests(unittest.TestCase):
         self.assertEqual(
             affected["missing_conditions"],
             [replaced["condition"]],
+        )
+
+    def test_report_completion_uses_run_bound_cue_modes(self) -> None:
+        cue_modes = ("target_preannounced", LENGTH_MATCHED_NULL_CUE_MODE)
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "trials.sqlite")
+            try:
+                run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    CountingRuleZMockProvider(),
+                    store,
+                    repetitions=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                    cue_modes=cue_modes,
+                    cue_surface_contract=self._null_cue_surface(),
+                )
+                rows = store.fetch_trials(task_type=TASK_TYPE)
+                updates = []
+                null_ids = []
+                for row in rows:
+                    if row["metadata"]["cue_mode"] == LENGTH_MATCHED_NULL_CUE_MODE:
+                        null_ids.append((row["id"],))
+                        continue
+                    metadata = dict(row["metadata"])
+                    metadata["requested_cue_modes"] = ["target_preannounced"]
+                    updates.append((json.dumps(metadata, sort_keys=True), row["id"]))
+                store.conn.executemany("DELETE FROM trials WHERE id=?", null_ids)
+                store.conn.executemany(
+                    "UPDATE trials SET metadata_json=? WHERE id=?",
+                    updates,
+                )
+                store.conn.commit()
+
+                summary = write_extraction_intervention_report(
+                    store,
+                    Path(td) / "reports",
+                )
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "requested cue modes do not match",
+                ):
+                    validate_extraction_intervention_store(store)
+            finally:
+                store.close()
+
+        self.assertFalse(summary["completion"]["surface_complete"])
+        self.assertEqual(
+            summary["completion"]["cue_modes_by_provider"],
+            {"counting-mock": list(cue_modes)},
+        )
+        self.assertTrue(
+            all(
+                LENGTH_MATCHED_NULL_CUE_MODE
+                in row["missing_conditions"][0]
+                for row in summary["completion"]["incomplete_case_replicates"]
+            )
         )
 
     def test_interrupted_provider_resumes_without_replaying_rows(self) -> None:
