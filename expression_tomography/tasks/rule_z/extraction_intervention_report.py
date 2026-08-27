@@ -9,18 +9,21 @@ from pathlib import Path
 from statistics import mean
 from typing import Any, Iterable
 
+from expression_tomography.core.schema import Case
 from expression_tomography.core.store import ExperimentStore
 
 from .extraction_intervention import (
     ARTIFACT_FAMILIES,
     COMPUTE_PATHS,
-    CUE_MODES,
     LENGTH_MATCHED_NULL_CUE_MODE,
     LITERAL_FIELDS,
     TASK_TYPE,
     compute_condition,
     literal_condition,
     normalize_cue_modes,
+)
+from .extraction_intervention_lineage import (
+    validate_experiment_run_record_for_cases,
 )
 
 
@@ -52,27 +55,56 @@ def _write_csv(path: Path, rows: Iterable[dict[str, Any]]) -> None:
 def _completion_summary(
     cases: list[dict[str, Any]],
     trials: list[dict[str, Any]],
+    experiment_runs: list[dict[str, Any]],
 ) -> dict[str, Any]:
-    providers = sorted({str(row["provider"]) for row in trials})
+    case_records = [
+        Case(
+            case_id=str(case["case_id"]),
+            task_type=str(case["task_type"]),
+            payload=case["payload"],
+            seed=int(case["seed"]),
+            case_hash=str(case["case_hash"]),
+        )
+        for case in cases
+    ]
+    run_surfaces: dict[str, tuple[str, tuple[str, ...]]] = {}
     cue_modes_by_provider: dict[str, tuple[str, ...]] = {}
+    for run in experiment_runs:
+        validate_experiment_run_record_for_cases(run, case_records)
+        contract = run["contract"]
+        provider_config = contract["provider_config"]
+        provider = str(provider_config["name"])
+        cue_modes = normalize_cue_modes(contract["cue_modes"])
+        previous_cue_modes = cue_modes_by_provider.setdefault(provider, cue_modes)
+        if previous_cue_modes != cue_modes:
+            raise RuntimeError(
+                f"Provider {provider} has inconsistent run-bound cue modes"
+            )
+        run_surfaces[str(run["experiment_run_identity_sha256"])] = (
+            provider,
+            cue_modes,
+        )
+
+    providers = sorted(
+        set(cue_modes_by_provider) | {str(row["provider"]) for row in trials}
+    )
     replicate_sets: dict[str, set[int]] = defaultdict(set)
     observed: dict[tuple[str, str, int], Counter[str]] = defaultdict(Counter)
     for row in trials:
         provider = str(row["provider"])
+        run_identity = row.get("experiment_run_identity_sha256")
+        run_surface = run_surfaces.get(str(run_identity))
+        if run_surface is None:
+            raise RuntimeError(
+                f"Trial {row['id']} does not reference a validated experiment run"
+            )
+        run_provider, _cue_modes = run_surface
+        if provider != run_provider:
+            raise RuntimeError(
+                f"Trial {row['id']} provider does not match its experiment run"
+            )
         replicate = int(row["metadata"].get("replicate_index", 0))
         metadata = row["metadata"]
-        declared_cue_modes = metadata.get("requested_cue_modes", CUE_MODES)
-        try:
-            cue_modes = normalize_cue_modes(declared_cue_modes)
-        except (TypeError, ValueError) as exc:
-            raise RuntimeError(
-                f"Invalid requested cue modes for provider {provider}"
-            ) from exc
-        previous_cue_modes = cue_modes_by_provider.setdefault(provider, cue_modes)
-        if previous_cue_modes != cue_modes:
-            raise RuntimeError(
-                f"Provider {provider} has inconsistent requested cue modes"
-            )
         declared_start = int(metadata.get("requested_replicate_start", replicate))
         declared_repetitions = int(metadata.get("requested_repetitions", 1))
         replicate_sets[provider].add(replicate)
@@ -126,6 +158,9 @@ def _completion_summary(
                         }
                     )
     unique_expected_counts = set(expected_per_provider.values())
+    providers_without_observed_replicates = [
+        provider for provider in providers if not replicate_sets[provider]
+    ]
     return {
         "providers": providers,
         "cue_modes_by_provider": {
@@ -138,8 +173,15 @@ def _completion_summary(
             else None
         ),
         "expected_trials_per_case_replicate_by_provider": expected_per_provider,
+        "providers_without_observed_replicates": (
+            providers_without_observed_replicates
+        ),
         "incomplete_case_replicates": incomplete,
-        "surface_complete": bool(providers) and not incomplete,
+        "surface_complete": (
+            bool(providers)
+            and not providers_without_observed_replicates
+            and not incomplete
+        ),
     }
 
 
@@ -1017,7 +1059,11 @@ def write_extraction_intervention_report(
     replicate_pair_rows = _replicate_pair_rows(trials)
     replicate_summary = _replicate_summary(replicate_pair_rows)
     replicate_overview = _replicate_overview(replicate_pair_rows)
-    completion = _completion_summary(cases, trials)
+    completion = _completion_summary(
+        cases,
+        trials,
+        store.fetch_experiment_runs(task_type=TASK_TYPE),
+    )
     summary = {
         "task_type": TASK_TYPE,
         "n_cases": len(cases),

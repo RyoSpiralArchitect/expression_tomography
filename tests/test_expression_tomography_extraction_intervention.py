@@ -1098,6 +1098,63 @@ class ExtractionInterventionTests(unittest.TestCase):
             [replaced["condition"]],
         )
 
+    def test_report_completion_uses_run_bound_cue_modes(self) -> None:
+        cue_modes = ("target_preannounced", LENGTH_MATCHED_NULL_CUE_MODE)
+        with tempfile.TemporaryDirectory() as td:
+            store = ExperimentStore(Path(td) / "trials.sqlite")
+            try:
+                run_extraction_intervention_experiment(
+                    self.pair_cases,
+                    CountingRuleZMockProvider(),
+                    store,
+                    repetitions=1,
+                    max_new_calls=88,
+                    progress_every=0,
+                    cue_modes=cue_modes,
+                    cue_surface_contract=self._null_cue_surface(),
+                )
+                rows = store.fetch_trials(task_type=TASK_TYPE)
+                updates = []
+                null_ids = []
+                for row in rows:
+                    if row["metadata"]["cue_mode"] == LENGTH_MATCHED_NULL_CUE_MODE:
+                        null_ids.append((row["id"],))
+                        continue
+                    metadata = dict(row["metadata"])
+                    metadata["requested_cue_modes"] = ["target_preannounced"]
+                    updates.append((json.dumps(metadata, sort_keys=True), row["id"]))
+                store.conn.executemany("DELETE FROM trials WHERE id=?", null_ids)
+                store.conn.executemany(
+                    "UPDATE trials SET metadata_json=? WHERE id=?",
+                    updates,
+                )
+                store.conn.commit()
+
+                summary = write_extraction_intervention_report(
+                    store,
+                    Path(td) / "reports",
+                )
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "requested cue modes do not match",
+                ):
+                    validate_extraction_intervention_store(store)
+            finally:
+                store.close()
+
+        self.assertFalse(summary["completion"]["surface_complete"])
+        self.assertEqual(
+            summary["completion"]["cue_modes_by_provider"],
+            {"counting-mock": list(cue_modes)},
+        )
+        self.assertTrue(
+            all(
+                LENGTH_MATCHED_NULL_CUE_MODE
+                in row["missing_conditions"][0]
+                for row in summary["completion"]["incomplete_case_replicates"]
+            )
+        )
+
     def test_interrupted_provider_resumes_without_replaying_rows(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             store = ExperimentStore(Path(td) / "trials.sqlite")
