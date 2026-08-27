@@ -1064,8 +1064,12 @@ def score_prose_sender(raw_response: str, payload: dict[str, Any]) -> dict[str, 
     )
     final_label = bool(
         re.search(
-            r"\b(?:final\s+)?(?:answer|label|outcome|result)\s*"
-            r"(?:is|:)\s*(?:yes|no|conflict)\b",
+            r"\b(?:final\s+)?(?:answer|label|outcome|result)\b\s*"
+            r"(?:[:=\-\u2012-\u2015]\s*|"
+            r"(?:(?:is|was|remains?|stays?|becomes?|equals?|"
+            r"(?:will|would|should|must|can|could|may|might)\s+be)\s+))?"
+            r"(?:(?:still|now|ultimately|therefore|thus|simply|clearly)\s+){0,2}"
+            r"(?:yes|no|conflict)\b",
             text,
             flags=re.I,
         )

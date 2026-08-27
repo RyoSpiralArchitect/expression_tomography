@@ -373,6 +373,10 @@ class RevisionInterfaceTests(unittest.TestCase):
             "```json\n{\"current_version\": \"v2\"}\n```",
             "Current: the revised rule is active.",
             "The current rule now applies. The final answer is yes.",
+            "The current rule now applies. The answer would be yes.",
+            "The current rule now applies. The result remains no.",
+            "The current rule now applies. Answer \u2014 conflict.",
+            "The current rule now applies. The outcome is clearly yes.",
             "The current rule now applies.\n\nTherefore the conclusion follows.",
         )
         for raw in shortcuts:
@@ -610,6 +614,15 @@ class RevisionInterfaceTests(unittest.TestCase):
                         progress_every=0,
                     )
                 partial = store.fetch_trials()
+                incomplete_report = Path(td) / "incomplete-report"
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "Revision-interface source surface is incomplete",
+                ):
+                    write_revision_interface_report(
+                        store, incomplete_report
+                    )
+                self.assertFalse(incomplete_report.exists())
                 resumed_provider = CountingRevisionInterfaceMock()
                 resumed = run_revision_interface_experiment(
                     one_case,

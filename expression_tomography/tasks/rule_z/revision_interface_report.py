@@ -486,6 +486,8 @@ def write_revision_interface_report(
     output_dir: str | Path,
 ) -> dict[str, Any]:
     validation = validate_revision_interface_store(store)
+    if not validation["surface_complete"]:
+        raise RuntimeError("Revision-interface source surface is incomplete")
     trials = store.fetch_trials(task_type=TASK_TYPE)
     trial_rows = _trial_rows(trials)
     pairs = _paired_rows(trials)
