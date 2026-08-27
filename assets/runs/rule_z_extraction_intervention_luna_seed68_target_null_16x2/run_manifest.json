@@ -13,7 +13,7 @@
     "research_note": "docs/live_rule_z_extraction_intervention_luna_null_cue_note_2026_08_26.md",
     "research_note_sha256": "603af381bddb4557ab4505224809c8eacd580a1b7d37cf52a305cf264da4c7f5",
     "cross_run_comparison_module": "expression_tomography/tasks/rule_z/extraction_intervention_compare.py",
-    "cross_run_comparison_module_sha256": "48fc4c19b09b3fea92bbf516058276e886841b7fa7ec6c55c0b147f0220e2a07",
+    "cross_run_comparison_module_sha256": "1fc6673ef7365ae542309eea1d4334f539f049518c6b28cdbe1481b7d2ebd154",
     "post_run_analysis_changed_provider_contract": false,
     "post_run_analysis_changed_prompt_parse_or_score": false
   },
@@ -392,7 +392,7 @@
     "cue_surface_config.json": "dad34272ae783f1340d5175064473b23ece2a7208627ebd4bd313bc1d8b8c39b",
     "prospective_manifest.json": "933279f05f80568a37705e4d52d98a122a4842a670e5081d4705868520bca24c",
     "provider_config.json": "ec09af8685b21682c7e957ec78f6efb322ffe75e2b920cd1f29c47b5c796ed69",
-    "rule_z_cross_run_comparison.json": "23e64b2a703724d0c08b7e15306ab725e5ea6903358397c31e761bad9cfd8ee5",
+    "rule_z_cross_run_comparison.json": "7d70bf68f2233c56aecf07b3d534ef674e9fce431a0fb381aa4d417a230ab614",
     "rule_z_cross_run_comparison.md": "b9c2589125369992b46465720fb07f1831846f7e492162ff6e79a5e6cb8b74cb",
     "rule_z_cross_run_pairs.csv": "bd4f21f45b32c20de9423f759cb2401cd2b6f5d8f6360829040e7d5096f679bb",
     "rule_z_cross_run_summary.csv": "549a64e58e2b2dcff7c6e06701d18b8ff3a91cc90c1f4d51568ca6fe02a95138",

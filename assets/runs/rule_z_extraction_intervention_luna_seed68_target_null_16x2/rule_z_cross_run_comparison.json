@@ -55,6 +55,10 @@
     "database_sha256": "ad93ec8f27ec57f5916e61a339b5f541414dcdc1fcba7f296a17c61f8aac6097",
     "experiment_run_identity_sha256": "4213bf597f8523d4bccee39ce27d0d7858078751963cc49751101ab0ee5fac81",
     "model_literal_execution_order_seed": 9802,
+    "replicate_indices": [
+      0,
+      1
+    ],
     "static_execution_order_seed": 9801,
     "trial_count": 2816
   },
@@ -82,6 +86,10 @@
     "database_sha256": "f1cfb931367d81d643ebb4fac748cf303ec1d280fc482b5f1a8a48a8d9fc89e3",
     "experiment_run_identity_sha256": "cfd74d41595c43ee9179d7f9b73ea1bd6ec2bba0d5cb49491284960059cd52fa",
     "model_literal_execution_order_seed": 9702,
+    "replicate_indices": [
+      0,
+      1
+    ],
     "static_execution_order_seed": 9701,
     "trial_count": 2816
   },
@@ -91,6 +99,8 @@
     "case_payloads_matched": true,
     "case_surface_sha256_matched": true,
     "comparison_identities_complete": true,
+    "current_store_revalidated_trials": 2816,
+    "prior_store_revalidated_trials": 2816,
     "prompt_contracts_matched": true,
     "provider_calls": 0,
     "provider_configurations_matched": true,
