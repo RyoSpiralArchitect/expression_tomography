@@ -389,6 +389,20 @@ class RevisionInterfaceTests(unittest.TestCase):
                 )
                 self.assertFalse(score["ordinary_prose_shape"])
 
+        non_shortcuts = (
+            "The answer is no different from the historical endpoint because the revised derivation preserves it.",
+            "The result is no longer governed by the retired rule, and both active conclusions remain.",
+        )
+        for raw in non_shortcuts:
+            with self.subTest(raw=raw):
+                score = score_sender_response(
+                    "E_prose_strong_joint",
+                    raw,
+                    parse_json_lenient(raw),
+                    payload,
+                )
+                self.assertTrue(score["ordinary_prose_shape"])
+
     def test_receiver_score_detects_role_swap_and_distinct_old_answer(self) -> None:
         payload = self.changed.payload
         expected = expected_receiver_readout(payload)

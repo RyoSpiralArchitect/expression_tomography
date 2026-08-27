@@ -1069,7 +1069,7 @@ def score_prose_sender(raw_response: str, payload: dict[str, Any]) -> dict[str, 
             r"(?:(?:is|was|remains?|stays?|becomes?|equals?|"
             r"(?:will|would|should|must|can|could|may|might)\s+be)\s+))?"
             r"(?:(?:still|now|ultimately|therefore|thus|simply|clearly)\s+){0,2}"
-            r"(?:yes|no|conflict)\b",
+            r"(?:yes|conflict|no(?!\s+(?:different|longer|more|less)\b))\b",
             text,
             flags=re.I,
         )
