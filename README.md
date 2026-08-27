@@ -295,6 +295,35 @@ frozen evidence and bounded interpretation are recorded in
 `docs/live_rule_z_rule_revision_leakage_luna_note_2026_08_26.md` and
 `assets/runs/rule_z_rule_revision_leakage_luna_seed83_288x2/`.
 
+## Rule-Z Revision Interface Calibration
+
+The follow-up calibration separates semantic role binding, typed versus prose
+scaffold, requested output component, answer-changing versus answer-preserving
+updates, and receiver reconstruction:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.revision_interface_cues \
+  --encoding o200k_base \
+  --output results/expression_tomography/revision_interface_cues.json
+
+python3 -m expression_tomography.tasks.rule_z.revision_interface_task \
+  --seed 101 --repetitions 2 --order-seed 13103 \
+  --max-new-calls 3024 \
+  --cue-contract results/expression_tomography/revision_interface_cues.json \
+  --provider-config expression_tomography/config/providers.openai_gpt_5_6_luna_revision_interface.json \
+  --db results/expression_tomography/revision_interface_luna.sqlite \
+  --report-dir results/expression_tomography/revision_interface_luna_reports
+```
+
+The fixed 108-case surface has 72 answer-changing and 36 answer-preserving
+revisions. Fourteen calls per case-replicate form the binding-by-scaffold
+factorial, answer/current/history decomposition, full-restatement anchor, and
+typed/prose oracle-ear controls. Both sender prose arms use the same strong
+receiver, while historical-first and current-first oracle prose are balanced.
+If that oracle ear fails, the corresponding sender prose outcome remains
+`unidentified`. The frozen design and adaptive follow-up rules are in
+`docs/rule_z_revision_interface_calibration_protocol_2026_08_27.md`.
+
 ## Metaphor Transfer Smoke
 
 ```bash

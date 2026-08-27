@@ -1,0 +1,236 @@
+{
+  "by_condition": [
+    {
+      "answer_old_rate": 0.0,
+      "canonical_exact_rate": 0.8003472222222222,
+      "canonical_superset_rate": 0.046875,
+      "content_complete_rate": 0.9722222222222222,
+      "group": "condition",
+      "n": 576,
+      "new_atom_current_rate": 0.9982638888888888,
+      "old_atom_current_rate": 0.0,
+      "role_unidentified_rate": 0.1111111111111111,
+      "semantic_role_complete_rate": 0.8611111111111112,
+      "status_counts": {
+        "canonical_exact": 461,
+        "canonical_superset": 27,
+        "content_complete_role_unidentified": 64,
+        "content_incomplete": 16,
+        "semantic_role_complete_noncanonical": 8
+      },
+      "strict_sender_legacy_leak_rate": 0.0,
+      "value": "E_delta_update"
+    },
+    {
+      "answer_old_rate": 0.0,
+      "canonical_exact_rate": 1.0,
+      "canonical_superset_rate": 0.0,
+      "content_complete_rate": 1.0,
+      "group": "condition",
+      "n": 576,
+      "new_atom_current_rate": 1.0,
+      "old_atom_current_rate": 0.0,
+      "role_unidentified_rate": 0.0,
+      "semantic_role_complete_rate": 1.0,
+      "status_counts": {
+        "canonical_exact": 576
+      },
+      "strict_sender_legacy_leak_rate": 0.0,
+      "value": "E_full_restate"
+    }
+  ],
+  "by_history_load": [
+    {
+      "answer_old_rate": 0.0,
+      "canonical_exact_rate": 0.9192708333333334,
+      "canonical_superset_rate": 0.018229166666666668,
+      "content_complete_rate": 0.9947916666666666,
+      "group": "history_load",
+      "n": 384,
+      "new_atom_current_rate": 1.0,
+      "old_atom_current_rate": 0.0,
+      "role_unidentified_rate": 0.052083333333333336,
+      "semantic_role_complete_rate": 0.9427083333333334,
+      "status_counts": {
+        "canonical_exact": 353,
+        "canonical_superset": 7,
+        "content_complete_role_unidentified": 20,
+        "content_incomplete": 2,
+        "semantic_role_complete_noncanonical": 2
+      },
+      "strict_sender_legacy_leak_rate": 0.0,
+      "value": "16"
+    },
+    {
+      "answer_old_rate": 0.0,
+      "canonical_exact_rate": 0.9140625,
+      "canonical_superset_rate": 0.0234375,
+      "content_complete_rate": 0.9869791666666666,
+      "group": "history_load",
+      "n": 384,
+      "new_atom_current_rate": 1.0,
+      "old_atom_current_rate": 0.0,
+      "role_unidentified_rate": 0.046875,
+      "semantic_role_complete_rate": 0.9401041666666666,
+      "status_counts": {
+        "canonical_exact": 351,
+        "canonical_superset": 9,
+        "content_complete_role_unidentified": 18,
+        "content_incomplete": 5,
+        "semantic_role_complete_noncanonical": 1
+      },
+      "strict_sender_legacy_leak_rate": 0.0,
+      "value": "32"
+    },
+    {
+      "answer_old_rate": 0.0,
+      "canonical_exact_rate": 0.8671875,
+      "canonical_superset_rate": 0.028645833333333332,
+      "content_complete_rate": 0.9765625,
+      "group": "history_load",
+      "n": 384,
+      "new_atom_current_rate": 0.9973958333333334,
+      "old_atom_current_rate": 0.0,
+      "role_unidentified_rate": 0.06770833333333333,
+      "semantic_role_complete_rate": 0.9088541666666666,
+      "status_counts": {
+        "canonical_exact": 333,
+        "canonical_superset": 11,
+        "content_complete_role_unidentified": 26,
+        "content_incomplete": 9,
+        "semantic_role_complete_noncanonical": 5
+      },
+      "strict_sender_legacy_leak_rate": 0.0,
+      "value": "8"
+    }
+  ],
+  "by_mutation_family": [
+    {
+      "answer_old_rate": 0.0,
+      "canonical_exact_rate": 0.8298611111111112,
+      "canonical_superset_rate": 0.06944444444444445,
+      "content_complete_rate": 0.9965277777777778,
+      "group": "mutation_family",
+      "n": 288,
+      "new_atom_current_rate": 1.0,
+      "old_atom_current_rate": 0.0,
+      "role_unidentified_rate": 0.09722222222222222,
+      "semantic_role_complete_rate": 0.8993055555555556,
+      "status_counts": {
+        "canonical_exact": 239,
+        "canonical_superset": 20,
+        "content_complete_role_unidentified": 28,
+        "content_incomplete": 1
+      },
+      "strict_sender_legacy_leak_rate": 0.0,
+      "value": "antecedent_rebind"
+    },
+    {
+      "answer_old_rate": 0.0,
+      "canonical_exact_rate": 0.9236111111111112,
+      "canonical_superset_rate": 0.020833333333333332,
+      "content_complete_rate": 0.9930555555555556,
+      "group": "mutation_family",
+      "n": 288,
+      "new_atom_current_rate": 1.0,
+      "old_atom_current_rate": 0.0,
+      "role_unidentified_rate": 0.04861111111111111,
+      "semantic_role_complete_rate": 0.9444444444444444,
+      "status_counts": {
+        "canonical_exact": 266,
+        "canonical_superset": 6,
+        "content_complete_role_unidentified": 14,
+        "content_incomplete": 2
+      },
+      "strict_sender_legacy_leak_rate": 0.0,
+      "value": "consequent_flip"
+    },
+    {
+      "answer_old_rate": 0.0,
+      "canonical_exact_rate": 0.8645833333333334,
+      "canonical_superset_rate": 0.0,
+      "content_complete_rate": 0.96875,
+      "group": "mutation_family",
+      "n": 288,
+      "new_atom_current_rate": 1.0,
+      "old_atom_current_rate": 0.0,
+      "role_unidentified_rate": 0.0763888888888889,
+      "semantic_role_complete_rate": 0.8923611111111112,
+      "status_counts": {
+        "canonical_exact": 249,
+        "content_complete_role_unidentified": 22,
+        "content_incomplete": 9,
+        "semantic_role_complete_noncanonical": 8
+      },
+      "strict_sender_legacy_leak_rate": 0.0,
+      "value": "priority_reversal"
+    },
+    {
+      "answer_old_rate": 0.0,
+      "canonical_exact_rate": 0.9826388888888888,
+      "canonical_superset_rate": 0.003472222222222222,
+      "content_complete_rate": 0.9861111111111112,
+      "group": "mutation_family",
+      "n": 288,
+      "new_atom_current_rate": 0.9965277777777778,
+      "old_atom_current_rate": 0.0,
+      "role_unidentified_rate": 0.0,
+      "semantic_role_complete_rate": 0.9861111111111112,
+      "status_counts": {
+        "canonical_exact": 283,
+        "canonical_superset": 1,
+        "content_incomplete": 4
+      },
+      "strict_sender_legacy_leak_rate": 0.0,
+      "value": "rule_retirement_replacement"
+    }
+  ],
+  "diagnostic_contract_version": "rule_z_rule_revision_semantic_diagnostics.v1",
+  "interpretation_boundaries": [
+    "The frozen score.v2 rows are read-only and are not rewritten.",
+    "Canonical exactness requires the prospectively specified top-level revision record.",
+    "Semantic role completeness requires the canonical role key and expected value to occur together at any nesting depth.",
+    "Content completeness without role completeness is reported as unidentified, not semantic success.",
+    "Recursive content coverage does not infer aliases from observed model outputs."
+  ],
+  "overall": {
+    "answer_old_rate": 0.0,
+    "canonical_exact_rate": 0.9001736111111112,
+    "canonical_superset_rate": 0.0234375,
+    "content_complete_rate": 0.9861111111111112,
+    "group": "all",
+    "n": 1152,
+    "new_atom_current_rate": 0.9991319444444444,
+    "old_atom_current_rate": 0.0,
+    "role_unidentified_rate": 0.05555555555555555,
+    "semantic_role_complete_rate": 0.9305555555555556,
+    "status_counts": {
+      "canonical_exact": 1037,
+      "canonical_superset": 27,
+      "content_complete_role_unidentified": 64,
+      "content_incomplete": 16,
+      "semantic_role_complete_noncanonical": 8
+    },
+    "strict_sender_legacy_leak_rate": 0.0,
+    "value": "ALL"
+  },
+  "sender_rows": 1152,
+  "source_database_sha256": "415f9f62812764b74a547299761840ad2bd520f976fdaa5a2960d64dace49165",
+  "source_run_identities": [
+    "0e1a6f342fd3d5e5b10b2b2a97ff4ff7624e6c2691c51886b8c237072a1f2c1a"
+  ],
+  "task_type": "rule_z_rule_revision_leakage",
+  "validation": {
+    "lineage_matches": 4032,
+    "missing_logical_identities": 0,
+    "parse_matches": 4032,
+    "prompt_matches": 4032,
+    "score_matches": 4032,
+    "sqlite_integrity_check": "ok",
+    "surface_complete": true,
+    "unexpected_logical_identities": 0,
+    "validated_cases": 288,
+    "validated_experiment_runs": 1,
+    "validated_trials": 4032
+  }
+}
