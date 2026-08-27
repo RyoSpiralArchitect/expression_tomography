@@ -1138,6 +1138,13 @@ def validate_extraction_intervention_store(
                     f"Stored trial {row['id']} references an unknown experiment run"
                 )
             cue_surface_contract = run["contract"].get("cue_surface_contract")
+            if metadata.get("requested_cue_modes") != run["contract"].get(
+                "cue_modes"
+            ):
+                raise RuntimeError(
+                    f"Stored trial {row['id']} requested cue modes do not match "
+                    "its experiment run"
+                )
         mock_hint = bool(metadata.get("mock_structured_hint_included"))
         trial_type = str(metadata.get("trial_type", ""))
         representation = None
