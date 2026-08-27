@@ -146,6 +146,45 @@ class RuleRevisionSemanticDiagnosticsTests(unittest.TestCase):
                 },
             )
 
+    def test_incomplete_diagnostics_leave_no_output_artifact(self) -> None:
+        cases = make_rule_revision_cases(
+            answer_transitions=("yes_to_no",),
+            mutation_families=("consequent_flip",),
+            history_loads=(8,),
+            cases_per_cell=1,
+        )
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            database = root / "trials.sqlite"
+            store = ExperimentStore(database)
+            try:
+                run_rule_revision_experiment(
+                    cases,
+                    RuleRevisionMockProvider(),
+                    store,
+                    repetitions=1,
+                    max_new_calls=7,
+                    progress_every=0,
+                )
+                store.conn.execute(
+                    "DELETE FROM trials WHERE condition = ?",
+                    ("T_oracle_current",),
+                )
+                store.conn.commit()
+                output = root / "diagnostics"
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "Rule revision source surface is incomplete",
+                ):
+                    write_semantic_diagnostics(
+                        store,
+                        output,
+                        source_database_sha256="test-hash",
+                    )
+                self.assertFalse(output.exists())
+            finally:
+                store.close()
+
     def test_frozen_diagnostics_are_bound_to_source_and_generator(self) -> None:
         root = Path(__file__).resolve().parents[1]
         run_dir = (

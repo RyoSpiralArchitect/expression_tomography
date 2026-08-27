@@ -380,10 +380,10 @@ def write_semantic_diagnostics(
     *,
     source_database_sha256: str,
 ) -> dict[str, Any]:
-    output = Path(output_dir)
-    output.mkdir(parents=True, exist_ok=True)
     summary, rows = build_semantic_diagnostics(store)
     summary["source_database_sha256"] = source_database_sha256
+    output = Path(output_dir)
+    output.mkdir(parents=True, exist_ok=True)
     _write_csv(output / "rule_revision_semantic_diagnostics.csv", rows)
     (output / "rule_revision_semantic_diagnostics_summary.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
