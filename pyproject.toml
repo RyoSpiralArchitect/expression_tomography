@@ -19,7 +19,7 @@ keywords = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest==9.0.2", "ruff==0.15.2"]
+dev = ["pytest==9.0.2", "ruff==0.15.2", "tiktoken==0.12.0"]
 cue = ["tiktoken==0.12.0"]
 hf = ["torch", "transformers"]
 
@@ -34,6 +34,11 @@ et-rule-z-extraction-intervention-compare = "expression_tomography.tasks.rule_z.
 et-rule-z-extraction-intervention-migrate = "expression_tomography.tasks.rule_z.extraction_intervention_migration:main"
 et-rule-z-extraction-intervention-lineage-migrate = "expression_tomography.tasks.rule_z.extraction_intervention_lineage_migration:main"
 et-rule-z-null-cue-surface = "expression_tomography.tasks.rule_z.extraction_intervention_null_cue:main"
+et-rule-z-rule-revision-leakage = "expression_tomography.tasks.rule_z.rule_revision_leakage_task:main"
+et-rule-z-rule-revision-semantic-diagnostics = "expression_tomography.tasks.rule_z.rule_revision_semantic_diagnostics:main"
+et-rule-z-revision-interface-cues = "expression_tomography.tasks.rule_z.revision_interface_cues:main"
+et-rule-z-revision-interface = "expression_tomography.tasks.rule_z.revision_interface_task:main"
+et-rule-z-revision-interface-manifest = "expression_tomography.tasks.rule_z.revision_interface_manifest:main"
 et-metaphor-transfer = "expression_tomography.tasks.metaphor_transfer.task:main"
 
 [tool.setuptools.packages.find]

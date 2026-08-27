@@ -1,0 +1,121 @@
+{
+  "answer_transition_counts": {
+    "conflict_to_conflict": 12,
+    "conflict_to_no": 12,
+    "conflict_to_yes": 12,
+    "no_to_conflict": 12,
+    "no_to_no": 12,
+    "no_to_yes": 12,
+    "yes_to_conflict": 12,
+    "yes_to_no": 12,
+    "yes_to_yes": 12
+  },
+  "binding_cue_contract_file_sha256": "86574a340a2392b9a939a790fb613683695562dbd2378a3d37720f71e9517ad3",
+  "binding_cue_contract_path": "assets/runs/rule_z_revision_interface_luna_seed101_108x2/binding_cue_contract.json",
+  "binding_cue_contract_sha256": "21944addabe33545055a988faa643c0ee11fead067610d666a770651fb072035",
+  "case_class_counts": {
+    "answer_changing": 72,
+    "answer_preserving": 36
+  },
+  "case_count": 108,
+  "case_surface_sha256": "8af5545a98946dcb86d50220480469d4fb180a21a02f323609e072824822112a",
+  "conditions": [
+    "E_typed_strong_joint",
+    "E_typed_neutral_joint",
+    "E_prose_strong_joint",
+    "E_prose_neutral_joint",
+    "E_typed_strong_answer_only",
+    "E_typed_strong_current_only",
+    "E_typed_strong_history_only",
+    "E_typed_strong_full_restate_joint",
+    "T_typed_strong_oracle",
+    "T_typed_neutral_oracle",
+    "T_prose_strong_oracle",
+    "T_prose_neutral_oracle",
+    "T_prose_strong_sender",
+    "T_prose_neutral_sender"
+  ],
+  "conditions_per_case_replicate": 14,
+  "dynamic_receiver_conditions": [
+    "T_prose_strong_sender",
+    "T_prose_neutral_sender"
+  ],
+  "experiment_run_identity_sha256": "1da089ec3be7921ed5fd31043b4c6e2ef1e9c97f70646d9879a5565e824db118",
+  "lineage_schema_version": "rule_z_revision_interface.lineage.v1",
+  "live_provider_calls_made": 0,
+  "max_tokens": 4000,
+  "model": "gpt-5.6-luna",
+  "oracle_prose_role_order_counts": {
+    "answer_changing|current_first": 36,
+    "answer_changing|historical_first": 36,
+    "answer_preserving|current_first": 18,
+    "answer_preserving|historical_first": 18
+  },
+  "packet_schema_version": "rule_z_rule_revision_leakage.packet.v1",
+  "planned_calls": 3024,
+  "preflight_provider_calls": 0,
+  "prompt_contract_version": "rule_z_revision_interface.prompt.v1",
+  "protocol": "docs/rule_z_revision_interface_calibration_protocol_2026_08_27.md",
+  "protocol_sha256": "6fc9676dcd2ee15ac58ea2b23ecb5e46d3dddf124f9bdc9f5760e412cb7d3290",
+  "provider": "openai-gpt-5.6-luna-low-revision-interface",
+  "provider_config_file_sha256": "19caa3c1c448706cdf42dd8ffd0c2d8b10157d4382b63151df29948af5b40634",
+  "provider_config_path": "expression_tomography/config/providers.openai_gpt_5_6_luna_revision_interface.json",
+  "provider_config_sha256": "cbf972da5d0dac39337ea59a634f0c6bb163d6f90331e9c52d10f744f3d434ca",
+  "provider_suite_max_new_calls": 3024,
+  "reasoning_effort": "low",
+  "receiver_execution_order_seed": 13104,
+  "receiver_phase_calls": 432,
+  "repetitions": 2,
+  "replicate_start": 0,
+  "score_schema_version": "rule_z_revision_interface.score.v2",
+  "seed": 101,
+  "static_calls": 2592,
+  "static_conditions": [
+    "E_typed_strong_joint",
+    "E_typed_neutral_joint",
+    "E_prose_strong_joint",
+    "E_prose_neutral_joint",
+    "E_typed_strong_answer_only",
+    "E_typed_strong_current_only",
+    "E_typed_strong_history_only",
+    "E_typed_strong_full_restate_joint",
+    "T_typed_strong_oracle",
+    "T_typed_neutral_oracle",
+    "T_prose_strong_oracle",
+    "T_prose_neutral_oracle"
+  ],
+  "static_execution_order_seed": 13103,
+  "status": "prospectively_registered_before_live_calls",
+  "surface_token_audit": {
+    "dynamic_receiver_note": "Proxy uses deterministic oracle prose; live sender output remains bounded separately by provider max_tokens.",
+    "encoding": "o200k_base",
+    "library": "tiktoken",
+    "max_expected_joint_response_tokens": 2148,
+    "max_expected_receiver_readout_tokens": 142,
+    "max_oracle_packet_tokens": 2148,
+    "max_oracle_prose_tokens": 1200,
+    "max_oracle_receiver_prompt_tokens_by_condition": {
+      "T_prose_neutral_oracle": 1358,
+      "T_prose_strong_oracle": 1358,
+      "T_typed_neutral_oracle": 2306,
+      "T_typed_strong_oracle": 2306
+    },
+    "max_proxy_dynamic_receiver_prompt_tokens_by_condition": {
+      "T_prose_neutral_sender": 1357,
+      "T_prose_strong_sender": 1357
+    },
+    "max_sender_prompt_tokens_by_condition": {
+      "E_prose_neutral_joint": 2240,
+      "E_prose_strong_joint": 2240,
+      "E_typed_neutral_joint": 2259,
+      "E_typed_strong_answer_only": 2202,
+      "E_typed_strong_current_only": 2207,
+      "E_typed_strong_full_restate_joint": 4215,
+      "E_typed_strong_history_only": 2187,
+      "E_typed_strong_joint": 2259
+    },
+    "version": "0.12.0"
+  },
+  "task_type": "rule_z_revision_interface_calibration",
+  "temperature": null
+}

@@ -1,0 +1,303 @@
+{
+  "manifest_version": "rule_z_rule_revision_leakage.run.v1",
+  "status": "complete",
+  "local_run_date": "2026-08-26",
+  "secrets_stored": false,
+  "implementation": {
+    "branch": "SpiralReality/rule-z-rule-revision-leakage",
+    "base_commit": "dbcfc7cfda23ae0e859bab4399f39d9040e43b43",
+    "preregistration_commit": "f0e698cf8fb3eae675cd44b4e123bc173e45737f",
+    "mock_dry_run_commit": "670a0cc36d8028e6416bb8f44ae01c8ca1757a4a",
+    "post_run_evidence_commit": "4f356f90d4f691320b85f317235f8edcbac34e6b",
+    "protocol": "docs/rule_z_rule_revision_leakage_protocol_2026_08_26.md",
+    "protocol_sha256": "fa10d9774f0bc73c59a6cd5cbd1d78fdf1b0c6b91f65864a25471b78f3d4aad1",
+    "research_note": "docs/live_rule_z_rule_revision_leakage_luna_note_2026_08_26.md",
+    "research_note_sha256": "f9207f48977236d63c668da948c1cef15996caff4bc1ffe0e226202fc4b9a1ce",
+    "post_run_analysis_changed_provider_contract": false,
+    "post_run_analysis_changed_prompt_parse_or_score": false,
+    "post_run_report_formatting_only": false,
+    "post_run_report_validation_only": true,
+    "complete_store_report_artifacts_unchanged": true,
+    "report_module_sha256": "8150aa2c7f1489db6d3ed1300d054e27e7fdf98e54cecfff3e62880298cb785e"
+  },
+  "generator": {
+    "task_type": "rule_z_rule_revision_leakage",
+    "seed": 83,
+    "case_count": 288,
+    "cases_per_cell": 4,
+    "cell_count": 72,
+    "replicates": 2,
+    "replicate_start": 0,
+    "conditions_per_case_replicate": 7,
+    "planned_successful_trials": 4032,
+    "static_order_seed": 11803,
+    "receiver_order_seed": 11804,
+    "answer_transition_counts": {
+      "conflict_to_no": 48,
+      "conflict_to_yes": 48,
+      "no_to_conflict": 48,
+      "no_to_yes": 48,
+      "yes_to_conflict": 48,
+      "yes_to_no": 48
+    },
+    "mutation_family_counts": {
+      "antecedent_rebind": 72,
+      "consequent_flip": 72,
+      "priority_reversal": 72,
+      "rule_retirement_replacement": 72
+    },
+    "history_load_counts": {
+      "8": 96,
+      "16": 96,
+      "32": 96
+    }
+  },
+  "provider": {
+    "name": "openai-gpt-5.6-luna-low-rule-revision",
+    "model": "gpt-5.6-luna",
+    "type": "openai_compatible",
+    "config_file": "provider_config.json",
+    "config_file_sha256": "3ea5a10ef33fc72653e589761448deaeae51ead27943067419043383c4bbc705",
+    "canonical_provider_config_sha256": "23ddf7976a1520f739f0379829b44ce8379c06d38a3f7aa1e4238d9d136a4b56",
+    "request_contract_version": "openai_compatible.chat_completions.temperature_optional.v3",
+    "max_tokens": 4000,
+    "temperature": null,
+    "temperature_request_mode": "provider_default",
+    "reasoning_effort": "low",
+    "timeout_s": 120,
+    "api_key_env": "OPENAI_API_KEY"
+  },
+  "experiment_run": {
+    "case_surface_sha256": "188393c3c93ebf5f6c71c79d82f3f53e3dd3a97a7ded25e4c9caec2dc766e4a2",
+    "experiment_run_identity_sha256": "0e1a6f342fd3d5e5b10b2b2a97ff4ff7624e6c2691c51886b8c237072a1f2c1a",
+    "experiment_run_rows": 1,
+    "created_at_utc": "2026-08-27 00:59:06"
+  },
+  "preflight": {
+    "planned_trials": 4032,
+    "max_new_calls": 4032,
+    "new_call_upper_bound": 4032,
+    "static_new_calls": 2304,
+    "receiver_new_calls": 1728,
+    "provider_calls": 0,
+    "case_rows_written": 0,
+    "trial_rows_written": 0,
+    "experiment_run_rows_written": 0,
+    "resume_after_timeout": {
+      "existing_trials": 3000,
+      "max_new_calls": 1032,
+      "new_call_upper_bound": 1032,
+      "provider_calls": 0
+    }
+  },
+  "execution": {
+    "created_at_utc_min": "2026-08-27 00:59:09",
+    "created_at_utc_max": "2026-08-27 06:34:07",
+    "process_boundaries": [
+      {
+        "process": 1,
+        "skipped_existing_trials": 0,
+        "inserted_trials": 3000,
+        "stop": "read_timeout",
+        "failed_call_inserted": false
+      },
+      {
+        "process": 2,
+        "skipped_existing_trials": 3000,
+        "inserted_trials": 1032,
+        "stop": "complete"
+      }
+    ],
+    "successful_stored_trials": 4032,
+    "failed_transport_attempts": 1,
+    "observed_process_level_request_attempts": 4033,
+    "performance_dependent_early_stop": false,
+    "selective_retry": false,
+    "case_replacement": false,
+    "case_count": 288,
+    "trial_count": 4032,
+    "complete_case_replicate_blocks": 576,
+    "unique_logical_identities": 4032,
+    "unique_generation_identities": 4032,
+    "unique_assessment_identities": 4032,
+    "parse_failures": 0,
+    "top_level_schema_failures": 0,
+    "sqlite_integrity_check": "ok",
+    "canonical_database_sha256": "415f9f62812764b74a547299761840ad2bd520f976fdaa5a2960d64dace49165",
+    "exact_rerun": {
+      "inserted_trials": 0,
+      "skipped_existing_trials": 4032,
+      "provider_calls": 0,
+      "experiment_run_identity_unchanged": true,
+      "database_sha256_unchanged": true
+    }
+  },
+  "provenance": {
+    "packet_schema_version": "rule_z_rule_revision_leakage.packet.v1",
+    "prompt_contract_version": "rule_z_rule_revision_leakage.prompt.v1",
+    "score_schema_version": "rule_z_rule_revision_leakage.score.v2",
+    "lineage_schema_version": "rule_z_rule_revision_leakage.lineage.v1",
+    "raw_response_reparse_validation_trials": 4032,
+    "prompt_matches": 4032,
+    "parse_matches": 4032,
+    "score_matches": 4032,
+    "lineage_matches": 4032,
+    "missing_logical_identities": 0,
+    "unexpected_logical_identities": 0,
+    "validated_experiment_runs": 1,
+    "provider_calls_during_revalidation": 0,
+    "deterministic_report_files": 5,
+    "verification": {
+      "pytest": "146 passed, 18 subtests passed",
+      "focused_pytest": "10 passed",
+      "ruff": "passed for all Git-tracked Python files"
+    }
+  },
+  "primary_results": {
+    "fresh_direct_controls": {
+      "old_exact": 569,
+      "new_exact": 569,
+      "n_each": 576,
+      "both_exact": 562,
+      "paired_n": 576
+    },
+    "delta_sender": {
+      "n": 576,
+      "packet_exact": 439,
+      "current_surface_exact": 572,
+      "derivation_exact": 554,
+      "history_record_exact": 461,
+      "answer_current": 574,
+      "strict_sender_legacy_leak": 0,
+      "direct_control_qualified_strict_leak": 0,
+      "direct_control_qualified_n": 562,
+      "computation_lag": 0,
+      "mixed_version_fusion": 0
+    },
+    "full_restatement_sender": {
+      "n": 576,
+      "packet_exact": 571,
+      "current_surface_exact": 573,
+      "derivation_exact": 574,
+      "history_record_exact": 576,
+      "answer_current": 576,
+      "strict_sender_legacy_leak": 0,
+      "direct_control_qualified_strict_leak": 0,
+      "direct_control_qualified_n": 562,
+      "computation_lag": 0,
+      "mixed_version_fusion": 0
+    },
+    "paired_sender_transition": {
+      "both_packet_exact": 435,
+      "delta_error_repaired_by_full": 136,
+      "delta_exact_full_inexact": 4,
+      "both_inexact": 1,
+      "repair_given_delta_error": 0.9927007299270073
+    },
+    "receivers": {
+      "delta": {
+        "n": 576,
+        "response_exact": 570,
+        "answer_exact": 573,
+        "version_exact": 576,
+        "receiver_only_leak_given_exact_input": 0,
+        "exact_input_n": 439,
+        "inherited_legacy_leak": 0
+      },
+      "full_restatement": {
+        "n": 576,
+        "response_exact": 573,
+        "answer_exact": 573,
+        "version_exact": 576,
+        "receiver_only_leak_given_exact_input": 0,
+        "exact_input_n": 571,
+        "inherited_legacy_leak": 0
+      },
+      "oracle_current": {
+        "n": 576,
+        "response_exact": 569,
+        "answer_exact": 573,
+        "version_exact": 576,
+        "receiver_only_leak_given_exact_input": 0,
+        "exact_input_n": 576
+      }
+    },
+    "replicate_stability": {
+      "delta": {
+        "case_pairs": 288,
+        "both_packet_exact": 174,
+        "both_packet_inexact": 23,
+        "packet_exactness_disagrees": 91,
+        "strict_leakage_disagrees": 0
+      },
+      "full_restatement": {
+        "case_pairs": 288,
+        "both_packet_exact": 283,
+        "both_packet_inexact": 0,
+        "packet_exactness_disagrees": 5,
+        "strict_leakage_disagrees": 0
+      }
+    }
+  },
+  "posthoc_diagnostics": {
+    "status": "descriptive_only_not_preregistered",
+    "changed_primary_score": false,
+    "delta_revision_record": {
+      "exact": 461,
+      "expected_subset_with_extra_keys_only": 27,
+      "missing_one_or_more_expected_keys": 88,
+      "mismatched_present_expected_values": 0,
+      "n": 576
+    },
+    "delta_packet_error_components": {
+      "history_only": 112,
+      "derivation_only": 17,
+      "current_surface_only": 3,
+      "history_and_derivation": 2,
+      "derivation_and_answer": 2,
+      "surface_derivation_and_history": 1
+    }
+  },
+  "semantic_diagnostics_v1": {
+    "status": "posthoc_descriptive_read_only",
+    "changed_frozen_trials": false,
+    "changed_primary_score": false,
+    "fail_closed_before_output_creation": true,
+    "complete_store_artifacts_unchanged": true,
+    "diagnostic_contract_version": "rule_z_rule_revision_semantic_diagnostics.v1",
+    "source_database_sha256": "415f9f62812764b74a547299761840ad2bd520f976fdaa5a2960d64dace49165",
+    "source_run_identity_sha256": "0e1a6f342fd3d5e5b10b2b2a97ff4ff7624e6c2691c51886b8c237072a1f2c1a",
+    "validated_trials": 4032,
+    "module": "expression_tomography/tasks/rule_z/rule_revision_semantic_diagnostics.py",
+    "module_sha256": "9b78716398f3ae00d6899bfa18e4512a6aac244e5b61fd6d494dd4292a7553ee",
+    "artifacts": {
+      "semantic_diagnostics_v1/rule_revision_semantic_diagnostics.csv": "b5debabffd7eadfe9bcbc20771f35a366ce9af19db4d8672bc8628342a8bb032",
+      "semantic_diagnostics_v1/rule_revision_semantic_diagnostics_report.md": "d88930d0d1cd441640207a6b113720fd25774692f3250cdbe4882612794621ad",
+      "semantic_diagnostics_v1/rule_revision_semantic_diagnostics_summary.json": "62128f51ff8d385261a737eadf26273b763a51f384d391f4c0244d249d3fa790"
+    }
+  },
+  "artifact_sha256": {
+    "prospective_manifest.json": "57beb56916142e917fe99f192e4c6349468cb80043d7e896e8cf24b42f8d5075",
+    "mock_dry_run_manifest.json": "f5e4b8a48c075ad2cf3d6543321b68e16e02cd12d63604fd28e569121a027041",
+    "mock_dry_run_report.md": "745708f996589ee6bbbdb0418a2a638882b79be815b0cb6e827f2f16ce99388f",
+    "operator_log.jsonl": "132d7c7da3dfa8bee0881c22d87047ffa3b60b37a4986750f3747bb46e3080c9",
+    "provider_config.json": "3ea5a10ef33fc72653e589761448deaeae51ead27943067419043383c4bbc705",
+    "rule_revision_pairs.csv": "72d8256f6958d3ece212d07698df23da9773cec9844815f33e464e5f5f45c976",
+    "rule_revision_report.md": "90f622df394c9fa7614e672b68979782fb1f204daf9cf02a682d198c62f6c755",
+    "rule_revision_strata.csv": "19a30151a80d2edd9ba76c734971374a11c949c17eacf9fdf28f6de76a88297f",
+    "rule_revision_summary.json": "98bfdcec21a39e92d31e34c1835db3d333acfdb7f8a99482c9dfc1f25f48648a",
+    "rule_revision_trials.csv": "55d442e4cd58ccdeaaeb666b9cf19e3d4b7b4a0ca945a80c5796ff2d461d867e",
+    "semantic_diagnostics_v1/rule_revision_semantic_diagnostics.csv": "b5debabffd7eadfe9bcbc20771f35a366ce9af19db4d8672bc8628342a8bb032",
+    "semantic_diagnostics_v1/rule_revision_semantic_diagnostics_report.md": "d88930d0d1cd441640207a6b113720fd25774692f3250cdbe4882612794621ad",
+    "semantic_diagnostics_v1/rule_revision_semantic_diagnostics_summary.json": "62128f51ff8d385261a737eadf26273b763a51f384d391f4c0244d249d3fa790",
+    "trials.sqlite": "415f9f62812764b74a547299761840ad2bd520f976fdaa5a2960d64dace49165"
+  },
+  "interpretation_boundaries": [
+    "Strict leakage requires a family-specific old atom in a current packet field and an answer matching the old oracle.",
+    "Historical old atoms inside revision_record are expected and are not leakage.",
+    "This fixed typed surface does not estimate a general population prevalence.",
+    "The result measures prompt-local revision handling, not weight-level unlearning or model editing.",
+    "A null result under the typed packet does not establish a null result under ordinary prose or weaker binding.",
+    "Post-hoc revision-record diagnostics do not rewrite the prospectively frozen score.v2 outcomes."
+  ]
+}

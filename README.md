@@ -256,6 +256,74 @@ the suite stops with zero calls.
 Resume also binds the complete task case surface. Changing `--seed`, `--worlds`,
 or stored case content fails before planning calls and requires a fresh database.
 
+## Rule-Z Rule Revision Leakage
+
+The rule-revision probe tests whether a prompt-local v1 rule continues to act
+as current after an authoritative v2 update:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.rule_revision_leakage_task \
+  --seed 83 --repetitions 2 --order-seed 11803 \
+  --max-new-calls 4032 \
+  --provider-config expression_tomography/config/providers.openai_gpt_5_6_luna_rule_revision.json \
+  --db results/expression_tomography/rule_revision_luna.sqlite \
+  --report-dir results/expression_tomography/rule_revision_luna_reports
+```
+
+The fixed surface contains 288 old-to-new transitions, balanced across all six
+changed answer directions, four revision families, three rule-history loads,
+and four opaque variants. Each of two replicates makes seven calls: fresh old
+and new direct controls, delta and full-restatement sender packets, receivers
+for both packets, and an oracle-current receiver control. Sender responses are
+frozen before the dependent receiver prompt is built, and every receiver row
+is bound to its exact upstream generation and assessment identities.
+
+Strict leakage requires an old rule atom in a current packet field and an
+answer matching the old oracle. A correctly labeled historical atom inside
+`revision_record` is not leakage. Current-surface computation lag,
+mixed-version fusion, receiver-only leakage, inherited leakage, and repair by
+full restatement remain separate deterministic scores. The prospective design,
+call budget, stop rules, and interpretation boundary are frozen in
+`docs/rule_z_rule_revision_leakage_protocol_2026_08_26.md`.
+
+The completed seed-83 Luna run stores 4,032 successful trials. Strict sender,
+receiver-only, inherited, computation-lag, and mixed-version leakage are all
+zero on the controlled typed surface. Delta packet exactness is 0.762, driven
+mainly by noncanonical historical revision records, while a complete v2
+restatement reaches 0.991 and repairs 136 of 137 delta packet failures. The
+frozen evidence and bounded interpretation are recorded in
+`docs/live_rule_z_rule_revision_leakage_luna_note_2026_08_26.md` and
+`assets/runs/rule_z_rule_revision_leakage_luna_seed83_288x2/`.
+
+## Rule-Z Revision Interface Calibration
+
+The follow-up calibration separates semantic role binding, typed versus prose
+scaffold, requested output component, answer-changing versus answer-preserving
+updates, and receiver reconstruction:
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.revision_interface_cues \
+  --encoding o200k_base \
+  --output results/expression_tomography/revision_interface_cues.json
+
+python3 -m expression_tomography.tasks.rule_z.revision_interface_task \
+  --seed 101 --repetitions 2 --order-seed 13103 \
+  --max-new-calls 3024 \
+  --cue-contract results/expression_tomography/revision_interface_cues.json \
+  --provider-config expression_tomography/config/providers.openai_gpt_5_6_luna_revision_interface.json \
+  --db results/expression_tomography/revision_interface_luna.sqlite \
+  --report-dir results/expression_tomography/revision_interface_luna_reports
+```
+
+The fixed 108-case surface has 72 answer-changing and 36 answer-preserving
+revisions. Fourteen calls per case-replicate form the binding-by-scaffold
+factorial, answer/current/history decomposition, full-restatement anchor, and
+typed/prose oracle-ear controls. Both sender prose arms use the same strong
+receiver, while historical-first and current-first oracle prose are balanced.
+If that oracle ear fails, the corresponding sender prose outcome remains
+`unidentified`. The frozen design and adaptive follow-up rules are in
+`docs/rule_z_revision_interface_calibration_protocol_2026_08_27.md`.
+
 ## Metaphor Transfer Smoke
 
 ```bash

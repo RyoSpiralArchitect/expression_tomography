@@ -1,0 +1,54 @@
+{
+  "status": "full_mock_dry_run_complete",
+  "task_type": "rule_z_revision_interface_calibration",
+  "seed": 101,
+  "case_count": 108,
+  "repetitions": 2,
+  "conditions_per_case_replicate": 14,
+  "score_schema_version": "rule_z_revision_interface.score.v2",
+  "mock_experiment_run_identity_sha256": "79ffd71a45bbc8bf5781a1a5b015ad990b7f996b70f548dcc89c89bf8ba2979e",
+  "first_run_inserted_trials": 3024,
+  "exact_resume_inserted_trials": 0,
+  "paired_case_replicates": 216,
+  "validation": {
+    "validated_cases": 108,
+    "validated_trials": 3024,
+    "validated_experiment_runs": 1,
+    "prompt_matches": 3024,
+    "parse_matches": 3024,
+    "score_matches": 3024,
+    "lineage_matches": 3024,
+    "missing_logical_identities": 0,
+    "unexpected_logical_identities": 0,
+    "surface_complete": true,
+    "sqlite_integrity_check": "ok"
+  },
+  "receiver_calibration": {
+    "oracle_prose_strong_failures": 0,
+    "oracle_prose_strong_n": 216,
+    "role_order_strata_qualified": true,
+    "primary_prose_sender_status": "identified"
+  },
+  "temporary_evidence_hashes": {
+    "trials_sqlite_sha256": "98d1177de5713d1ae2da4dacc675aaf402c71a83db294ba8afcf97370ab25334",
+    "summary_json_sha256": "3593950999d55dc57a48c7a92d54b3a1ea1e5f4e202940cb736c766a9d126546",
+    "report_md_sha256": "84224ece98f4bc267f485008a8e864bef5dc538a2522eda0cd2cb24044723b1b",
+    "replicates_csv_sha256": "bc989de9f95d3302aece9db862ac48ba6aada7a44987e891b7a18a8270e6987c"
+  },
+  "temporary_evidence_sizes_bytes": {
+    "trials_sqlite": 29839360,
+    "summary_json": 15182,
+    "report_md": 1489,
+    "replicates_csv": 676
+  },
+  "below_cap_preflight": {
+    "max_new_calls": 3023,
+    "planned_new_calls": 3024,
+    "rejected": true,
+    "stored_cases": 0,
+    "stored_trials": 0,
+    "stored_experiment_runs": 0
+  },
+  "live_provider_calls_made": 0,
+  "note": "The 29.8 MB mock SQLite database was validated from a temporary path and is represented here by its hash; no live evidence was generated."
+}

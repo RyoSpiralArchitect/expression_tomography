@@ -1,0 +1,60 @@
+{
+  "audit": {
+    "receiver": {
+      "neutral": {
+        "characters": 77,
+        "encoding_tokens": 20,
+        "utf8_bytes": 77,
+        "whitespace_words": 10
+      },
+      "neutral_sha256": "9098866bb7ce0ea858203a00bfb29eb1e6f7a8e1963bafa214de91465eef8f3a",
+      "strong": {
+        "characters": 77,
+        "encoding_tokens": 20,
+        "utf8_bytes": 77,
+        "whitespace_words": 10
+      },
+      "strong_sha256": "94f5a4b700b81384003a910069414e265a61cefe85276dd4661e9955b9b4b924"
+    },
+    "sender": {
+      "neutral": {
+        "characters": 74,
+        "encoding_tokens": 21,
+        "utf8_bytes": 74,
+        "whitespace_words": 11
+      },
+      "neutral_sha256": "aa2d5f429a4a0a6296a1f01619dbf3cb229ec085577d1299e91bfe174a8db02a",
+      "strong": {
+        "characters": 74,
+        "encoding_tokens": 21,
+        "utf8_bytes": 74,
+        "whitespace_words": 11
+      },
+      "strong_sha256": "c7fcdc94a77be44db63173fb177377218692be958286beb7bd8d03fb62115b51"
+    }
+  },
+  "contract_version": "rule_z_revision_interface.binding_cues.v1",
+  "cues": {
+    "receiver": {
+      "neutral": "MARKER_CUE: papyrus piano azimuth cactus walnut pebble glyph quasar snowdrop.",
+      "strong": "BINDING_CUE: Reconstruct current v2 roles; never promote historical v1 atoms."
+    },
+    "sender": {
+      "neutral": "MARKER_CUE: iota zeta voxel prism domino quasar kappa indigo orbit meadow.",
+      "strong": "BINDING_CUE: Treat v2 as current; keep v1 and superseded atoms historical."
+    }
+  },
+  "matching_contract": {
+    "characters": "exact",
+    "encoding_tokens": "exact",
+    "neutral_semantics": "unrelated non-version marker",
+    "prompt_line_position": "exact",
+    "utf8_bytes": "exact",
+    "whitespace_words": "exact"
+  },
+  "tokenizer": {
+    "encoding": "o200k_base",
+    "library": "tiktoken",
+    "version": "0.12.0"
+  }
+}
