@@ -286,6 +286,15 @@ full restatement remain separate deterministic scores. The prospective design,
 call budget, stop rules, and interpretation boundary are frozen in
 `docs/rule_z_rule_revision_leakage_protocol_2026_08_26.md`.
 
+The completed seed-83 Luna run stores 4,032 successful trials. Strict sender,
+receiver-only, inherited, computation-lag, and mixed-version leakage are all
+zero on the controlled typed surface. Delta packet exactness is 0.762, driven
+mainly by noncanonical historical revision records, while a complete v2
+restatement reaches 0.991 and repairs 136 of 137 delta packet failures. The
+frozen evidence and bounded interpretation are recorded in
+`docs/live_rule_z_rule_revision_leakage_luna_note_2026_08_26.md` and
+`assets/runs/rule_z_rule_revision_leakage_luna_seed83_288x2/`.
+
 ## Metaphor Transfer Smoke
 
 ```bash

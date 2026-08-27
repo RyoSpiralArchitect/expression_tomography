@@ -320,6 +320,9 @@ class RuleRevisionLeakageTests(unittest.TestCase):
             report_files = {
                 path.name for path in (root / "report").iterdir()
             }
+            report_text = (
+                root / "report" / "rule_revision_report.md"
+            ).read_text(encoding="utf-8")
 
         self.assertEqual(first["inserted_trials"], 14)
         self.assertEqual(provider.call_count, 14)
@@ -362,6 +365,9 @@ class RuleRevisionLeakageTests(unittest.TestCase):
                 "rule_revision_summary.json",
                 "rule_revision_trials.csv",
             },
+        )
+        self.assertFalse(
+            any(line.endswith(" ") for line in report_text.splitlines())
         )
 
     def test_interrupted_dynamic_phase_resumes_only_missing_identities(self) -> None:

@@ -514,7 +514,7 @@ def _markdown(summary: dict[str, Any]) -> str:
             ],
         ]
     )
-    return "\n".join(lines) + "\n"
+    return "\n".join(line.rstrip() for line in lines) + "\n"
 
 
 def write_rule_revision_report(
