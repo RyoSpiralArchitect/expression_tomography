@@ -15,8 +15,10 @@
     "research_note_sha256": "f9207f48977236d63c668da948c1cef15996caff4bc1ffe0e226202fc4b9a1ce",
     "post_run_analysis_changed_provider_contract": false,
     "post_run_analysis_changed_prompt_parse_or_score": false,
-    "post_run_report_formatting_only": true,
-    "report_module_sha256": "d86377e55b875ae6ab0f57522264ff11ed405ba588d128ad5aea32ae65c2f080"
+    "post_run_report_formatting_only": false,
+    "post_run_report_validation_only": true,
+    "complete_store_report_artifacts_unchanged": true,
+    "report_module_sha256": "8150aa2c7f1489db6d3ed1300d054e27e7fdf98e54cecfff3e62880298cb785e"
   },
   "generator": {
     "task_type": "rule_z_rule_revision_leakage",

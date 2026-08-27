@@ -157,6 +157,16 @@ class RuleRevisionSemanticDiagnosticsTests(unittest.TestCase):
             (run_dir / "run_manifest.json").read_text(encoding="utf-8")
         )
         binding = manifest["semantic_diagnostics_v1"]
+        self.assertEqual(
+            manifest["implementation"]["report_module_sha256"],
+            hashlib.sha256(
+                (
+                    root
+                    / "expression_tomography/tasks/rule_z/"
+                    "rule_revision_leakage_report.py"
+                ).read_bytes()
+            ).hexdigest(),
+        )
         summary = json.loads(
             (
                 run_dir

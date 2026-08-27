@@ -373,7 +373,8 @@ class RuleRevisionLeakageTests(unittest.TestCase):
     def test_interrupted_dynamic_phase_resumes_only_missing_identities(self) -> None:
         interrupted = CountingRevisionMockProvider(fail_after=11)
         with tempfile.TemporaryDirectory() as td:
-            store = ExperimentStore(Path(td) / "trials.sqlite")
+            root = Path(td)
+            store = ExperimentStore(root / "trials.sqlite")
             try:
                 with self.assertRaisesRegex(
                     RuntimeError,
@@ -388,6 +389,13 @@ class RuleRevisionLeakageTests(unittest.TestCase):
                         progress_every=0,
                     )
                 partial = store.fetch_trials(task_type=TASK_TYPE)
+                incomplete_report = root / "incomplete-report"
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    "Rule revision source surface is incomplete",
+                ):
+                    write_rule_revision_report(store, incomplete_report)
+                self.assertFalse(incomplete_report.exists())
                 resumed_provider = CountingRevisionMockProvider()
                 resumed = run_rule_revision_experiment(
                     self.one_case,

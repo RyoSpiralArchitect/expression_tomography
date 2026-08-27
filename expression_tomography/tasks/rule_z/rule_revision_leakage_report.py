@@ -418,6 +418,8 @@ def _pair_summary(
 
 def summarize_rule_revision(store: ExperimentStore) -> dict[str, Any]:
     validation = validate_rule_revision_store(store)
+    if not validation["surface_complete"]:
+        raise RuntimeError("Rule revision source surface is incomplete")
     trials = store.fetch_trials(task_type=TASK_TYPE)
     cases = store.fetch_cases(task_type=TASK_TYPE)
     trial_rows = _trial_rows(trials)
@@ -521,9 +523,9 @@ def write_rule_revision_report(
     store: ExperimentStore,
     output_dir: str | Path,
 ) -> dict[str, Any]:
+    summary = summarize_rule_revision(store)
     output = Path(output_dir)
     output.mkdir(parents=True, exist_ok=True)
-    summary = summarize_rule_revision(store)
     trial_rows = summary.pop("_trial_rows")
     pair_rows = summary.pop("_pair_rows")
     strata = summary.pop("_strata")
