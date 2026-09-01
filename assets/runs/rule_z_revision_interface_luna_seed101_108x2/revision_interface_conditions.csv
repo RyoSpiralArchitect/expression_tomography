@@ -1,0 +1,15 @@
+provider,condition,n,accuracy,parse_rate,schema_rate,ordinary_prose_shape_rate,current_surface_exact_rate,derivation_exact_rate,history_canonical_exact_rate,history_semantic_role_complete_rate,answer_current_rate,revision_uptake_rate,roles_swapped_rate
+openai-gpt-5.6-luna-low-revision-interface,E_prose_neutral_joint,216,,,,1.0,,,,,,,
+openai-gpt-5.6-luna-low-revision-interface,E_prose_strong_joint,216,,,,1.0,,,,,,,
+openai-gpt-5.6-luna-low-revision-interface,E_typed_neutral_joint,216,0.6111111111111112,1.0,1.0,,0.9907407407407407,0.6157407407407407,1.0,1.0,1.0,1.0,
+openai-gpt-5.6-luna-low-revision-interface,E_typed_strong_answer_only,216,0.9675925925925926,1.0,1.0,,,,,,0.9675925925925926,,
+openai-gpt-5.6-luna-low-revision-interface,E_typed_strong_current_only,216,0.875,1.0,1.0,,0.875,,,,,1.0,
+openai-gpt-5.6-luna-low-revision-interface,E_typed_strong_full_restate_joint,216,0.4537037037037037,1.0,1.0,,0.9953703703703703,0.4537037037037037,1.0,1.0,1.0,1.0,
+openai-gpt-5.6-luna-low-revision-interface,E_typed_strong_history_only,216,0.06018518518518518,1.0,1.0,,,,0.06018518518518518,0.18055555555555555,,,
+openai-gpt-5.6-luna-low-revision-interface,E_typed_strong_joint,216,0.47685185185185186,1.0,1.0,,0.9861111111111112,0.48148148148148145,0.9907407407407407,1.0,0.9861111111111112,1.0,
+openai-gpt-5.6-luna-low-revision-interface,T_prose_neutral_oracle,216,0.24074074074074073,1.0,1.0,,,,,,0.9537037037037037,,0.0
+openai-gpt-5.6-luna-low-revision-interface,T_prose_neutral_sender,216,0.2037037037037037,1.0,1.0,,,,,,0.9212962962962963,,0.0
+openai-gpt-5.6-luna-low-revision-interface,T_prose_strong_oracle,216,0.23148148148148148,1.0,1.0,,,,,,0.9537037037037037,,0.0
+openai-gpt-5.6-luna-low-revision-interface,T_prose_strong_sender,216,0.18055555555555555,1.0,1.0,,,,,,0.9305555555555556,,0.0
+openai-gpt-5.6-luna-low-revision-interface,T_typed_neutral_oracle,216,1.0,1.0,1.0,,,,,,1.0,,0.0
+openai-gpt-5.6-luna-low-revision-interface,T_typed_strong_oracle,216,1.0,1.0,1.0,,,,,,1.0,,0.0
