@@ -9,6 +9,7 @@
     "implementation_merge_commit": "e5e91676789b45cc5c499930ce3dc70df0da26d9",
     "interrupted_evidence_commit": "7df3e431889ed9e84c16865eaa7dcf317d2f1519",
     "completion_evidence_commit": "8b56f3b47038cc58940cc19565cd6d473bf4f43d",
+    "post_run_report_hardening_commit": "bca9e6a28fdd9ac91edb80ba2917da882037ba0f",
     "protocol": "docs/rule_z_revision_interface_calibration_protocol_2026_08_27.md",
     "protocol_sha256": "6fc9676dcd2ee15ac58ea2b23ecb5e46d3dddf124f9bdc9f5760e412cb7d3290",
     "research_note": "docs/live_rule_z_revision_interface_calibration_luna_note_2026_08_31.md",
@@ -16,9 +17,13 @@
     "task_module": "expression_tomography/tasks/rule_z/revision_interface_task.py",
     "task_module_sha256": "de3a91a2198e069f9d5402a1d31892c48b4e49f3a1b60395bbc79f16c0a709f8",
     "report_module": "expression_tomography/tasks/rule_z/revision_interface_report.py",
-    "report_module_sha256": "f46ac670449c55020e2377a82b30902a942f3b3cea44fcad6d00079eaab719c0",
+    "report_module_sha256": "a266216b0c61c248299df4592dee52d0871f00d0bc134f1bacedb148b2c30fd2",
     "post_run_analysis_changed_provider_contract": false,
     "post_run_analysis_changed_prompt_parse_or_score": false,
+    "post_run_report_presentation_changed": true,
+    "post_run_report_validation_only": true,
+    "post_run_report_regenerated_with_provider_calls": 0,
+    "post_run_report_changed_frozen_trials": false,
     "interrupted_manifest_preserved": true
   },
   "generator": {
@@ -195,7 +200,7 @@
     "provider_calls_during_revalidation": 0,
     "surface_complete": true,
     "verification": {
-      "pytest": "169 passed, 32 subtests passed",
+      "pytest": "170 passed, 32 subtests passed",
       "ruff": "passed for all Git-tracked Python files"
     }
   },
@@ -288,21 +293,21 @@
     "interrupted_run_manifest.json": "c78660d67b87b21423177fc8b9328f6ea28c5a209788e257c2bcfffb82f8365f",
     "mock_dry_run_manifest.json": "6941f7b52c350c9e1eea444f34b2fbcebafd468889bf609264944736f4c28620",
     "mock_dry_run_report.md": "b833068716d4f338635c23cbc1c6347a42d197113c63906787907f262a461b47",
-    "operator_log.jsonl": "5aaa258881fe65910b571a3b6f4b22fb0f491286cd4a41c39521670c76f2ad8a",
+    "operator_log.jsonl": "222d5c5da31dd36ff2e790030a7199d46efd2d3620ab048fd990f90d71519500",
     "prospective_manifest.json": "96ecd83f29c200809aad3c55d8a208f667beb2a814874d83c742980193e8a94a",
     "provider_config.json": "19caa3c1c448706cdf42dd8ffd0c2d8b10157d4382b63151df29948af5b40634",
     "revision_interface_conditions.csv": "3e7ea9ca38a045f202428b1a11deaef3875d98cb0dcd43d71a4d51562fb9b48d",
-    "revision_interface_estimands.csv": "b66d33d38f1c9f87786a83ba6b595a6b595732e6f396859377ad614fa6571658",
+    "revision_interface_estimands.csv": "7977c2c866d0623279cbbaae94316fa2df066d39f07d34028c4ef7cbf8de9e01",
     "revision_interface_pairs.csv": "ed7e78a0e69ccac0ead180e49df2cdbc5ec928daad5daf8f49de8d2ab69574cd",
     "revision_interface_replicates.csv": "48e26d688f58e8a69aa75026946ca0395ee775bacfa8abcdfae56c93820ea30a",
-    "revision_interface_report.md": "5941b13479aab6b72616608f1bf1c453acfba08cbb5d8bdc1bf2facc72326cea",
-    "revision_interface_summary.json": "5dd592552b884596d13abd2397869c11b5959ee2870bb84ef12cedf70f3146f2",
+    "revision_interface_report.md": "001921f5e2670f5870aea2fb0129a87e2fb14462984109d7680c489a1b37d02d",
+    "revision_interface_summary.json": "b43334d4968d32e6c5e10fb043c1098a3b41b291a57a5da44a9a31adef226778",
     "revision_interface_trials.csv": "69764fe75033b2b524bf191ed8b0b892a43cd875229f4ba447b2128108eef47f",
     "trials.sqlite": "42f87904d857cbcfc1da06434566f9e7c7e54fa87df6a324206662e440320c70"
   },
   "interpretation_boundaries": [
     "The failed strong-oracle prose gate makes the primary prose sender comparison unidentified.",
-    "The 50 gate-qualified prose rows are a selected descriptive subset and do not replace the failed provider-level gate.",
+    "The 50 case-qualified prose rows remain available only with case_qualified_descriptive_only scope; the Markdown primary table reports UNIDENTIFIED and they do not replace the failed provider-level gate.",
     "The negative typed strong-minus-neutral effect is a prompt-local behavioral result, not an internal-mechanism claim.",
     "No strict old-rule leakage was observed, but generic derivation and packet failures remain substantial.",
     "Answer-preserving endpoint success does not establish exact revised-state reconstruction.",
