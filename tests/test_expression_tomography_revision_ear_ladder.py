@@ -505,6 +505,54 @@ class RevisionEarLadderTests(unittest.TestCase):
             hashlib.sha256(protocol_path.read_bytes()).hexdigest(),
         )
 
+    def test_frozen_live_evidence_is_bound_to_manifest(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        run_dir = (
+            root
+            / "assets/runs/"
+            "rule_z_revision_ear_ladder_luna_seed101_108x2"
+        )
+        manifest = json.loads(
+            (run_dir / "run_manifest.json").read_text(encoding="utf-8")
+        )
+        database_sha256 = hashlib.sha256(
+            (run_dir / "trials.sqlite").read_bytes()
+        ).hexdigest()
+        self.assertEqual(
+            manifest["execution"]["canonical_database_sha256"],
+            database_sha256,
+        )
+        diagnostic_path = (
+            root
+            / manifest["implementation"]["semantic_diagnostic_module"]
+        )
+        self.assertEqual(
+            manifest["implementation"][
+                "semantic_diagnostic_module_sha256"
+            ],
+            hashlib.sha256(diagnostic_path.read_bytes()).hexdigest(),
+        )
+        semantic_summary = json.loads(
+            (run_dir / "revision_ear_semantic_summary.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertEqual(
+            semantic_summary["diagnostic_scope"],
+            manifest["posthoc_semantic_diagnostic"]["scope"],
+        )
+        self.assertFalse(semantic_summary["primary_score_changed"])
+        for relative_path, expected_sha256 in manifest[
+            "artifact_sha256"
+        ].items():
+            with self.subTest(relative_path=relative_path):
+                self.assertEqual(
+                    hashlib.sha256(
+                        (run_dir / relative_path).read_bytes()
+                    ).hexdigest(),
+                    expected_sha256,
+                )
+
 
 if __name__ == "__main__":
     unittest.main()
