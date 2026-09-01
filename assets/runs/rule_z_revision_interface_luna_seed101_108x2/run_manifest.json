@@ -1,0 +1,317 @@
+{
+  "manifest_version": "rule_z_revision_interface.run.v1",
+  "status": "complete",
+  "local_run_date": "2026-08-31",
+  "secrets_stored": false,
+  "implementation": {
+    "branch": "SpiralReality/rule-z-revision-interface-luna-run",
+    "preregistration_commit": "13d35a7fbcc1ca450b30cb0c8070c1a837460a77",
+    "implementation_merge_commit": "e5e91676789b45cc5c499930ce3dc70df0da26d9",
+    "interrupted_evidence_commit": "7df3e431889ed9e84c16865eaa7dcf317d2f1519",
+    "completion_evidence_commit": "8b56f3b47038cc58940cc19565cd6d473bf4f43d",
+    "post_run_report_hardening_commit": "bca9e6a28fdd9ac91edb80ba2917da882037ba0f",
+    "protocol": "docs/rule_z_revision_interface_calibration_protocol_2026_08_27.md",
+    "protocol_sha256": "6fc9676dcd2ee15ac58ea2b23ecb5e46d3dddf124f9bdc9f5760e412cb7d3290",
+    "research_note": "docs/live_rule_z_revision_interface_calibration_luna_note_2026_08_31.md",
+    "research_note_sha256": "bde64588aa1640bc1786e195febf1f89c044b3a94fa50ecb3d08861a5cafc67d",
+    "task_module": "expression_tomography/tasks/rule_z/revision_interface_task.py",
+    "task_module_sha256": "de3a91a2198e069f9d5402a1d31892c48b4e49f3a1b60395bbc79f16c0a709f8",
+    "report_module": "expression_tomography/tasks/rule_z/revision_interface_report.py",
+    "report_module_sha256": "a266216b0c61c248299df4592dee52d0871f00d0bc134f1bacedb148b2c30fd2",
+    "post_run_analysis_changed_provider_contract": false,
+    "post_run_analysis_changed_prompt_parse_or_score": false,
+    "post_run_report_presentation_changed": true,
+    "post_run_report_validation_only": true,
+    "post_run_report_regenerated_with_provider_calls": 0,
+    "post_run_report_changed_frozen_trials": false,
+    "interrupted_manifest_preserved": true
+  },
+  "generator": {
+    "task_type": "rule_z_revision_interface_calibration",
+    "seed": 101,
+    "case_count": 108,
+    "answer_changing_cases": 72,
+    "answer_preserving_cases": 36,
+    "replicates": 2,
+    "replicate_start": 0,
+    "conditions_per_case_replicate": 14,
+    "static_conditions": 12,
+    "dynamic_receiver_conditions": 2,
+    "planned_successful_trials": 3024,
+    "planned_static_trials": 2592,
+    "planned_dynamic_receiver_trials": 432,
+    "static_order_seed": 13103,
+    "receiver_order_seed": 13104,
+    "answer_transition_counts": {
+      "conflict_to_conflict": 12,
+      "conflict_to_no": 12,
+      "conflict_to_yes": 12,
+      "no_to_conflict": 12,
+      "no_to_no": 12,
+      "no_to_yes": 12,
+      "yes_to_conflict": 12,
+      "yes_to_no": 12,
+      "yes_to_yes": 12
+    }
+  },
+  "provider": {
+    "name": "openai-gpt-5.6-luna-low-revision-interface",
+    "model": "gpt-5.6-luna",
+    "type": "openai_compatible",
+    "config_file": "provider_config.json",
+    "config_file_sha256": "19caa3c1c448706cdf42dd8ffd0c2d8b10157d4382b63151df29948af5b40634",
+    "canonical_provider_config_sha256": "cbf972da5d0dac39337ea59a634f0c6bb163d6f90331e9c52d10f744f3d434ca",
+    "max_tokens": 4000,
+    "temperature": null,
+    "temperature_request_mode": "provider_default",
+    "reasoning_effort": "low",
+    "api_key_env": "OPENAI_API_KEY"
+  },
+  "cue_contract": {
+    "file": "binding_cue_contract.json",
+    "file_sha256": "86574a340a2392b9a939a790fb613683695562dbd2378a3d37720f71e9517ad3",
+    "canonical_sha256": "21944addabe33545055a988faa643c0ee11fead067610d666a770651fb072035",
+    "tokenizer": "tiktoken 0.12.0 o200k_base",
+    "length_match_dimensions": [
+      "characters",
+      "utf8_bytes",
+      "whitespace_words",
+      "tokens",
+      "prompt_line_position"
+    ]
+  },
+  "experiment_run": {
+    "case_surface_sha256": "8af5545a98946dcb86d50220480469d4fb180a21a02f323609e072824822112a",
+    "experiment_run_identity_sha256": "1da089ec3be7921ed5fd31043b4c6e2ef1e9c97f70646d9879a5565e824db118",
+    "experiment_run_rows": 1,
+    "first_successful_trial_created_at_utc": "2026-08-27 14:57:35",
+    "last_successful_trial_created_at_utc": "2026-09-01 05:58:04"
+  },
+  "preflight": {
+    "planned_trials": 3024,
+    "max_new_calls": 3024,
+    "new_call_upper_bound": 3024,
+    "provider_calls": 0,
+    "below_cap_rejection": {
+      "max_new_calls": 3023,
+      "rejected": true,
+      "provider_calls": 0,
+      "case_rows_written": 0,
+      "trial_rows_written": 0,
+      "experiment_run_rows_written": 0
+    },
+    "resume_after_credit_restoration": {
+      "existing_trials": 1171,
+      "max_new_calls": 1853,
+      "new_call_upper_bound": 1853,
+      "static_new_calls": 1421,
+      "dynamic_new_calls": 432,
+      "provider_calls": 0,
+      "experiment_run_identity_unchanged": true
+    }
+  },
+  "execution": {
+    "process_boundaries": [
+      {
+        "process": 1,
+        "inserted_trials": 1,
+        "request_attempts": 2,
+        "stop": "provider_http_500_server_error",
+        "failed_call_inserted": false
+      },
+      {
+        "process": 2,
+        "inserted_trials": 1,
+        "request_attempts": 2,
+        "stop": "provider_http_500_server_error",
+        "failed_call_inserted": false
+      },
+      {
+        "process": 3,
+        "inserted_trials": 1,
+        "request_attempts": 2,
+        "stop": "provider_http_500_server_error",
+        "failed_call_inserted": false
+      },
+      {
+        "process": "instrumented_exact_identity_call",
+        "inserted_trials": 1,
+        "request_attempts": 1,
+        "stop": "success",
+        "request_payload_changed": false,
+        "response_content_discarded": false,
+        "trial_inserted_through_standard_path": true
+      },
+      {
+        "process": 4,
+        "inserted_trials": 1167,
+        "request_attempts": 1168,
+        "stop": "provider_http_429_credit_balance_exhausted",
+        "failed_call_inserted": false
+      },
+      {
+        "process": 5,
+        "skipped_existing_trials": 1171,
+        "inserted_trials": 1853,
+        "request_attempts": 1853,
+        "stop": "complete"
+      }
+    ],
+    "successful_stored_trials": 3024,
+    "failed_transport_attempts": 3,
+    "failed_quota_attempts": 1,
+    "observed_request_attempts": 3028,
+    "performance_dependent_early_stop": false,
+    "selective_retry": false,
+    "case_replacement": false,
+    "case_count": 108,
+    "trial_count": 3024,
+    "complete_case_replicate_blocks": 216,
+    "condition_count": 14,
+    "trials_per_condition": 216,
+    "unique_logical_identities": 3024,
+    "unique_generation_identities": 3024,
+    "unique_assessment_identities": 3024,
+    "sqlite_integrity_check": "ok",
+    "database_bytes": 28487680,
+    "canonical_database_sha256": "42f87904d857cbcfc1da06434566f9e7c7e54fa87df6a324206662e440320c70",
+    "exact_rerun": {
+      "inserted_trials": 0,
+      "skipped_existing_trials": 3024,
+      "remaining_new_calls": 0,
+      "provider_calls": 0,
+      "experiment_run_identity_unchanged": true,
+      "database_sha256_unchanged": true
+    }
+  },
+  "provenance": {
+    "packet_schema_version": "rule_z_rule_revision_leakage.packet.v1",
+    "prompt_contract_version": "rule_z_revision_interface.prompt.v1",
+    "score_schema_version": "rule_z_revision_interface.score.v2",
+    "lineage_schema_version": "rule_z_revision_interface.lineage.v1",
+    "raw_response_reparse_validation_trials": 3024,
+    "prompt_matches": 3024,
+    "parse_matches": 3024,
+    "score_matches": 3024,
+    "lineage_matches": 3024,
+    "missing_logical_identities": 0,
+    "unexpected_logical_identities": 0,
+    "validated_experiment_runs": 1,
+    "provider_calls_during_revalidation": 0,
+    "surface_complete": true,
+    "verification": {
+      "pytest": "170 passed, 32 subtests passed",
+      "ruff": "passed for all Git-tracked Python files"
+    }
+  },
+  "primary_results": {
+    "provider_calibration_gate": {
+      "status": "unidentified",
+      "strong_oracle_prose_exact": 50,
+      "strong_oracle_prose_n": 216,
+      "strong_oracle_prose_failures": 166,
+      "role_order_strata_qualified": false
+    },
+    "oracle_receivers": {
+      "typed_strong_exact": 216,
+      "typed_neutral_exact": 216,
+      "prose_strong_exact": 50,
+      "prose_neutral_exact": 52,
+      "prose_strong_current_answer": 206,
+      "prose_neutral_current_answer": 206,
+      "prose_strong_current_first_exact": 18,
+      "prose_strong_historical_first_exact": 32,
+      "n_each": 216
+    },
+    "typed_joint": {
+      "strong_exact": 103,
+      "neutral_exact": 132,
+      "paired_binding_effect": -0.13425925925925927,
+      "strong_current_surface_exact": 213,
+      "neutral_current_surface_exact": 214,
+      "strong_derivation_exact": 104,
+      "neutral_derivation_exact": 133,
+      "strong_revision_uptake": 216,
+      "neutral_revision_uptake": 216,
+      "strong_old_atom_current": 0,
+      "strong_distinct_old_answer": 0,
+      "n_each": 216
+    },
+    "strong_output_contracts": {
+      "answer_only_exact": 209,
+      "current_only_exact": 189,
+      "history_only_exact": 13,
+      "history_only_semantic_role_complete": 39,
+      "delta_joint_exact": 103,
+      "full_restatement_joint_exact": 98,
+      "full_restatement_current_surface_exact": 215,
+      "n_each": 216
+    },
+    "case_class": {
+      "answer_changing": {
+        "n": 144,
+        "typed_strong_joint_exact": 84,
+        "typed_neutral_joint_exact": 105,
+        "full_restatement_joint_exact": 80,
+        "answer_only_exact": 137,
+        "current_only_exact": 128
+      },
+      "answer_preserving": {
+        "n": 72,
+        "typed_strong_joint_exact": 19,
+        "typed_neutral_joint_exact": 27,
+        "full_restatement_joint_exact": 18,
+        "answer_only_exact": 72,
+        "current_only_exact": 61
+      }
+    },
+    "descriptive_gate_qualified_prose_subset": {
+      "inferential_status": "descriptive_only_selected_subset",
+      "n": 50,
+      "strong_sender_exact": 35,
+      "neutral_sender_exact": 36,
+      "paired_difference": -0.02
+    },
+    "replicate_disagreement": {
+      "typed_strong_joint": 0.21296296296296297,
+      "typed_neutral_joint": 0.18518518518518517,
+      "answer_only": 0.027777777777777776,
+      "current_only": 0.21296296296296297,
+      "history_only": 0.10185185185185185,
+      "full_restatement_joint": 0.2037037037037037,
+      "strong_oracle_prose": 0.018518518518518517
+    }
+  },
+  "triggered_adaptive_branches": [
+    "ear-only paraphrase, decoy, and clause-order ladder",
+    "v2-only current-state control",
+    "exact lexical role-reversal pairs and multiple prose compilers",
+    "increase repetitions before provider comparison"
+  ],
+  "artifact_sha256": {
+    "binding_cue_contract.json": "86574a340a2392b9a939a790fb613683695562dbd2378a3d37720f71e9517ad3",
+    "interrupted_run_manifest.json": "c78660d67b87b21423177fc8b9328f6ea28c5a209788e257c2bcfffb82f8365f",
+    "mock_dry_run_manifest.json": "6941f7b52c350c9e1eea444f34b2fbcebafd468889bf609264944736f4c28620",
+    "mock_dry_run_report.md": "b833068716d4f338635c23cbc1c6347a42d197113c63906787907f262a461b47",
+    "operator_log.jsonl": "222d5c5da31dd36ff2e790030a7199d46efd2d3620ab048fd990f90d71519500",
+    "prospective_manifest.json": "96ecd83f29c200809aad3c55d8a208f667beb2a814874d83c742980193e8a94a",
+    "provider_config.json": "19caa3c1c448706cdf42dd8ffd0c2d8b10157d4382b63151df29948af5b40634",
+    "revision_interface_conditions.csv": "3e7ea9ca38a045f202428b1a11deaef3875d98cb0dcd43d71a4d51562fb9b48d",
+    "revision_interface_estimands.csv": "7977c2c866d0623279cbbaae94316fa2df066d39f07d34028c4ef7cbf8de9e01",
+    "revision_interface_pairs.csv": "ed7e78a0e69ccac0ead180e49df2cdbc5ec928daad5daf8f49de8d2ab69574cd",
+    "revision_interface_replicates.csv": "48e26d688f58e8a69aa75026946ca0395ee775bacfa8abcdfae56c93820ea30a",
+    "revision_interface_report.md": "001921f5e2670f5870aea2fb0129a87e2fb14462984109d7680c489a1b37d02d",
+    "revision_interface_summary.json": "b43334d4968d32e6c5e10fb043c1098a3b41b291a57a5da44a9a31adef226778",
+    "revision_interface_trials.csv": "69764fe75033b2b524bf191ed8b0b892a43cd875229f4ba447b2128108eef47f",
+    "trials.sqlite": "42f87904d857cbcfc1da06434566f9e7c7e54fa87df6a324206662e440320c70"
+  },
+  "interpretation_boundaries": [
+    "The failed strong-oracle prose gate makes the primary prose sender comparison unidentified.",
+    "The 50 case-qualified prose rows remain available only with case_qualified_descriptive_only scope; the Markdown primary table reports UNIDENTIFIED and they do not replace the failed provider-level gate.",
+    "The negative typed strong-minus-neutral effect is a prompt-local behavioral result, not an internal-mechanism claim.",
+    "No strict old-rule leakage was observed, but generic derivation and packet failures remain substantial.",
+    "Answer-preserving endpoint success does not establish exact revised-state reconstruction.",
+    "Replicate disagreement requires more repetitions before provider comparison.",
+    "This calibration does not establish a general language-expression bottleneck or general intelligence bottleneck."
+  ]
+}
