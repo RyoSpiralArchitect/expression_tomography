@@ -33,6 +33,11 @@ from expression_tomography.tasks.rule_z.revision_ear_ladder_mock import (
 from expression_tomography.tasks.rule_z.revision_ear_ladder_report import (
     write_revision_ear_report,
 )
+from expression_tomography.tasks.rule_z.revision_ear_semantic_diagnostics import (
+    normalize_revision_atom,
+    score_semantic_readout,
+    write_revision_ear_semantic_diagnostics,
+)
 from expression_tomography.tasks.rule_z.revision_ear_ladder_task import (
     preflight_revision_ear_suite,
     run_revision_ear_experiment,
@@ -40,6 +45,9 @@ from expression_tomography.tasks.rule_z.revision_ear_ladder_task import (
 )
 from expression_tomography.tasks.rule_z.revision_interface_cues import (
     builtin_binding_cue_contract,
+)
+from expression_tomography.tasks.rule_z.revision_interface import (
+    expected_receiver_readout,
 )
 
 
@@ -335,6 +343,126 @@ class RevisionEarLadderTests(unittest.TestCase):
                 root / "report" / "revision_ear_report.md"
             ).read_text(encoding="utf-8")
             self.assertIn("UNIDENTIFIED", report)
+
+    def test_semantic_atom_normalization_is_narrow_and_explicit(self) -> None:
+        expected = {
+            "id": "r_example",
+            "if": ["is_student", "has_debt"],
+            "then": "eligible",
+        }
+        self.assertEqual(normalize_revision_atom(expected), {
+            **expected,
+            "if": ["has_debt", "is_student"],
+        })
+        self.assertEqual(
+            normalize_revision_atom(
+                {
+                    "rule": "r_example",
+                    "requires": "is_student, has_debt",
+                    "concludes": "eligible",
+                }
+            ),
+            {**expected, "if": ["has_debt", "is_student"]},
+        )
+        self.assertEqual(
+            normalize_revision_atom(["r_high", "r_low"]),
+            ["r_high", "r_low"],
+        )
+        self.assertIsNone(
+            normalize_revision_atom(
+                {
+                    "id": "r_example",
+                    "rule": "r_duplicate",
+                    "requires": "is_student",
+                    "concludes": "eligible",
+                }
+            )
+        )
+        self.assertIsNone(
+            normalize_revision_atom(
+                {
+                    "rule": "r_example",
+                    "requires": "is_student",
+                    "concludes": "eligible",
+                    "confidence": 1.0,
+                }
+            )
+        )
+
+    def test_semantic_score_recovers_only_allowlisted_alias_shape(self) -> None:
+        case = next(
+            item
+            for item in self.cases
+            if item.payload["mutation_family"] != "priority_reversal"
+        )
+        parsed = expected_receiver_readout(case.payload)
+        for field in ("historical_revision_atom", "current_revision_atom"):
+            atom = parsed[field]
+            parsed[field] = {
+                "rule": atom["id"],
+                "requires": ", ".join(reversed(atom["if"])),
+                "concludes": atom["then"],
+            }
+        diagnostic = score_semantic_readout(parsed, case.payload)
+        self.assertFalse(diagnostic["primary_correct"])
+        self.assertTrue(diagnostic["semantic_correct"])
+        self.assertTrue(diagnostic["historical_alias_normalized"])
+        self.assertTrue(diagnostic["current_alias_normalized"])
+
+        parsed["historical_revision_atom"]["confidence"] = 1.0
+        rejected = score_semantic_readout(parsed, case.payload)
+        self.assertFalse(rejected["semantic_correct"])
+        self.assertFalse(rejected["historical_atom_normalizable"])
+
+    def test_semantic_diagnostic_is_read_only_and_separately_labeled(self) -> None:
+        provider = RevisionEarLadderMockProvider()
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            db_path = root / "trials.sqlite"
+            store = ExperimentStore(db_path)
+            try:
+                run_revision_ear_experiment(
+                    self.cases,
+                    provider,
+                    self.cue,
+                    store,
+                    progress_every=0,
+                )
+            finally:
+                store.close()
+            before = hashlib.sha256(db_path.read_bytes()).hexdigest()
+            read_only_store = ExperimentStore(db_path, read_only=True)
+            try:
+                summary = write_revision_ear_semantic_diagnostics(
+                    read_only_store, root / "semantic"
+                )
+            finally:
+                read_only_store.close()
+            after = hashlib.sha256(db_path.read_bytes()).hexdigest()
+            self.assertEqual(after, before)
+            self.assertFalse(summary["primary_score_changed"])
+            self.assertEqual(
+                summary["diagnostic_scope"],
+                "posthoc_semantic_diagnostic_only",
+            )
+            self.assertTrue(
+                all(
+                    row["effect_scope"] == "posthoc_semantic_diagnostic_only"
+                    for row in summary["estimands"]
+                )
+            )
+            self.assertEqual(
+                sorted(path.name for path in (root / "semantic").iterdir()),
+                [
+                    "revision_ear_semantic_conditions.csv",
+                    "revision_ear_semantic_estimands.csv",
+                    "revision_ear_semantic_replicates.csv",
+                    "revision_ear_semantic_report.md",
+                    "revision_ear_semantic_shapes.csv",
+                    "revision_ear_semantic_summary.json",
+                    "revision_ear_semantic_trials.csv",
+                ],
+            )
 
     def test_live_manifest_build_is_zero_call_and_hash_bound(self) -> None:
         root = Path(__file__).resolve().parents[1]
