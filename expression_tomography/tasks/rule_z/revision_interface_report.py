@@ -492,7 +492,6 @@ def write_revision_interface_report(
     trial_rows = _trial_rows(trials)
     pairs = _paired_rows(trials)
     condition_summary = _condition_summary(trial_rows)
-    estimands = _estimand_rows(pairs)
     replicate_diagnostics = _replicate_rows(pairs)
     providers = sorted({str(row["provider"]) for row in pairs})
     provider_gates = {}
@@ -516,6 +515,17 @@ def write_revision_interface_report(
                 "identified" if failures == 0 and strata_qualified else "unidentified"
             ),
         }
+    estimands = _estimand_rows(pairs)
+    for row in estimands:
+        status = provider_gates[str(row["provider"])][
+            "primary_prose_sender_status"
+        ]
+        row["primary_prose_sender_status"] = status
+        row["prose_effect_scope"] = (
+            "provider_primary"
+            if status == "identified"
+            else "case_qualified_descriptive_only"
+        )
     summary = {
         "task_type": TASK_TYPE,
         "validation": validation,
@@ -590,6 +600,9 @@ def write_revision_interface_report(
         ]
     )
     for row in estimands:
+        prose_identified = (
+            row["primary_prose_sender_status"] == "identified"
+        )
         lines.append(
             "| "
             + " | ".join(
@@ -598,12 +611,24 @@ def write_revision_interface_report(
                     str(row["stratum"]),
                     str(row["n"]),
                     _fmt(row["binding_effect_typed"]),
-                    _fmt(row["binding_effect_prose_identified"]),
-                    _fmt(row["scaffold_effect_strong_identified"]),
-                    _fmt(
-                        row[
-                            "binding_x_scaffold_interaction_identified"
-                        ]
+                    (
+                        _fmt(row["binding_effect_prose_identified"])
+                        if prose_identified
+                        else "UNIDENTIFIED"
+                    ),
+                    (
+                        _fmt(row["scaffold_effect_strong_identified"])
+                        if prose_identified
+                        else "UNIDENTIFIED"
+                    ),
+                    (
+                        _fmt(
+                            row[
+                                "binding_x_scaffold_interaction_identified"
+                            ]
+                        )
+                        if prose_identified
+                        else "UNIDENTIFIED"
                     ),
                 )
             )
@@ -611,6 +636,10 @@ def write_revision_interface_report(
         )
     lines.extend(
         [
+            "",
+            "Case-qualified descriptive prose values remain in the CSV and "
+            "JSON exports with an explicit `prose_effect_scope`; they do not "
+            "replace an unidentified provider-level gate.",
             "",
             "## Boundaries",
             "",

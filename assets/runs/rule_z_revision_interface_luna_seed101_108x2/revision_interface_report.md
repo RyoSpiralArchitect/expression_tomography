@@ -17,11 +17,13 @@ Prose sender effects are inferentially available only when the receiver qualific
 
 | Provider | Stratum | n | Typed binding | Prose binding | Strong scaffold | Interaction |
 |---|---:|---:|---:|---:|---:|---:|
-| openai-gpt-5.6-luna-low-revision-interface | all | 216 | -0.134 | -0.020 | 0.060 | 0.040 |
-| openai-gpt-5.6-luna-low-revision-interface | case_class=answer_changing | 144 | -0.146 | 0.000 | -0.303 | 0.030 |
-| openai-gpt-5.6-luna-low-revision-interface | case_class=answer_preserving | 72 | -0.111 | -0.059 | 0.765 | 0.059 |
-| openai-gpt-5.6-luna-low-revision-interface | role_order=current_first | 108 | -0.111 | 0.000 | 0.111 | 0.111 |
-| openai-gpt-5.6-luna-low-revision-interface | role_order=historical_first | 108 | -0.157 | -0.031 | 0.031 | 0.000 |
+| openai-gpt-5.6-luna-low-revision-interface | all | 216 | -0.134 | UNIDENTIFIED | UNIDENTIFIED | UNIDENTIFIED |
+| openai-gpt-5.6-luna-low-revision-interface | case_class=answer_changing | 144 | -0.146 | UNIDENTIFIED | UNIDENTIFIED | UNIDENTIFIED |
+| openai-gpt-5.6-luna-low-revision-interface | case_class=answer_preserving | 72 | -0.111 | UNIDENTIFIED | UNIDENTIFIED | UNIDENTIFIED |
+| openai-gpt-5.6-luna-low-revision-interface | role_order=current_first | 108 | -0.111 | UNIDENTIFIED | UNIDENTIFIED | UNIDENTIFIED |
+| openai-gpt-5.6-luna-low-revision-interface | role_order=historical_first | 108 | -0.157 | UNIDENTIFIED | UNIDENTIFIED | UNIDENTIFIED |
+
+Case-qualified descriptive prose values remain in the CSV and JSON exports with an explicit `prose_effect_scope`; they do not replace an unidentified provider-level gate.
 
 ## Boundaries
 

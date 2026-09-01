@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import csv
 import hashlib
 import json
 import tempfile
@@ -84,6 +85,30 @@ class OracleEarFailRevisionInterfaceMock(CountingRevisionInterfaceMock):
             "CONDITION_CLASS: receiver_prose_oracle" in prompt
             and STRONG_BINDING_CUES["receiver"] in prompt
         ):
+            parsed = parse_json_lenient(raw)
+            assert parsed is not None
+            parsed["answer"] = (
+                "no" if parsed["answer"] != "no" else "yes"
+            )
+            return json.dumps(parsed, ensure_ascii=False, sort_keys=True)
+        return raw
+
+
+class PartialOracleEarFailRevisionInterfaceMock(
+    CountingRevisionInterfaceMock
+):
+    def __init__(self) -> None:
+        super().__init__()
+        self.failed_one_strong_oracle = False
+
+    def complete(self, prompt: str) -> str:
+        raw = super().complete(prompt)
+        if (
+            not self.failed_one_strong_oracle
+            and "CONDITION_CLASS: receiver_prose_oracle" in prompt
+            and STRONG_BINDING_CUES["receiver"] in prompt
+        ):
+            self.failed_one_strong_oracle = True
             parsed = parse_json_lenient(raw)
             assert parsed is not None
             parsed["answer"] = (
@@ -586,6 +611,12 @@ class RevisionInterfaceTests(unittest.TestCase):
             if row["provider"] == provider.name and row["stratum"] == "all"
         )
         self.assertEqual(
+            overall_estimand["primary_prose_sender_status"], "identified"
+        )
+        self.assertEqual(
+            overall_estimand["prose_effect_scope"], "provider_primary"
+        )
+        self.assertEqual(
             overall_estimand["delta_joint_revision_uptake_rate"], 1.0
         )
         self.assertEqual(
@@ -686,6 +717,78 @@ class RevisionInterfaceTests(unittest.TestCase):
         self.assertIsNone(
             overall["binding_effect_prose_identified"]
         )
+        self.assertEqual(
+            overall["primary_prose_sender_status"], "unidentified"
+        )
+        self.assertEqual(
+            overall["prose_effect_scope"],
+            "case_qualified_descriptive_only",
+        )
+
+    def test_partial_oracle_ear_failure_does_not_promote_subset(self) -> None:
+        provider = PartialOracleEarFailRevisionInterfaceMock()
+        with tempfile.TemporaryDirectory() as td:
+            report_dir = Path(td) / "report"
+            store = ExperimentStore(Path(td) / "trials.sqlite")
+            try:
+                run_revision_interface_experiment(
+                    [self.changed, self.silent],
+                    provider,
+                    self.cues,
+                    store,
+                    repetitions=1,
+                    max_new_calls=28,
+                    progress_every=0,
+                )
+                summary = write_revision_interface_report(
+                    store, report_dir
+                )
+            finally:
+                store.close()
+            estimand_rows = list(
+                csv.DictReader(
+                    (report_dir / "revision_interface_estimands.csv").open(
+                        encoding="utf-8"
+                    )
+                )
+            )
+            report_text = (
+                report_dir / "revision_interface_report.md"
+            ).read_text(encoding="utf-8")
+
+        gate = summary["provider_calibration_gates"][provider.name]
+        self.assertEqual(gate["oracle_prose_strong_failures"], 1)
+        self.assertEqual(gate["primary_prose_sender_status"], "unidentified")
+        overall = next(
+            row
+            for row in summary["estimands"]
+            if row["provider"] == provider.name and row["stratum"] == "all"
+        )
+        self.assertEqual(overall["prose_identified_n"], 1)
+        self.assertIsNotNone(overall["binding_effect_prose_identified"])
+        self.assertEqual(
+            overall["primary_prose_sender_status"], "unidentified"
+        )
+        self.assertEqual(
+            overall["prose_effect_scope"],
+            "case_qualified_descriptive_only",
+        )
+        csv_overall = next(
+            row for row in estimand_rows if row["stratum"] == "all"
+        )
+        self.assertEqual(
+            csv_overall["primary_prose_sender_status"], "unidentified"
+        )
+        self.assertEqual(
+            csv_overall["prose_effect_scope"],
+            "case_qualified_descriptive_only",
+        )
+        all_row = next(
+            line
+            for line in report_text.splitlines()
+            if f"| {provider.name} | all |" in line
+        )
+        self.assertEqual(all_row.count("UNIDENTIFIED"), 3)
 
     def test_prospective_manifest_matches_live_preflight_and_token_audit(
         self,
