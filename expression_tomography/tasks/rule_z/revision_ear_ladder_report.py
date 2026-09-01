@@ -305,6 +305,33 @@ def _interaction_effect(
                 )
                 left.append(temporal)
                 right.append(explicit)
+    elif contrast == "compiler_x_order":
+        for block in blocks:
+            for note_state in NOTE_STATES:
+                temporal = _value(
+                    block,
+                    _condition("temporal_status", "current_first", note_state),
+                    metric,
+                ) - _value(
+                    block,
+                    _condition(
+                        "temporal_status", "historical_first", note_state
+                    ),
+                    metric,
+                )
+                explicit = _value(
+                    block,
+                    _condition("explicit_version", "current_first", note_state),
+                    metric,
+                ) - _value(
+                    block,
+                    _condition(
+                        "explicit_version", "historical_first", note_state
+                    ),
+                    metric,
+                )
+                left.append(temporal)
+                right.append(explicit)
     else:
         raise ValueError(f"Unknown revision ear interaction: {contrast}")
     return left, right, [a - b for a, b in zip(left, right)]
@@ -359,6 +386,7 @@ def _estimand_rows(
     interactions = (
         ("decoy_x_order", "current_order_decoy", "historical_order_decoy"),
         ("decoy_x_compiler", "temporal_decoy", "explicit_decoy"),
+        ("compiler_x_order", "temporal_order", "explicit_order"),
     )
     for provider, provider_blocks in sorted(grouped.items()):
         status = qualifications[provider]["receiver_task_status"]
@@ -547,6 +575,7 @@ def write_revision_ear_report(
         "compiler",
         "decoy_x_order",
         "decoy_x_compiler",
+        "compiler_x_order",
     }
     for row in estimands:
         if (

@@ -93,26 +93,35 @@ def score_semantic_readout(
     expected_current = normalize_revision_atom(expected["current_revision_atom"])
     historical = normalize_revision_atom(obj.get("historical_revision_atom"))
     current = normalize_revision_atom(obj.get("current_revision_atom"))
-    historical_exact = historical is not None and historical == expected_historical
-    current_exact = current is not None and current == expected_current
+    schema_valid = bool(primary["schema_valid"])
+    historical_exact = (
+        schema_valid
+        and historical is not None
+        and historical == expected_historical
+    )
+    current_exact = (
+        schema_valid and current is not None and current == expected_current
+    )
     roles_swapped = (
-        historical is not None
+        schema_valid
+        and historical is not None
         and current is not None
         and historical == expected_current
         and current == expected_historical
     )
     pair_content_complete = (
-        historical is not None
+        schema_valid
+        and historical is not None
         and current is not None
         and _unordered_equal(
             [historical, current], [expected_historical, expected_current]
         )
     )
-    active_exact = _unordered_equal(
+    active_exact = schema_valid and _unordered_equal(
         obj.get("active_conclusions"), expected["active_conclusions"]
     )
     answer = str(obj.get("answer", "")).strip().lower()
-    answer_exact = answer == payload["new_answer"]
+    answer_exact = schema_valid and answer == payload["new_answer"]
     answer_changed = payload["old_answer"] != payload["new_answer"]
     answer_old_distinct = answer_changed and answer == payload["old_answer"]
     structural_exact = historical_exact and current_exact and active_exact
@@ -120,6 +129,7 @@ def score_semantic_readout(
     return {
         "diagnostic_version": DIAGNOSTIC_VERSION,
         "diagnostic_scope": DIAGNOSTIC_SCOPE,
+        "schema_valid": schema_valid,
         "primary_correct": bool(primary["correct"]),
         "primary_historical_atom_exact": bool(primary["historical_atom_exact"]),
         "primary_current_atom_exact": bool(primary["current_atom_exact"]),
@@ -432,6 +442,7 @@ def write_revision_ear_semantic_diagnostics(
         "compiler",
         "decoy_x_order",
         "decoy_x_compiler",
+        "compiler_x_order",
     }
     for row in estimands:
         if (

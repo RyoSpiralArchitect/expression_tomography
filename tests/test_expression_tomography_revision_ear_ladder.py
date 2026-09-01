@@ -226,6 +226,19 @@ class RevisionEarLadderTests(unittest.TestCase):
                     and row["metric"] == "correct"
                 ]
                 self.assertTrue(overall)
+                self.assertEqual(
+                    {row["estimand"] for row in overall},
+                    {
+                        "aligned_note_vs_clean",
+                        "clause_order",
+                        "compiler",
+                        "compiler_x_order",
+                        "decoy_x_compiler",
+                        "decoy_x_order",
+                        "excluded_role_decoy",
+                        "reversed_note_vs_clean",
+                    },
+                )
                 self.assertTrue(all(row["effect"] == 0.0 for row in overall))
                 self.assertTrue(
                     all(row["effect_scope"] == "provider_primary" for row in overall)
@@ -413,6 +426,13 @@ class RevisionEarLadderTests(unittest.TestCase):
         rejected = score_semantic_readout(parsed, case.payload)
         self.assertFalse(rejected["semantic_correct"])
         self.assertFalse(rejected["historical_atom_normalizable"])
+
+        invalid_schema = expected_receiver_readout(case.payload)
+        invalid_schema.pop("readout_schema")
+        invalid = score_semantic_readout(invalid_schema, case.payload)
+        self.assertFalse(invalid["schema_valid"])
+        self.assertFalse(invalid["semantic_structural_exact"])
+        self.assertFalse(invalid["semantic_correct"])
 
     def test_semantic_diagnostic_is_read_only_and_separately_labeled(self) -> None:
         provider = RevisionEarLadderMockProvider()

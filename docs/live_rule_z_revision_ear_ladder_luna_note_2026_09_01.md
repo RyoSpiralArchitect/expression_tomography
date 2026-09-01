@@ -98,8 +98,9 @@ That regularity motivated a separately labeled post-hoc shape diagnostic.
 The primary responses and `score.v1` rows remain frozen. A read-only diagnostic
 was defined after inspecting the completed output-shape inventory. It accepts
 only explicit, unambiguous aliases for a rule's identifier, antecedents, and
-conclusion, rejects unknown or duplicate keys, and leaves two-item priority
-edges unchanged. It does not infer a priority edge from rule objects.
+conclusion, retains the exact top-level readout schema gate, rejects unknown or
+duplicate keys, and leaves two-item priority edges unchanged. It does not infer
+a priority edge from rule objects.
 
 The diagnostic changed no SQLite byte: the database SHA-256 was identical
 before and after it ran.
@@ -171,6 +172,7 @@ therefore endpoint contrasts only:
 | Temporal-status minus explicit-version compiler | -0.022 |
 | Decoy by order interaction | 0.007 |
 | Decoy by compiler interaction | 0.035 |
+| Compiler by order interaction | -0.019 |
 
 These values are `posthoc_semantic_diagnostic_only`. They are small on this
 surface but cannot be interpreted as registered representation effects because

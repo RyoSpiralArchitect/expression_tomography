@@ -22,6 +22,7 @@ Effects are shown only when the typed receiver qualification is identified.
 | openai-gpt-5.6-luna-low-revision-ear-ladder | compiler | 1296 | UNIDENTIFIED | UNIDENTIFIED | UNIDENTIFIED |
 | openai-gpt-5.6-luna-low-revision-ear-ladder | decoy_x_order | 432 | UNIDENTIFIED | UNIDENTIFIED | UNIDENTIFIED |
 | openai-gpt-5.6-luna-low-revision-ear-ladder | decoy_x_compiler | 432 | UNIDENTIFIED | UNIDENTIFIED | UNIDENTIFIED |
+| openai-gpt-5.6-luna-low-revision-ear-ladder | compiler_x_order | 648 | UNIDENTIFIED | UNIDENTIFIED | UNIDENTIFIED |
 
 Descriptive values remain in CSV and JSON exports with an explicit `effect_scope`; they do not replace a failed typed-anchor gate.
 

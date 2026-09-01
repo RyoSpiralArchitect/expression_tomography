@@ -19,6 +19,7 @@ These values are diagnostic only and do not replace the primary `UNIDENTIFIED` t
 | openai-gpt-5.6-luna-low-revision-ear-ladder | compiler | 1296 | 0.895 | 0.917 | -0.022 |
 | openai-gpt-5.6-luna-low-revision-ear-ladder | decoy_x_order | 432 | -0.007 | -0.014 | 0.007 |
 | openai-gpt-5.6-luna-low-revision-ear-ladder | decoy_x_compiler | 432 | 0.007 | -0.028 | 0.035 |
+| openai-gpt-5.6-luna-low-revision-ear-ladder | compiler_x_order | 648 | -0.025 | -0.006 | -0.019 |
 
 ## Boundary
 
