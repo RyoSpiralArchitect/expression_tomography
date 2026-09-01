@@ -10,6 +10,7 @@
     "posthoc_semantic_diagnostic_commit": "cda5a046b8e91ca459325faadc67469713aeb4e2",
     "completion_evidence_commit": "5b7354e22c4fc1ae1b2c6ae65cfc60d5adf39f43",
     "post_run_review_hardening_commit": "9e5e563551ee3551312a4cb156d0787000963850",
+    "post_run_review_followup_commit": "b20688cedf260b9ea4473a8e9fbc663d6de853b2",
     "protocol": "docs/rule_z_revision_ear_ladder_protocol_2026_09_01.md",
     "protocol_sha256": "817d1ef7a5212f2b98ad3c6c431bb37dccc960a9268b3b7dd1b08dac63980b97",
     "research_note": "docs/live_rule_z_revision_ear_ladder_luna_note_2026_09_01.md",
@@ -21,7 +22,7 @@
     "report_module": "expression_tomography/tasks/rule_z/revision_ear_ladder_report.py",
     "report_module_sha256": "9847e481e04f58486579e9d0a831c86eed33612e348ac2a69bc0c86cb8617dec",
     "semantic_diagnostic_module": "expression_tomography/tasks/rule_z/revision_ear_semantic_diagnostics.py",
-    "semantic_diagnostic_module_sha256": "4448bc0b2f193e3b768c23ce66da8706c2b13dfbf7ad13c919198030e34fb7b6",
+    "semantic_diagnostic_module_sha256": "e1f2942d75f7b80d856bc396525841c5fcd90b63fb0be687ca2eca3b850e4613",
     "post_run_analysis_changed_provider_contract": false,
     "post_run_analysis_changed_prompt_parse_or_primary_score": false,
     "post_run_semantic_diagnostic_scope": "posthoc_semantic_diagnostic_only",
@@ -29,7 +30,8 @@
     "post_run_semantic_diagnostic_changed_frozen_trials": false,
     "post_run_review_hardening": [
       "retain exact top-level schema validity while relaxing only allowlisted atom aliases",
-      "export the prospectively required compiler-by-order interaction"
+      "export the prospectively required compiler-by-order interaction",
+      "gate distinct-old-answer diagnostics on exact top-level schema validity"
     ]
   },
   "generator": {
@@ -285,7 +287,7 @@
     "live_run_stdout.log": "dd48cc7981e27fe37636027157b6ce0f4bc82d90ad69dac56eafdab19250445f",
     "mock_dry_run_manifest.json": "e55c8d0d3463ea5ed1f65f626c019fb30f137a093cb51ead3d4faf7ac0c54cb6",
     "mock_dry_run_report.md": "d98b49f10906e55078eaa12b53b1da71d6cef6c20d084d0b2dcc97bfc53ba42f",
-    "operator_log.jsonl": "6c3709fded5a3f7c2318543267c0eb76aea4648d946610bbe8524ed6e4ab1ac9",
+    "operator_log.jsonl": "2b8e1a2366b4f4609eda286791470f36cc3ee8efc67e0b44df16e3020f28584e",
     "prospective_manifest.json": "49ecb1ff344a10fdf9d3f1db27cdd05af7ae65ca1ebf7e2314f50a5a705b696e",
     "provider_config.json": "5cbb59c62d1f0c7fe70e2dbeb7cdb29507439c0d93371b77abaed8aab810aef0",
     "revalidation_stdout.log": "4046976fb8d436f97efbf872d8953ac945dc946226f517a76f4fc3e02e23d863",
