@@ -1,0 +1,222 @@
+{
+  "answer_transition_counts": {
+    "conflict_to_conflict": 12,
+    "conflict_to_no": 12,
+    "conflict_to_yes": 12,
+    "no_to_conflict": 12,
+    "no_to_no": 12,
+    "no_to_yes": 12,
+    "yes_to_conflict": 12,
+    "yes_to_no": 12,
+    "yes_to_yes": 12
+  },
+  "binding_cue_contract_file_sha256": "86574a340a2392b9a939a790fb613683695562dbd2378a3d37720f71e9517ad3",
+  "binding_cue_contract_path": "assets/runs/rule_z_revision_ear_ladder_luna_seed101_108x2/binding_cue_contract.json",
+  "binding_cue_contract_sha256": "21944addabe33545055a988faa643c0ee11fead067610d666a770651fb072035",
+  "case_class_counts": {
+    "answer_changing": 72,
+    "answer_preserving": 36
+  },
+  "case_count": 108,
+  "case_surface_sha256": "e2414be5ec337d337b7f1032ab6e5c522b484ba6ad0c2ccd0b6c1a400e01b43c",
+  "case_surface_version": "rule_z_revision_ear_ladder.surface.v1",
+  "condition_specs": {
+    "T_prose_explicit_version_current_first_aligned": {
+      "compiler": "explicit_version",
+      "note_state": "aligned",
+      "role_order": "current_first",
+      "scaffold": "prose"
+    },
+    "T_prose_explicit_version_current_first_none": {
+      "compiler": "explicit_version",
+      "note_state": "none",
+      "role_order": "current_first",
+      "scaffold": "prose"
+    },
+    "T_prose_explicit_version_current_first_reversed": {
+      "compiler": "explicit_version",
+      "note_state": "reversed",
+      "role_order": "current_first",
+      "scaffold": "prose"
+    },
+    "T_prose_explicit_version_historical_first_aligned": {
+      "compiler": "explicit_version",
+      "note_state": "aligned",
+      "role_order": "historical_first",
+      "scaffold": "prose"
+    },
+    "T_prose_explicit_version_historical_first_none": {
+      "compiler": "explicit_version",
+      "note_state": "none",
+      "role_order": "historical_first",
+      "scaffold": "prose"
+    },
+    "T_prose_explicit_version_historical_first_reversed": {
+      "compiler": "explicit_version",
+      "note_state": "reversed",
+      "role_order": "historical_first",
+      "scaffold": "prose"
+    },
+    "T_prose_temporal_status_current_first_aligned": {
+      "compiler": "temporal_status",
+      "note_state": "aligned",
+      "role_order": "current_first",
+      "scaffold": "prose"
+    },
+    "T_prose_temporal_status_current_first_none": {
+      "compiler": "temporal_status",
+      "note_state": "none",
+      "role_order": "current_first",
+      "scaffold": "prose"
+    },
+    "T_prose_temporal_status_current_first_reversed": {
+      "compiler": "temporal_status",
+      "note_state": "reversed",
+      "role_order": "current_first",
+      "scaffold": "prose"
+    },
+    "T_prose_temporal_status_historical_first_aligned": {
+      "compiler": "temporal_status",
+      "note_state": "aligned",
+      "role_order": "historical_first",
+      "scaffold": "prose"
+    },
+    "T_prose_temporal_status_historical_first_none": {
+      "compiler": "temporal_status",
+      "note_state": "none",
+      "role_order": "historical_first",
+      "scaffold": "prose"
+    },
+    "T_prose_temporal_status_historical_first_reversed": {
+      "compiler": "temporal_status",
+      "note_state": "reversed",
+      "role_order": "historical_first",
+      "scaffold": "prose"
+    },
+    "T_typed_anchor": {
+      "compiler": "typed_anchor",
+      "note_state": "not_applicable",
+      "role_order": "not_applicable",
+      "scaffold": "typed"
+    }
+  },
+  "conditions": [
+    "T_typed_anchor",
+    "T_prose_explicit_version_historical_first_none",
+    "T_prose_explicit_version_historical_first_aligned",
+    "T_prose_explicit_version_historical_first_reversed",
+    "T_prose_explicit_version_current_first_none",
+    "T_prose_explicit_version_current_first_aligned",
+    "T_prose_explicit_version_current_first_reversed",
+    "T_prose_temporal_status_historical_first_none",
+    "T_prose_temporal_status_historical_first_aligned",
+    "T_prose_temporal_status_historical_first_reversed",
+    "T_prose_temporal_status_current_first_none",
+    "T_prose_temporal_status_current_first_aligned",
+    "T_prose_temporal_status_current_first_reversed"
+  ],
+  "conditions_per_case_replicate": 13,
+  "execution_order_seed": 14921,
+  "experiment_run_identity_sha256": "10e1b25a6b74f6bcc6bb44f5559c1eb8d22b68c3af361fc73287a64d95d8e495",
+  "history_load_counts": {
+    "8": 36,
+    "16": 36,
+    "32": 36
+  },
+  "lineage_schema_version": "rule_z_revision_ear_ladder.lineage.v1",
+  "live_provider_calls_made": 0,
+  "max_tokens": 4000,
+  "model": "gpt-5.6-luna",
+  "mutation_family_counts": {
+    "antecedent_rebind": 27,
+    "consequent_flip": 27,
+    "priority_reversal": 27,
+    "rule_retirement_replacement": 27
+  },
+  "packet_schema_version": "rule_z_rule_revision_leakage.packet.v1",
+  "planned_calls": 2808,
+  "preflight_provider_calls": 0,
+  "preflight_writes": {
+    "case_rows": 0,
+    "run_rows": 0,
+    "trial_rows": 0
+  },
+  "prompt_contract_version": "rule_z_revision_ear_ladder.prompt.v1",
+  "protocol": "docs/rule_z_revision_ear_ladder_protocol_2026_09_01.md",
+  "protocol_sha256": "817d1ef7a5212f2b98ad3c6c431bb37dccc960a9268b3b7dd1b08dac63980b97",
+  "provider": "openai-gpt-5.6-luna-low-revision-ear-ladder",
+  "provider_config_file_sha256": "5cbb59c62d1f0c7fe70e2dbeb7cdb29507439c0d93371b77abaed8aab810aef0",
+  "provider_config_path": "assets/runs/rule_z_revision_ear_ladder_luna_seed101_108x2/provider_config.json",
+  "provider_config_sha256": "401bd812ec8a111881a58bf113504d6bf6944cd86c258dd5b7afa9b2e131fa42",
+  "provider_suite_max_new_calls": 2808,
+  "reasoning_effort": "low",
+  "repetitions": 2,
+  "replicate_start": 0,
+  "representation_contract_version": "rule_z_revision_ear_ladder.representation.v1",
+  "representation_surface_audit": {
+    "aligned_reversed_exact_surface_pairs": 432,
+    "clause_order_exact_surface_pairs": 648,
+    "max_representation_tokens_by_condition": {
+      "T_prose_explicit_version_current_first_aligned": 1333,
+      "T_prose_explicit_version_current_first_none": 1242,
+      "T_prose_explicit_version_current_first_reversed": 1333,
+      "T_prose_explicit_version_historical_first_aligned": 1333,
+      "T_prose_explicit_version_historical_first_none": 1242,
+      "T_prose_explicit_version_historical_first_reversed": 1333,
+      "T_prose_temporal_status_current_first_aligned": 1325,
+      "T_prose_temporal_status_current_first_none": 1234,
+      "T_prose_temporal_status_current_first_reversed": 1325,
+      "T_prose_temporal_status_historical_first_aligned": 1325,
+      "T_prose_temporal_status_historical_first_none": 1234,
+      "T_prose_temporal_status_historical_first_reversed": 1325,
+      "T_typed_anchor": 2148
+    },
+    "tokenizer": {
+      "encoding": "o200k_base",
+      "library": "tiktoken",
+      "version": "0.12.0"
+    }
+  },
+  "representation_surface_audit_sha256": "190beccf1e337f2b5afcbb835102e975008887a8c20017175f569af653fea6f5",
+  "score_schema_version": "rule_z_revision_ear_ladder.score.v1",
+  "seed": 101,
+  "status": "prospectively_registered_before_live_calls",
+  "surface_token_audit": {
+    "encoding": "o200k_base",
+    "library": "tiktoken",
+    "max_expected_response_tokens": 126,
+    "max_prompt_tokens_by_condition": {
+      "T_prose_explicit_version_current_first_aligned": 1496,
+      "T_prose_explicit_version_current_first_none": 1405,
+      "T_prose_explicit_version_current_first_reversed": 1496,
+      "T_prose_explicit_version_historical_first_aligned": 1496,
+      "T_prose_explicit_version_historical_first_none": 1405,
+      "T_prose_explicit_version_historical_first_reversed": 1496,
+      "T_prose_temporal_status_current_first_aligned": 1488,
+      "T_prose_temporal_status_current_first_none": 1397,
+      "T_prose_temporal_status_current_first_reversed": 1488,
+      "T_prose_temporal_status_historical_first_aligned": 1488,
+      "T_prose_temporal_status_historical_first_none": 1397,
+      "T_prose_temporal_status_historical_first_reversed": 1488,
+      "T_typed_anchor": 2311
+    },
+    "max_representation_tokens_by_condition": {
+      "T_prose_explicit_version_current_first_aligned": 1333,
+      "T_prose_explicit_version_current_first_none": 1242,
+      "T_prose_explicit_version_current_first_reversed": 1333,
+      "T_prose_explicit_version_historical_first_aligned": 1333,
+      "T_prose_explicit_version_historical_first_none": 1242,
+      "T_prose_explicit_version_historical_first_reversed": 1333,
+      "T_prose_temporal_status_current_first_aligned": 1325,
+      "T_prose_temporal_status_current_first_none": 1234,
+      "T_prose_temporal_status_current_first_reversed": 1325,
+      "T_prose_temporal_status_historical_first_aligned": 1325,
+      "T_prose_temporal_status_historical_first_none": 1234,
+      "T_prose_temporal_status_historical_first_reversed": 1325,
+      "T_typed_anchor": 2148
+    },
+    "version": "0.12.0"
+  },
+  "task_type": "rule_z_revision_ear_ladder",
+  "temperature": null
+}

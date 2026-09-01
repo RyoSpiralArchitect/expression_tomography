@@ -1,0 +1,67 @@
+{
+  "below_cap_preflight": {
+    "max_new_calls": 2807,
+    "planned_new_calls": 2808,
+    "provider_calls": 0,
+    "rejected": true,
+    "stored_cases": 0,
+    "stored_experiment_runs": 0,
+    "stored_trials": 0
+  },
+  "case_count": 108,
+  "case_replicate_blocks": 216,
+  "conditions_per_case_replicate": 13,
+  "exact_resume_inserted_trials": 0,
+  "first_run_inserted_trials": 2808,
+  "live_provider_calls_made": 0,
+  "mock_experiment_run_identity_sha256": "07a1a2b6f5d18bbc9af34bc82c0cd6a252d7afe0010dbed1eb3e9cb77ca4efc7",
+  "note": "The temporary mock SQLite database and generated exports are represented by hashes; no live evidence was generated.",
+  "provider_calls_after_resume": 2808,
+  "provider_calls_before_resume": 2808,
+  "receiver_qualification": {
+    "case_class_strata": {
+      "answer_changing": {
+        "failures": 0,
+        "n": 144,
+        "qualified": true
+      },
+      "answer_preserving": {
+        "failures": 0,
+        "n": 72,
+        "qualified": true
+      }
+    },
+    "receiver_task_status": "identified",
+    "typed_anchor_failures": 0,
+    "typed_anchor_n": 216
+  },
+  "repetitions": 2,
+  "seed": 101,
+  "status": "full_mock_dry_run_complete",
+  "task_type": "rule_z_revision_ear_ladder",
+  "temporary_evidence_hashes": {
+    "revision_ear_replicates.csv": "b2a0024dd97e0f8858c6abba7edcee4451e83455ce0c9234c9c7288953479fee",
+    "revision_ear_report.md": "c6ed0ac4b955a1b49f2bff50dc600494e16b6428ea548f919c3625e4ad271157",
+    "revision_ear_summary.json": "41b4313c693ec2407ac0898d1bbcdeccac227e3213e84522524580d2ea7c4fbc",
+    "trials.sqlite": "c05a0592336669b56e4102986b7a8ff9b60dc639f5679dace8c33a68a9948000"
+  },
+  "temporary_evidence_sizes_bytes": {
+    "revision_ear_replicates.csv": 7744,
+    "revision_ear_report.md": 1330,
+    "revision_ear_summary.json": 88552,
+    "trials.sqlite": 24260608
+  },
+  "validation": {
+    "lineage_matches": 2808,
+    "missing_logical_identities": 0,
+    "parse_matches": 2808,
+    "prompt_matches": 2808,
+    "score_matches": 2808,
+    "sqlite_integrity_check": "ok",
+    "surface_complete": true,
+    "unexpected_logical_identities": 0,
+    "validated_cases": 108,
+    "validated_experiment_runs": 1,
+    "validated_trials": 2808
+  }
+}
