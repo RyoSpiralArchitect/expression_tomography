@@ -1,0 +1,23 @@
+[Spiralton] MLX not found or incompatible; magic disabled.
+[SpiralReality] Spiralton v6.1.0 MegaMax
+[🌀] * Spiralton MLX fusion active
+[🌀] -> Detected M4 — optimized variants loaded
+[🌀] @ Auto-Tune v2.1 ON (β=0.9+adaptive, explore=0%) 3 profiles loaded
+[🌀] * v5.1 features: SGMAT, SDPA-native, W4A16, PagedV2, ChunkedV2, SwiGLU-SIMD
+[🌀] [OK] mx.take/mx.matmul patched (v5.9: HyperMax)
+[🌀] [OK] NumPy Turbo active (BLAS: Apple Accelerate, openblas-dynamic, fp16-gemm)
+[🌀] [OK] mlx_numpy bridge ready (MLX-accelerated NumPy ops)
+[🌀] [OK] mlx_compute() context ready (10x faster NumPy blocks)
+{
+  "lineage_matches": 2808,
+  "missing_logical_identities": 0,
+  "parse_matches": 2808,
+  "prompt_matches": 2808,
+  "score_matches": 2808,
+  "sqlite_integrity_check": "ok",
+  "surface_complete": true,
+  "unexpected_logical_identities": 0,
+  "validated_cases": 108,
+  "validated_experiment_runs": 1,
+  "validated_trials": 2808
+}
