@@ -123,7 +123,9 @@ def score_semantic_readout(
     answer = str(obj.get("answer", "")).strip().lower()
     answer_exact = schema_valid and answer == payload["new_answer"]
     answer_changed = payload["old_answer"] != payload["new_answer"]
-    answer_old_distinct = answer_changed and answer == payload["old_answer"]
+    answer_old_distinct = (
+        schema_valid and answer_changed and answer == payload["old_answer"]
+    )
     structural_exact = historical_exact and current_exact and active_exact
     correct = structural_exact and answer_exact
     return {

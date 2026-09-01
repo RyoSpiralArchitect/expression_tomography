@@ -407,6 +407,7 @@ class RevisionEarLadderTests(unittest.TestCase):
             item
             for item in self.cases
             if item.payload["mutation_family"] != "priority_reversal"
+            and item.payload["case_class"] == "answer_changing"
         )
         parsed = expected_receiver_readout(case.payload)
         for field in ("historical_revision_atom", "current_revision_atom"):
@@ -433,6 +434,12 @@ class RevisionEarLadderTests(unittest.TestCase):
         self.assertFalse(invalid["schema_valid"])
         self.assertFalse(invalid["semantic_structural_exact"])
         self.assertFalse(invalid["semantic_correct"])
+
+        invalid_schema["answer"] = case.payload["old_answer"]
+        invalid_old_answer = score_semantic_readout(
+            invalid_schema, case.payload
+        )
+        self.assertFalse(invalid_old_answer["answer_old_distinct"])
 
     def test_semantic_diagnostic_is_read_only_and_separately_labeled(self) -> None:
         provider = RevisionEarLadderMockProvider()
