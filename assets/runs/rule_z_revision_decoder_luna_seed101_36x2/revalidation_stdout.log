@@ -1,0 +1,69 @@
+{
+  "case_count": 36,
+  "missing_trials": 0,
+  "planned_trials": 288,
+  "reproduced_trials": 288,
+  "run_count": 1,
+  "sqlite_integrity": "ok",
+  "surface_complete": true,
+  "trial_count": 288
+}
+{
+  "openai-gpt-5.6-luna-low-revision-decoder": {
+    "at_least_two_replicates": true,
+    "gate": "100% typed-derived state and endpoint, both case classes and every replicate",
+    "scope": "this frozen micro-surface only; not a population reliability guarantee",
+    "status": "qualified_for_larger_calibration",
+    "typed_endpoint": {
+      "n": 72,
+      "rate": 1.0,
+      "successes": 72,
+      "wilson_95_high": 1.0,
+      "wilson_95_low": 0.9493488274035422
+    },
+    "typed_full": {
+      "n": 72,
+      "rate": 1.0,
+      "successes": 72,
+      "wilson_95_high": 1.0,
+      "wilson_95_low": 0.9493488274035422
+    },
+    "typed_state": {
+      "n": 72,
+      "rate": 1.0,
+      "successes": 72,
+      "wilson_95_high": 1.0,
+      "wilson_95_low": 0.9493488274035422
+    },
+    "typed_strata": {
+      "case_class:answer_changing": {
+        "n": 48,
+        "rate": 1.0,
+        "successes": 48,
+        "wilson_95_high": 0.9999999999999999,
+        "wilson_95_low": 0.9258998703338824
+      },
+      "case_class:answer_preserving": {
+        "n": 24,
+        "rate": 1.0,
+        "successes": 24,
+        "wilson_95_high": 1.0,
+        "wilson_95_low": 0.8620237953250198
+      },
+      "replicate_index:0": {
+        "n": 36,
+        "rate": 1.0,
+        "successes": 36,
+        "wilson_95_high": 1.0,
+        "wilson_95_low": 0.9035813714055363
+      },
+      "replicate_index:1": {
+        "n": 36,
+        "rate": 1.0,
+        "successes": 36,
+        "wilson_95_high": 1.0,
+        "wilson_95_low": 0.9035813714055363
+      }
+    }
+  }
+}

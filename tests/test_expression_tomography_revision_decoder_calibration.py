@@ -40,6 +40,7 @@ from expression_tomography.tasks.rule_z.revision_decoder_manifest import (
 )
 from expression_tomography.tasks.rule_z.revision_decoder_mock import (
     RevisionDecoderMockProvider,
+    load_decoder_providers,
 )
 from expression_tomography.tasks.rule_z.revision_decoder_report import (
     write_decoder_report,
@@ -646,6 +647,97 @@ class RevisionDecoderTests(unittest.TestCase):
         for changed in (events[1:], events[:-1], [*events, *events[:2]]):
             with self.assertRaises(RuntimeError):
                 validate_operator_log(changed, rows)
+
+
+class FrozenDecoderEvidenceTests(unittest.TestCase):
+    asset_root = REPO_ROOT / "assets/runs/rule_z_revision_decoder_luna_seed101_36x2"
+
+    def test_live_artifacts_and_generation_sources_match_their_manifests(self) -> None:
+        manifest = json.loads((self.asset_root / "run_manifest.json").read_text())
+        prospective = json.loads(
+            (self.asset_root / "prospective_manifest.json").read_text()
+        )
+        self.assertEqual(
+            manifest["source_db_sha256"],
+            "62acca41d55c2abf5428c157b7f0044fc9b987304a6bd6c3607ccd6f2ffc61a0",
+        )
+        self.assertEqual(
+            manifest["experiment_run_identity_sha256"],
+            prospective["experiment_run_identity_sha256"],
+        )
+        self.assertEqual(
+            manifest["preregistration_commit"],
+            "d24874d56ad210811b0fc710d45e031079705623",
+        )
+        for name, expected in manifest["artifacts"].items():
+            with self.subTest(name=name):
+                self.assertEqual(Path(name).name, name)
+                path = self.asset_root / name
+                self.assertFalse(path.is_symlink())
+                self.assertEqual(path.stat().st_size, expected["bytes"])
+                self.assertEqual(
+                    hashlib.sha256(path.read_bytes()).hexdigest(), expected["sha256"]
+                )
+        for name, expected in prospective["frozen_file_sha256"].items():
+            with self.subTest(source=name):
+                path = (REPO_ROOT / name).resolve()
+                self.assertTrue(path.is_relative_to(REPO_ROOT))
+                self.assertEqual(
+                    hashlib.sha256(path.read_bytes()).hexdigest(), expected
+                )
+
+    def test_live_replay_and_report_are_read_only_and_cannot_call_the_provider(
+        self,
+    ) -> None:
+        db = self.asset_root / "trials.sqlite"
+        before = hashlib.sha256(db.read_bytes()).hexdigest()
+        manifest = json.loads((self.asset_root / "run_manifest.json").read_text())
+        store = ExperimentStore(db, read_only=True)
+        try:
+            self.assertEqual(validate_decoder_store(store), manifest["validation"])
+            events = [
+                json.loads(line)
+                for line in (self.asset_root / "operator_log.jsonl")
+                .read_text()
+                .splitlines()
+            ]
+            self.assertEqual(
+                validate_operator_log(events, store.fetch_trials()),
+                manifest["operator_log"],
+            )
+            self.assertEqual(manifest["operator_log"]["started"], 288)
+            self.assertEqual(manifest["operator_log"]["not_persisted"], 0)
+            with patch(
+                "expression_tomography.core.providers.OpenAICompatibleProvider.complete",
+                side_effect=AssertionError("No live API calls in evidence replay"),
+            ):
+                resumed = run_decoder_suite(
+                    make_decoder_cases(),
+                    load_decoder_providers(self.asset_root / "provider_config.json"),
+                    store,
+                    max_new_calls=0,
+                    progress_every=0,
+                )
+            self.assertEqual(resumed, manifest["zero_call_read_only_revalidation"])
+            with tempfile.TemporaryDirectory() as temporary:
+                output = Path(temporary)
+                summary = write_decoder_report(store, output)
+                self.assertEqual(summary["failed_condition_results"], 0)
+                self.assertEqual(summary["logical_condition_results"], 216)
+                self.assertEqual(summary["physical_provider_calls"], 288)
+                for record in summary["condition_results"]:
+                    self.assertEqual(record["n"], 72)
+                    self.assertEqual(record["structural_exact_successes"], 72)
+                    self.assertEqual(record["answer_exact_successes"], 72)
+                    self.assertEqual(record["full_exact_successes"], 72)
+                for name in manifest["deterministic_report_artifacts_reproduced"]:
+                    self.assertEqual(
+                        (output / name).read_bytes(),
+                        (self.asset_root / name).read_bytes(),
+                    )
+        finally:
+            store.close()
+        self.assertEqual(hashlib.sha256(db.read_bytes()).hexdigest(), before)
 
 
 if __name__ == "__main__":

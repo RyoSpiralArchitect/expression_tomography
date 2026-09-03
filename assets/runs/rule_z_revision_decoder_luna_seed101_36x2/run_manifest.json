@@ -1,0 +1,196 @@
+{
+  "artifacts": {
+    "README.md": {
+      "bytes": 1527,
+      "sha256": "82f698d4c45b37f63e136a68f0e57a7c3fe6a78508cda7315a9d6001634bb3b9"
+    },
+    "decoder_blocks.csv": {
+      "bytes": 170741,
+      "sha256": "83a30b578e5f42ecb76db7a18d7902afc580dc8f9539410851a9df6e4271202f"
+    },
+    "decoder_conditions.csv": {
+      "bytes": 2602,
+      "sha256": "3f53291d9babe68791cfe84ad3ae04a237e5d34de49e46d97e691a13ec2f41a2"
+    },
+    "decoder_contrasts.csv": {
+      "bytes": 844,
+      "sha256": "438cc67a8cd1d7824be516c707f3b8029392edff770adf4b0b194064e0e7ecf6"
+    },
+    "decoder_replicates.csv": {
+      "bytes": 11302,
+      "sha256": "6f3108aaad3f1009e7f1034687fb46e894c649580791b823a76e72aed25ace37"
+    },
+    "decoder_report.md": {
+      "bytes": 2521,
+      "sha256": "d0bc75c48cd656ce392ce4425c7feaa9bf0eeb93386ea5759a11b3ff4c1378b3"
+    },
+    "decoder_strata.csv": {
+      "bytes": 24881,
+      "sha256": "31f316e33637bdf1af529fed8fe043e66d4d338ef579fba21eb83a83136ed65d"
+    },
+    "decoder_summary.json": {
+      "bytes": 11497,
+      "sha256": "0944862a8b70beadd9c0baf9050ef6bb16a181a3fef0d19358d74f4fde987e59"
+    },
+    "decoder_trials.csv": {
+      "bytes": 1899096,
+      "sha256": "99b79f1a0aab7bc2d02fe74d8d93d3a940eb345d543d0913b2a8e6ebb45d06fe"
+    },
+    "execution_environment.json": {
+      "bytes": 313,
+      "sha256": "659dfd32fcdf0899070de6385c727134ed242efead4c869de86bab98d61ea297"
+    },
+    "live_preflight.json": {
+      "bytes": 309,
+      "sha256": "6c3011127bfa5978595c9a01b96d1cc3e9367eaa84670aabc4490c5442f11a13"
+    },
+    "live_run_stdout.log": {
+      "bytes": 3592,
+      "sha256": "261a898a6fba902126ea49c87d217dc6b41a80aca537ec6670e4726d672cd8be"
+    },
+    "mock_check_manifest.json": {
+      "bytes": 1295,
+      "sha256": "dbc4f8a581462ce2355ff875eef60533a70be9b245a78a5884ea70c1ba9cec6d"
+    },
+    "mock_report.md": {
+      "bytes": 2331,
+      "sha256": "4198eeab2fb7e4a999c67ebe044a7814c14e9c35c9bfca440192558030c8722b"
+    },
+    "mock_run_stdout.log": {
+      "bytes": 2085,
+      "sha256": "48adce60384a6247bcdb3548980d2e180af2bda2cc7e05ed787c09bbe590da61"
+    },
+    "mock_summary.json": {
+      "bytes": 11307,
+      "sha256": "3620be07882195d4fac35c0a26d75295c4ed0719732b7a7dfc39ffa7fc5d2f59"
+    },
+    "operator_log.jsonl": {
+      "bytes": 352484,
+      "sha256": "1e3f6643c219f362afe36ac8d2d81a3c06cf2e74648b5422d1a4e2a35dfbe25f"
+    },
+    "prospective_manifest.json": {
+      "bytes": 117850,
+      "sha256": "8a918fa1a72de985adacb7add550d823d4a5455a2e0d62092e457a561520b89f"
+    },
+    "provider_config.json": {
+      "bytes": 356,
+      "sha256": "b1b4865f37cf2566226e7c8b7f0d07149e27095daeb0b603d94efdc97cdc7c5a"
+    },
+    "revalidation_stdout.log": {
+      "bytes": 1753,
+      "sha256": "aca4667566ef9d480ff2e22fdcaaf128114d09b30f104591869713d12ddccb15"
+    },
+    "trials.sqlite": {
+      "bytes": 2433024,
+      "sha256": "62acca41d55c2abf5428c157b7f0044fc9b987304a6bd6c3607ccd6f2ffc61a0"
+    },
+    "zero_call_resume_stdout.log": {
+      "bytes": 362,
+      "sha256": "c276a73bc6a87c1e44bffcf90f60fe34dabec6027ae0906a8fe2bfc19e498b09"
+    }
+  },
+  "deterministic_report_artifacts_reproduced": [
+    "decoder_summary.json",
+    "decoder_report.md",
+    "decoder_blocks.csv",
+    "decoder_conditions.csv",
+    "decoder_strata.csv",
+    "decoder_contrasts.csv",
+    "decoder_replicates.csv",
+    "decoder_trials.csv"
+  ],
+  "experiment_run_identity_sha256": "f48a16fd7a772830366fa43b0408e932c2039588fb57e9004362617d54d1adf1",
+  "operator_log": {
+    "all_events_bound_to_trials": true,
+    "first_started_utc": "2026-09-03T12:21:33.837114+00:00",
+    "last_persisted_utc": "2026-09-03T12:30:33.623058+00:00",
+    "not_persisted": 0,
+    "persisted": 288,
+    "started": 288
+  },
+  "preregistration_commit": "d24874d56ad210811b0fc710d45e031079705623",
+  "qualification": {
+    "openai-gpt-5.6-luna-low-revision-decoder": {
+      "at_least_two_replicates": true,
+      "gate": "100% typed-derived state and endpoint, both case classes and every replicate",
+      "scope": "this frozen micro-surface only; not a population reliability guarantee",
+      "status": "qualified_for_larger_calibration",
+      "typed_endpoint": {
+        "n": 72,
+        "rate": 1.0,
+        "successes": 72,
+        "wilson_95_high": 1.0,
+        "wilson_95_low": 0.9493488274035422
+      },
+      "typed_full": {
+        "n": 72,
+        "rate": 1.0,
+        "successes": 72,
+        "wilson_95_high": 1.0,
+        "wilson_95_low": 0.9493488274035422
+      },
+      "typed_state": {
+        "n": 72,
+        "rate": 1.0,
+        "successes": 72,
+        "wilson_95_high": 1.0,
+        "wilson_95_low": 0.9493488274035422
+      },
+      "typed_strata": {
+        "case_class:answer_changing": {
+          "n": 48,
+          "rate": 1.0,
+          "successes": 48,
+          "wilson_95_high": 0.9999999999999999,
+          "wilson_95_low": 0.9258998703338824
+        },
+        "case_class:answer_preserving": {
+          "n": 24,
+          "rate": 1.0,
+          "successes": 24,
+          "wilson_95_high": 1.0,
+          "wilson_95_low": 0.8620237953250198
+        },
+        "replicate_index:0": {
+          "n": 36,
+          "rate": 1.0,
+          "successes": 36,
+          "wilson_95_high": 1.0,
+          "wilson_95_low": 0.9035813714055363
+        },
+        "replicate_index:1": {
+          "n": 36,
+          "rate": 1.0,
+          "successes": 36,
+          "wilson_95_high": 1.0,
+          "wilson_95_low": 0.9035813714055363
+        }
+      }
+    }
+  },
+  "source_db_sha256": "62acca41d55c2abf5428c157b7f0044fc9b987304a6bd6c3607ccd6f2ffc61a0",
+  "status": "complete_frozen_evidence",
+  "task_type": "rule_z_revision_decoder_calibration",
+  "validation": {
+    "case_count": 36,
+    "missing_trials": 0,
+    "planned_trials": 288,
+    "reproduced_trials": 288,
+    "run_count": 1,
+    "sqlite_integrity": "ok",
+    "surface_complete": true,
+    "trial_count": 288
+  },
+  "zero_call_read_only_revalidation": [
+    {
+      "existing_trials": 288,
+      "experiment_run_identity_sha256": "f48a16fd7a772830366fa43b0408e932c2039588fb57e9004362617d54d1adf1",
+      "inserted_trials": 0,
+      "logical_condition_results": 216,
+      "new_call_upper_bound": 0,
+      "planned_provider_calls": 288,
+      "provider": "openai-gpt-5.6-luna-low-revision-decoder",
+      "skipped_trials": 288
+    }
+  ]
+}

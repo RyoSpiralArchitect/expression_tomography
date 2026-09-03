@@ -1,0 +1,7 @@
+provider,left,right,metric,paired_n,case_count,left_only_correct,right_only_correct,paired_effect,scope
+openai-gpt-5.6-luna-low-revision-decoder,T_prose_joint,T_typed_joint,structural_exact,72,36,0,0,0.0,calibration_surface_only
+openai-gpt-5.6-luna-low-revision-decoder,T_prose_joint,T_typed_joint,answer_exact,72,36,0,0,0.0,calibration_surface_only
+openai-gpt-5.6-luna-low-revision-decoder,T_prose_joint,T_typed_joint,full_exact,72,36,0,0,0.0,calibration_surface_only
+openai-gpt-5.6-luna-low-revision-decoder,T_prose_staged,T_prose_joint,structural_exact,72,36,0,0,0.0,calibration_surface_only
+openai-gpt-5.6-luna-low-revision-decoder,T_prose_staged,T_prose_joint,answer_exact,72,36,0,0,0.0,calibration_surface_only
+openai-gpt-5.6-luna-low-revision-decoder,T_prose_staged,T_prose_joint,full_exact,72,36,0,0,0.0,calibration_surface_only

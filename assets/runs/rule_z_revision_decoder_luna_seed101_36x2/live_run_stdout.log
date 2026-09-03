@@ -1,0 +1,95 @@
+openai-gpt-5.6-luna-low-revision-decoder: persisted 12/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 24/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 36/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 48/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 60/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 72/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 84/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 96/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 108/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 120/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 132/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 144/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 156/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 168/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 180/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 192/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 204/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 216/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 228/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 240/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 252/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 264/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 276/288 new calls
+openai-gpt-5.6-luna-low-revision-decoder: persisted 288/288 new calls
+[
+  {
+    "existing_trials": 0,
+    "experiment_run_identity_sha256": "f48a16fd7a772830366fa43b0408e932c2039588fb57e9004362617d54d1adf1",
+    "inserted_trials": 288,
+    "logical_condition_results": 216,
+    "new_call_upper_bound": 288,
+    "planned_provider_calls": 288,
+    "provider": "openai-gpt-5.6-luna-low-revision-decoder",
+    "skipped_trials": 0
+  }
+]
+{
+  "openai-gpt-5.6-luna-low-revision-decoder": {
+    "at_least_two_replicates": true,
+    "gate": "100% typed-derived state and endpoint, both case classes and every replicate",
+    "scope": "this frozen micro-surface only; not a population reliability guarantee",
+    "status": "qualified_for_larger_calibration",
+    "typed_endpoint": {
+      "n": 72,
+      "rate": 1.0,
+      "successes": 72,
+      "wilson_95_high": 1.0,
+      "wilson_95_low": 0.9493488274035422
+    },
+    "typed_full": {
+      "n": 72,
+      "rate": 1.0,
+      "successes": 72,
+      "wilson_95_high": 1.0,
+      "wilson_95_low": 0.9493488274035422
+    },
+    "typed_state": {
+      "n": 72,
+      "rate": 1.0,
+      "successes": 72,
+      "wilson_95_high": 1.0,
+      "wilson_95_low": 0.9493488274035422
+    },
+    "typed_strata": {
+      "case_class:answer_changing": {
+        "n": 48,
+        "rate": 1.0,
+        "successes": 48,
+        "wilson_95_high": 0.9999999999999999,
+        "wilson_95_low": 0.9258998703338824
+      },
+      "case_class:answer_preserving": {
+        "n": 24,
+        "rate": 1.0,
+        "successes": 24,
+        "wilson_95_high": 1.0,
+        "wilson_95_low": 0.8620237953250198
+      },
+      "replicate_index:0": {
+        "n": 36,
+        "rate": 1.0,
+        "successes": 36,
+        "wilson_95_high": 1.0,
+        "wilson_95_low": 0.9035813714055363
+      },
+      "replicate_index:1": {
+        "n": 36,
+        "rate": 1.0,
+        "successes": 36,
+        "wilson_95_high": 1.0,
+        "wilson_95_low": 0.9035813714055363
+      }
+    }
+  }
+}

@@ -350,6 +350,11 @@ defines the frozen surface, typed-derived gate, stage-specific scores, and
 limits of the procedural contrasts. It does not revise the earlier ear-ladder
 score or post-hoc diagnostic.
 
+The [Luna run note](docs/live_rule_z_revision_decoder_luna_note_2026_09_03.md)
+records the completed 288-call micro-calibration: all three conditions reach
+72/72 full readout, with raw data and replay evidence preserved. This passes
+the local gate, not a general reliability or staged-method superiority test.
+
 ## Metaphor Transfer Smoke
 
 ```bash
