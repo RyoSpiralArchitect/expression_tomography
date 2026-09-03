@@ -42,6 +42,8 @@ et-rule-z-revision-interface-manifest = "expression_tomography.tasks.rule_z.revi
 et-rule-z-revision-ear-ladder = "expression_tomography.tasks.rule_z.revision_ear_ladder_task:main"
 et-rule-z-revision-ear-ladder-manifest = "expression_tomography.tasks.rule_z.revision_ear_ladder_manifest:main"
 et-rule-z-revision-ear-semantic-diagnostics = "expression_tomography.tasks.rule_z.revision_ear_semantic_diagnostics:main"
+et-rule-z-revision-decoder = "expression_tomography.tasks.rule_z.revision_decoder_task:main"
+et-rule-z-revision-decoder-manifest = "expression_tomography.tasks.rule_z.revision_decoder_manifest:main"
 et-metaphor-transfer = "expression_tomography.tasks.metaphor_transfer.task:main"
 
 [tool.setuptools.packages.find]

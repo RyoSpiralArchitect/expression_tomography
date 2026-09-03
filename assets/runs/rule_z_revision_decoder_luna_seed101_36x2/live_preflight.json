@@ -1,0 +1,10 @@
+[
+  {
+    "existing_trials": 0,
+    "experiment_run_identity_sha256": "f48a16fd7a772830366fa43b0408e932c2039588fb57e9004362617d54d1adf1",
+    "logical_condition_results": 216,
+    "new_call_upper_bound": 288,
+    "planned_provider_calls": 288,
+    "provider": "openai-gpt-5.6-luna-low-revision-decoder"
+  }
+]

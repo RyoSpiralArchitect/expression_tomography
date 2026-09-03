@@ -324,6 +324,32 @@ If that oracle ear fails, the corresponding sender prose outcome remains
 `unidentified`. The frozen design and adaptive follow-up rules are in
 `docs/rule_z_revision_interface_calibration_protocol_2026_08_27.md`.
 
+## Rule-Z Revision Decoder Calibration
+
+The receiver-only micro-calibration separates exact state readout from endpoint
+decoding. Typed inputs omit the answer; rule-object keys and the endpoint
+mapping are explicit. The staged arm commits the model's state before a second
+request receives only its emitted active conclusions, without an oracle fallback.
+
+```bash
+python3 -m expression_tomography.tasks.rule_z.revision_decoder_task \
+  --seed 101 --repetitions 2 --order-seed 19337 --max-new-calls 288 \
+  --db results/expression_tomography/revision_decoder_mock.sqlite \
+  --report-dir results/expression_tomography/revision_decoder_mock_report
+```
+
+This is 36 cases x 2 repeats x 3 logical conditions, but **288 API calls** because
+one condition has two stages. The default provider is a deterministic mock.
+For Luna, use
+`expression_tomography/config/providers.openai_gpt_5_6_luna_revision_decoder.json`.
+Use `--preflight-only` before execution and `--validate-only` for read-only
+revalidation. An exact complete rerun with `--max-new-calls 0` skips all calls.
+
+The [prospective protocol](docs/rule_z_revision_decoder_calibration_protocol_2026_09_03.md)
+defines the frozen surface, typed-derived gate, stage-specific scores, and
+limits of the procedural contrasts. It does not revise the earlier ear-ladder
+score or post-hoc diagnostic.
+
 ## Metaphor Transfer Smoke
 
 ```bash
