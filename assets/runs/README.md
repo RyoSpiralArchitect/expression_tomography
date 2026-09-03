@@ -209,6 +209,16 @@ rule_z_extraction_intervention_luna_seed68_target_null_16x2
   checks and treats the formatting cue as a competing control, not an inert
   placebo.
 
+rule_z_revision_decoder_luna_seed101_36x2
+  Prospectively registered 36-case, two-replicate receiver calibration after
+  the revision ear ladder. Three logical conditions require 288 physical
+  calls: answer-free typed readout, schema-explicit joint prose readout, and
+  a persisted state followed by endpoint decoding from emitted conclusions
+  only. All three conditions reach 72/72 full readout on this micro-surface.
+  Includes raw SQLite, all physical trials, paired/stratified/repetition
+  exports, bound operator receipts, read-only revalidation, zero-call resume,
+  and prospective/completed-run manifests. The earlier evidence stays frozen.
+
 metaphor_transfer_openai_live
   First OpenAI live metaphor-transfer smoke run.
 

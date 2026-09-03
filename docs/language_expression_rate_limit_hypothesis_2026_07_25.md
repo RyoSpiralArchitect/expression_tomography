@@ -601,6 +601,9 @@ target-preannouncement gains as semantic binding rather than generic attention.
 
 ## Evidence Ledger
 
+The following ledger preserves earlier stages of the program. Later dated
+updates below add new calibration evidence without rewriting those snapshots.
+
 ### Operationalized, Not Yet Live Evidence
 
 - Prospective pre-answer declarations remain outside the current evidence.
@@ -667,3 +670,37 @@ target-preannouncement gains as semantic binding rather than generic attention.
 - Whether the proposed probe family shares a common factor.
 - How to measure expressive generativity without reducing novelty to arbitrary
   difference from a fixed oracle.
+
+## 2026-09-03: Readout And Endpoint Calibration
+
+The [new revision decoder micro-calibration](live_rule_z_revision_decoder_luna_note_2026_09_03.md)
+qualifies its explicit-contract typed anchor on 36 cases with two repeats.
+Typed input without an answer, one-call oracle prose, and a genuinely staged
+prose/state/endpoint path each reach 72/72 full-readout success. The 288-call
+surface is complete, with no within-case state-accuracy or endpoint-accuracy
+disagreements across the two repeats.
+
+This adds a measurement distinction, not a conclusion about general
+intelligence:
+
+```text
+state readout != requested serialization != endpoint decoding
+```
+
+The earlier ear ladder's unspecified nested keys and endpoint mapping remain
+measurement limitations of that frozen run. A new explicit contract succeeds
+on this micro-surface, but the probe bundles changes and has no concurrent
+legacy-prompt arm. It does not identify which change caused the difference,
+rescue the old qualification gate, or prove that semantic content was already
+present in a latent state.
+
+The staged condition is not better here: one-call prose is also at ceiling.
+Both representations already expose active conclusions, so this result does
+not demonstrate unaided rule recomputation. The next larger factorial must
+re-qualify its own answer-free anchor and retain at least three replicates.
+
+For the learning roadmap, keep serialization failure, wrong represented state,
+and inconsistent downstream decision as separate labels. Fine-tuning a mixed
+failure class would risk learning around a measurement defect rather than
+improving preservation or reuse of distinctions. The non-reduction clause and
+the open generativity/reader-state hypotheses above remain in force.

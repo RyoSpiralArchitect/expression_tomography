@@ -1,0 +1,42 @@
+{
+  "below_cap_error": "Preflight planned 288 new calls, exceeding max_new_calls=287",
+  "below_cap_writes": {
+    "cases": 0,
+    "runs": 0,
+    "trials": 0
+  },
+  "database_sha256_after": "a66ee8fdbf7865977ff2959c8066e9ab9ac6c28db04b5a131e1ff172103c22a8",
+  "database_sha256_before": "a66ee8fdbf7865977ff2959c8066e9ab9ac6c28db04b5a131e1ff172103c22a8",
+  "kind": "deterministic_mock_only",
+  "operator_audit": {
+    "all_events_bound_to_trials": true,
+    "first_started_utc": "2026-09-03T12:18:06.378769+00:00",
+    "last_persisted_utc": "2026-09-03T12:18:06.569509+00:00",
+    "not_persisted": 0,
+    "persisted": 288,
+    "started": 288
+  },
+  "resume_provider_calls": 0,
+  "validation": {
+    "case_count": 36,
+    "missing_trials": 0,
+    "planned_trials": 288,
+    "reproduced_trials": 288,
+    "run_count": 1,
+    "sqlite_integrity": "ok",
+    "surface_complete": true,
+    "trial_count": 288
+  },
+  "zero_call_resume": [
+    {
+      "existing_trials": 288,
+      "experiment_run_identity_sha256": "d75f008a9169550e0f2aa02ac987293be53e2a5844245bcee58459a4375c7e8a",
+      "inserted_trials": 0,
+      "logical_condition_results": 216,
+      "new_call_upper_bound": 0,
+      "planned_provider_calls": 288,
+      "provider": "revision-decoder-mock",
+      "skipped_trials": 288
+    }
+  ]
+}

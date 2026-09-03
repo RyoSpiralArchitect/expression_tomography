@@ -1,0 +1,10 @@
+{
+  "actual_token_usage": "not_collected_by_text_only_provider_interface",
+  "credential_present": true,
+  "credential_source": "OPENAI_API_KEY environment variable",
+  "machine": "arm64",
+  "platform": "darwin",
+  "provider_concurrency": 1,
+  "python_version": "3.12.6",
+  "site_initialization_disabled": true
+}
