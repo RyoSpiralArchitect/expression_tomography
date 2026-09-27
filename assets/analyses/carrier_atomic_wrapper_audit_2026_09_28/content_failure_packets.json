@@ -1,0 +1,200 @@
+[
+  {
+    "observation": {
+      "slot_sha256": "965ce73241bb8546973adfdb466fcc74436a76c562f0d02226a34ed125e37ade",
+      "fixture_id": "suppression.winner_must_fire.b",
+      "pair_id": "suppression.winner_must_fire",
+      "variant": "b",
+      "reader": "mistral_large",
+      "replicate": 0,
+      "stage": "suppression",
+      "source_logical_trial_sha256": "e64becd1b7a8fbb70e2af65d9a11597992bcaa7ee5b16be7f64862fed00061f7",
+      "source_assessment_sha256": "2e058a9930a7e6103304b3c43bc0ef8beca8a6cad8f7212702e61cf06a14bf6d",
+      "source_raw_sha256": "3d3b0b591209bdbe1c8c0267f9752125f814cfa9ef4f2fe409ac79ce1b471e78",
+      "primary_score": {
+        "correct": null,
+        "schema_valid": false
+      },
+      "operation": "remove_single_json_fence",
+      "raw_response": "```json\n{\"holds\":false}\n```",
+      "extracted_text": "{\"holds\":false}",
+      "extracted_text_sha256": "01699785bcc63f0e6d0f754e7aa2eb543714019894d4618b4c128c9c05b51c2d",
+      "secondary_parsed": {
+        "holds": false
+      },
+      "secondary_score": {
+        "schema_valid": true,
+        "correct": false
+      },
+      "private_expected": true,
+      "audit_assessment_sha256": "72e3db3bef316dac8a95b2b2aadbadea712c47d38280fb66adb2a0e8db50e461"
+    },
+    "fixture": {
+      "fixture_id": "suppression.winner_must_fire.b",
+      "pair_id": "suppression.winner_must_fire",
+      "stage": "suppression",
+      "variant": "b",
+      "source_family": "f02",
+      "changed_field": "fired_rules",
+      "expected_relation": "flip",
+      "public": {
+        "rules": [
+          {
+            "id": "r2",
+            "then": "eligible"
+          },
+          {
+            "id": "r3",
+            "then": "not_eligible"
+          }
+        ],
+        "fired_rules": [
+          "r2",
+          "r3"
+        ],
+        "priority": [
+          [
+            "r2",
+            "r3"
+          ]
+        ],
+        "target_rule": "r3"
+      },
+      "private_expected": true,
+      "prompt": "Evaluate one public operation independently.\nTreat fired_rules as the supplied complete fired set; do not infer it again. Each priority [winner, loser] suppresses the loser only when BOTH are fired. Only listed edges apply; there is no default preference for a conclusion. All supplied edges join opposite conclusions. Is target_rule suppressed?\nReturn only a JSON object with exactly one key, \"holds\", whose value is the JSON boolean true or false. No explanation or additional fields.\nPUBLIC_INPUT_JSON:\n{\"fired_rules\":[\"r2\",\"r3\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r2\",\"then\":\"eligible\"},{\"id\":\"r3\",\"then\":\"not_eligible\"}],\"target_rule\":\"r3\"}",
+      "prompt_sha256": "b1ed233467a09261ee14b49949b247bbb6da5b3d45e2639c13a26357af82d341"
+    }
+  },
+  {
+    "observation": {
+      "slot_sha256": "b62f05c569fe005ffdd450ea20b8eae4aedafebf0f5212df9a408c1ffb598d0f",
+      "fixture_id": "suppression.edge_direction.a",
+      "pair_id": "suppression.edge_direction",
+      "variant": "a",
+      "reader": "mistral_large",
+      "replicate": 0,
+      "stage": "suppression",
+      "source_logical_trial_sha256": "a17945288b728b6cec6378051a50e4e6e774e4b406b22419de75acd549d8fa57",
+      "source_assessment_sha256": "f685e5c96d689cc6290526030fd85e7a658ac2d1374a6eb04651895851e8f5f5",
+      "source_raw_sha256": "3d3b0b591209bdbe1c8c0267f9752125f814cfa9ef4f2fe409ac79ce1b471e78",
+      "primary_score": {
+        "correct": null,
+        "schema_valid": false
+      },
+      "operation": "remove_single_json_fence",
+      "raw_response": "```json\n{\"holds\":false}\n```",
+      "extracted_text": "{\"holds\":false}",
+      "extracted_text_sha256": "01699785bcc63f0e6d0f754e7aa2eb543714019894d4618b4c128c9c05b51c2d",
+      "secondary_parsed": {
+        "holds": false
+      },
+      "secondary_score": {
+        "schema_valid": true,
+        "correct": false
+      },
+      "private_expected": true,
+      "audit_assessment_sha256": "e28666de3815b50c1486d07683ca3e2ea708b9a597f1fe6e8dca210063621e8a"
+    },
+    "fixture": {
+      "fixture_id": "suppression.edge_direction.a",
+      "pair_id": "suppression.edge_direction",
+      "stage": "suppression",
+      "variant": "a",
+      "source_family": "f08",
+      "changed_field": "priority",
+      "expected_relation": "flip",
+      "public": {
+        "rules": [
+          {
+            "id": "r1",
+            "then": "eligible"
+          },
+          {
+            "id": "r2",
+            "then": "not_eligible"
+          }
+        ],
+        "fired_rules": [
+          "r1",
+          "r2"
+        ],
+        "priority": [
+          [
+            "r2",
+            "r1"
+          ]
+        ],
+        "target_rule": "r1"
+      },
+      "private_expected": true,
+      "prompt": "Evaluate one public operation independently.\nTreat fired_rules as the supplied complete fired set; do not infer it again. Each priority [winner, loser] suppresses the loser only when BOTH are fired. Only listed edges apply; there is no default preference for a conclusion. All supplied edges join opposite conclusions. Is target_rule suppressed?\nReturn only a JSON object with exactly one key, \"holds\", whose value is the JSON boolean true or false. No explanation or additional fields.\nPUBLIC_INPUT_JSON:\n{\"fired_rules\":[\"r1\",\"r2\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"then\":\"eligible\"},{\"id\":\"r2\",\"then\":\"not_eligible\"}],\"target_rule\":\"r1\"}",
+      "prompt_sha256": "171d5f0f96f13417d761837bce53b54edf0fbdf3c71ebeba18e9a1b0fb63aa83"
+    }
+  },
+  {
+    "observation": {
+      "slot_sha256": "b7e6effb72d5255a0ec7f2da69e6b76a70de4079387d8acd165b5bbb5bce708e",
+      "fixture_id": "suppression.edge_direction.a",
+      "pair_id": "suppression.edge_direction",
+      "variant": "a",
+      "reader": "mistral_large",
+      "replicate": 1,
+      "stage": "suppression",
+      "source_logical_trial_sha256": "95e0880aa1797e5c37fdcb163e9a61d1a5f5c5dcfc7d5f39a1f22b87f3d8b9c3",
+      "source_assessment_sha256": "50bf6823042d75d718fd93ca48c1a57a24d51483da4fad9511f6e509e78b3676",
+      "source_raw_sha256": "3d3b0b591209bdbe1c8c0267f9752125f814cfa9ef4f2fe409ac79ce1b471e78",
+      "primary_score": {
+        "correct": null,
+        "schema_valid": false
+      },
+      "operation": "remove_single_json_fence",
+      "raw_response": "```json\n{\"holds\":false}\n```",
+      "extracted_text": "{\"holds\":false}",
+      "extracted_text_sha256": "01699785bcc63f0e6d0f754e7aa2eb543714019894d4618b4c128c9c05b51c2d",
+      "secondary_parsed": {
+        "holds": false
+      },
+      "secondary_score": {
+        "schema_valid": true,
+        "correct": false
+      },
+      "private_expected": true,
+      "audit_assessment_sha256": "6c9d0b9033233b1c94374b36d1c7326cf3fef6eabc0d213f32545699fb8f2ba1"
+    },
+    "fixture": {
+      "fixture_id": "suppression.edge_direction.a",
+      "pair_id": "suppression.edge_direction",
+      "stage": "suppression",
+      "variant": "a",
+      "source_family": "f08",
+      "changed_field": "priority",
+      "expected_relation": "flip",
+      "public": {
+        "rules": [
+          {
+            "id": "r1",
+            "then": "eligible"
+          },
+          {
+            "id": "r2",
+            "then": "not_eligible"
+          }
+        ],
+        "fired_rules": [
+          "r1",
+          "r2"
+        ],
+        "priority": [
+          [
+            "r2",
+            "r1"
+          ]
+        ],
+        "target_rule": "r1"
+      },
+      "private_expected": true,
+      "prompt": "Evaluate one public operation independently.\nTreat fired_rules as the supplied complete fired set; do not infer it again. Each priority [winner, loser] suppresses the loser only when BOTH are fired. Only listed edges apply; there is no default preference for a conclusion. All supplied edges join opposite conclusions. Is target_rule suppressed?\nReturn only a JSON object with exactly one key, \"holds\", whose value is the JSON boolean true or false. No explanation or additional fields.\nPUBLIC_INPUT_JSON:\n{\"fired_rules\":[\"r1\",\"r2\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"then\":\"eligible\"},{\"id\":\"r2\",\"then\":\"not_eligible\"}],\"target_rule\":\"r1\"}",
+      "prompt_sha256": "171d5f0f96f13417d761837bce53b54edf0fbdf3c71ebeba18e9a1b0fb63aa83"
+    }
+  }
+]

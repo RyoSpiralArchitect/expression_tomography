@@ -1,0 +1,276 @@
+{
+  "kind": "POST_HOC_COMPATIBILITY_AUDIT_NOT_MECHANISM_IDENTIFICATION",
+  "inputs": {
+    "gpt6_luna": {
+      "path": "assets/runs/carrier_downstream_reader_gpt6_luna_2026_09_27",
+      "manifest_sha256": "1ed85f17240ffb5db8fbeea0db62e1f564a50c0c9c30bf77443f85711d10623d"
+    },
+    "mistral_large": {
+      "path": "assets/runs/carrier_reader_mistral_2026_09_27",
+      "manifest_sha256": "c2c2720a6cb8e475277ca721898aaff1ad5eb97e1c0dc9922af1cc05aa72c1ed"
+    }
+  },
+  "n_worlds": 6,
+  "n_sources": 18,
+  "n_families": 3,
+  "candidates": {
+    "public_oracle": "Unchanged Rule-Z interpreter, using only facts/rules/priority.",
+    "any_antecedent": "Treat a nonempty AND condition as OR; keep priority semantics.",
+    "ignore_priorities": "Correct conjunction, but remove every priority edge.",
+    "unconditional_suppression": "Suppress listed losers even if their winner does not fire.",
+    "all_rules_fire": "Ignore antecedents, but retain conditional priority semantics.",
+    "multiple_active_means_conflict": "More than one active rule means conflict, regardless of polarity.",
+    "active_rule_majority": "Vote over active rules; a nonempty tie means conflict; empty means no.",
+    "replace_facts_on_add": "Replace, rather than union, actual facts with the added fact.",
+    "copy_source_label": "Copy the corresponding reported source label without recomputing.",
+    "reuse_current_oracle": "Use the correct current answer in both answer fields."
+  },
+  "readers": {
+    "gpt6_luna": {
+      "n_planned": 108,
+      "n_recorded": 108,
+      "n_valid": 108,
+      "invariance": {
+        "facts_unchanged": {
+          "n_eligible": 18,
+          "n_valid": 18,
+          "n_answer_disagreements": 0
+        },
+        "active_rules_unchanged": {
+          "n_eligible": 54,
+          "n_valid": 54,
+          "n_answer_disagreements": 0
+        },
+        "active_conclusions_unchanged": {
+          "n_eligible": 90,
+          "n_valid": 90,
+          "n_answer_disagreements": 0
+        }
+      },
+      "fields": {
+        "answer": {
+          "n_errors": 0,
+          "candidate_compatibility": {
+            "public_oracle": {
+              "n_label_matches_all_valid": 108,
+              "n_label_matches_on_errors": 0
+            },
+            "any_antecedent": {
+              "n_label_matches_all_valid": 72,
+              "n_label_matches_on_errors": 0
+            },
+            "ignore_priorities": {
+              "n_label_matches_all_valid": 90,
+              "n_label_matches_on_errors": 0
+            },
+            "unconditional_suppression": {
+              "n_label_matches_all_valid": 90,
+              "n_label_matches_on_errors": 0
+            },
+            "all_rules_fire": {
+              "n_label_matches_all_valid": 54,
+              "n_label_matches_on_errors": 0
+            },
+            "multiple_active_means_conflict": {
+              "n_label_matches_all_valid": 90,
+              "n_label_matches_on_errors": 0
+            },
+            "active_rule_majority": {
+              "n_label_matches_all_valid": 108,
+              "n_label_matches_on_errors": 0
+            },
+            "replace_facts_on_add": {
+              "n_label_matches_all_valid": 108,
+              "n_label_matches_on_errors": 0
+            },
+            "copy_source_label": {
+              "n_label_matches_all_valid": 108,
+              "n_label_matches_on_errors": 0
+            },
+            "reuse_current_oracle": {
+              "n_label_matches_all_valid": 108,
+              "n_label_matches_on_errors": 0
+            }
+          },
+          "copy_source_label_oracle_correct": 108
+        },
+        "counterfactual_answer": {
+          "n_errors": 0,
+          "candidate_compatibility": {
+            "public_oracle": {
+              "n_label_matches_all_valid": 108,
+              "n_label_matches_on_errors": 0
+            },
+            "any_antecedent": {
+              "n_label_matches_all_valid": 72,
+              "n_label_matches_on_errors": 0
+            },
+            "ignore_priorities": {
+              "n_label_matches_all_valid": 90,
+              "n_label_matches_on_errors": 0
+            },
+            "unconditional_suppression": {
+              "n_label_matches_all_valid": 72,
+              "n_label_matches_on_errors": 0
+            },
+            "all_rules_fire": {
+              "n_label_matches_all_valid": 54,
+              "n_label_matches_on_errors": 0
+            },
+            "multiple_active_means_conflict": {
+              "n_label_matches_all_valid": 72,
+              "n_label_matches_on_errors": 0
+            },
+            "active_rule_majority": {
+              "n_label_matches_all_valid": 90,
+              "n_label_matches_on_errors": 0
+            },
+            "replace_facts_on_add": {
+              "n_label_matches_all_valid": 36,
+              "n_label_matches_on_errors": 0
+            },
+            "copy_source_label": {
+              "n_label_matches_all_valid": 96,
+              "n_label_matches_on_errors": 0
+            },
+            "reuse_current_oracle": {
+              "n_label_matches_all_valid": 90,
+              "n_label_matches_on_errors": 0
+            }
+          },
+          "copy_source_label_oracle_correct": 96
+        }
+      }
+    },
+    "mistral_large": {
+      "n_planned": 108,
+      "n_recorded": 108,
+      "n_valid": 108,
+      "invariance": {
+        "facts_unchanged": {
+          "n_eligible": 18,
+          "n_valid": 18,
+          "n_answer_disagreements": 7
+        },
+        "active_rules_unchanged": {
+          "n_eligible": 54,
+          "n_valid": 54,
+          "n_answer_disagreements": 43
+        },
+        "active_conclusions_unchanged": {
+          "n_eligible": 90,
+          "n_valid": 90,
+          "n_answer_disagreements": 75
+        }
+      },
+      "fields": {
+        "answer": {
+          "n_errors": 11,
+          "candidate_compatibility": {
+            "public_oracle": {
+              "n_label_matches_all_valid": 97,
+              "n_label_matches_on_errors": 0
+            },
+            "any_antecedent": {
+              "n_label_matches_all_valid": 61,
+              "n_label_matches_on_errors": 0
+            },
+            "ignore_priorities": {
+              "n_label_matches_all_valid": 101,
+              "n_label_matches_on_errors": 11
+            },
+            "unconditional_suppression": {
+              "n_label_matches_all_valid": 79,
+              "n_label_matches_on_errors": 0
+            },
+            "all_rules_fire": {
+              "n_label_matches_all_valid": 43,
+              "n_label_matches_on_errors": 0
+            },
+            "multiple_active_means_conflict": {
+              "n_label_matches_all_valid": 101,
+              "n_label_matches_on_errors": 11
+            },
+            "active_rule_majority": {
+              "n_label_matches_all_valid": 97,
+              "n_label_matches_on_errors": 0
+            },
+            "replace_facts_on_add": {
+              "n_label_matches_all_valid": 97,
+              "n_label_matches_on_errors": 0
+            },
+            "copy_source_label": {
+              "n_label_matches_all_valid": 97,
+              "n_label_matches_on_errors": 0
+            },
+            "reuse_current_oracle": {
+              "n_label_matches_all_valid": 97,
+              "n_label_matches_on_errors": 0
+            }
+          },
+          "copy_source_label_oracle_correct": 108
+        },
+        "counterfactual_answer": {
+          "n_errors": 78,
+          "candidate_compatibility": {
+            "public_oracle": {
+              "n_label_matches_all_valid": 30,
+              "n_label_matches_on_errors": 0
+            },
+            "any_antecedent": {
+              "n_label_matches_all_valid": 30,
+              "n_label_matches_on_errors": 18
+            },
+            "ignore_priorities": {
+              "n_label_matches_all_valid": 32,
+              "n_label_matches_on_errors": 10
+            },
+            "unconditional_suppression": {
+              "n_label_matches_all_valid": 30,
+              "n_label_matches_on_errors": 18
+            },
+            "all_rules_fire": {
+              "n_label_matches_all_valid": 48,
+              "n_label_matches_on_errors": 36
+            },
+            "multiple_active_means_conflict": {
+              "n_label_matches_all_valid": 50,
+              "n_label_matches_on_errors": 28
+            },
+            "active_rule_majority": {
+              "n_label_matches_all_valid": 40,
+              "n_label_matches_on_errors": 14
+            },
+            "replace_facts_on_add": {
+              "n_label_matches_all_valid": 26,
+              "n_label_matches_on_errors": 18
+            },
+            "copy_source_label": {
+              "n_label_matches_all_valid": 42,
+              "n_label_matches_on_errors": 12
+            },
+            "reuse_current_oracle": {
+              "n_label_matches_all_valid": 12,
+              "n_label_matches_on_errors": 0
+            }
+          },
+          "copy_source_label_oracle_correct": 96
+        }
+      }
+    }
+  },
+  "uncovered_counterfactual_errors": {
+    "gpt6_luna": {},
+    "mistral_large": {
+      "f08.w0": 18
+    }
+  },
+  "limitations": [
+    "Candidate catalogue chosen after viewing outcomes; non-exhaustive, overlapping, no fitting or candidate mixtures.",
+    "Label compatibility is not evidence that a model executed that algorithm.",
+    "All candidate algorithms are invariant to rule order; within-world variability remains unexplained.",
+    "Invariant subsets overlap; repetitions, channels and payloads are dependent, not independent trials.",
+    "Current active rules were supplied; counterfactual traces were not observed.",
+    "No new model calls, score changes, decoder changes or same-family/collusion verdict."
+  ]
+}

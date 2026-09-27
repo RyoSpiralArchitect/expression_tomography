@@ -1,0 +1,27 @@
+{
+  "status": "response_received",
+  "execution_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+  "logical_trial_identity_sha256": "36df93537ecbd34c92e0c439d67665c1b82496cca51c4c0ed7be40d8453307d4",
+  "slot_sha256": "9c240fe6940a9ec7c1c9f15709fc5ea9a05ed3d841e482b368a884856182b547",
+  "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p00\",\"p01\",\"p03\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+  "provider": {
+    "name": "reader-gpt-6-luna-low",
+    "settings": {
+      "type": "openai_compatible",
+      "model": "gpt-6-luna",
+      "temperature": null,
+      "max_tokens": 4000,
+      "timeout_s": 120.0,
+      "reasoning_effort": "low",
+      "device": "auto",
+      "dtype": "auto"
+    },
+    "base_url": "https://api.openai.com/v1",
+    "implementation": "expression_tomography.core.providers.OpenAICompatibleProvider",
+    "request_contract": "openai_compatible.chat_completions.temperature_optional.v3",
+    "is_mock": false
+  },
+  "model_call": true,
+  "raw_response": "{\"answer\":\"conflict\"}",
+  "raw_response_sha256": "46b57ab8e21776a07874a9f00e9955a6072d476f9ae53b08f94e03fc74f1a903"
+}

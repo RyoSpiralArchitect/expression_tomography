@@ -1,0 +1,27 @@
+{
+  "status": "response_received",
+  "execution_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+  "logical_trial_identity_sha256": "58558dba89e4f7a837b28d8f0dde3a8d0e0268069bbf2f58dc3a817519c7d402",
+  "slot_sha256": "66465d3492695b7471c7341592b54028c4cf51c6ac77d5cead823315f86858df",
+  "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"text\":\"{\\\"facts\\\":[\\\"p01\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r3\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p02\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+  "provider": {
+    "name": "reader-gpt-6-luna-low",
+    "settings": {
+      "type": "openai_compatible",
+      "model": "gpt-6-luna",
+      "temperature": null,
+      "max_tokens": 4000,
+      "timeout_s": 120.0,
+      "reasoning_effort": "low",
+      "device": "auto",
+      "dtype": "auto"
+    },
+    "base_url": "https://api.openai.com/v1",
+    "implementation": "expression_tomography.core.providers.OpenAICompatibleProvider",
+    "request_contract": "openai_compatible.chat_completions.temperature_optional.v3",
+    "is_mock": false
+  },
+  "model_call": true,
+  "raw_response": "{\"asserted\":{\"active_rules\":null,\"answer\":null,\"counterfactual_answer\":null,\"facts\":[\"p01\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]},\"recomputed\":{\"active_rules\":[\"r3\"],\"answer\":\"no\",\"counterfactual_answer\":\"conflict\"}}",
+  "raw_response_sha256": "b9607bc661aaa4dab280de01c5eab428ed2b4a2805681a5a7f05e1b60b058832"
+}

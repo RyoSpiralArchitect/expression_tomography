@@ -1,0 +1,2257 @@
+[
+  {
+    "id": 8,
+    "case_hash": "391ea153f19ca9311fd58bc3",
+    "case_id": "a84f2a2f482c6a5b8f06cb4f532b9b8156843e04618a58be8e3d7faac8d48efb",
+    "task_type": "carrier_state_calibration",
+    "condition": "base_only_b1",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r1\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p02\\\",\\\"p03\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+    "raw_response": "```json\n{\n  \"asserted\": {\n    \"active_rules\": null,\n    \"answer\": null,\n    \"counterfactual_answer\": null,\n    \"facts\": [\"p00\", \"p01\"],\n    \"priority\": [[\"r2\", \"r1\"]],\n    \"rules\": [\n      {\n        \"id\": \"r1\",\n        \"if\": [\"p00\", \"p01\"],\n        \"then\": \"eligible\"\n      },\n      {\n        \"id\": \"r2\",\n        \"if\": [\"p02\", \"p03\"],\n        \"then\": \"not_eligible\"\n      },\n      {\n        \"id\": \"r3\",\n        \"if\": [\"p01\"],\n        \"then\": \"not_eligible\"\n      }\n    ]\n  },\n  \"recomputed\": {\n    \"active_rules\": [\"r1\", \"r3\"],\n    \"answer\": \"conflict\",\n    \"counterfactual_answer\": \"no\"\n  }\n}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "810dcd19315e055f2f15f99f2c21156147a5651f0bf77956a7e87ffaee553399",
+    "generation_identity_sha256": "9728a65de38acf259bf584ec2e70be59879d6cbef10f647ff0431302bc666ab7",
+    "assessment_identity_sha256": "2d0dd7a621c25484d75855c9c1e9c72c246e2d2bd43da3290770f09253164af9",
+    "created_at": "2026-09-27 14:33:00",
+    "parsed_response": {
+      "asserted": {
+        "active_rules": null,
+        "answer": null,
+        "counterfactual_answer": null,
+        "facts": [
+          "p00",
+          "p01"
+        ],
+        "priority": [
+          [
+            "r2",
+            "r1"
+          ]
+        ],
+        "rules": [
+          {
+            "id": "r1",
+            "if": [
+              "p00",
+              "p01"
+            ],
+            "then": "eligible"
+          },
+          {
+            "id": "r2",
+            "if": [
+              "p02",
+              "p03"
+            ],
+            "then": "not_eligible"
+          },
+          {
+            "id": "r3",
+            "if": [
+              "p01"
+            ],
+            "then": "not_eligible"
+          }
+        ]
+      },
+      "recomputed": {
+        "active_rules": [
+          "r1",
+          "r3"
+        ],
+        "answer": "conflict",
+        "counterfactual_answer": "no"
+      }
+    },
+    "score": {
+      "assertion_fidelity": true,
+      "both_answers_correct": false,
+      "counterfactual_answer_correct": false,
+      "current_active_rules_correct": true,
+      "current_answer_correct": true,
+      "current_answer_from_returned_active": true,
+      "first_oracle_deviation": {
+        "counterfactual": null,
+        "current": null
+      },
+      "required_answer_invariance": false,
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "2d0dd7a621c25484d75855c9c1e9c72c246e2d2bd43da3290770f09253164af9",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f08",
+      "generation_identity_sha256": "9728a65de38acf259bf584ec2e70be59879d6cbef10f647ff0431302bc666ab7",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "810dcd19315e055f2f15f99f2c21156147a5651f0bf77956a7e87ffaee553399",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 0,
+      "slot_sha256": "34be3361a487c06bb06a8762eea100c036a08aac619b710cdb594d1858f4b920",
+      "world_id": "f08.w1"
+    }
+  },
+  {
+    "id": 9,
+    "case_hash": "e76f5b3f3dfa91127f7c3746",
+    "case_id": "1791445e18bbad0b512d92b0ddae4f4cea2bfa58df1466e5276a78666e835f2e",
+    "task_type": "carrier_state_calibration",
+    "condition": "paired_public_trace",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p01\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+    "raw_response": "```json\n{\n  \"current\": {\n    \"active_conclusions\": [\"not_eligible\"],\n    \"active_rules\": [\"r3\"],\n    \"answer\": \"no\",\n    \"facts\": [\"p01\"],\n    \"fired_rules\": [\"r3\"],\n    \"suppressed_rules\": []\n  },\n  \"counterfactual\": {\n    \"active_conclusions\": [\"eligible\", \"not_eligible\"],\n    \"active_rules\": [\"r1\", \"r2\"],\n    \"answer\": \"conflict\",\n    \"facts\": [\"p01\", \"p03\"],\n    \"fired_rules\": [\"r1\", \"r2\", \"r3\"],\n    \"suppressed_rules\": [\"r1\"]\n  }\n}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "ea36ac3cb4e185a59b7eaa8d82b29f8a01517dd7b76efc6aba0f01187d089300",
+    "generation_identity_sha256": "de38ca3dce8aa961b6e9e2df1a6c647fc080abea902e74bec03f9af5a03c3f78",
+    "assessment_identity_sha256": "24a91d5c8d3fa021f2ea17405428eefdda74b516cc012a5e75510e425ac44fa9",
+    "created_at": "2026-09-27 14:33:02",
+    "parsed_response": {
+      "counterfactual": {
+        "active_conclusions": [
+          "eligible",
+          "not_eligible"
+        ],
+        "active_rules": [
+          "r1",
+          "r2"
+        ],
+        "answer": "conflict",
+        "facts": [
+          "p01",
+          "p03"
+        ],
+        "fired_rules": [
+          "r1",
+          "r2",
+          "r3"
+        ],
+        "suppressed_rules": [
+          "r1"
+        ]
+      },
+      "current": {
+        "active_conclusions": [
+          "not_eligible"
+        ],
+        "active_rules": [
+          "r3"
+        ],
+        "answer": "no",
+        "facts": [
+          "p01"
+        ],
+        "fired_rules": [
+          "r3"
+        ],
+        "suppressed_rules": []
+      }
+    },
+    "score": {
+      "all_trace_fields_correct": false,
+      "both_answers_correct": false,
+      "counterfactual_active_conclusions_correct": false,
+      "counterfactual_active_from_returned_fired_suppressed_consistent": false,
+      "counterfactual_active_rules_correct": false,
+      "counterfactual_answer_correct": false,
+      "counterfactual_answer_from_returned_conclusions_consistent": true,
+      "counterfactual_conclusions_from_returned_active_consistent": true,
+      "counterfactual_facts_correct": true,
+      "counterfactual_fired_from_returned_facts_consistent": false,
+      "counterfactual_fired_rules_correct": false,
+      "counterfactual_suppressed_from_returned_fired_consistent": true,
+      "counterfactual_suppressed_rules_correct": false,
+      "current_active_conclusions_correct": true,
+      "current_active_from_returned_fired_suppressed_consistent": true,
+      "current_active_rules_correct": true,
+      "current_answer_correct": true,
+      "current_answer_from_returned_conclusions_consistent": true,
+      "current_conclusions_from_returned_active_consistent": true,
+      "current_facts_correct": true,
+      "current_fired_from_returned_facts_consistent": true,
+      "current_fired_rules_correct": true,
+      "current_suppressed_from_returned_fired_consistent": true,
+      "current_suppressed_rules_correct": true,
+      "first_oracle_deviation": {
+        "counterfactual": "fired_rules",
+        "current": null
+      },
+      "required_answer_invariance": false,
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "24a91d5c8d3fa021f2ea17405428eefdda74b516cc012a5e75510e425ac44fa9",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f08",
+      "generation_identity_sha256": "de38ca3dce8aa961b6e9e2df1a6c647fc080abea902e74bec03f9af5a03c3f78",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "ea36ac3cb4e185a59b7eaa8d82b29f8a01517dd7b76efc6aba0f01187d089300",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 0,
+      "slot_sha256": "411d98771956fdf7f016314cbaa2db3466b964683a6272b2c605271460dbbd08",
+      "world_id": "f08.w0"
+    }
+  },
+  {
+    "id": 11,
+    "case_hash": "8ca834106c80cb490f1ece13",
+    "case_id": "1eb2cfa5faf79534b62c37fc5ea4763d4ed44ee63050be7ec86e0b28dbf340f6",
+    "task_type": "carrier_state_calibration",
+    "condition": "materialized_single_state",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p00\",\"p01\",\"p02\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+    "raw_response": "```json\n{\"answer\":\"no\"}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "12cf772ac6a5b50a62d5d69efa2b697106ac13b3c2634d25ca50da69f60309b4",
+    "generation_identity_sha256": "1b13aaa34bfe7999f45589bbb7e73710e0cd3e40d3287b1f02c257da50bac677",
+    "assessment_identity_sha256": "85f605336d0d05b744ef390597425aff14c87188e6257bb55d8cc346788b5a0b",
+    "created_at": "2026-09-27 14:33:05",
+    "parsed_response": {
+      "answer": "no"
+    },
+    "score": {
+      "counterfactual_answer_correct": false,
+      "first_oracle_deviation": {
+        "counterfactual": null,
+        "current": null
+      },
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "85f605336d0d05b744ef390597425aff14c87188e6257bb55d8cc346788b5a0b",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f02",
+      "generation_identity_sha256": "1b13aaa34bfe7999f45589bbb7e73710e0cd3e40d3287b1f02c257da50bac677",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "12cf772ac6a5b50a62d5d69efa2b697106ac13b3c2634d25ca50da69f60309b4",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 0,
+      "slot_sha256": "4a227760fc1bc0d4877a10d4bedf9b746916478a20ad8cd3c8edba873e79caa1",
+      "world_id": "f02.w1"
+    }
+  },
+  {
+    "id": 13,
+    "case_hash": "9f0318a7e6ac96ea1015a71b",
+    "case_id": "d40319127cecad6ee64c6f4b66901ef707f95cd80d2def6a3fe994ddc720e56d",
+    "task_type": "carrier_state_calibration",
+    "condition": "base_only_b1",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p01\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r1\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p02\\\",\\\"p03\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+    "raw_response": "```json\n{\n  \"asserted\": {\n    \"active_rules\": null,\n    \"answer\": null,\n    \"counterfactual_answer\": null,\n    \"facts\": [\"p01\"],\n    \"priority\": [[\"r2\", \"r1\"]],\n    \"rules\": [\n      {\"id\": \"r1\", \"if\": [\"p00\", \"p01\"], \"then\": \"eligible\"},\n      {\"id\": \"r2\", \"if\": [\"p02\", \"p03\"], \"then\": \"not_eligible\"},\n      {\"id\": \"r3\", \"if\": [\"p01\"], \"then\": \"not_eligible\"}\n    ]\n  },\n  \"recomputed\": {\n    \"active_rules\": [\"r3\"],\n    \"answer\": \"no\",\n    \"counterfactual_answer\": \"conflict\"\n  }\n}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "b502fee2352856ed203a0bf8f6466b877b45fc1094c3b6fd729ef4a779a6db64",
+    "generation_identity_sha256": "6a89ced29e3375aaf1132a04e65ad580e42eb8ec4d7c5b90c3dfaea40fbe47b5",
+    "assessment_identity_sha256": "e46f3d804e653bad08b4c496d949ec88ef8e371f8efe5c5faad14fad6baef1eb",
+    "created_at": "2026-09-27 14:33:09",
+    "parsed_response": {
+      "asserted": {
+        "active_rules": null,
+        "answer": null,
+        "counterfactual_answer": null,
+        "facts": [
+          "p01"
+        ],
+        "priority": [
+          [
+            "r2",
+            "r1"
+          ]
+        ],
+        "rules": [
+          {
+            "id": "r1",
+            "if": [
+              "p00",
+              "p01"
+            ],
+            "then": "eligible"
+          },
+          {
+            "id": "r2",
+            "if": [
+              "p02",
+              "p03"
+            ],
+            "then": "not_eligible"
+          },
+          {
+            "id": "r3",
+            "if": [
+              "p01"
+            ],
+            "then": "not_eligible"
+          }
+        ]
+      },
+      "recomputed": {
+        "active_rules": [
+          "r3"
+        ],
+        "answer": "no",
+        "counterfactual_answer": "conflict"
+      }
+    },
+    "score": {
+      "assertion_fidelity": true,
+      "both_answers_correct": false,
+      "counterfactual_answer_correct": false,
+      "current_active_rules_correct": true,
+      "current_answer_correct": true,
+      "current_answer_from_returned_active": true,
+      "first_oracle_deviation": {
+        "counterfactual": null,
+        "current": null
+      },
+      "required_answer_invariance": false,
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "e46f3d804e653bad08b4c496d949ec88ef8e371f8efe5c5faad14fad6baef1eb",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f08",
+      "generation_identity_sha256": "6a89ced29e3375aaf1132a04e65ad580e42eb8ec4d7c5b90c3dfaea40fbe47b5",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "b502fee2352856ed203a0bf8f6466b877b45fc1094c3b6fd729ef4a779a6db64",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 0,
+      "slot_sha256": "582ce934550d1ac72037692a449a9904d6f6dc98abe587b5b4066b0b47ad98dd",
+      "world_id": "f08.w0"
+    }
+  },
+  {
+    "id": 16,
+    "case_hash": "6b53aff366b53a74f0c4cac2",
+    "case_id": "bc536740c7c4a86eaf4f47477561d0a536e6cd95dda98105892fd067f385d6a7",
+    "task_type": "carrier_state_calibration",
+    "condition": "paired_public_trace",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p01\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}}",
+    "raw_response": "```json\n{\n  \"current\": {\n    \"active_conclusions\": [\"eligible\"],\n    \"active_rules\": [\"r3\"],\n    \"answer\": \"yes\",\n    \"facts\": [\"p01\"],\n    \"fired_rules\": [\"r1\", \"r3\"],\n    \"suppressed_rules\": [\"r1\"]\n  },\n  \"counterfactual\": {\n    \"active_conclusions\": [\"eligible\"],\n    \"active_rules\": [\"r1\"],\n    \"answer\": \"yes\",\n    \"facts\": [\"p01\", \"p03\"],\n    \"fired_rules\": [\"r1\", \"r3\"],\n    \"suppressed_rules\": [\"r3\"]\n  }\n}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "550e8effcec17772cbe4dfb6756acdc0f4681ca562e1f1e85993b7c20a5e0249",
+    "generation_identity_sha256": "a8ed684fbafe898526ec01cd81dc4e4d55a3ddf0cc1866abf0b09498da6bb448",
+    "assessment_identity_sha256": "ba36fde5b750919419c50d641b7266053d06e76a49733a39c4ff68355abca61e",
+    "created_at": "2026-09-27 14:33:14",
+    "parsed_response": {
+      "counterfactual": {
+        "active_conclusions": [
+          "eligible"
+        ],
+        "active_rules": [
+          "r1"
+        ],
+        "answer": "yes",
+        "facts": [
+          "p01",
+          "p03"
+        ],
+        "fired_rules": [
+          "r1",
+          "r3"
+        ],
+        "suppressed_rules": [
+          "r3"
+        ]
+      },
+      "current": {
+        "active_conclusions": [
+          "eligible"
+        ],
+        "active_rules": [
+          "r3"
+        ],
+        "answer": "yes",
+        "facts": [
+          "p01"
+        ],
+        "fired_rules": [
+          "r1",
+          "r3"
+        ],
+        "suppressed_rules": [
+          "r1"
+        ]
+      }
+    },
+    "score": {
+      "all_trace_fields_correct": false,
+      "both_answers_correct": true,
+      "counterfactual_active_conclusions_correct": true,
+      "counterfactual_active_from_returned_fired_suppressed_consistent": true,
+      "counterfactual_active_rules_correct": false,
+      "counterfactual_answer_correct": true,
+      "counterfactual_answer_from_returned_conclusions_consistent": true,
+      "counterfactual_conclusions_from_returned_active_consistent": true,
+      "counterfactual_facts_correct": true,
+      "counterfactual_fired_from_returned_facts_consistent": true,
+      "counterfactual_fired_rules_correct": true,
+      "counterfactual_suppressed_from_returned_fired_consistent": false,
+      "counterfactual_suppressed_rules_correct": false,
+      "current_active_conclusions_correct": true,
+      "current_active_from_returned_fired_suppressed_consistent": true,
+      "current_active_rules_correct": true,
+      "current_answer_correct": true,
+      "current_answer_from_returned_conclusions_consistent": true,
+      "current_conclusions_from_returned_active_consistent": true,
+      "current_facts_correct": true,
+      "current_fired_from_returned_facts_consistent": false,
+      "current_fired_rules_correct": false,
+      "current_suppressed_from_returned_fired_consistent": false,
+      "current_suppressed_rules_correct": false,
+      "first_oracle_deviation": {
+        "counterfactual": "suppressed_rules",
+        "current": "fired_rules"
+      },
+      "required_answer_invariance": true,
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "ba36fde5b750919419c50d641b7266053d06e76a49733a39c4ff68355abca61e",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f05",
+      "generation_identity_sha256": "a8ed684fbafe898526ec01cd81dc4e4d55a3ddf0cc1866abf0b09498da6bb448",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "550e8effcec17772cbe4dfb6756acdc0f4681ca562e1f1e85993b7c20a5e0249",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 0,
+      "slot_sha256": "64cfe7817c848a9489011b861d1ac8459bda11f4b104b59e7ee027415591f208",
+      "world_id": "f05.w0"
+    }
+  },
+  {
+    "id": 18,
+    "case_hash": "33f03b87ed6e48ffeeb397b9",
+    "case_id": "d93912cd1f4a1d58b919dd0cd5cd7da13feb54b522f0deb321bf6f006b6a101e",
+    "task_type": "carrier_state_calibration",
+    "condition": "base_only_b1",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p00\\\",\\\"p01\\\",\\\"p02\\\"],\\\"priority\\\":[],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p01\\\",\\\"p03\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p02\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"}]}\"}",
+    "raw_response": "```json\n{\n  \"asserted\": {\n    \"active_rules\": null,\n    \"answer\": null,\n    \"counterfactual_answer\": null,\n    \"facts\": [\"p00\", \"p01\", \"p02\"],\n    \"priority\": [],\n    \"rules\": [\n      {\n        \"id\": \"r1\",\n        \"if\": [\"p01\", \"p03\"],\n        \"then\": \"eligible\"\n      },\n      {\n        \"id\": \"r2\",\n        \"if\": [\"p00\", \"p02\"],\n        \"then\": \"not_eligible\"\n      },\n      {\n        \"id\": \"r3\",\n        \"if\": [\"p01\"],\n        \"then\": \"eligible\"\n      }\n    ]\n  },\n  \"recomputed\": {\n    \"active_rules\": [\"r2\", \"r3\"],\n    \"answer\": \"conflict\",\n    \"counterfactual_answer\": \"yes\"\n  }\n}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "c449399bdfbf31f502d03e38c388e39f537ee2e0294ae9077ee1fed6413b5857",
+    "generation_identity_sha256": "156eb51c04a83d90350825d6fe443dd674892af8c3db65249ae854578db9d3c6",
+    "assessment_identity_sha256": "7bbea89ee0079e15da626921fec6e954f6eaa90e88f4b885552c2e693058a9c8",
+    "created_at": "2026-09-27 14:33:19",
+    "parsed_response": {
+      "asserted": {
+        "active_rules": null,
+        "answer": null,
+        "counterfactual_answer": null,
+        "facts": [
+          "p00",
+          "p01",
+          "p02"
+        ],
+        "priority": [],
+        "rules": [
+          {
+            "id": "r1",
+            "if": [
+              "p01",
+              "p03"
+            ],
+            "then": "eligible"
+          },
+          {
+            "id": "r2",
+            "if": [
+              "p00",
+              "p02"
+            ],
+            "then": "not_eligible"
+          },
+          {
+            "id": "r3",
+            "if": [
+              "p01"
+            ],
+            "then": "eligible"
+          }
+        ]
+      },
+      "recomputed": {
+        "active_rules": [
+          "r2",
+          "r3"
+        ],
+        "answer": "conflict",
+        "counterfactual_answer": "yes"
+      }
+    },
+    "score": {
+      "assertion_fidelity": true,
+      "both_answers_correct": false,
+      "counterfactual_answer_correct": false,
+      "current_active_rules_correct": true,
+      "current_answer_correct": true,
+      "current_answer_from_returned_active": true,
+      "first_oracle_deviation": {
+        "counterfactual": null,
+        "current": null
+      },
+      "required_answer_invariance": false,
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "7bbea89ee0079e15da626921fec6e954f6eaa90e88f4b885552c2e693058a9c8",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f05",
+      "generation_identity_sha256": "156eb51c04a83d90350825d6fe443dd674892af8c3db65249ae854578db9d3c6",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "c449399bdfbf31f502d03e38c388e39f537ee2e0294ae9077ee1fed6413b5857",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 0,
+      "slot_sha256": "7aa44b2ce0f7ee06d90a817855740d06334ebada5fd874c51ce119e21fd0735c",
+      "world_id": "f05.w1"
+    }
+  },
+  {
+    "id": 19,
+    "case_hash": "8973f8a9b5109e4fe2ff6a86",
+    "case_id": "39e386829d692149800668fbd6c0c6b11ad160b3b7d4e4f4206b1a31d7b7537c",
+    "task_type": "carrier_state_calibration",
+    "condition": "paired_public_trace",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"world\":{\"facts\":[\"p00\",\"p01\",\"p02\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+    "raw_response": "```json\n{\n  \"current\": {\n    \"active_conclusions\": [\"not_eligible\"],\n    \"active_rules\": [\"r3\"],\n    \"answer\": \"no\",\n    \"facts\": [\"p00\", \"p01\", \"p02\"],\n    \"fired_rules\": [\"r1\", \"r2\", \"r3\"],\n    \"suppressed_rules\": [\"r2\"]\n  },\n  \"counterfactual\": {\n    \"active_conclusions\": [\"eligible\", \"not_eligible\"],\n    \"active_rules\": [\"r1\", \"r3\"],\n    \"answer\": \"conflict\",\n    \"facts\": [\"p00\", \"p01\", \"p02\"],\n    \"fired_rules\": [\"r1\", \"r2\", \"r3\"],\n    \"suppressed_rules\": []\n  }\n}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "8397c5083207d96232632d5b8dadae345c406f69d4f2132387fe5107c2ae1bc3",
+    "generation_identity_sha256": "0f97da064b20bc5679dec32da89e6293f051d8097ce84d966d521c591b7ba80d",
+    "assessment_identity_sha256": "e6d10ea590d34ee807413fe847f0a8e5de0eb24307d0006d1492e2e2cee52670",
+    "created_at": "2026-09-27 14:33:22",
+    "parsed_response": {
+      "counterfactual": {
+        "active_conclusions": [
+          "eligible",
+          "not_eligible"
+        ],
+        "active_rules": [
+          "r1",
+          "r3"
+        ],
+        "answer": "conflict",
+        "facts": [
+          "p00",
+          "p01",
+          "p02"
+        ],
+        "fired_rules": [
+          "r1",
+          "r2",
+          "r3"
+        ],
+        "suppressed_rules": []
+      },
+      "current": {
+        "active_conclusions": [
+          "not_eligible"
+        ],
+        "active_rules": [
+          "r3"
+        ],
+        "answer": "no",
+        "facts": [
+          "p00",
+          "p01",
+          "p02"
+        ],
+        "fired_rules": [
+          "r1",
+          "r2",
+          "r3"
+        ],
+        "suppressed_rules": [
+          "r2"
+        ]
+      }
+    },
+    "score": {
+      "all_trace_fields_correct": false,
+      "both_answers_correct": false,
+      "counterfactual_active_conclusions_correct": false,
+      "counterfactual_active_from_returned_fired_suppressed_consistent": false,
+      "counterfactual_active_rules_correct": false,
+      "counterfactual_answer_correct": false,
+      "counterfactual_answer_from_returned_conclusions_consistent": true,
+      "counterfactual_conclusions_from_returned_active_consistent": true,
+      "counterfactual_facts_correct": true,
+      "counterfactual_fired_from_returned_facts_consistent": true,
+      "counterfactual_fired_rules_correct": true,
+      "counterfactual_suppressed_from_returned_fired_consistent": false,
+      "counterfactual_suppressed_rules_correct": false,
+      "current_active_conclusions_correct": false,
+      "current_active_from_returned_fired_suppressed_consistent": false,
+      "current_active_rules_correct": false,
+      "current_answer_correct": false,
+      "current_answer_from_returned_conclusions_consistent": true,
+      "current_conclusions_from_returned_active_consistent": true,
+      "current_facts_correct": true,
+      "current_fired_from_returned_facts_consistent": true,
+      "current_fired_rules_correct": true,
+      "current_suppressed_from_returned_fired_consistent": false,
+      "current_suppressed_rules_correct": false,
+      "first_oracle_deviation": {
+        "counterfactual": "suppressed_rules",
+        "current": "suppressed_rules"
+      },
+      "required_answer_invariance": false,
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "e6d10ea590d34ee807413fe847f0a8e5de0eb24307d0006d1492e2e2cee52670",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f02",
+      "generation_identity_sha256": "0f97da064b20bc5679dec32da89e6293f051d8097ce84d966d521c591b7ba80d",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "8397c5083207d96232632d5b8dadae345c406f69d4f2132387fe5107c2ae1bc3",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 0,
+      "slot_sha256": "7c1d8c732bd145fbacf47289010f41d7aa5664275cbe963ac3986cf692ee242e",
+      "world_id": "f02.w1"
+    }
+  },
+  {
+    "id": 20,
+    "case_hash": "baf0bbfafa8c95184421ddda",
+    "case_id": "ffdf3add73d479aacfe892e69262f012a43a2f74ddb431108ffec03b7f80cd1c",
+    "task_type": "carrier_state_calibration",
+    "condition": "paired_public_trace",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p00\",\"p01\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+    "raw_response": "```json\n{\n  \"current\": {\n    \"active_conclusions\": [\"not_eligible\"],\n    \"active_rules\": [\"r3\"],\n    \"answer\": \"no\",\n    \"facts\": [\"p00\", \"p01\"],\n    \"fired_rules\": [\"r1\", \"r3\"],\n    \"suppressed_rules\": [\"r1\"]\n  },\n  \"counterfactual\": {\n    \"active_conclusions\": [\"eligible\", \"not_eligible\"],\n    \"active_rules\": [\"r1\", \"r2\"],\n    \"answer\": \"conflict\",\n    \"facts\": [\"p00\", \"p01\", \"p03\"],\n    \"fired_rules\": [\"r1\", \"r2\", \"r3\"],\n    \"suppressed_rules\": [\"r1\"]\n  }\n}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "b3b08f03a01b47bd071ba144317286a1af12aff7668166395d0b54d8a348753a",
+    "generation_identity_sha256": "5f12dbf655ba6a6fbefcbaef4a212c591f197834cc0594395caaeb0e9342807b",
+    "assessment_identity_sha256": "cd04d95d0e8752450858f5bf0eb2432109b4a2fd73dbb85d8438549fdebad56a",
+    "created_at": "2026-09-27 14:33:24",
+    "parsed_response": {
+      "counterfactual": {
+        "active_conclusions": [
+          "eligible",
+          "not_eligible"
+        ],
+        "active_rules": [
+          "r1",
+          "r2"
+        ],
+        "answer": "conflict",
+        "facts": [
+          "p00",
+          "p01",
+          "p03"
+        ],
+        "fired_rules": [
+          "r1",
+          "r2",
+          "r3"
+        ],
+        "suppressed_rules": [
+          "r1"
+        ]
+      },
+      "current": {
+        "active_conclusions": [
+          "not_eligible"
+        ],
+        "active_rules": [
+          "r3"
+        ],
+        "answer": "no",
+        "facts": [
+          "p00",
+          "p01"
+        ],
+        "fired_rules": [
+          "r1",
+          "r3"
+        ],
+        "suppressed_rules": [
+          "r1"
+        ]
+      }
+    },
+    "score": {
+      "all_trace_fields_correct": false,
+      "both_answers_correct": false,
+      "counterfactual_active_conclusions_correct": true,
+      "counterfactual_active_from_returned_fired_suppressed_consistent": false,
+      "counterfactual_active_rules_correct": false,
+      "counterfactual_answer_correct": true,
+      "counterfactual_answer_from_returned_conclusions_consistent": true,
+      "counterfactual_conclusions_from_returned_active_consistent": true,
+      "counterfactual_facts_correct": true,
+      "counterfactual_fired_from_returned_facts_consistent": false,
+      "counterfactual_fired_rules_correct": false,
+      "counterfactual_suppressed_from_returned_fired_consistent": true,
+      "counterfactual_suppressed_rules_correct": false,
+      "current_active_conclusions_correct": false,
+      "current_active_from_returned_fired_suppressed_consistent": true,
+      "current_active_rules_correct": false,
+      "current_answer_correct": false,
+      "current_answer_from_returned_conclusions_consistent": true,
+      "current_conclusions_from_returned_active_consistent": true,
+      "current_facts_correct": true,
+      "current_fired_from_returned_facts_consistent": true,
+      "current_fired_rules_correct": true,
+      "current_suppressed_from_returned_fired_consistent": false,
+      "current_suppressed_rules_correct": false,
+      "first_oracle_deviation": {
+        "counterfactual": "fired_rules",
+        "current": "suppressed_rules"
+      },
+      "required_answer_invariance": false,
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "cd04d95d0e8752450858f5bf0eb2432109b4a2fd73dbb85d8438549fdebad56a",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f08",
+      "generation_identity_sha256": "5f12dbf655ba6a6fbefcbaef4a212c591f197834cc0594395caaeb0e9342807b",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "b3b08f03a01b47bd071ba144317286a1af12aff7668166395d0b54d8a348753a",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 0,
+      "slot_sha256": "8127ac0906d699de8edd5b1784a9ab477b6406b5ffbbf1fc0b6ff92e63cbf6a2",
+      "world_id": "f08.w1"
+    }
+  },
+  {
+    "id": 21,
+    "case_hash": "3bf2e9e6217d143b9c1e52b1",
+    "case_id": "ad19eabf422ca8ed1043daab4e35a7bbcc89c961f26c55a649a169d43c2d4c85",
+    "task_type": "carrier_state_calibration",
+    "condition": "base_only_b1",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"text\":\"{\\\"facts\\\":[\\\"p00\\\",\\\"p01\\\",\\\"p02\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r3\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p02\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+    "raw_response": "```json\n{\n  \"asserted\": {\n    \"active_rules\": null,\n    \"answer\": null,\n    \"counterfactual_answer\": null,\n    \"facts\": [\"p00\", \"p01\", \"p02\"],\n    \"priority\": [[\"r2\", \"r3\"]],\n    \"rules\": [\n      {\"id\": \"r1\", \"if\": [\"p02\"], \"then\": \"eligible\"},\n      {\"id\": \"r2\", \"if\": [\"p00\", \"p01\"], \"then\": \"eligible\"},\n      {\"id\": \"r3\", \"if\": [\"p01\"], \"then\": \"not_eligible\"}\n    ]\n  },\n  \"recomputed\": {\n    \"active_rules\": [\"r1\", \"r2\"],\n    \"answer\": \"conflict\",\n    \"counterfactual_answer\": \"conflict\"\n  }\n}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "cbdc78be4c80dba68c24ab2b662301f796e4ccb96fec115d9c6cf624edae363d",
+    "generation_identity_sha256": "86fbcd2d1905b86a61ffac05b665260e30bdab4b665b86c563d61bbb1910ace3",
+    "assessment_identity_sha256": "f11695c88a310e1b1d23e0cd118ffd77a1f330fefb9d94aafe33b1fd7f47a4c3",
+    "created_at": "2026-09-27 14:33:26",
+    "parsed_response": {
+      "asserted": {
+        "active_rules": null,
+        "answer": null,
+        "counterfactual_answer": null,
+        "facts": [
+          "p00",
+          "p01",
+          "p02"
+        ],
+        "priority": [
+          [
+            "r2",
+            "r3"
+          ]
+        ],
+        "rules": [
+          {
+            "id": "r1",
+            "if": [
+              "p02"
+            ],
+            "then": "eligible"
+          },
+          {
+            "id": "r2",
+            "if": [
+              "p00",
+              "p01"
+            ],
+            "then": "eligible"
+          },
+          {
+            "id": "r3",
+            "if": [
+              "p01"
+            ],
+            "then": "not_eligible"
+          }
+        ]
+      },
+      "recomputed": {
+        "active_rules": [
+          "r1",
+          "r2"
+        ],
+        "answer": "conflict",
+        "counterfactual_answer": "conflict"
+      }
+    },
+    "score": {
+      "assertion_fidelity": true,
+      "both_answers_correct": false,
+      "counterfactual_answer_correct": false,
+      "current_active_rules_correct": true,
+      "current_answer_correct": false,
+      "current_answer_from_returned_active": false,
+      "first_oracle_deviation": {
+        "counterfactual": null,
+        "current": null
+      },
+      "required_answer_invariance": true,
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "f11695c88a310e1b1d23e0cd118ffd77a1f330fefb9d94aafe33b1fd7f47a4c3",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f02",
+      "generation_identity_sha256": "86fbcd2d1905b86a61ffac05b665260e30bdab4b665b86c563d61bbb1910ace3",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "cbdc78be4c80dba68c24ab2b662301f796e4ccb96fec115d9c6cf624edae363d",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 0,
+      "slot_sha256": "870b53269b539e49cd30cbae51a3859b8b65abbfd5231fc461d474efd1d11cbd",
+      "world_id": "f02.w1"
+    }
+  },
+  {
+    "id": 24,
+    "case_hash": "b02639910856256be86143f4",
+    "case_id": "bda34e0e3a42550ab62524fc542a1f025ddc6752a49456849f79ca8e244462de",
+    "task_type": "carrier_state_calibration",
+    "condition": "paired_public_trace",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p00\",\"p01\",\"p02\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}}",
+    "raw_response": "```json\n{\n  \"current\": {\n    \"active_conclusions\": [\"eligible\"],\n    \"active_rules\": [\"r3\"],\n    \"answer\": \"yes\",\n    \"facts\": [\"p00\", \"p01\", \"p02\"],\n    \"fired_rules\": [\"r1\", \"r2\", \"r3\"],\n    \"suppressed_rules\": [\"r1\"]\n  },\n  \"counterfactual\": {\n    \"active_conclusions\": [\"eligible\"],\n    \"active_rules\": [\"r1\", \"r3\"],\n    \"answer\": \"conflict\",\n    \"facts\": [\"p00\", \"p01\", \"p02\", \"p03\"],\n    \"fired_rules\": [\"r1\", \"r2\", \"r3\"],\n    \"suppressed_rules\": []\n  }\n}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "092176fdd67eb0a31654b0d037528353e5ef49ef21fc08bd416739291e5ae487",
+    "generation_identity_sha256": "2018c11a20e42e69aea0f32c20d6b4fe9c0ae8dae40de2d9ebf41fc416bbb057",
+    "assessment_identity_sha256": "04944a766390d37d602c086ed2825cb44bb33cf5e8afbf514171084318f2c9b1",
+    "created_at": "2026-09-27 14:33:31",
+    "parsed_response": {
+      "counterfactual": {
+        "active_conclusions": [
+          "eligible"
+        ],
+        "active_rules": [
+          "r1",
+          "r3"
+        ],
+        "answer": "conflict",
+        "facts": [
+          "p00",
+          "p01",
+          "p02",
+          "p03"
+        ],
+        "fired_rules": [
+          "r1",
+          "r2",
+          "r3"
+        ],
+        "suppressed_rules": []
+      },
+      "current": {
+        "active_conclusions": [
+          "eligible"
+        ],
+        "active_rules": [
+          "r3"
+        ],
+        "answer": "yes",
+        "facts": [
+          "p00",
+          "p01",
+          "p02"
+        ],
+        "fired_rules": [
+          "r1",
+          "r2",
+          "r3"
+        ],
+        "suppressed_rules": [
+          "r1"
+        ]
+      }
+    },
+    "score": {
+      "all_trace_fields_correct": false,
+      "both_answers_correct": false,
+      "counterfactual_active_conclusions_correct": false,
+      "counterfactual_active_from_returned_fired_suppressed_consistent": false,
+      "counterfactual_active_rules_correct": false,
+      "counterfactual_answer_correct": true,
+      "counterfactual_answer_from_returned_conclusions_consistent": false,
+      "counterfactual_conclusions_from_returned_active_consistent": true,
+      "counterfactual_facts_correct": true,
+      "counterfactual_fired_from_returned_facts_consistent": true,
+      "counterfactual_fired_rules_correct": true,
+      "counterfactual_suppressed_from_returned_fired_consistent": true,
+      "counterfactual_suppressed_rules_correct": true,
+      "current_active_conclusions_correct": false,
+      "current_active_from_returned_fired_suppressed_consistent": false,
+      "current_active_rules_correct": false,
+      "current_answer_correct": false,
+      "current_answer_from_returned_conclusions_consistent": true,
+      "current_conclusions_from_returned_active_consistent": true,
+      "current_facts_correct": true,
+      "current_fired_from_returned_facts_consistent": false,
+      "current_fired_rules_correct": false,
+      "current_suppressed_from_returned_fired_consistent": false,
+      "current_suppressed_rules_correct": false,
+      "first_oracle_deviation": {
+        "counterfactual": "active_rules",
+        "current": "fired_rules"
+      },
+      "required_answer_invariance": false,
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "04944a766390d37d602c086ed2825cb44bb33cf5e8afbf514171084318f2c9b1",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f05",
+      "generation_identity_sha256": "2018c11a20e42e69aea0f32c20d6b4fe9c0ae8dae40de2d9ebf41fc416bbb057",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "092176fdd67eb0a31654b0d037528353e5ef49ef21fc08bd416739291e5ae487",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 0,
+      "slot_sha256": "9aa479eeb863a3dc257c9b6d486179fd5ba0f72c2c284202eb95c908e00e9423",
+      "world_id": "f05.w1"
+    }
+  },
+  {
+    "id": 25,
+    "case_hash": "6f9c4cb627018c90cc23b355",
+    "case_id": "f7de06acbdeb23c1cfb6d133a5ec8ed14c97cee05b28d31dc3ac3170fab89989",
+    "task_type": "carrier_state_calibration",
+    "condition": "materialized_single_state",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p00\",\"p01\",\"p03\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+    "raw_response": "```json\n{\"answer\":\"no\"}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "76faa6b953a67dad194211a76d062ed02e1d447782e2faa356d5e652bb6d450b",
+    "generation_identity_sha256": "8660942c594ed95fa2c152b9ce7acf0bdbafd730d80b1517be66231b767cf614",
+    "assessment_identity_sha256": "7ced44f0c3f73a4d331fff64934f3a5ed03018d7f51e5809de076ce6aa85ed77",
+    "created_at": "2026-09-27 14:33:31",
+    "parsed_response": {
+      "answer": "no"
+    },
+    "score": {
+      "counterfactual_answer_correct": false,
+      "first_oracle_deviation": {
+        "counterfactual": null,
+        "current": null
+      },
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "7ced44f0c3f73a4d331fff64934f3a5ed03018d7f51e5809de076ce6aa85ed77",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f08",
+      "generation_identity_sha256": "8660942c594ed95fa2c152b9ce7acf0bdbafd730d80b1517be66231b767cf614",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "76faa6b953a67dad194211a76d062ed02e1d447782e2faa356d5e652bb6d450b",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 0,
+      "slot_sha256": "a094671e427e79b0a89a8a80ff4fd624f92cf5072022b251f355ecf09501e1d4",
+      "world_id": "f08.w1"
+    }
+  },
+  {
+    "id": 31,
+    "case_hash": "e978d6c3e56a13b4a441a43e",
+    "case_id": "f0fdaebe3115db7e8e83f3261992d7245ab16aff75fdb1a71ffa123d16d15abb",
+    "task_type": "carrier_state_calibration",
+    "condition": "materialized_single_state",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p01\",\"p02\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+    "raw_response": "```json\n{\"answer\":\"no\"}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "95f4a37715df0f350f69b3e9eef729466d4dd9e41a963b2edbdc2c7dce68d656",
+    "generation_identity_sha256": "0577f495c8c09ac6cb0e6358441c6713227e15f2114ca1ace9b16209974cf285",
+    "assessment_identity_sha256": "b850e233b068ba37dbdadd43f36cff0592c566a111a54e330892b7e72db56c21",
+    "created_at": "2026-09-27 14:33:41",
+    "parsed_response": {
+      "answer": "no"
+    },
+    "score": {
+      "counterfactual_answer_correct": false,
+      "first_oracle_deviation": {
+        "counterfactual": null,
+        "current": null
+      },
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "b850e233b068ba37dbdadd43f36cff0592c566a111a54e330892b7e72db56c21",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f02",
+      "generation_identity_sha256": "0577f495c8c09ac6cb0e6358441c6713227e15f2114ca1ace9b16209974cf285",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "95f4a37715df0f350f69b3e9eef729466d4dd9e41a963b2edbdc2c7dce68d656",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 0,
+      "slot_sha256": "ccb217103a7657614fb914a57cb94751ebeb82403bbf63922a23673c2e1c52f5",
+      "world_id": "f02.w0"
+    }
+  },
+  {
+    "id": 34,
+    "case_hash": "e37080705337475b2b2377de",
+    "case_id": "500bf1fcf2d94685cdd859a1e13dae7c5fcc6d75eab2077c73c38e4d1418b8d3",
+    "task_type": "carrier_state_calibration",
+    "condition": "base_only_b1",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p01\\\"],\\\"priority\\\":[],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p01\\\",\\\"p03\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p02\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"}]}\"}",
+    "raw_response": "```json\n{\n  \"asserted\": {\n    \"active_rules\": null,\n    \"answer\": null,\n    \"counterfactual_answer\": null,\n    \"facts\": [\"p01\"],\n    \"priority\": [],\n    \"rules\": [\n      {\n        \"id\": \"r1\",\n        \"if\": [\"p01\", \"p03\"],\n        \"then\": \"eligible\"\n      },\n      {\n        \"id\": \"r2\",\n        \"if\": [\"p00\", \"p02\"],\n        \"then\": \"not_eligible\"\n      },\n      {\n        \"id\": \"r3\",\n        \"if\": [\"p01\"],\n        \"then\": \"eligible\"\n      }\n    ]\n  },\n  \"recomputed\": {\n    \"active_rules\": [\"r3\"],\n    \"answer\": \"yes\",\n    \"counterfactual_answer\": \"conflict\"\n  }\n}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "7af08458a610e72a60fd9f54703d22763f9736c103e6bf636e9da9be78a4536f",
+    "generation_identity_sha256": "1c5731c26d567e4bed9520c4f3aa8dbc7f4235d2503b5e7e5b9dcedeacc31e64",
+    "assessment_identity_sha256": "746981f2a404e098437982607b90e11a1e82885a474018b5fbbb6241c660a6a1",
+    "created_at": "2026-09-27 14:33:47",
+    "parsed_response": {
+      "asserted": {
+        "active_rules": null,
+        "answer": null,
+        "counterfactual_answer": null,
+        "facts": [
+          "p01"
+        ],
+        "priority": [],
+        "rules": [
+          {
+            "id": "r1",
+            "if": [
+              "p01",
+              "p03"
+            ],
+            "then": "eligible"
+          },
+          {
+            "id": "r2",
+            "if": [
+              "p00",
+              "p02"
+            ],
+            "then": "not_eligible"
+          },
+          {
+            "id": "r3",
+            "if": [
+              "p01"
+            ],
+            "then": "eligible"
+          }
+        ]
+      },
+      "recomputed": {
+        "active_rules": [
+          "r3"
+        ],
+        "answer": "yes",
+        "counterfactual_answer": "conflict"
+      }
+    },
+    "score": {
+      "assertion_fidelity": true,
+      "both_answers_correct": false,
+      "counterfactual_answer_correct": false,
+      "current_active_rules_correct": true,
+      "current_answer_correct": true,
+      "current_answer_from_returned_active": true,
+      "first_oracle_deviation": {
+        "counterfactual": null,
+        "current": null
+      },
+      "required_answer_invariance": false,
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "746981f2a404e098437982607b90e11a1e82885a474018b5fbbb6241c660a6a1",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f05",
+      "generation_identity_sha256": "1c5731c26d567e4bed9520c4f3aa8dbc7f4235d2503b5e7e5b9dcedeacc31e64",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "7af08458a610e72a60fd9f54703d22763f9736c103e6bf636e9da9be78a4536f",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 0,
+      "slot_sha256": "ee243a019ab013eb165bc519c49f9bb6a9b8a1a38467bc599f2ce33b45f245b9",
+      "world_id": "f05.w0"
+    }
+  },
+  {
+    "id": 39,
+    "case_hash": "baf0bbfafa8c95184421ddda",
+    "case_id": "ffdf3add73d479aacfe892e69262f012a43a2f74ddb431108ffec03b7f80cd1c",
+    "task_type": "carrier_state_calibration",
+    "condition": "paired_public_trace",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p00\",\"p01\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+    "raw_response": "```json\n{\n  \"current\": {\n    \"active_conclusions\": [\"eligible\"],\n    \"active_rules\": [\"r1\"],\n    \"answer\": \"yes\",\n    \"facts\": [\"p00\", \"p01\"],\n    \"fired_rules\": [\"r1\"],\n    \"suppressed_rules\": []\n  },\n  \"counterfactual\": {\n    \"active_conclusions\": [\"not_eligible\"],\n    \"active_rules\": [\"r2\"],\n    \"answer\": \"no\",\n    \"facts\": [\"p00\", \"p01\", \"p03\"],\n    \"fired_rules\": [\"r1\", \"r2\"],\n    \"suppressed_rules\": [\"r1\"]\n  }\n}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "36c273b45687074e243c3a084e5d9ae8e0add85e9d3b5a5a659b3d55445a604f",
+    "generation_identity_sha256": "c19ebc617f0bf5543703b07d21e6bc9dd2094a99373286547298c5aa36228768",
+    "assessment_identity_sha256": "69e410dba37972380a15d516af77467f6d152c30530b4b00f7e2c91fb8a9ed3c",
+    "created_at": "2026-09-27 14:34:00",
+    "parsed_response": {
+      "counterfactual": {
+        "active_conclusions": [
+          "not_eligible"
+        ],
+        "active_rules": [
+          "r2"
+        ],
+        "answer": "no",
+        "facts": [
+          "p00",
+          "p01",
+          "p03"
+        ],
+        "fired_rules": [
+          "r1",
+          "r2"
+        ],
+        "suppressed_rules": [
+          "r1"
+        ]
+      },
+      "current": {
+        "active_conclusions": [
+          "eligible"
+        ],
+        "active_rules": [
+          "r1"
+        ],
+        "answer": "yes",
+        "facts": [
+          "p00",
+          "p01"
+        ],
+        "fired_rules": [
+          "r1"
+        ],
+        "suppressed_rules": []
+      }
+    },
+    "score": {
+      "all_trace_fields_correct": false,
+      "both_answers_correct": false,
+      "counterfactual_active_conclusions_correct": false,
+      "counterfactual_active_from_returned_fired_suppressed_consistent": true,
+      "counterfactual_active_rules_correct": false,
+      "counterfactual_answer_correct": false,
+      "counterfactual_answer_from_returned_conclusions_consistent": true,
+      "counterfactual_conclusions_from_returned_active_consistent": true,
+      "counterfactual_facts_correct": true,
+      "counterfactual_fired_from_returned_facts_consistent": false,
+      "counterfactual_fired_rules_correct": false,
+      "counterfactual_suppressed_from_returned_fired_consistent": true,
+      "counterfactual_suppressed_rules_correct": false,
+      "current_active_conclusions_correct": false,
+      "current_active_from_returned_fired_suppressed_consistent": true,
+      "current_active_rules_correct": false,
+      "current_answer_correct": false,
+      "current_answer_from_returned_conclusions_consistent": true,
+      "current_conclusions_from_returned_active_consistent": true,
+      "current_facts_correct": true,
+      "current_fired_from_returned_facts_consistent": false,
+      "current_fired_rules_correct": false,
+      "current_suppressed_from_returned_fired_consistent": true,
+      "current_suppressed_rules_correct": true,
+      "first_oracle_deviation": {
+        "counterfactual": "fired_rules",
+        "current": "fired_rules"
+      },
+      "required_answer_invariance": false,
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "69e410dba37972380a15d516af77467f6d152c30530b4b00f7e2c91fb8a9ed3c",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f08",
+      "generation_identity_sha256": "c19ebc617f0bf5543703b07d21e6bc9dd2094a99373286547298c5aa36228768",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "36c273b45687074e243c3a084e5d9ae8e0add85e9d3b5a5a659b3d55445a604f",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 1,
+      "slot_sha256": "14ea88813595e761bda9928bfa7ec531ae2931bd59101dcb2d95b65a3e7cdc3b",
+      "world_id": "f08.w1"
+    }
+  },
+  {
+    "id": 40,
+    "case_hash": "8973f8a9b5109e4fe2ff6a86",
+    "case_id": "39e386829d692149800668fbd6c0c6b11ad160b3b7d4e4f4206b1a31d7b7537c",
+    "task_type": "carrier_state_calibration",
+    "condition": "paired_public_trace",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"world\":{\"facts\":[\"p00\",\"p01\",\"p02\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+    "raw_response": "```json\n{\n  \"current\": {\n    \"active_conclusions\": [\"not_eligible\"],\n    \"active_rules\": [\"r3\"],\n    \"answer\": \"no\",\n    \"facts\": [\"p00\", \"p01\", \"p02\"],\n    \"fired_rules\": [\"r1\", \"r2\", \"r3\"],\n    \"suppressed_rules\": [\"r2\"]\n  },\n  \"counterfactual\": {\n    \"active_conclusions\": [\"eligible\"],\n    \"active_rules\": [\"r1\", \"r2\"],\n    \"answer\": \"conflict\",\n    \"facts\": [\"p00\", \"p01\", \"p02\"],\n    \"fired_rules\": [\"r1\", \"r2\", \"r3\"],\n    \"suppressed_rules\": [\"r3\"]\n  }\n}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "bccb7d16e4523267cf8701474c44b6c69aaf74158452a9bd335cfcb46b257dc9",
+    "generation_identity_sha256": "142f9d228f0bc9f97cdb6dc7eee9a49096c228b44471d8a55393038f114df206",
+    "assessment_identity_sha256": "e41faa13863dd510e7473489f28d1a00b92e523957a473fc48f3d11d40f89666",
+    "created_at": "2026-09-27 14:34:02",
+    "parsed_response": {
+      "counterfactual": {
+        "active_conclusions": [
+          "eligible"
+        ],
+        "active_rules": [
+          "r1",
+          "r2"
+        ],
+        "answer": "conflict",
+        "facts": [
+          "p00",
+          "p01",
+          "p02"
+        ],
+        "fired_rules": [
+          "r1",
+          "r2",
+          "r3"
+        ],
+        "suppressed_rules": [
+          "r3"
+        ]
+      },
+      "current": {
+        "active_conclusions": [
+          "not_eligible"
+        ],
+        "active_rules": [
+          "r3"
+        ],
+        "answer": "no",
+        "facts": [
+          "p00",
+          "p01",
+          "p02"
+        ],
+        "fired_rules": [
+          "r1",
+          "r2",
+          "r3"
+        ],
+        "suppressed_rules": [
+          "r2"
+        ]
+      }
+    },
+    "score": {
+      "all_trace_fields_correct": false,
+      "both_answers_correct": false,
+      "counterfactual_active_conclusions_correct": true,
+      "counterfactual_active_from_returned_fired_suppressed_consistent": true,
+      "counterfactual_active_rules_correct": true,
+      "counterfactual_answer_correct": false,
+      "counterfactual_answer_from_returned_conclusions_consistent": false,
+      "counterfactual_conclusions_from_returned_active_consistent": true,
+      "counterfactual_facts_correct": true,
+      "counterfactual_fired_from_returned_facts_consistent": true,
+      "counterfactual_fired_rules_correct": true,
+      "counterfactual_suppressed_from_returned_fired_consistent": true,
+      "counterfactual_suppressed_rules_correct": true,
+      "current_active_conclusions_correct": false,
+      "current_active_from_returned_fired_suppressed_consistent": false,
+      "current_active_rules_correct": false,
+      "current_answer_correct": false,
+      "current_answer_from_returned_conclusions_consistent": true,
+      "current_conclusions_from_returned_active_consistent": true,
+      "current_facts_correct": true,
+      "current_fired_from_returned_facts_consistent": true,
+      "current_fired_rules_correct": true,
+      "current_suppressed_from_returned_fired_consistent": false,
+      "current_suppressed_rules_correct": false,
+      "first_oracle_deviation": {
+        "counterfactual": "answer",
+        "current": "suppressed_rules"
+      },
+      "required_answer_invariance": false,
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "e41faa13863dd510e7473489f28d1a00b92e523957a473fc48f3d11d40f89666",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f02",
+      "generation_identity_sha256": "142f9d228f0bc9f97cdb6dc7eee9a49096c228b44471d8a55393038f114df206",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "bccb7d16e4523267cf8701474c44b6c69aaf74158452a9bd335cfcb46b257dc9",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 1,
+      "slot_sha256": "190bc24df996a86a418a46b75cecce1610dcf0ce8e082b7c68b5f4e7b38ed11e",
+      "world_id": "f02.w1"
+    }
+  },
+  {
+    "id": 42,
+    "case_hash": "8ca834106c80cb490f1ece13",
+    "case_id": "1eb2cfa5faf79534b62c37fc5ea4763d4ed44ee63050be7ec86e0b28dbf340f6",
+    "task_type": "carrier_state_calibration",
+    "condition": "materialized_single_state",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p00\",\"p01\",\"p02\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+    "raw_response": "```json\n{\n  \"answer\": \"no\"\n}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "2c8c5e9dccb06c2c1a147c2ce74399cca7dfbac4450938ce33ef964a5f0d7c6c",
+    "generation_identity_sha256": "212009492d0db06a75b57aca3e320c0b5d16b0a4a06fc98412fecff47f4c3e60",
+    "assessment_identity_sha256": "668da7ba43afaccef05718a306b8ac2dda43135f43f5a0537869463230543d0a",
+    "created_at": "2026-09-27 14:34:05",
+    "parsed_response": {
+      "answer": "no"
+    },
+    "score": {
+      "counterfactual_answer_correct": false,
+      "first_oracle_deviation": {
+        "counterfactual": null,
+        "current": null
+      },
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "668da7ba43afaccef05718a306b8ac2dda43135f43f5a0537869463230543d0a",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f02",
+      "generation_identity_sha256": "212009492d0db06a75b57aca3e320c0b5d16b0a4a06fc98412fecff47f4c3e60",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "2c8c5e9dccb06c2c1a147c2ce74399cca7dfbac4450938ce33ef964a5f0d7c6c",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 1,
+      "slot_sha256": "2e1f8f3408246315820f6ea946d3b25bc866b412d770ddd887dae5e1be1444d2",
+      "world_id": "f02.w1"
+    }
+  },
+  {
+    "id": 43,
+    "case_hash": "3bf2e9e6217d143b9c1e52b1",
+    "case_id": "ad19eabf422ca8ed1043daab4e35a7bbcc89c961f26c55a649a169d43c2d4c85",
+    "task_type": "carrier_state_calibration",
+    "condition": "base_only_b1",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"text\":\"{\\\"facts\\\":[\\\"p00\\\",\\\"p01\\\",\\\"p02\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r3\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p02\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+    "raw_response": "```json\n{\n  \"asserted\": {\n    \"active_rules\": null,\n    \"answer\": null,\n    \"counterfactual_answer\": null,\n    \"facts\": [\"p00\", \"p01\", \"p02\"],\n    \"priority\": [[\"r2\", \"r3\"]],\n    \"rules\": [\n      {\"id\": \"r1\", \"if\": [\"p02\"], \"then\": \"eligible\"},\n      {\"id\": \"r2\", \"if\": [\"p00\", \"p01\"], \"then\": \"eligible\"},\n      {\"id\": \"r3\", \"if\": [\"p01\"], \"then\": \"not_eligible\"}\n    ]\n  },\n  \"recomputed\": {\n    \"active_rules\": [\"r1\", \"r2\"],\n    \"answer\": \"conflict\",\n    \"counterfactual_answer\": \"conflict\"\n  }\n}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "40c95db08450d77b081f5ee06fbc5257a19caa7778d506ad5b4a4dfef4b3ea1e",
+    "generation_identity_sha256": "2b15e9ba1312a8ab2496b9786e91cd367078fc17570722321690c9da0f85ce0e",
+    "assessment_identity_sha256": "c087de0a0b3808dfa99416e75092cf1b8ce093f8d0560a37b2b363c79b713da8",
+    "created_at": "2026-09-27 14:34:07",
+    "parsed_response": {
+      "asserted": {
+        "active_rules": null,
+        "answer": null,
+        "counterfactual_answer": null,
+        "facts": [
+          "p00",
+          "p01",
+          "p02"
+        ],
+        "priority": [
+          [
+            "r2",
+            "r3"
+          ]
+        ],
+        "rules": [
+          {
+            "id": "r1",
+            "if": [
+              "p02"
+            ],
+            "then": "eligible"
+          },
+          {
+            "id": "r2",
+            "if": [
+              "p00",
+              "p01"
+            ],
+            "then": "eligible"
+          },
+          {
+            "id": "r3",
+            "if": [
+              "p01"
+            ],
+            "then": "not_eligible"
+          }
+        ]
+      },
+      "recomputed": {
+        "active_rules": [
+          "r1",
+          "r2"
+        ],
+        "answer": "conflict",
+        "counterfactual_answer": "conflict"
+      }
+    },
+    "score": {
+      "assertion_fidelity": true,
+      "both_answers_correct": false,
+      "counterfactual_answer_correct": false,
+      "current_active_rules_correct": true,
+      "current_answer_correct": false,
+      "current_answer_from_returned_active": false,
+      "first_oracle_deviation": {
+        "counterfactual": null,
+        "current": null
+      },
+      "required_answer_invariance": true,
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "c087de0a0b3808dfa99416e75092cf1b8ce093f8d0560a37b2b363c79b713da8",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f02",
+      "generation_identity_sha256": "2b15e9ba1312a8ab2496b9786e91cd367078fc17570722321690c9da0f85ce0e",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "40c95db08450d77b081f5ee06fbc5257a19caa7778d506ad5b4a4dfef4b3ea1e",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 1,
+      "slot_sha256": "307437dd907d004bcaadc0976f9d1835ec510a5bf9d3edad138826f9c3124c10",
+      "world_id": "f02.w1"
+    }
+  },
+  {
+    "id": 45,
+    "case_hash": "e37080705337475b2b2377de",
+    "case_id": "500bf1fcf2d94685cdd859a1e13dae7c5fcc6d75eab2077c73c38e4d1418b8d3",
+    "task_type": "carrier_state_calibration",
+    "condition": "base_only_b1",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p01\\\"],\\\"priority\\\":[],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p01\\\",\\\"p03\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p02\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"}]}\"}",
+    "raw_response": "```json\n{\n  \"asserted\": {\n    \"active_rules\": null,\n    \"answer\": null,\n    \"counterfactual_answer\": null,\n    \"facts\": [\"p01\"],\n    \"priority\": [],\n    \"rules\": [\n      {\n        \"id\": \"r1\",\n        \"if\": [\"p01\", \"p03\"],\n        \"then\": \"eligible\"\n      },\n      {\n        \"id\": \"r2\",\n        \"if\": [\"p00\", \"p02\"],\n        \"then\": \"not_eligible\"\n      },\n      {\n        \"id\": \"r3\",\n        \"if\": [\"p01\"],\n        \"then\": \"eligible\"\n      }\n    ]\n  },\n  \"recomputed\": {\n    \"active_rules\": [\"r3\"],\n    \"answer\": \"yes\",\n    \"counterfactual_answer\": \"conflict\"\n  }\n}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "ee7951e5dde826f2669dea431ea4d6ced0cba231c2a485067169149af852a88d",
+    "generation_identity_sha256": "6db4d514d26c700e3d4c0a1c9c70d62cbf094b78f587eaf50167041baa156043",
+    "assessment_identity_sha256": "be87faea14e766636cc05ec94dcb9d17f32eb0043a0acbcc313513ccef9d9f25",
+    "created_at": "2026-09-27 14:34:11",
+    "parsed_response": {
+      "asserted": {
+        "active_rules": null,
+        "answer": null,
+        "counterfactual_answer": null,
+        "facts": [
+          "p01"
+        ],
+        "priority": [],
+        "rules": [
+          {
+            "id": "r1",
+            "if": [
+              "p01",
+              "p03"
+            ],
+            "then": "eligible"
+          },
+          {
+            "id": "r2",
+            "if": [
+              "p00",
+              "p02"
+            ],
+            "then": "not_eligible"
+          },
+          {
+            "id": "r3",
+            "if": [
+              "p01"
+            ],
+            "then": "eligible"
+          }
+        ]
+      },
+      "recomputed": {
+        "active_rules": [
+          "r3"
+        ],
+        "answer": "yes",
+        "counterfactual_answer": "conflict"
+      }
+    },
+    "score": {
+      "assertion_fidelity": true,
+      "both_answers_correct": false,
+      "counterfactual_answer_correct": false,
+      "current_active_rules_correct": true,
+      "current_answer_correct": true,
+      "current_answer_from_returned_active": true,
+      "first_oracle_deviation": {
+        "counterfactual": null,
+        "current": null
+      },
+      "required_answer_invariance": false,
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "be87faea14e766636cc05ec94dcb9d17f32eb0043a0acbcc313513ccef9d9f25",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f05",
+      "generation_identity_sha256": "6db4d514d26c700e3d4c0a1c9c70d62cbf094b78f587eaf50167041baa156043",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "ee7951e5dde826f2669dea431ea4d6ced0cba231c2a485067169149af852a88d",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 1,
+      "slot_sha256": "4019c621caa354482e9d239db12d834dd7d1c4baa6299e75917e6c9ee75dc7b2",
+      "world_id": "f05.w0"
+    }
+  },
+  {
+    "id": 46,
+    "case_hash": "b02639910856256be86143f4",
+    "case_id": "bda34e0e3a42550ab62524fc542a1f025ddc6752a49456849f79ca8e244462de",
+    "task_type": "carrier_state_calibration",
+    "condition": "paired_public_trace",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p00\",\"p01\",\"p02\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}}",
+    "raw_response": "```json\n{\n  \"current\": {\n    \"active_conclusions\": [],\n    \"active_rules\": [],\n    \"answer\": \"no\",\n    \"facts\": [\"p00\", \"p01\", \"p02\"],\n    \"fired_rules\": [],\n    \"suppressed_rules\": []\n  },\n  \"counterfactual\": {\n    \"active_conclusions\": [\"eligible\"],\n    \"active_rules\": [\"r1\", \"r3\"],\n    \"answer\": \"yes\",\n    \"facts\": [\"p00\", \"p01\", \"p02\", \"p03\"],\n    \"fired_rules\": [\"r1\", \"r2\", \"r3\"],\n    \"suppressed_rules\": [\"r2\"]\n  }\n}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "988152f146edda173011c727840f22973caa95a2cd80acdbbe27d57b10636be3",
+    "generation_identity_sha256": "2391d435ccba8bf50c196517e7d9f3bb874f8024c25886fd578b4649d1f955fb",
+    "assessment_identity_sha256": "af06c603c161c98e240838fc61951ece97f6b46b2f5efd17e3e87ebb05424b92",
+    "created_at": "2026-09-27 14:34:13",
+    "parsed_response": {
+      "counterfactual": {
+        "active_conclusions": [
+          "eligible"
+        ],
+        "active_rules": [
+          "r1",
+          "r3"
+        ],
+        "answer": "yes",
+        "facts": [
+          "p00",
+          "p01",
+          "p02",
+          "p03"
+        ],
+        "fired_rules": [
+          "r1",
+          "r2",
+          "r3"
+        ],
+        "suppressed_rules": [
+          "r2"
+        ]
+      },
+      "current": {
+        "active_conclusions": [],
+        "active_rules": [],
+        "answer": "no",
+        "facts": [
+          "p00",
+          "p01",
+          "p02"
+        ],
+        "fired_rules": [],
+        "suppressed_rules": []
+      }
+    },
+    "score": {
+      "all_trace_fields_correct": false,
+      "both_answers_correct": false,
+      "counterfactual_active_conclusions_correct": false,
+      "counterfactual_active_from_returned_fired_suppressed_consistent": true,
+      "counterfactual_active_rules_correct": false,
+      "counterfactual_answer_correct": false,
+      "counterfactual_answer_from_returned_conclusions_consistent": true,
+      "counterfactual_conclusions_from_returned_active_consistent": true,
+      "counterfactual_facts_correct": true,
+      "counterfactual_fired_from_returned_facts_consistent": true,
+      "counterfactual_fired_rules_correct": true,
+      "counterfactual_suppressed_from_returned_fired_consistent": false,
+      "counterfactual_suppressed_rules_correct": false,
+      "current_active_conclusions_correct": false,
+      "current_active_from_returned_fired_suppressed_consistent": true,
+      "current_active_rules_correct": false,
+      "current_answer_correct": false,
+      "current_answer_from_returned_conclusions_consistent": true,
+      "current_conclusions_from_returned_active_consistent": true,
+      "current_facts_correct": true,
+      "current_fired_from_returned_facts_consistent": false,
+      "current_fired_rules_correct": false,
+      "current_suppressed_from_returned_fired_consistent": true,
+      "current_suppressed_rules_correct": true,
+      "first_oracle_deviation": {
+        "counterfactual": "suppressed_rules",
+        "current": "fired_rules"
+      },
+      "required_answer_invariance": false,
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "af06c603c161c98e240838fc61951ece97f6b46b2f5efd17e3e87ebb05424b92",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f05",
+      "generation_identity_sha256": "2391d435ccba8bf50c196517e7d9f3bb874f8024c25886fd578b4649d1f955fb",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "988152f146edda173011c727840f22973caa95a2cd80acdbbe27d57b10636be3",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 1,
+      "slot_sha256": "45223a3e6769d8ff74969a29da1a13c8d2178ef272c834ecc6dd88cba6c2d840",
+      "world_id": "f05.w1"
+    }
+  },
+  {
+    "id": 51,
+    "case_hash": "6b53aff366b53a74f0c4cac2",
+    "case_id": "bc536740c7c4a86eaf4f47477561d0a536e6cd95dda98105892fd067f385d6a7",
+    "task_type": "carrier_state_calibration",
+    "condition": "paired_public_trace",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p01\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}}",
+    "raw_response": "```json\n{\n  \"current\": {\n    \"active_conclusions\": [\"eligible\"],\n    \"active_rules\": [\"r3\"],\n    \"answer\": \"yes\",\n    \"facts\": [\"p01\"],\n    \"fired_rules\": [\"r1\", \"r3\"],\n    \"suppressed_rules\": [\"r1\"]\n  },\n  \"counterfactual\": {\n    \"active_conclusions\": [\"eligible\"],\n    \"active_rules\": [\"r1\"],\n    \"answer\": \"yes\",\n    \"facts\": [\"p01\", \"p03\"],\n    \"fired_rules\": [\"r1\", \"r3\"],\n    \"suppressed_rules\": [\"r3\"]\n  }\n}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "0274afa6dbb6bb57aac28605fa63d035099e87d581f625f28007dbd13e95bc38",
+    "generation_identity_sha256": "8f6746f4549d090e442404a1a18c94721504ac795d55ef838eb80bd5ce0e7ca1",
+    "assessment_identity_sha256": "6d5415993911ce09bf938cca43a9858f8e185b7dcb1a1303797164d2a85958bd",
+    "created_at": "2026-09-27 14:34:20",
+    "parsed_response": {
+      "counterfactual": {
+        "active_conclusions": [
+          "eligible"
+        ],
+        "active_rules": [
+          "r1"
+        ],
+        "answer": "yes",
+        "facts": [
+          "p01",
+          "p03"
+        ],
+        "fired_rules": [
+          "r1",
+          "r3"
+        ],
+        "suppressed_rules": [
+          "r3"
+        ]
+      },
+      "current": {
+        "active_conclusions": [
+          "eligible"
+        ],
+        "active_rules": [
+          "r3"
+        ],
+        "answer": "yes",
+        "facts": [
+          "p01"
+        ],
+        "fired_rules": [
+          "r1",
+          "r3"
+        ],
+        "suppressed_rules": [
+          "r1"
+        ]
+      }
+    },
+    "score": {
+      "all_trace_fields_correct": false,
+      "both_answers_correct": true,
+      "counterfactual_active_conclusions_correct": true,
+      "counterfactual_active_from_returned_fired_suppressed_consistent": true,
+      "counterfactual_active_rules_correct": false,
+      "counterfactual_answer_correct": true,
+      "counterfactual_answer_from_returned_conclusions_consistent": true,
+      "counterfactual_conclusions_from_returned_active_consistent": true,
+      "counterfactual_facts_correct": true,
+      "counterfactual_fired_from_returned_facts_consistent": true,
+      "counterfactual_fired_rules_correct": true,
+      "counterfactual_suppressed_from_returned_fired_consistent": false,
+      "counterfactual_suppressed_rules_correct": false,
+      "current_active_conclusions_correct": true,
+      "current_active_from_returned_fired_suppressed_consistent": true,
+      "current_active_rules_correct": true,
+      "current_answer_correct": true,
+      "current_answer_from_returned_conclusions_consistent": true,
+      "current_conclusions_from_returned_active_consistent": true,
+      "current_facts_correct": true,
+      "current_fired_from_returned_facts_consistent": false,
+      "current_fired_rules_correct": false,
+      "current_suppressed_from_returned_fired_consistent": false,
+      "current_suppressed_rules_correct": false,
+      "first_oracle_deviation": {
+        "counterfactual": "suppressed_rules",
+        "current": "fired_rules"
+      },
+      "required_answer_invariance": true,
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "6d5415993911ce09bf938cca43a9858f8e185b7dcb1a1303797164d2a85958bd",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f05",
+      "generation_identity_sha256": "8f6746f4549d090e442404a1a18c94721504ac795d55ef838eb80bd5ce0e7ca1",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "0274afa6dbb6bb57aac28605fa63d035099e87d581f625f28007dbd13e95bc38",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 1,
+      "slot_sha256": "71558bcff1e81ddae04404e85a58a6960e9f44bbe996d032ed9a055c48165d3e",
+      "world_id": "f05.w0"
+    }
+  },
+  {
+    "id": 54,
+    "case_hash": "e76f5b3f3dfa91127f7c3746",
+    "case_id": "1791445e18bbad0b512d92b0ddae4f4cea2bfa58df1466e5276a78666e835f2e",
+    "task_type": "carrier_state_calibration",
+    "condition": "paired_public_trace",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p01\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+    "raw_response": "```json\n{\n  \"current\": {\n    \"active_conclusions\": [\"not_eligible\"],\n    \"active_rules\": [\"r3\"],\n    \"answer\": \"no\",\n    \"facts\": [\"p01\"],\n    \"fired_rules\": [\"r3\"],\n    \"suppressed_rules\": []\n  },\n  \"counterfactual\": {\n    \"active_conclusions\": [\"eligible\", \"not_eligible\"],\n    \"active_rules\": [\"r1\", \"r2\"],\n    \"answer\": \"conflict\",\n    \"facts\": [\"p01\", \"p03\"],\n    \"fired_rules\": [\"r1\", \"r2\", \"r3\"],\n    \"suppressed_rules\": [\"r1\"]\n  }\n}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "f8a69fd679f374a982c4019404f42183a7cfacef2ea215a0dccd9176e524e0f5",
+    "generation_identity_sha256": "d749685dd246bcc0c3630373bd6927a29e2c09b60c1f9791e116fb1a9021f138",
+    "assessment_identity_sha256": "65c22a60af9caea5c652009ad23609f42ed401537992aaed7b7f545a9edd26d2",
+    "created_at": "2026-09-27 14:34:26",
+    "parsed_response": {
+      "counterfactual": {
+        "active_conclusions": [
+          "eligible",
+          "not_eligible"
+        ],
+        "active_rules": [
+          "r1",
+          "r2"
+        ],
+        "answer": "conflict",
+        "facts": [
+          "p01",
+          "p03"
+        ],
+        "fired_rules": [
+          "r1",
+          "r2",
+          "r3"
+        ],
+        "suppressed_rules": [
+          "r1"
+        ]
+      },
+      "current": {
+        "active_conclusions": [
+          "not_eligible"
+        ],
+        "active_rules": [
+          "r3"
+        ],
+        "answer": "no",
+        "facts": [
+          "p01"
+        ],
+        "fired_rules": [
+          "r3"
+        ],
+        "suppressed_rules": []
+      }
+    },
+    "score": {
+      "all_trace_fields_correct": false,
+      "both_answers_correct": false,
+      "counterfactual_active_conclusions_correct": false,
+      "counterfactual_active_from_returned_fired_suppressed_consistent": false,
+      "counterfactual_active_rules_correct": false,
+      "counterfactual_answer_correct": false,
+      "counterfactual_answer_from_returned_conclusions_consistent": true,
+      "counterfactual_conclusions_from_returned_active_consistent": true,
+      "counterfactual_facts_correct": true,
+      "counterfactual_fired_from_returned_facts_consistent": false,
+      "counterfactual_fired_rules_correct": false,
+      "counterfactual_suppressed_from_returned_fired_consistent": true,
+      "counterfactual_suppressed_rules_correct": false,
+      "current_active_conclusions_correct": true,
+      "current_active_from_returned_fired_suppressed_consistent": true,
+      "current_active_rules_correct": true,
+      "current_answer_correct": true,
+      "current_answer_from_returned_conclusions_consistent": true,
+      "current_conclusions_from_returned_active_consistent": true,
+      "current_facts_correct": true,
+      "current_fired_from_returned_facts_consistent": true,
+      "current_fired_rules_correct": true,
+      "current_suppressed_from_returned_fired_consistent": true,
+      "current_suppressed_rules_correct": true,
+      "first_oracle_deviation": {
+        "counterfactual": "fired_rules",
+        "current": null
+      },
+      "required_answer_invariance": false,
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "65c22a60af9caea5c652009ad23609f42ed401537992aaed7b7f545a9edd26d2",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f08",
+      "generation_identity_sha256": "d749685dd246bcc0c3630373bd6927a29e2c09b60c1f9791e116fb1a9021f138",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "f8a69fd679f374a982c4019404f42183a7cfacef2ea215a0dccd9176e524e0f5",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 1,
+      "slot_sha256": "961d35edcf21ca84a16f749a06acd52f79b54f757a8152a82be9aa8d7cb24afa",
+      "world_id": "f08.w0"
+    }
+  },
+  {
+    "id": 55,
+    "case_hash": "391ea153f19ca9311fd58bc3",
+    "case_id": "a84f2a2f482c6a5b8f06cb4f532b9b8156843e04618a58be8e3d7faac8d48efb",
+    "task_type": "carrier_state_calibration",
+    "condition": "base_only_b1",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r1\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p02\\\",\\\"p03\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+    "raw_response": "```json\n{\n  \"asserted\": {\n    \"active_rules\": null,\n    \"answer\": null,\n    \"counterfactual_answer\": null,\n    \"facts\": [\"p00\", \"p01\"],\n    \"priority\": [[\"r2\", \"r1\"]],\n    \"rules\": [\n      {\n        \"id\": \"r1\",\n        \"if\": [\"p00\", \"p01\"],\n        \"then\": \"eligible\"\n      },\n      {\n        \"id\": \"r2\",\n        \"if\": [\"p02\", \"p03\"],\n        \"then\": \"not_eligible\"\n      },\n      {\n        \"id\": \"r3\",\n        \"if\": [\"p01\"],\n        \"then\": \"not_eligible\"\n      }\n    ]\n  },\n  \"recomputed\": {\n    \"active_rules\": [\"r1\", \"r3\"],\n    \"answer\": \"conflict\",\n    \"counterfactual_answer\": \"no\"\n  }\n}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "336139d263a74f00513be0669f790705aa744da00a0a6f49f281e54e8b9d1b31",
+    "generation_identity_sha256": "aaf754372e0b39b0d4760de1817ea5d5b3544224ee576218da1535cb9aafa08d",
+    "assessment_identity_sha256": "ae4bb29f575910f2c9b773c3a9aa85480f0140785671f54c6b11201a6fe4c855",
+    "created_at": "2026-09-27 14:34:28",
+    "parsed_response": {
+      "asserted": {
+        "active_rules": null,
+        "answer": null,
+        "counterfactual_answer": null,
+        "facts": [
+          "p00",
+          "p01"
+        ],
+        "priority": [
+          [
+            "r2",
+            "r1"
+          ]
+        ],
+        "rules": [
+          {
+            "id": "r1",
+            "if": [
+              "p00",
+              "p01"
+            ],
+            "then": "eligible"
+          },
+          {
+            "id": "r2",
+            "if": [
+              "p02",
+              "p03"
+            ],
+            "then": "not_eligible"
+          },
+          {
+            "id": "r3",
+            "if": [
+              "p01"
+            ],
+            "then": "not_eligible"
+          }
+        ]
+      },
+      "recomputed": {
+        "active_rules": [
+          "r1",
+          "r3"
+        ],
+        "answer": "conflict",
+        "counterfactual_answer": "no"
+      }
+    },
+    "score": {
+      "assertion_fidelity": true,
+      "both_answers_correct": false,
+      "counterfactual_answer_correct": false,
+      "current_active_rules_correct": true,
+      "current_answer_correct": true,
+      "current_answer_from_returned_active": true,
+      "first_oracle_deviation": {
+        "counterfactual": null,
+        "current": null
+      },
+      "required_answer_invariance": false,
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "ae4bb29f575910f2c9b773c3a9aa85480f0140785671f54c6b11201a6fe4c855",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f08",
+      "generation_identity_sha256": "aaf754372e0b39b0d4760de1817ea5d5b3544224ee576218da1535cb9aafa08d",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "336139d263a74f00513be0669f790705aa744da00a0a6f49f281e54e8b9d1b31",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 1,
+      "slot_sha256": "99e73247a2eb8439b9ab065802018f3d9c6e5a1f1c479ec3fc752cdc1f9ea2e1",
+      "world_id": "f08.w1"
+    }
+  },
+  {
+    "id": 62,
+    "case_hash": "6f9c4cb627018c90cc23b355",
+    "case_id": "f7de06acbdeb23c1cfb6d133a5ec8ed14c97cee05b28d31dc3ac3170fab89989",
+    "task_type": "carrier_state_calibration",
+    "condition": "materialized_single_state",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p00\",\"p01\",\"p03\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+    "raw_response": "```json\n{\"answer\":\"no\"}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "3af66ac3f96328480fc1e2ae44ba54adc90d8ecfeceb1480cb6feaa7619a6cf3",
+    "generation_identity_sha256": "8ec087769c757833f607137bc6d6bbd7d92fcc1505306b7c03557e54bd7b0b26",
+    "assessment_identity_sha256": "7e58e10b22b0d93e9b4be8c689088ebe1c8790720fb8f3d0e2b49b2349405ff0",
+    "created_at": "2026-09-27 14:34:39",
+    "parsed_response": {
+      "answer": "no"
+    },
+    "score": {
+      "counterfactual_answer_correct": false,
+      "first_oracle_deviation": {
+        "counterfactual": null,
+        "current": null
+      },
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "7e58e10b22b0d93e9b4be8c689088ebe1c8790720fb8f3d0e2b49b2349405ff0",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f08",
+      "generation_identity_sha256": "8ec087769c757833f607137bc6d6bbd7d92fcc1505306b7c03557e54bd7b0b26",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "3af66ac3f96328480fc1e2ae44ba54adc90d8ecfeceb1480cb6feaa7619a6cf3",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 1,
+      "slot_sha256": "b6c52aa7f1f7fefe983e81d7482b4704d820be2f6db6dc8eccc0aaea541a869a",
+      "world_id": "f08.w1"
+    }
+  },
+  {
+    "id": 63,
+    "case_hash": "e978d6c3e56a13b4a441a43e",
+    "case_id": "f0fdaebe3115db7e8e83f3261992d7245ab16aff75fdb1a71ffa123d16d15abb",
+    "task_type": "carrier_state_calibration",
+    "condition": "materialized_single_state",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p01\",\"p02\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+    "raw_response": "```json\n{\"answer\":\"no\"}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "c0655d417e6f83fdf60ea9c99ecc2f26807c37cf65093e55932c66c91eb44466",
+    "generation_identity_sha256": "f68b55a664070af20cc8f77aa1a058ded942369381612e1cc742d58fbfcc1525",
+    "assessment_identity_sha256": "6effa691e4d05aa893e656af6ebaa75208ef29c67a642446becf8f7b893e315e",
+    "created_at": "2026-09-27 14:34:40",
+    "parsed_response": {
+      "answer": "no"
+    },
+    "score": {
+      "counterfactual_answer_correct": false,
+      "first_oracle_deviation": {
+        "counterfactual": null,
+        "current": null
+      },
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "6effa691e4d05aa893e656af6ebaa75208ef29c67a642446becf8f7b893e315e",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f02",
+      "generation_identity_sha256": "f68b55a664070af20cc8f77aa1a058ded942369381612e1cc742d58fbfcc1525",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "c0655d417e6f83fdf60ea9c99ecc2f26807c37cf65093e55932c66c91eb44466",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 1,
+      "slot_sha256": "b77ac8ef4a19acd23082f42166e3a84554a175688eed9bcc83731b835fbddb5e",
+      "world_id": "f02.w0"
+    }
+  },
+  {
+    "id": 64,
+    "case_hash": "127ada5a83106a1509c9e68e",
+    "case_id": "6cfad99f6a169d80c1ab47d0f1a931472d1d49109eaac935f630ec6ce14ca341",
+    "task_type": "carrier_state_calibration",
+    "condition": "paired_public_trace",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"world\":{\"facts\":[\"p01\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+    "raw_response": "```json\n{\n  \"current\": {\n    \"active_conclusions\": [\"not_eligible\"],\n    \"active_rules\": [\"r3\"],\n    \"answer\": \"no\",\n    \"facts\": [\"p01\"],\n    \"fired_rules\": [\"r3\"],\n    \"suppressed_rules\": []\n  },\n  \"counterfactual\": {\n    \"active_conclusions\": [\"eligible\", \"not_eligible\"],\n    \"active_rules\": [\"r1\", \"r3\"],\n    \"answer\": \"conflict\",\n    \"facts\": [\"p01\", \"p02\"],\n    \"fired_rules\": [\"r1\", \"r3\"],\n    \"suppressed_rules\": [\"r2\"]\n  }\n}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "b4e9241c25ef4fbe4ae2f663f1b5b1c667ec6c49b65d18bcfaf58b19f49c6315",
+    "generation_identity_sha256": "9d40439ab1b7566a3fc5c3b1b023de61a51befe8218991c63e1910dd7a69ecf8",
+    "assessment_identity_sha256": "44267ec705b71245f9f725c8bf667552bf01541e8ad0e9859d794309b5d82ef9",
+    "created_at": "2026-09-27 14:34:42",
+    "parsed_response": {
+      "counterfactual": {
+        "active_conclusions": [
+          "eligible",
+          "not_eligible"
+        ],
+        "active_rules": [
+          "r1",
+          "r3"
+        ],
+        "answer": "conflict",
+        "facts": [
+          "p01",
+          "p02"
+        ],
+        "fired_rules": [
+          "r1",
+          "r3"
+        ],
+        "suppressed_rules": [
+          "r2"
+        ]
+      },
+      "current": {
+        "active_conclusions": [
+          "not_eligible"
+        ],
+        "active_rules": [
+          "r3"
+        ],
+        "answer": "no",
+        "facts": [
+          "p01"
+        ],
+        "fired_rules": [
+          "r3"
+        ],
+        "suppressed_rules": []
+      }
+    },
+    "score": {
+      "all_trace_fields_correct": false,
+      "both_answers_correct": true,
+      "counterfactual_active_conclusions_correct": true,
+      "counterfactual_active_from_returned_fired_suppressed_consistent": true,
+      "counterfactual_active_rules_correct": true,
+      "counterfactual_answer_correct": true,
+      "counterfactual_answer_from_returned_conclusions_consistent": true,
+      "counterfactual_conclusions_from_returned_active_consistent": true,
+      "counterfactual_facts_correct": true,
+      "counterfactual_fired_from_returned_facts_consistent": true,
+      "counterfactual_fired_rules_correct": true,
+      "counterfactual_suppressed_from_returned_fired_consistent": false,
+      "counterfactual_suppressed_rules_correct": false,
+      "current_active_conclusions_correct": true,
+      "current_active_from_returned_fired_suppressed_consistent": true,
+      "current_active_rules_correct": true,
+      "current_answer_correct": true,
+      "current_answer_from_returned_conclusions_consistent": true,
+      "current_conclusions_from_returned_active_consistent": true,
+      "current_facts_correct": true,
+      "current_fired_from_returned_facts_consistent": true,
+      "current_fired_rules_correct": true,
+      "current_suppressed_from_returned_fired_consistent": true,
+      "current_suppressed_rules_correct": true,
+      "first_oracle_deviation": {
+        "counterfactual": "suppressed_rules",
+        "current": null
+      },
+      "required_answer_invariance": null,
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "44267ec705b71245f9f725c8bf667552bf01541e8ad0e9859d794309b5d82ef9",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f02",
+      "generation_identity_sha256": "9d40439ab1b7566a3fc5c3b1b023de61a51befe8218991c63e1910dd7a69ecf8",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "b4e9241c25ef4fbe4ae2f663f1b5b1c667ec6c49b65d18bcfaf58b19f49c6315",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 1,
+      "slot_sha256": "bccc047e13bc8e2b473ecd026f51d5983c49b5c1c8154224c0b4f5d92f6fc9d9",
+      "world_id": "f02.w0"
+    }
+  },
+  {
+    "id": 65,
+    "case_hash": "9f0318a7e6ac96ea1015a71b",
+    "case_id": "d40319127cecad6ee64c6f4b66901ef707f95cd80d2def6a3fe994ddc720e56d",
+    "task_type": "carrier_state_calibration",
+    "condition": "base_only_b1",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p01\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r1\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p02\\\",\\\"p03\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+    "raw_response": "```json\n{\n  \"asserted\": {\n    \"active_rules\": null,\n    \"answer\": null,\n    \"counterfactual_answer\": null,\n    \"facts\": [\"p01\"],\n    \"priority\": [[\"r2\", \"r1\"]],\n    \"rules\": [\n      {\n        \"id\": \"r1\",\n        \"if\": [\"p00\", \"p01\"],\n        \"then\": \"eligible\"\n      },\n      {\n        \"id\": \"r2\",\n        \"if\": [\"p02\", \"p03\"],\n        \"then\": \"not_eligible\"\n      },\n      {\n        \"id\": \"r3\",\n        \"if\": [\"p01\"],\n        \"then\": \"not_eligible\"\n      }\n    ]\n  },\n  \"recomputed\": {\n    \"active_rules\": [\"r3\"],\n    \"answer\": \"no\",\n    \"counterfactual_answer\": \"conflict\"\n  }\n}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "c171ea13a6b99c3e794119fd728f42e8f15d89cabae8b8d4f719c89b09a458c0",
+    "generation_identity_sha256": "40f5c4053a9a1d14a4c43df3a36c7841093f34b4e16027977c7938a6f69a6f22",
+    "assessment_identity_sha256": "3c6138cbe67883a3098c2973bc2f730c8bf21f2a0518801eeddc441c8de8c17b",
+    "created_at": "2026-09-27 14:34:45",
+    "parsed_response": {
+      "asserted": {
+        "active_rules": null,
+        "answer": null,
+        "counterfactual_answer": null,
+        "facts": [
+          "p01"
+        ],
+        "priority": [
+          [
+            "r2",
+            "r1"
+          ]
+        ],
+        "rules": [
+          {
+            "id": "r1",
+            "if": [
+              "p00",
+              "p01"
+            ],
+            "then": "eligible"
+          },
+          {
+            "id": "r2",
+            "if": [
+              "p02",
+              "p03"
+            ],
+            "then": "not_eligible"
+          },
+          {
+            "id": "r3",
+            "if": [
+              "p01"
+            ],
+            "then": "not_eligible"
+          }
+        ]
+      },
+      "recomputed": {
+        "active_rules": [
+          "r3"
+        ],
+        "answer": "no",
+        "counterfactual_answer": "conflict"
+      }
+    },
+    "score": {
+      "assertion_fidelity": true,
+      "both_answers_correct": false,
+      "counterfactual_answer_correct": false,
+      "current_active_rules_correct": true,
+      "current_answer_correct": true,
+      "current_answer_from_returned_active": true,
+      "first_oracle_deviation": {
+        "counterfactual": null,
+        "current": null
+      },
+      "required_answer_invariance": false,
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "3c6138cbe67883a3098c2973bc2f730c8bf21f2a0518801eeddc441c8de8c17b",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f08",
+      "generation_identity_sha256": "40f5c4053a9a1d14a4c43df3a36c7841093f34b4e16027977c7938a6f69a6f22",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "c171ea13a6b99c3e794119fd728f42e8f15d89cabae8b8d4f719c89b09a458c0",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 1,
+      "slot_sha256": "bcdca6956751fb532c601daa0227167958c1a8f86ee6b4d5e908a796a694c6b6",
+      "world_id": "f08.w0"
+    }
+  },
+  {
+    "id": 70,
+    "case_hash": "33f03b87ed6e48ffeeb397b9",
+    "case_id": "d93912cd1f4a1d58b919dd0cd5cd7da13feb54b522f0deb321bf6f006b6a101e",
+    "task_type": "carrier_state_calibration",
+    "condition": "base_only_b1",
+    "provider": "reader-mistral-large-latest",
+    "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p00\\\",\\\"p01\\\",\\\"p02\\\"],\\\"priority\\\":[],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p01\\\",\\\"p03\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p02\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"}]}\"}",
+    "raw_response": "```json\n{\n  \"asserted\": {\n    \"active_rules\": null,\n    \"answer\": null,\n    \"counterfactual_answer\": null,\n    \"facts\": [\"p00\", \"p01\", \"p02\"],\n    \"priority\": [],\n    \"rules\": [\n      {\n        \"id\": \"r1\",\n        \"if\": [\"p01\", \"p03\"],\n        \"then\": \"eligible\"\n      },\n      {\n        \"id\": \"r2\",\n        \"if\": [\"p00\", \"p02\"],\n        \"then\": \"not_eligible\"\n      },\n      {\n        \"id\": \"r3\",\n        \"if\": [\"p01\"],\n        \"then\": \"eligible\"\n      }\n    ]\n  },\n  \"recomputed\": {\n    \"active_rules\": [\"r2\", \"r3\"],\n    \"answer\": \"conflict\",\n    \"counterfactual_answer\": \"yes\"\n  }\n}\n```",
+    "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+    "logical_trial_identity_sha256": "6d02a7f9686bdaf3f9123a8366169710a46a43bc3ccd6ca9b366cf0a55b97780",
+    "generation_identity_sha256": "0610bccbec0d3ad68aaf2bb2ee90789fa99a4053b38b6847ffee3a629f288549",
+    "assessment_identity_sha256": "a6fb3c271625ee2d578e850d54fb459d2fe2743ba22969a13350bf35ecb642d4",
+    "created_at": "2026-09-27 14:34:56",
+    "parsed_response": {
+      "asserted": {
+        "active_rules": null,
+        "answer": null,
+        "counterfactual_answer": null,
+        "facts": [
+          "p00",
+          "p01",
+          "p02"
+        ],
+        "priority": [],
+        "rules": [
+          {
+            "id": "r1",
+            "if": [
+              "p01",
+              "p03"
+            ],
+            "then": "eligible"
+          },
+          {
+            "id": "r2",
+            "if": [
+              "p00",
+              "p02"
+            ],
+            "then": "not_eligible"
+          },
+          {
+            "id": "r3",
+            "if": [
+              "p01"
+            ],
+            "then": "eligible"
+          }
+        ]
+      },
+      "recomputed": {
+        "active_rules": [
+          "r2",
+          "r3"
+        ],
+        "answer": "conflict",
+        "counterfactual_answer": "yes"
+      }
+    },
+    "score": {
+      "assertion_fidelity": true,
+      "both_answers_correct": false,
+      "counterfactual_answer_correct": false,
+      "current_active_rules_correct": true,
+      "current_answer_correct": true,
+      "current_answer_from_returned_active": true,
+      "first_oracle_deviation": {
+        "counterfactual": null,
+        "current": null
+      },
+      "required_answer_invariance": false,
+      "schema_valid": true
+    },
+    "metadata": {
+      "assessment_identity_sha256": "a6fb3c271625ee2d578e850d54fb459d2fe2743ba22969a13350bf35ecb642d4",
+      "experiment_run_identity_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+      "family_id": "f05",
+      "generation_identity_sha256": "0610bccbec0d3ad68aaf2bb2ee90789fa99a4053b38b6847ffee3a629f288549",
+      "is_mock": false,
+      "logical_trial_identity_sha256": "6d02a7f9686bdaf3f9123a8366169710a46a43bc3ccd6ca9b366cf0a55b97780",
+      "model_call": true,
+      "reader": "mistral_large",
+      "replicate": 1,
+      "slot_sha256": "dbd4e0a15e024e9a813af2c62a68b935023a163aba8d55ca56a949bcc35afe9d",
+      "world_id": "f05.w1"
+    }
+  }
+]

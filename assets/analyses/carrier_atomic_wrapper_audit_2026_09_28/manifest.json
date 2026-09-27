@@ -1,0 +1,10 @@
+{
+  "execution_sha256": "3bc8919f5180a979b02d7992a5c591915bf4d5dd3a32cc591a3a692de54298fd",
+  "files_sha256": {
+    "analysis.json": "8fd6ea52d817adaca761aa734f8cf3cae2fadcccff420600f9a13412b08f7409",
+    "analyze.py": "9748350ff0490852e22c2c4c60b0341e915d8d5aaa379dfc5a90f347b7c5a169",
+    "content_failure_packets.json": "b882fcf27bb76bfd7ba65d707a3eb517554be50a54d81dc94efbb660b6a0c595",
+    "observations.json": "1dad6a2dc6f5c4c614a4eab3e9aec439da68a666caba8dac8497b0e0319338a0",
+    "paired_contrasts.json": "a558fd3fbde56594760b03831cd0cf570e7fd0cf7e4719735cb2520def9fc691"
+  }
+}

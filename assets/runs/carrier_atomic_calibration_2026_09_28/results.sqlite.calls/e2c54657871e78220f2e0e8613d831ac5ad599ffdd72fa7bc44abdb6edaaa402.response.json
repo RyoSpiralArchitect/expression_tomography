@@ -1,0 +1,27 @@
+{
+  "status": "response_received",
+  "execution_sha256": "190871f5f82d394b092248cae50e0083361fefeae80e13bf9c9539f45ea36ea6",
+  "logical_trial_identity_sha256": "e2c54657871e78220f2e0e8613d831ac5ad599ffdd72fa7bc44abdb6edaaa402",
+  "slot_sha256": "bdc098332a32fdd9e1fcdbcd2ae31bd6c89a3b3ff0ae7a52a008d822ba911fe3",
+  "prompt": "Evaluate one public operation independently.\nTreat fired_rules and suppressed_rules as supplied complete sets. Active rules are fired_rules MINUS suppressed_rules. Do not recompute either supplied set. Is target_rule active?\nReturn only a JSON object with exactly one key, \"holds\", whose value is the JSON boolean true or false. No explanation or additional fields.\nPUBLIC_INPUT_JSON:\n{\"fired_rules\":[\"r1\",\"r2\",\"r3\"],\"suppressed_rules\":[\"r3\"],\"target_rule\":\"r1\"}",
+  "provider": {
+    "name": "reader-gpt-6-luna-low",
+    "settings": {
+      "type": "openai_compatible",
+      "model": "gpt-6-luna",
+      "temperature": null,
+      "max_tokens": 4000,
+      "timeout_s": 120.0,
+      "reasoning_effort": "low",
+      "device": "auto",
+      "dtype": "auto"
+    },
+    "base_url": "https://api.openai.com/v1",
+    "implementation": "expression_tomography.core.providers.OpenAICompatibleProvider",
+    "request_contract": "openai_compatible.chat_completions.temperature_optional.v3",
+    "is_mock": false
+  },
+  "model_call": true,
+  "raw_response": "{\"holds\":true}",
+  "raw_response_sha256": "dc0214a08c9d2b596a1d9da717072de453d0706de2c8c627065f933e7771c1bf"
+}
