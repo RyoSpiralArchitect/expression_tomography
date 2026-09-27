@@ -23,11 +23,17 @@ This is still narrower than the forward hypothesis that improving expression
 increases independently measured intelligence. No training or general-capability
 claim follows from a successful document pilot.
 
-Status: **design plus provisional source shortlist**. After PR #26 merged,
+Current first step: the user's subsequent scope reduction is implemented as the
+[three-letter, one-hop PG preparation](pg_letters_pilot_2026_09_28.md), using
+existing cached sources. It defers newspapers, literary ratings and two hops;
+the broader design below is retained, not the current execution matrix.
+
+Original proposal status: **design plus provisional source shortlist**. After PR #26 merged,
 [six English candidates](natural_document_selection_2026_09_28.md) were scouted;
 their source versions, excerpt bytes, rights gates and human review are not
-frozen. No source-text archive, admitted corpus or experimental provider calls
-exist under this plan. The B3 call cap does not cover it. Exact sources, source
+frozen in that shortlist. The later PG preparation keeps source texts locally,
+with no admitted corpus or experimental provider calls. The B3 call cap does
+not cover it. Exact sources, source
 language and a new live budget must be frozen before execution.
 
 ## First Source Gate

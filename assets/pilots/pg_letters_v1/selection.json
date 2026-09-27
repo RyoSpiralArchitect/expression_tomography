@@ -1,0 +1,195 @@
+{
+  "version": "pg_letters.selection.v1",
+  "status": "local_preparation_only",
+  "selected_on": "2026-09-28",
+  "language": "en",
+  "selection_basis": "Three purposively selected historical letters with concrete communication purposes, before any experimental model output. Not a random sample or a held-out corpus.",
+  "origin": "Existing official PG mirror acquired on Furnace in August 2026, subsequently cold-stored; three members read without modifying the archive or training data.",
+  "new_downloads": 0,
+  "new_experimental_model_calls": 0,
+  "training_eligible": false,
+  "human_ledger_review": "pending; assistant-drafted acceptable readings are not an independent gold standard",
+  "reuse_status": "Local inspection/preparation only. Keep full cached PG headers/licenses locally. Publication and provider-processing review remain pending; catalog/ebook US notices do not establish worldwide clearance.",
+  "scan_status": "Cached transcriptions inspected; original printed pages not visually compared. Score relative to the frozen transcription, not an asserted autograph transcription.",
+  "cases": [
+    {
+      "case_id": "austen_v_travel",
+      "pg_id": 42078,
+      "source_file": "pg42078.txt",
+      "source_sha256": "bab2307f14c376144efb1169537d2bb70d47a2c1fd774ef2dc3dfb12e51808b3",
+      "source_bytes": 458158,
+      "author": "Jane Austen",
+      "recipient": "Cassandra Austen",
+      "catalog_url": "https://www.gutenberg.org/ebooks/42078",
+      "edition": "The Letters of Jane Austen; selected by Sarah Chauncey Woolsey from the Brabourne compilation; Little, Brown, Boston, 1908. Ebook credits Suzanne Shell, Emmy and Distributed Proofreaders; updated 2024-10-23.",
+      "locator": "Letter V, Rowling, Sunday (September 18), opening two paragraphs. Heading does not state a year.",
+      "purpose": "Explain a contingent travel arrangement and the reply needed before proceeding.",
+      "start_anchor": "ROWLING, Sunday (September 18).",
+      "end_anchor": "no more about it.",
+      "omitted_context": "Later family news, a hoped-for pickup, reflections on the earlier plan, and a humorous postscript are excluded. The opening reverses the captain/ship names; do not silently correct it or test their real-world identities.",
+      "probes": [
+        {
+          "id": "q1",
+          "question": "When does Frank need to be in town, and why has he delayed leaving?",
+          "source_status": "supported",
+          "acceptable_reading": "Wednesday; he remains until then to accommodate the writer, rather than leaving on the earlier intended day.",
+          "evidence": ["be in town on Wednesday", "He remains till Wednesday merely to accommodate me."],
+          "loss_to_watch": "Conflating the earlier intended departure with the current Wednesday arrangement."
+        },
+        {
+          "id": "q2",
+          "question": "What communication is the writer waiting for, and when does she expect to know its result?",
+          "source_status": "supported",
+          "acceptable_reading": "A reply from Miss P. about receiving her on Wednesday; she wrote again requesting return of post and expects to know on Tuesday. This is an expectation, not a received confirmation.",
+          "evidence": ["I have written to her again to-day, and desired her to answer it by return of post.", "On Tuesday, therefore, I shall positively know whether they can receive me on Wednesday."],
+          "loss_to_watch": "Turning an expected reply into an already confirmed invitation."
+        },
+        {
+          "id": "q3",
+          "question": "What alternative travel arrangement is described, and what conditions govern it?",
+          "source_status": "supported",
+          "acceptable_reading": "If they cannot receive her on Wednesday, Edward has promised to take her to Greenwich the following Monday, if that suits them better; this is not an unconditional confirmed journey.",
+          "evidence": ["If they cannot, Edward has been so good as to promise to take me to Greenwich on the Monday following", "if that suits them better."],
+          "loss_to_watch": "Keeping Monday and Edward but deleting the conditions."
+        },
+        {
+          "id": "q4",
+          "question": "What will the writer do if no answer arrives by the stated deadline?",
+          "source_status": "supported",
+          "acceptable_reading": "If none arrives on Tuesday, she must suppose Mary is away and wait until she hears. This is an inference and a waiting policy, not proof of Mary's absence or permission to leave anyway.",
+          "evidence": ["If I have no answer at all on Tuesday, I must suppose Mary is not at home, and must wait till I do hear"],
+          "loss_to_watch": "Collapsing no reply into a negative reply or a known absence."
+        },
+        {
+          "id": "q5",
+          "question": "Does the excerpt establish whether the Pearsons are actually at home?",
+          "source_status": "insufficient",
+          "acceptable_reading": "No; their availability remains unresolved in this excerpt. Do not infer absence from lack of a reply.",
+          "evidence": ["I cannot go on the uncertainty of the Pearsons being at home"],
+          "loss_to_watch": "Inventing the missing outcome."
+        }
+      ]
+    },
+    {
+      "case_id": "darwin_murray_publication",
+      "pg_id": 2088,
+      "source_file": "pg2088.txt",
+      "source_sha256": "86011cb297293e535ae529594487d7a04b22b7ceb412988d74cc06d6cde71b36",
+      "source_bytes": 1095484,
+      "author": "Charles Darwin",
+      "recipient": "John Murray; identified by the preceding editorial introduction, not inserted into the message",
+      "catalog_url": "https://www.gutenberg.org/ebooks/2088",
+      "edition": "Life and Letters of Charles Darwin, Volume 2; edited by Francis Darwin. Cached ebook credits Sue Asscher and David Widger; updated 2022-01-15. Exact underlying print edition not established by the cached title page.",
+      "locator": "Chapter 2.X; Down, September 21 [1861], letter introduced as addressed to Mr. Murray, ending immediately before the September 24 letter.",
+      "purpose": "Ask for candid publication advice, state doubts, and specify a financial boundary.",
+      "start_anchor": "Down, September 21 [1861].",
+      "end_anchor": "cares for the success of a book.",
+      "omitted_context": "Preceding editorial context and subsequent acceptance/offer correspondence are excluded. The printed ellipsis inside the selected letter is inherited from this edition, not a new deletion. Do not reconstruct omitted material or later outcomes.",
+      "probes": [
+        {
+          "id": "q1",
+          "question": "What decision does the writer ask the recipient to advise on, and how should that advice be given?",
+          "source_status": "supported",
+          "acceptable_reading": "Whether to publish the long orchid paper separately, rather than only as a society paper; the writer asks for candid judgment, not an answer merely to oblige him, and says he will follow it.",
+          "evidence": ["give me your opinion, which I shall implicitly follow", "POSSIBLY it might be worth publishing separately", "I beg you not to be guided in the least in order to oblige me"],
+          "loss_to_watch": "Changing a request for advice into an instruction to publish."
+        },
+        {
+          "id": "q2",
+          "question": "What publishing terms is the writer willing or unwilling to accept?",
+          "source_status": "supported",
+          "acceptable_reading": "Flexible terms, with half risk/half profit offered as an example, but not publication entirely at his own risk. No agreement has yet been established here.",
+          "evidence": ["I would agree to any terms, such as half risk and half profit, or what you liked; but I would not publish on my sole risk"],
+          "loss_to_watch": "Quoting any terms while losing the sole-risk exception, or treating the example as an agreed contract."
+        },
+        {
+          "id": "q3",
+          "question": "Who does the writer think would be interested in the paper?",
+          "source_status": "supported",
+          "acceptable_reading": "A good many people who care for natural history, but not others; accessibility claims do not imply broad expected demand.",
+          "evidence": ["would interest a good many of such persons who care for Natural History, but no others."],
+          "loss_to_watch": "Replacing the limited audience expectation with general public appeal."
+        },
+        {
+          "id": "q4",
+          "question": "How certain is the writer that separate publication is a good idea?",
+          "source_status": "supported",
+          "acceptable_reading": "He finds the facts interesting but has great doubts and acknowledges a tendency to overvalue his own work. Not confident commercial success.",
+          "evidence": ["I have myself GREAT doubts on the subject.", "I am very apt to think that my geese are swans"],
+          "loss_to_watch": "Losing self-doubt while retaining enthusiasm."
+        },
+        {
+          "id": "q5",
+          "question": "What final publishing agreement, if any, does this excerpt establish?",
+          "source_status": "insufficient",
+          "acceptable_reading": "None is established in this excerpt; it contains a request and possible terms, not the recipient's agreement.",
+          "evidence": ["If I were to publish separately"],
+          "loss_to_watch": "Importing the later publisher reply or background history."
+        }
+      ]
+    },
+    {
+      "case_id": "stevenson_colvin_visit",
+      "pg_id": 622,
+      "source_file": "pg622.txt",
+      "source_sha256": "2ab25ddbfa9bad880062f0577c716631b6654b1ee51fa040106880165ebf04f9",
+      "source_bytes": 682864,
+      "author": "Robert Louis Stevenson",
+      "recipient": "Sidney Colvin",
+      "catalog_url": "https://www.gutenberg.org/ebooks/622",
+      "edition": "Letters to his Family and Friends, Volume I; edited by Sidney Colvin; Methuen, seventh edition, December 1906. Transcribed by David Price; ebook updated 2019-08-25.",
+      "locator": "Letter to Sidney Colvin, 17 Heriot Road, Edinburgh [January 1875], complete body through signature.",
+      "purpose": "Explain travel constraints and reconcile wanting company with not imposing a visit; report pending writing plans.",
+      "start_anchor": "17 _Heriot Road_, _Edinburgh_ [_January_ 1875].",
+      "end_anchor": "R. L. STEVENSON.",
+      "omitted_context": "The repeated recipient heading just before the dated letter is excluded; salutation and signature remain. Surrounding letters and editorial material are excluded. Italics markers and punctuation are preserved.",
+      "probes": [
+        {
+          "id": "q1",
+          "question": "What constrains the writer's proposed trip south, and what timing does he suggest?",
+          "source_status": "supported",
+          "acceptable_reading": "Money appears to prevent it until the session ends at the end of March. This is his tentative assessment, not a booked departure date.",
+          "evidence": ["I think the still small unanswerable voice of coins will make it impossible until the session is over (end of March)"],
+          "loss_to_watch": "Interpreting the metaphor literally or converting a constraint into a confirmed itinerary."
+        },
+        {
+          "id": "q2",
+          "question": "How does the writer feel about a visit from Colvin, and what does he ask or expect Colvin to do?",
+          "source_status": "supported",
+          "acceptable_reading": "He would be very happy to see Colvin but does not want to impose/bother him and resigns himself to a later time. Neither a simple rejection nor an unqualified request to come now captures both sides.",
+          "evidence": ["I do not want you to come and bother yourself", "I wish you could come", "I see that it is wrong to expect it, and so I resign myself: some time after."],
+          "loss_to_watch": "Collapsing considerate non-demand into lack of desire, or desire into an obligation."
+        },
+        {
+          "id": "q3",
+          "question": "What does the writer say about his father's readiness for a visit?",
+          "source_status": "supported",
+          "acceptable_reading": "Not quite certain whether his father will be fit for the visitor, though the writer says he now has no real fear about it; preserve the qualification instead of asserting definite fitness or definite illness.",
+          "evidence": ["it is still not quite certain whether my father will be quite fit for you, although I have now no fear of that really."],
+          "loss_to_watch": "Replacing qualified reassurance with certainty."
+        },
+        {
+          "id": "q4",
+          "question": "What is the status of the proposal sent to Appleton?",
+          "source_status": "supported",
+          "acceptable_reading": "The writer offered a series on the modern French school, but has not received an answer; not acceptance or rejection.",
+          "evidence": ["I offered Appleton a series of papers on the modern French school", "But he has not deigned to answer my letter."],
+          "loss_to_watch": "Treating nonresponse as a rejected or accepted proposal."
+        },
+        {
+          "id": "q5",
+          "question": "What exact date has been agreed for Colvin's visit?",
+          "source_status": "insufficient",
+          "acceptable_reading": "No agreed date is given; some time after is indefinite, and end of March belongs to the writer's possible trip south, not an agreed Colvin visit.",
+          "evidence": ["some time after."],
+          "loss_to_watch": "Transferring the writer's travel timing to the friend's visit."
+        }
+      ]
+    }
+  ],
+  "deferred": [
+    "The previous six-source letter/news shortlist remains a scouting record; newspapers, literary scoring and two-hop transmission are deferred.",
+    "PG19 title matches for fictional letters and diaries were not treated as evidence of real correspondence.",
+    "Austen Letter III and Darwin September 24 were superseded for this pilot by passages with more explicit contingent actions; no model results informed that choice."
+  ]
+}

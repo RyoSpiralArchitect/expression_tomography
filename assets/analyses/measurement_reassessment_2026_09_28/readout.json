@@ -1,0 +1,2911 @@
+{
+  "schema": "measurement_reassessment.v1",
+  "new_model_calls": 0,
+  "scope_counts": {
+    "assets": 56,
+    "current_results": 9,
+    "historical_results": 77
+  },
+  "database_count": 142,
+  "run_directory_count": 40,
+  "limits": [
+    "File counts are not trials, API calls, independent worlds, or replications.",
+    "Inventory checks do not replay every scorer or semantically annotate every output.",
+    "Selected contrasts are post-hoc and assistant-reviewed, not human gold.",
+    "PG raw text and partial human responses remain local; no new release or training."
+  ],
+  "databases": [
+    {
+      "path": "assets/pilots/carrier_calibration_v1/mock/trials.sqlite",
+      "sha256": "5ce0cd51a9d60d86d49cfeebb31e450c250a5cd541980b4349aeacd9da5f69e1",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 432,
+      "task_types": [
+        "carrier_calibration"
+      ],
+      "problems": {
+        "prompt_hash_mismatch": 432,
+        "raw_response_hash_mismatch": 432
+      },
+      "declared_hash_convention_recheck": {
+        "checked": 864,
+        "matched": 864
+      }
+    },
+    {
+      "path": "assets/pilots/intermediate_audit_v1/mock/trials.sqlite",
+      "sha256": "f386ea62eb50db9b749cdf1b3451c1c1a3343aeb7f9e2fac30c4167267e9607e",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 144,
+      "task_types": [
+        "intermediate_audit"
+      ],
+      "problems": {
+        "prompt_hash_mismatch": 144
+      },
+      "declared_hash_convention_recheck": {
+        "checked": 144,
+        "matched": 144
+      }
+    },
+    {
+      "path": "assets/pilots/text_boundary_targets_v1/mock/trials.sqlite",
+      "sha256": "096a581485c1ca961954a08b6ec1fe980d3834085dd47277f6c6bfd5b0dad892",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 216,
+      "task_types": [
+        "text_boundary_targets"
+      ],
+      "problems": {
+        "prompt_hash_mismatch": 216,
+        "raw_response_hash_mismatch": 216
+      },
+      "declared_hash_convention_recheck": {
+        "checked": 432,
+        "matched": 432
+      }
+    },
+    {
+      "path": "assets/pilots/text_boundary_v1/mock/trials.sqlite",
+      "sha256": "af4b07283a90846bec3bdc83808cb6efa1bb165f2a5cc34780cf500082ebf746",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 252,
+      "task_types": [
+        "text_boundary"
+      ],
+      "problems": {
+        "prompt_hash_mismatch": 252,
+        "raw_response_hash_mismatch": 252
+      },
+      "declared_hash_convention_recheck": {
+        "checked": 504,
+        "matched": 504
+      }
+    },
+    {
+      "path": "assets/runs/carrier_atomic_calibration_2026_09_28/results.sqlite",
+      "sha256": "681513b96c0b546ce1e08d5163f8cfc5754b95c78ffc83d21cd51699b6040c0c",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 128,
+      "task_types": [
+        "carrier_atomic_calibration"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/carrier_calibration_openai_luna_2026_09_27/trials.sqlite",
+      "sha256": "3d2ff193024e1de4415441755ff17ef99887b7752cc52031bdf840824b5baa90",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 108,
+      "task_types": [
+        "carrier_calibration"
+      ],
+      "problems": {
+        "prompt_hash_mismatch": 108,
+        "raw_response_hash_mismatch": 108
+      },
+      "declared_hash_convention_recheck": {
+        "checked": 216,
+        "matched": 216
+      }
+    },
+    {
+      "path": "assets/runs/carrier_content_sensitivity_openai_luna_2026_09_27/results.sqlite",
+      "sha256": "dcdc8a22a32410e387bab9ac3f1f7be8d411fe34b950f7365092a4808b5fe1c0",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 304,
+      "task_types": [
+        "carrier_content_sensitivity"
+      ],
+      "problems": {
+        "prompt_hash_mismatch": 304,
+        "raw_response_hash_mismatch": 304
+      },
+      "declared_hash_convention_recheck": {
+        "checked": 608,
+        "matched": 608
+      }
+    },
+    {
+      "path": "assets/runs/carrier_downstream_reader_gpt6_luna_2026_09_27/results.sqlite",
+      "sha256": "5142a1f9ffb22336dcef8fcc2d6bc461480174ec8e38e86c3c143dc8a51e77f0",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 108,
+      "task_types": [
+        "carrier_downstream"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/carrier_downstream_rewrite_luna_2026_09_27/results.sqlite",
+      "sha256": "beaa1a4299a0fbf9087d7d7ce24a1c3951fda3ac8fb8e27820d0402d587757da",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 18,
+      "task_types": [
+        "carrier_downstream"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/carrier_reader_mistral_2026_09_27/results.sqlite",
+      "sha256": "1c58f2d217e7a031b34a5b221c31b96bec109bbb6f6622a706836aebeae5d651",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 108,
+      "task_types": [
+        "carrier_downstream"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/carrier_state_calibration_2026_09_27/results.sqlite",
+      "sha256": "b8326318839397551481d8ade2c16f66eb5daa13574faa06265c7e2b1000e330",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 72,
+      "task_types": [
+        "carrier_state_calibration"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/metaphor_transfer_anthropic_live/trials.sqlite",
+      "sha256": "20c35efdb6b24a9bc97aa2ad0cd377b93c7a4752b2d9e5b84e6a0d5767f1a6c7",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 3,
+      "task_types": [
+        "metaphor_transfer"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/metaphor_transfer_openai_live/trials.sqlite",
+      "sha256": "b042b6b23e1ba77788ea9489d009059d70a3aebbd62a39fe804017ce05099379",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 3,
+      "task_types": [
+        "metaphor_transfer"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_audit_reader_calibration_luna_seed53_120/invariants/trials.sqlite",
+      "sha256": "dbadb4c01423295a6c66336c28ff6b355605b26132a9d2cea69b48c09041377a",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 120,
+      "task_types": [
+        "rule_z_audit_calibration"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_audit_reader_calibration_luna_seed53_120/legacy/trials.sqlite",
+      "sha256": "aacd0c2e72f461a24fb2233cce2e15a41d51e03b2fca50feca10478b5cc709be",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 240,
+      "task_types": [
+        "rule_z_audit_calibration"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_binding_stress_anthropic_seed41/trials.sqlite",
+      "sha256": "9d4cd5d1c9c973f2811ccca5c05a34e6c464304209441e429353b0da6709de03",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 600,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+      "sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 270,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_contract_perturbation_anthropic_seed29_30/trials.sqlite",
+      "sha256": "b3e7c75716aaa1acf05e9afd344195ace91df27d29d8edf7d8d9e3753c9f634a",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 390,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_ear_redteam_anthropic_rerun_seed29_30/trials.sqlite",
+      "sha256": "cb21c25b2940c36585f81ff4470110b03466c56a0c5d6f32746f44903e3b5f68",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 210,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_ear_redteam_anthropic_seed29_30/trials.sqlite",
+      "sha256": "6f3ace8e5b8a0487b5080655255035d66ccf53268f95e67b589a271a2b09e8fc",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 210,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_ear_redteam_gpt55_seed29_30/trials.sqlite",
+      "sha256": "37c22196a688c23f9e631639c48e8cf7f5d90942f46b70ce51daba4264b2036d",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 210,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_ear_redteam_openai_seed29_30/trials.sqlite",
+      "sha256": "e1613893199be4e9d1258a5db02b5b7f6cd7f79ac08460b734e1131fb2c04421",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 210,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/diagnostics/score_v1.sqlite",
+      "sha256": "58b2fe08b9e80ab12aaacf8153c34d600f064f0ab47e890a4c5a0d50c7b9e6de",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 704,
+      "task_types": [
+        "rule_z_extraction_intervention"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/diagnostics/score_v2.sqlite",
+      "sha256": "9741c8bc88b2306b4c0c094409909df14ef9defb7612d2da07bce3c5120ae772",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 704,
+      "task_types": [
+        "rule_z_extraction_intervention"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/trials.sqlite",
+      "sha256": "6213fb1cb99cbac2bb25b1eeab52060bbb411fe3a00b723c33bbd47e1eea23a2",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 704,
+      "task_types": [
+        "rule_z_extraction_intervention"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_extraction_intervention_luna_seed68_16x2/trials.sqlite",
+      "sha256": "f1cfb931367d81d643ebb4fac748cf303ec1d280fc482b5f1a8a48a8d9fc89e3",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 2816,
+      "task_types": [
+        "rule_z_extraction_intervention"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_extraction_intervention_luna_seed68_target_null_16x2/trials.sqlite",
+      "sha256": "ad93ec8f27ec57f5916e61a339b5f541414dcdc1fcba7f296a17c61f8aac6097",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 2816,
+      "task_types": [
+        "rule_z_extraction_intervention"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_free_prompt_ladder_anthropic_seed29_30/trials.sqlite",
+      "sha256": "457145f454455f3cb87fc8f55dd1c810e729e6352f3d4e7b6adfb1fe36edfc2b",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 240,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_free_prompt_ladder_openai_seed29_30/trials.sqlite",
+      "sha256": "2e75ce5e3a0f9f7b42dfa440180e9f34efc50f69c1040e512893be04c7b35c0c",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 240,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_initial_anthropic_seed29_30/trials.sqlite",
+      "sha256": "5fdf0a857117e7f1e4b2bdc8ccddd6049b397efdf5e3bea4154c04f24dd939af",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 120,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_initial_openai_seed29_30/trials.sqlite",
+      "sha256": "38637b1d01889351043af9477cbe486df6978ae837718b96070ad4a3fac076fd",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 120,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_intermediate_factorial_anthropic_sonnet46_seed41/trials.sqlite",
+      "sha256": "cd9fd6e9156ebba798558cac9675a605ba04fcb49f336911bbedca1953d75eef",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 204,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_iterative_repair_anthropic_seed29_30/trials.sqlite",
+      "sha256": "050f753a69a0c95ed2eb507d4dab6caf501994e40b2f924cfee33cc7ce036865",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 240,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/calibration_trials.sqlite",
+      "sha256": "77cc9047c833c405b4033f42879d6a3c5c20ae23246ee0c4e18292f640016170",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 72,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/budget4000_default_chunks/compact_free.sqlite",
+      "sha256": "6937cbc9e3417907b885c1f5969ef1ca13231f31fc4a347670ff91f05c83b636",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 22,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/budget4000_default_chunks/compact_generic.sqlite",
+      "sha256": "0010d904340e0615b19ae5a45adc430d060dc1c747b95cedf63ec3476ac1713b",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 33,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/budget4000_default_chunks/explicit_free.sqlite",
+      "sha256": "d2a9eba3bea90009ca002df1c72b0d2eab9a40ee3792878452c54e6f25bcadb5",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 33,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/budget4000_default_chunks/explicit_generic.sqlite",
+      "sha256": "0321cb1d754d42ca632a9a66bac5dd14d86022a8667b085d3949c3fa45e39d0f",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 30,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/calibration_budget2000_default.sqlite",
+      "sha256": "d2c776218c302692f7a48a4250c6a9810a918658840509ded07dfb5cf8f60020",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 12,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/calibration_budget4000_default.sqlite",
+      "sha256": "4e8bac5b95cdd208297c2eb2cd8d6832eb20444aead2ad2896629c22588d5201",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 12,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/full_budget2000_default.sqlite",
+      "sha256": "1357020ff08af49ccb281612f2887650d677352cc4885e081d7a2a5c10e6d7d5",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 0,
+      "task_types": [],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/full_budget4000_default.sqlite",
+      "sha256": "e1194efc90fe704ef918e0dcb45dd26168f83f3db43f3aced52ad6cb2f693d71",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 4,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/trials.sqlite",
+      "sha256": "f97628639a121338b4fe6a2d203e3e17630c0817eeff4647e306c3e39953ac69",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 465,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low_complete/trials.sqlite",
+      "sha256": "c2381200da3fd81fb408a311317ed19095e3b7472d460e05a2a3d79d856bc058",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 768,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_priority_binding_openai_gpt55_seed41_budget2000/trials.sqlite",
+      "sha256": "9e74ac1318395e22ab3a9694ba98b70164b503054ee06857ceb7d5146cb8c6f3",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 192,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_priority_compute_anthropic_sonnet46_seed41_budget2000/trials.sqlite",
+      "sha256": "927caa324b8922c0b4ac72d0094985a6d50941b4aef1edf4c99503de42ada7d1",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 312,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_priority_compute_openai_gpt55_seed41_budget900_diagnostic/trials.sqlite",
+      "sha256": "8c35e0e3553a111efe82d26410b51182877351530d37c05044a377dfb9cfc1e9",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 300,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {
+        "blank_transmission_message": 6
+      }
+    },
+    {
+      "path": "assets/runs/rule_z_revision_decoder_luna_seed101_36x2/trials.sqlite",
+      "sha256": "62acca41d55c2abf5428c157b7f0044fc9b987304a6bd6c3607ccd6f2ffc61a0",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 288,
+      "task_types": [
+        "rule_z_revision_decoder_calibration"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_revision_ear_ladder_luna_seed101_108x2/trials.sqlite",
+      "sha256": "1395e7136c46b1f5dcbbdf4ce3013b774e7d01ad2323694e5b5266104fbd60cd",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 2808,
+      "task_types": [
+        "rule_z_revision_ear_ladder"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_revision_interface_luna_seed101_108x2/trials.sqlite",
+      "sha256": "42f87904d857cbcfc1da06434566f9e7c7e54fa87df6a324206662e440320c70",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 3024,
+      "task_types": [
+        "rule_z_revision_interface_calibration"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_rule_revision_leakage_luna_seed83_288x2/trials.sqlite",
+      "sha256": "415f9f62812764b74a547299761840ad2bd520f976fdaa5a2960d64dace49165",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 4032,
+      "task_types": [
+        "rule_z_rule_revision_leakage"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_sender_anthropic_seed29_30/trials.sqlite",
+      "sha256": "8971d972670305eaa861f9678b96ee496e4add59dc96aa018dd50399e757a55f",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 210,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_sender_gpt55_seed29_30/trials.sqlite",
+      "sha256": "f687ea9a36c964e44de9dbd03446809e7f021967d5a15bd31c5b3227a235f06f",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 210,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/rule_z_transmission_openai_seed29_30/trials.sqlite",
+      "sha256": "392f9c08d45813ec16a7f6047d818ea3a4fbd936fd07878a67cd1441ac1095b2",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 180,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "assets/runs/text_boundary_openai_luna_2026_09_07/trials.sqlite",
+      "sha256": "06c68fe9ff4df2d4937588813ecea83a43218d9e6ef5872311cd56a952012869",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 252,
+      "task_types": [
+        "text_boundary"
+      ],
+      "problems": {
+        "prompt_hash_mismatch": 252,
+        "raw_response_hash_mismatch": 252
+      },
+      "declared_hash_convention_recheck": {
+        "checked": 504,
+        "matched": 504
+      }
+    },
+    {
+      "path": "assets/runs/text_boundary_targets_openai_luna_2026_09_08/trials.sqlite",
+      "sha256": "db70415e08fcd4caf098760a0fe05c9bf24c474c0de77d417462928ec44a86fe",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 216,
+      "task_types": [
+        "text_boundary_targets"
+      ],
+      "problems": {
+        "prompt_hash_mismatch": 216,
+        "raw_response_hash_mismatch": 216
+      },
+      "declared_hash_convention_recheck": {
+        "checked": 432,
+        "matched": 432
+      }
+    },
+    {
+      "path": "current_results/carrier_atomic_calibration_2026_09_28/results.sqlite",
+      "sha256": "d4d19bf72a3eeff129e2ca2ac52a16462275a9dbd5c7532e432eb1dfc1db32e9",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 128,
+      "task_types": [
+        "carrier_atomic_calibration"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "current_results/carrier_content_sensitivity_openai_luna_2026_09_27/results.sqlite",
+      "sha256": "7fbb6dfe0319a15ab123ba26b4e03bf617ccf0a22be9ba9284b852f27d9e30f6",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 304,
+      "task_types": [
+        "carrier_content_sensitivity"
+      ],
+      "problems": {
+        "prompt_hash_mismatch": 304,
+        "raw_response_hash_mismatch": 304
+      },
+      "declared_hash_convention_recheck": {
+        "checked": 608,
+        "matched": 608
+      }
+    },
+    {
+      "path": "current_results/carrier_downstream_reader_gpt6_luna_2026_09_27/results.sqlite",
+      "sha256": "dc44211b3c411d55af97a81ff1a1e182ce0635b98372c11e920f81af7ad0ca08",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 108,
+      "task_types": [
+        "carrier_downstream"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "current_results/carrier_downstream_rewrite_luna_2026_09_27/results.sqlite",
+      "sha256": "1557c81f034d840c38c4c58895463a10f8d76d6731d2d7d1edb19d62b1ed0c3c",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 18,
+      "task_types": [
+        "carrier_downstream"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "current_results/carrier_reader_mistral_2026_09_27/results.sqlite",
+      "sha256": "ccbfa116d1fc5095fd11cce0d25d856846f611d735e9cb340c93d646f36b39cd",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 108,
+      "task_types": [
+        "carrier_downstream"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "current_results/carrier_state_calibration_2026_09_27/results.sqlite",
+      "sha256": "cc850959e39afe06b51f6a0595a336d43c1404172ce56eac2f7133649177faa6",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 72,
+      "task_types": [
+        "carrier_state_calibration"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "current_results/text_boundary/openai_luna_2026_09_07/trials.sqlite",
+      "sha256": "06c68fe9ff4df2d4937588813ecea83a43218d9e6ef5872311cd56a952012869",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 252,
+      "task_types": [
+        "text_boundary"
+      ],
+      "problems": {
+        "prompt_hash_mismatch": 252,
+        "raw_response_hash_mismatch": 252
+      },
+      "declared_hash_convention_recheck": {
+        "checked": 504,
+        "matched": 504
+      }
+    },
+    {
+      "path": "current_results/text_boundary_targets/mock_2026_09_08/trials.sqlite",
+      "sha256": "096a581485c1ca961954a08b6ec1fe980d3834085dd47277f6c6bfd5b0dad892",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 216,
+      "task_types": [
+        "text_boundary_targets"
+      ],
+      "problems": {
+        "prompt_hash_mismatch": 216,
+        "raw_response_hash_mismatch": 216
+      },
+      "declared_hash_convention_recheck": {
+        "checked": 432,
+        "matched": 432
+      }
+    },
+    {
+      "path": "current_results/text_boundary_targets/openai_luna_2026_09_08/trials.sqlite",
+      "sha256": "db70415e08fcd4caf098760a0fe05c9bf24c474c0de77d417462928ec44a86fe",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 216,
+      "task_types": [
+        "text_boundary_targets"
+      ],
+      "problems": {
+        "prompt_hash_mismatch": 216,
+        "raw_response_hash_mismatch": 216
+      },
+      "declared_hash_convention_recheck": {
+        "checked": 432,
+        "matched": 432
+      }
+    },
+    {
+      "path": "historical_results/expression_tomography/rule_z_audit_calibration_luna_invariants_seed53_120.sqlite",
+      "sha256": "f05320fc1761d22ceb87e85f70bcf0d4af12f80276f9cae4b2b29bf4db3b1715",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 120,
+      "task_types": [
+        "rule_z_audit_calibration"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/expression_tomography/rule_z_audit_calibration_luna_invariants_seed53_smoke12.sqlite",
+      "sha256": "3394dbee79adfb2c338a600d7eb8d1528e846a51a8ac0948c71b4905dd7b4aed",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 12,
+      "task_types": [
+        "rule_z_audit_calibration"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/expression_tomography/rule_z_audit_calibration_luna_opaque_v2_request_v2_seed53_120_legacy.sqlite",
+      "sha256": "4614725826a31a2a493f68a1047c09d66076861b89212212b2769d972c0bc53e",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 0,
+      "task_types": [],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/expression_tomography/rule_z_audit_calibration_luna_opaque_v2_request_v3_seed53_120_invariants.sqlite",
+      "sha256": "dbadb4c01423295a6c66336c28ff6b355605b26132a9d2cea69b48c09041377a",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 120,
+      "task_types": [
+        "rule_z_audit_calibration"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/expression_tomography/rule_z_audit_calibration_luna_opaque_v2_request_v3_seed53_120_legacy.sqlite",
+      "sha256": "aacd0c2e72f461a24fb2233cce2e15a41d51e03b2fca50feca10478b5cc709be",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 240,
+      "task_types": [
+        "rule_z_audit_calibration"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/expression_tomography/rule_z_audit_calibration_luna_opaque_v2_seed53_120_invariants.sqlite",
+      "sha256": "727d0c9757a4a489bc28d1df4bba33908003e81fec7f85683135eade8821b42a",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 120,
+      "task_types": [
+        "rule_z_audit_calibration"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/expression_tomography/rule_z_audit_calibration_luna_opaque_v2_seed53_120_legacy.sqlite",
+      "sha256": "1b673afdc5e1ffb33feeb649ebcb9c93e8edaedba4fb75ea9f382d7131190be7",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 240,
+      "task_types": [
+        "rule_z_audit_calibration"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/expression_tomography/rule_z_audit_calibration_luna_seed53_120.sqlite",
+      "sha256": "fcd6eccc29afb81dce1df9a99167844762da6e222218368fa2f50306149a6e2b",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 240,
+      "task_types": [
+        "rule_z_audit_calibration"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/expression_tomography/rule_z_audit_calibration_luna_seed53_smoke12.sqlite",
+      "sha256": "b220976399f0408c8fd4f2952d15b15dc9a100c4b4a281447ca7304ec8b25c3c",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 24,
+      "task_types": [
+        "rule_z_audit_calibration"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2.sqlite",
+      "sha256": "58b2fe08b9e80ab12aaacf8153c34d600f064f0ab47e890a4c5a0d50c7b9e6de",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 704,
+      "task_types": [
+        "rule_z_extraction_intervention"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2_score_v2.sqlite",
+      "sha256": "9741c8bc88b2306b4c0c094409909df14ef9defb7612d2da07bce3c5120ae772",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 704,
+      "task_types": [
+        "rule_z_extraction_intervention"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2_score_v3.sqlite",
+      "sha256": "6213fb1cb99cbac2bb25b1eeab52060bbb411fe3a00b723c33bbd47e1eea23a2",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 704,
+      "task_types": [
+        "rule_z_extraction_intervention"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/expression_tomography/rule_z_extraction_intervention_luna_seed68_16x2/trials.sqlite",
+      "sha256": "f1cfb931367d81d643ebb4fac748cf303ec1d280fc482b5f1a8a48a8d9fc89e3",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 2816,
+      "task_types": [
+        "rule_z_extraction_intervention"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/expression_tomography/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low_complete.sqlite",
+      "sha256": "c2381200da3fd81fb408a311317ed19095e3b7472d460e05a2a3d79d856bc058",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 768,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/live_metaphor_anthropic.sqlite",
+      "sha256": "20c35efdb6b24a9bc97aa2ad0cd377b93c7a4752b2d9e5b84e6a0d5767f1a6c7",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 3,
+      "task_types": [
+        "metaphor_transfer"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/live_metaphor_openai.sqlite",
+      "sha256": "b042b6b23e1ba77788ea9489d009059d70a3aebbd62a39fe804017ce05099379",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 3,
+      "task_types": [
+        "metaphor_transfer"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/live_rule_z_anthropic.sqlite",
+      "sha256": "795b4b34036489a31b8d1def8ecbf77b853d270711b4bc95954aedefdf98c3c5",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 16,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/live_rule_z_anthropic_30.sqlite",
+      "sha256": "5fdf0a857117e7f1e4b2bdc8ccddd6049b397efdf5e3bea4154c04f24dd939af",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 120,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/live_rule_z_anthropic_v2.sqlite",
+      "sha256": "d80fca9be081a3c7bc6ff6d30596b0783bee61147a953fb17ce1caedcdb04286",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 16,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/live_rule_z_anthropic_v3.sqlite",
+      "sha256": "4a884fa4909c4704ec2c583253603cba95fa2753c29d5a5b459e491bcd68819d",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 8,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/live_rule_z_diagnostics_seed29_30.sqlite",
+      "sha256": "392f9c08d45813ec16a7f6047d818ea3a4fbd936fd07878a67cd1441ac1095b2",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 180,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/live_rule_z_ear_redteam_anthropic_rerun_seed29_30.sqlite",
+      "sha256": "cb21c25b2940c36585f81ff4470110b03466c56a0c5d6f32746f44903e3b5f68",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 210,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/live_rule_z_ear_redteam_anthropic_seed29_30.sqlite",
+      "sha256": "6f3ace8e5b8a0487b5080655255035d66ccf53268f95e67b589a271a2b09e8fc",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 210,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/live_rule_z_ear_redteam_gpt55_seed29_30.sqlite",
+      "sha256": "37c22196a688c23f9e631639c48e8cf7f5d90942f46b70ce51daba4264b2036d",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 210,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/live_rule_z_ear_redteam_openai_seed29_30.sqlite",
+      "sha256": "e1613893199be4e9d1258a5db02b5b7f6cd7f79ac08460b734e1131fb2c04421",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 210,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/live_rule_z_openai.sqlite",
+      "sha256": "9a677003b784b25d3e21b316ea9e25128e90253f5c00c19780613744efa78a8a",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 16,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/live_rule_z_openai_30.sqlite",
+      "sha256": "38637b1d01889351043af9477cbe486df6978ae837718b96070ad4a3fac076fd",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 120,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/live_rule_z_sender_anthropic_seed29_30.sqlite",
+      "sha256": "8971d972670305eaa861f9678b96ee496e4add59dc96aa018dd50399e757a55f",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 210,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/live_rule_z_sender_gpt55_seed29_30.sqlite",
+      "sha256": "f687ea9a36c964e44de9dbd03446809e7f021967d5a15bd31c5b3227a235f06f",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 210,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/metaphor_transfer.sqlite",
+      "sha256": "29afd216c8ca0bf508650eff1de89b0d70afe30a4f90d7d9f5a3f75afa6d2d63",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 3,
+      "task_types": [
+        "metaphor_transfer"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_revision_luna_seed83_288x2_score_v2.sqlite",
+      "sha256": "415f9f62812764b74a547299761840ad2bd520f976fdaa5a2960d64dace49165",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 4032,
+      "task_types": [
+        "rule_z_rule_revision_leakage"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_revision_mock_seed83_288x2.sqlite",
+      "sha256": "8d5b96df7b9852d1e9964239ebd1698eaa12314dd0cc703884175d2c59e6cf92",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 4032,
+      "task_types": [
+        "rule_z_rule_revision_leakage"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_revision_mock_seed83_288x2_receiver_phase.sqlite",
+      "sha256": "569413692c1cb4ebd064552101f8d6e6aea8c01015866492e3533edb5eb3527d",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 4032,
+      "task_types": [
+        "rule_z_rule_revision_leakage"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_revision_mock_seed83_288x2_score_v2.sqlite",
+      "sha256": "3c40a85e415d8413b863de7f80f74022c74c992f0f5bb68f4c9fff9732528ee5",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 4032,
+      "task_types": [
+        "rule_z_rule_revision_leakage"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_revision_prereg_preflight_v1.sqlite",
+      "sha256": "7f852784ee57dc57d8032e404d2d0b1f922b7aed937477902c3f8a7ba4c82da1",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 0,
+      "task_types": [],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z.sqlite",
+      "sha256": "33dc8d4febc34bf5f494838525bdf145eea4b13b77d4129310082406c300a726",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 32,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_binding_stress_anthropic_seed41.sqlite",
+      "sha256": "9d4cd5d1c9c973f2811ccca5c05a34e6c464304209441e429353b0da6709de03",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 600,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_conflict_metrics_mock_smoke.sqlite",
+      "sha256": "61bd954285ad0404511a2db0e8c634227508650d446ed909c2b2a3736de1b8eb",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 42,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_contract_binding_anthropic_seed29_30.sqlite",
+      "sha256": "41e7337439d22e76a6928585d61e60149abaaff963516554010728610074161e",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 531,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_contract_binding_anthropic_seed29_30_clean.sqlite",
+      "sha256": "80596af605e28773886c08b22361e5bd556a58e24024c2dba236a933a348cb47",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 270,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_contract_binding_anthropic_seed29_30_fixed.sqlite",
+      "sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 270,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_contract_binding_mock_smoke.sqlite",
+      "sha256": "1a9c76fad1ae09ec711738350381687913c527b6d1d7182edf4bc7ae0855b832",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 54,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_contract_perturbation_anthropic_seed29_30.sqlite",
+      "sha256": "b3e7c75716aaa1acf05e9afd344195ace91df27d29d8edf7d8d9e3753c9f634a",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 390,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_contract_perturbation_mock.sqlite",
+      "sha256": "20bf05506676a20df197aa17b7a0c254187cdc81fbb54acae2ccd2e644f05b44",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 78,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_diagnostics_mock_smoke.sqlite",
+      "sha256": "bd0cc1dc50ba8a9e00ad7227531a17f2a456d2a6a23e58a822f2a25f80652802",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 36,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_diagnostics_v2_mock_smoke.sqlite",
+      "sha256": "94ad16db92557dbf0166c9e9ca35eb51857b803722b15626858fdc813b4ef560",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 48,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_ear_redteam_mock_smoke.sqlite",
+      "sha256": "dc874813ceacc1c0e3c4d8a02ad287aa47b16eeee3fa7e3b910e7708936950f6",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 42,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_extraction_intervention_luna_seed68_target_null_below_cap.sqlite",
+      "sha256": "7f852784ee57dc57d8032e404d2d0b1f922b7aed937477902c3f8a7ba4c82da1",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 0,
+      "task_types": [],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_extraction_intervention_luna_seed68_target_null_preflight.sqlite",
+      "sha256": "7f852784ee57dc57d8032e404d2d0b1f922b7aed937477902c3f8a7ba4c82da1",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 0,
+      "task_types": [],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_free_prompt_ladder_anthropic_seed29_30.sqlite",
+      "sha256": "457145f454455f3cb87fc8f55dd1c810e729e6352f3d4e7b6adfb1fe36edfc2b",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 240,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_free_prompt_ladder_mock_smoke.sqlite",
+      "sha256": "06ba415678f41b5f19820276812339f5568bc65b8d600103278becfc3f17ec2b",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 48,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_free_prompt_ladder_openai_seed29_30.sqlite",
+      "sha256": "2e75ce5e3a0f9f7b42dfa440180e9f34efc50f69c1040e512893be04c7b35c0c",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 240,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_intermediate_factorial_anthropic_sonnet46_seed41.sqlite",
+      "sha256": "cd9fd6e9156ebba798558cac9675a605ba04fcb49f336911bbedca1953d75eef",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 204,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_intermediate_factorial_mock_seed41.sqlite",
+      "sha256": "3c2fdc99616658e50c05f25a27f128ded0566d4e09334bc89f9b6e75ae502753",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 216,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_intermediate_probe_mock_seed41.sqlite",
+      "sha256": "67a2af04caa63739b402b71fc83689917a27012b964c102091ae0b34ff77467a",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 12,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_intermediate_probe_v1_mock_seed41.sqlite",
+      "sha256": "12f7accafc01d338ea9578205e9873ee92981bb701fd858ac9e4e03d52a79710",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 12,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_iterative_repair_anthropic_seed29_30.sqlite",
+      "sha256": "050f753a69a0c95ed2eb507d4dab6caf501994e40b2f924cfee33cc7ce036865",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 240,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_iterative_repair_mock_smoke.sqlite",
+      "sha256": "27a4c2b1e75feb599ae931139ee3e9f2eec36fd420da740eab7604718a0f3e20",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 48,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_posthoc_live_reader_calibration_seed41/trials.sqlite",
+      "sha256": "d2c776218c302692f7a48a4250c6a9810a918658840509ded07dfb5cf8f60020",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 12,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_posthoc_live_reader_calibration_seed41_budget4000/trials.sqlite",
+      "sha256": "4e8bac5b95cdd208297c2eb2cd8d6832eb20444aead2ad2896629c22588d5201",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 12,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_posthoc_live_reader_calibration_seed41_budget4000_low/trials.sqlite",
+      "sha256": "77cc9047c833c405b4033f42879d6a3c5c20ae23246ee0c4e18292f640016170",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 72,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_posthoc_live_readers_seed41/trials.sqlite",
+      "sha256": "1357020ff08af49ccb281612f2887650d677352cc4885e081d7a2a5c10e6d7d5",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 0,
+      "task_types": [],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_posthoc_live_readers_seed41_budget4000/trials.sqlite",
+      "sha256": "e1194efc90fe704ef918e0dcb45dd26168f83f3db43f3aced52ad6cb2f693d71",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 4,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_posthoc_live_readers_seed41_budget4000_chunks/compact_free.sqlite",
+      "sha256": "6937cbc9e3417907b885c1f5969ef1ca13231f31fc4a347670ff91f05c83b636",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 22,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_posthoc_live_readers_seed41_budget4000_chunks/compact_generic.sqlite",
+      "sha256": "0010d904340e0615b19ae5a45adc430d060dc1c747b95cedf63ec3476ac1713b",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 33,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_posthoc_live_readers_seed41_budget4000_chunks/explicit_free.sqlite",
+      "sha256": "d2a9eba3bea90009ca002df1c72b0d2eab9a40ee3792878452c54e6f25bcadb5",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 33,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_posthoc_live_readers_seed41_budget4000_chunks/explicit_generic.sqlite",
+      "sha256": "0321cb1d754d42ca632a9a66bac5dd14d86022a8667b085d3949c3fa45e39d0f",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 30,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_posthoc_live_readers_seed41_budget4000_low/trials.sqlite",
+      "sha256": "f97628639a121338b4fe6a2d203e3e17630c0817eeff4647e306c3e39953ac69",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 465,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/compact_free.sqlite",
+      "sha256": "92c4f145986b8ecc3fc203fc0933187721d3fd20537703f5e1f68eecada74454",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 118,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/compact_generic.sqlite",
+      "sha256": "08b34f26cab0a45a88362922dd0026ae847d912829919d93b5bb8f2a9cd2e74e",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 114,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/explicit_free.sqlite",
+      "sha256": "83826fdf72ca8ce10c91f2b9ff34f280277de026a5e0d1cb98d3e65c47021e40",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 118,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/explicit_generic.sqlite",
+      "sha256": "db1813f2ea6d7cc1cc25962894081383705a9a98d83b758b62522a891216a8bc",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 115,
+      "task_types": [
+        "rule_z_intermediate_probe"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_priority_binding_openai_gpt55_budget2000_seed41.sqlite",
+      "sha256": "9e74ac1318395e22ab3a9694ba98b70164b503054ee06857ceb7d5146cb8c6f3",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 192,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_priority_compute_anthropic_sonnet46_budget2000_seed41.sqlite",
+      "sha256": "927caa324b8922c0b4ac72d0094985a6d50941b4aef1edf4c99503de42ada7d1",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 312,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_priority_compute_mock_seed41.sqlite",
+      "sha256": "06ef4a2fe93bbc28db231b4bc1349d9c19d74d0a90b79cf5518027aaf2026ce2",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 168,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    },
+    {
+      "path": "historical_results/rule_z_priority_compute_openai_gpt55_seed41.sqlite",
+      "sha256": "8c35e0e3553a111efe82d26410b51182877351530d37c05044a377dfb9cfc1e9",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 300,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {
+        "blank_transmission_message": 6
+      }
+    },
+    {
+      "path": "historical_results/rule_z_sender_modes_mock_smoke.sqlite",
+      "sha256": "e8f3daf47e29a7f68c3355f607fa6907a02c8a906c3f0bb825c337b3b23950b4",
+      "status": "audited",
+      "integrity": [
+        "ok"
+      ],
+      "rows": 42,
+      "task_types": [
+        "rule_z"
+      ],
+      "problems": {}
+    }
+  ],
+  "run_coverage": [
+    {
+      "directory": "assets/runs/carrier_atomic_calibration_2026_09_28",
+      "source_note": "docs/carrier_atomic_calibration_2026_09_28.md"
+    },
+    {
+      "directory": "assets/runs/carrier_calibration_openai_luna_2026_09_27",
+      "source_note": "docs/live_carrier_calibration_luna_note_2026_09_27.md"
+    },
+    {
+      "directory": "assets/runs/carrier_content_sensitivity_openai_luna_2026_09_27",
+      "source_note": "docs/carrier_content_sensitivity_luna_2026_09_27.md"
+    },
+    {
+      "directory": "assets/runs/carrier_downstream_reader_gpt6_luna_2026_09_27",
+      "source_note": "docs/carrier_downstream_gpt6_luna_2026_09_27.md"
+    },
+    {
+      "directory": "assets/runs/carrier_downstream_rewrite_luna_2026_09_27",
+      "source_note": "docs/carrier_downstream_gpt6_luna_2026_09_27.md"
+    },
+    {
+      "directory": "assets/runs/carrier_reader_mistral_2026_09_27",
+      "source_note": "docs/carrier_reader_mistral_2026_09_27.md"
+    },
+    {
+      "directory": "assets/runs/carrier_state_calibration_2026_09_27",
+      "source_note": "docs/carrier_state_calibration_2026_09_27.md"
+    },
+    {
+      "directory": "assets/runs/metaphor_transfer_anthropic_live",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/metaphor_transfer_openai_live",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_audit_reader_calibration_luna_seed53_120",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_binding_stress_anthropic_seed41",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_contract_binding_anthropic_seed29_30",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_contract_perturbation_anthropic_seed29_30",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_ear_redteam_anthropic_rerun_seed29_30",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_ear_redteam_anthropic_seed29_30",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_ear_redteam_gpt55_seed29_30",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_ear_redteam_openai_seed29_30",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_extraction_intervention_luna_seed67_4x2",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_extraction_intervention_luna_seed68_16x2",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_extraction_intervention_luna_seed68_target_null_16x2",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_free_prompt_ladder_anthropic_seed29_30",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_free_prompt_ladder_openai_seed29_30",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_initial_anthropic_seed29_30",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_initial_openai_seed29_30",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_intermediate_factorial_anthropic_sonnet46_seed41",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_iterative_repair_anthropic_seed29_30",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low_complete",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_priority_binding_openai_gpt55_seed41_budget2000",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_priority_compute_anthropic_sonnet46_seed41_budget2000",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_priority_compute_openai_gpt55_seed41_budget900_diagnostic",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_revision_decoder_luna_seed101_36x2",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_revision_ear_ladder_luna_seed101_108x2",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_revision_interface_luna_seed101_108x2",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_rule_revision_leakage_luna_seed83_288x2",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_sender_anthropic_seed29_30",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_sender_gpt55_seed29_30",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/rule_z_transmission_openai_seed29_30",
+      "source_note": "docs/all_run_evidence_ledger_2026_09_04.md"
+    },
+    {
+      "directory": "assets/runs/text_boundary_openai_luna_2026_09_07",
+      "source_note": "docs/live_text_boundary_luna_note_2026_09_07.md"
+    },
+    {
+      "directory": "assets/runs/text_boundary_targets_openai_luna_2026_09_08",
+      "source_note": "docs/live_text_boundary_targets_luna_note_2026_09_08.md"
+    }
+  ],
+  "input_hashes": {
+    "assets/runs/rule_z_contract_binding_anthropic_seed29_30/rule_z_contrast_packets.jsonl": "6e4111edbd7843619bec18f8ff13d6d75b120e6f8fc58af07a976ab185aa3f6c",
+    "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+    "assets/runs/carrier_state_calibration_2026_09_27/raw_trials.json": "515ffb8afccf0759e7461b20b497fc186d61fd4c8f5607fd9c1d227f29d12380",
+    "assets/analyses/pg_letters_live_2026_09_28/assistant_audit.json": "f05f3a3ec765563abadd7e1187b4c6a7392ca2bda812aadf86d4864c1c7eda52",
+    "expression_tomography/tasks/rule_z/oracle.py": "9fd79829cfb241e9a02043e21280525a17e0eb8206a745b1c5469306b2f6eec2",
+    "expression_tomography/core/schema.py": "676827df7757edbeef971d5aaf685ea4e5a36363241add8356143b7e6fef29b2",
+    "scripts/reassess_measurement.py": "8dc6a1fd04a0cbddc65a1c90fc3157d53539ad7b48f230f58426429418ca5ed5"
+  },
+  "binding_contrasts": [
+    {
+      "case_id": "rule_0006",
+      "expected": "yes",
+      "baseline": {
+        "B_answer": "yes",
+        "B_correct": true,
+        "D_answer": "yes",
+        "D_correct": true,
+        "O_answer": "yes",
+        "O_correct": true
+      },
+      "readings": [
+        {
+          "condition": "T_free_schema_prompt",
+          "trial_id": 112,
+          "answer": "no",
+          "stored_correct": false,
+          "message_sha256": "a33206d75e52bde3a2a9e985d33f3ba4ce8717c7b76dab93846fa549f37763ea",
+          "whitespace_words": 267
+        },
+        {
+          "condition": "T_factlocked",
+          "trial_id": 116,
+          "answer": "yes",
+          "stored_correct": true,
+          "message_sha256": "761b98ffac98456ad6684056eac608b0f96519be2cd852ff7a5b6ac25c794aa0",
+          "whitespace_words": 223
+        },
+        {
+          "condition": "T_free_case_hint_no_sections",
+          "trial_id": 115,
+          "answer": "yes",
+          "stored_correct": true,
+          "message_sha256": "0215f9f5276e548db8f44d4425d99fe35c9f48380bcc450154f10d922fc07d2a",
+          "whitespace_words": 210
+        },
+        {
+          "condition": "T_oracle_contract_private_prose",
+          "trial_id": 538,
+          "answer": "yes",
+          "stored_correct": true,
+          "message_sha256": "e5ece5ab98f32d7001e78c21e378f2fec8d8fb996c06c8bc62533a1834b52f70",
+          "whitespace_words": 257
+        },
+        {
+          "condition": "T_oracle_text",
+          "trial_id": 117,
+          "answer": "yes",
+          "stored_correct": true,
+          "message_sha256": "693f39efe027e200bd3ed1bb960771037c91fb3f8b16200a55cfe352b5d3f1f9",
+          "whitespace_words": 86
+        },
+        {
+          "condition": "T_self_contract_private_prose",
+          "trial_id": 113,
+          "answer": "yes",
+          "stored_correct": true,
+          "message_sha256": "55b4e1549ce66d0a6276c5678ffd7fb07ef3ab3067e9d363b52eae7a58d2dbf4",
+          "whitespace_words": 278
+        }
+      ],
+      "assistant_observation": "Case facts absent; policy vocabulary is not a fact assignment.",
+      "policy_without_case_facts": {
+        "answer_counts": {
+          "no": 33,
+          "yes": 18,
+          "conflict": 13
+        },
+        "witnesses": {
+          "no": {
+            "facts": [],
+            "oracle": {
+              "answer": "no",
+              "fired_rules": [],
+              "suppressed_rules": [],
+              "fired_priority_edges": [],
+              "active_rules": [],
+              "active_conclusions": []
+            }
+          },
+          "yes": {
+            "facts": [
+              "is_employee",
+              "has_manager_letter"
+            ],
+            "oracle": {
+              "answer": "yes",
+              "fired_rules": [
+                "r4"
+              ],
+              "suppressed_rules": [],
+              "fired_priority_edges": [],
+              "active_rules": [
+                "r4"
+              ],
+              "active_conclusions": [
+                "eligible"
+              ]
+            }
+          },
+          "conflict": {
+            "facts": [
+              "has_debt",
+              "is_employee",
+              "has_manager_letter"
+            ],
+            "oracle": {
+              "answer": "conflict",
+              "fired_rules": [
+                "r2",
+                "r4"
+              ],
+              "suppressed_rules": [],
+              "fired_priority_edges": [],
+              "active_rules": [
+                "r2",
+                "r4"
+              ],
+              "active_conclusions": [
+                "eligible",
+                "not_eligible"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "case_id": "rule_0026",
+      "expected": "no",
+      "baseline": {
+        "B_answer": "yes",
+        "B_correct": false,
+        "D_answer": "no",
+        "D_correct": true,
+        "O_answer": "no",
+        "O_correct": true
+      },
+      "readings": [
+        {
+          "condition": "T_free_schema_prompt",
+          "trial_id": 472,
+          "answer": "yes",
+          "stored_correct": false,
+          "message_sha256": "d856814d4bb8ae072d952ae8fce13e43022ac43a846f04204c3f146d954bd047",
+          "whitespace_words": 348
+        },
+        {
+          "condition": "T_factlocked",
+          "trial_id": 476,
+          "answer": "no",
+          "stored_correct": true,
+          "message_sha256": "d8e71fa4d44ba1e8da408356c1d565ffa3aef7a1d5c797aa5dac8dce4fac923f",
+          "whitespace_words": 211
+        },
+        {
+          "condition": "T_free_case_hint_no_sections",
+          "trial_id": 475,
+          "answer": "no",
+          "stored_correct": true,
+          "message_sha256": "cfd91883f4b15a3a8cc9d8618d24df13e08dbcfead43fceb8841262633323a23",
+          "whitespace_words": 216
+        },
+        {
+          "condition": "T_oracle_contract_private_prose",
+          "trial_id": 558,
+          "answer": "no",
+          "stored_correct": true,
+          "message_sha256": "fb1772c97770bd3983c790bd79d0ec418378bfd6bb7ab5856b361d8f5249be46",
+          "whitespace_words": 225
+        },
+        {
+          "condition": "T_oracle_text",
+          "trial_id": 477,
+          "answer": "no",
+          "stored_correct": true,
+          "message_sha256": "1f1c02be7bbcb65f27e0574081d5194aa22117f0a27f4f7791ade3cf9ed7e8da",
+          "whitespace_words": 78
+        },
+        {
+          "condition": "T_self_contract_private_prose",
+          "trial_id": 473,
+          "answer": "no",
+          "stored_correct": true,
+          "message_sha256": "aa2caee2957a80d5f741c04d39c59ee5ef991c2ca3e33455445e7f29307fac4d",
+          "whitespace_words": 306
+        }
+      ],
+      "assistant_observation": "Actual facts and rules present. Message leaves no-fire category vague, but receiver rubric supplies no. Reader still says yes."
+    },
+    {
+      "case_id": "rule_0011",
+      "expected": "conflict",
+      "baseline": {
+        "B_answer": "yes",
+        "B_correct": false,
+        "D_answer": "conflict",
+        "D_correct": true,
+        "O_answer": "conflict",
+        "O_correct": true
+      },
+      "readings": [
+        {
+          "condition": "T_free_schema_prompt",
+          "trial_id": 202,
+          "answer": "no",
+          "stored_correct": false,
+          "message_sha256": "64ccc63e7596b83db49cc4a3fe98b33ab40fe36916c6f7d0fa2f67951e1fce3b",
+          "whitespace_words": 399
+        },
+        {
+          "condition": "T_factlocked",
+          "trial_id": 206,
+          "answer": "conflict",
+          "stored_correct": true,
+          "message_sha256": "5a4536f2bc38d87ca5d9b9e69da5af930719c0a17f3dd2ee13f9178d1675cd88",
+          "whitespace_words": 246
+        },
+        {
+          "condition": "T_free_case_hint_no_sections",
+          "trial_id": 205,
+          "answer": "conflict",
+          "stored_correct": true,
+          "message_sha256": "66012c67ebafca866690c482ef3e4bf8f21df6fa6d9d7e115238df63951c7a6d",
+          "whitespace_words": 254
+        },
+        {
+          "condition": "T_oracle_contract_private_prose",
+          "trial_id": 543,
+          "answer": "conflict",
+          "stored_correct": true,
+          "message_sha256": "1e0eecdc733b95fd2c45e47cb9d7e3bcf54a526c77e33c3e467c57c0af3150eb",
+          "whitespace_words": 302
+        },
+        {
+          "condition": "T_oracle_text",
+          "trial_id": 207,
+          "answer": "conflict",
+          "stored_correct": true,
+          "message_sha256": "c59b72dde8a10a2593b15a3b294ec2b151eae92375cff560dd5b95316a350e39",
+          "whitespace_words": 88
+        },
+        {
+          "condition": "T_self_contract_private_prose",
+          "trial_id": 203,
+          "answer": "conflict",
+          "stored_correct": true,
+          "message_sha256": "30f3498fcea8d3468f38df4785ee9d2f9d3b578c15916f40373bf644128f22b8",
+          "whitespace_words": 275
+        }
+      ],
+      "assistant_observation": "Actual facts present; stored message ends inside the r4 table row. Finish reason unavailable."
+    },
+    {
+      "case_id": "rule_0013",
+      "expected": "yes",
+      "baseline": {
+        "B_answer": "yes",
+        "B_correct": true,
+        "D_answer": "yes",
+        "D_correct": true,
+        "O_answer": "yes",
+        "O_correct": true
+      },
+      "readings": [
+        {
+          "condition": "T_free_schema_prompt",
+          "trial_id": 238,
+          "answer": "no",
+          "stored_correct": false,
+          "message_sha256": "1df1309563d95b26c43717f1db0b239dab5b8400f35b2dd9c69810e08d9e8fc3",
+          "whitespace_words": 262
+        },
+        {
+          "condition": "T_factlocked",
+          "trial_id": 242,
+          "answer": "yes",
+          "stored_correct": true,
+          "message_sha256": "376a0a2b8d5daeda406d70432e324b9a9b2e37b016236e9abd4a42ac97c9c0e1",
+          "whitespace_words": 220
+        },
+        {
+          "condition": "T_free_case_hint_no_sections",
+          "trial_id": 241,
+          "answer": "yes",
+          "stored_correct": true,
+          "message_sha256": "eb97c4789bb375c02f7903ae0ae6e90e2db47783399ebb14c20663b1490be167",
+          "whitespace_words": 194
+        },
+        {
+          "condition": "T_oracle_contract_private_prose",
+          "trial_id": 545,
+          "answer": "yes",
+          "stored_correct": true,
+          "message_sha256": "c1cfd49c4919c6429be4777fc4d361d6ae3641b82fa8d84597496719e7affacd",
+          "whitespace_words": 252
+        },
+        {
+          "condition": "T_oracle_text",
+          "trial_id": 243,
+          "answer": "yes",
+          "stored_correct": true,
+          "message_sha256": "8dd57d72399f45d0631df883f709f4ec3446a1436ce40acf7b4f2c27fa89c8be",
+          "whitespace_words": 83
+        },
+        {
+          "condition": "T_self_contract_private_prose",
+          "trial_id": 239,
+          "answer": "yes",
+          "stored_correct": true,
+          "message_sha256": "2c8b496f6a3fdee27d57fa705f62726279ca9224949d28d2813de4aceb668d41",
+          "whitespace_words": 237
+        }
+      ],
+      "assistant_observation": "Case facts absent; policy vocabulary is not a fact assignment.",
+      "policy_without_case_facts": {
+        "answer_counts": {
+          "no": 33,
+          "yes": 18,
+          "conflict": 13
+        },
+        "witnesses": {
+          "no": {
+            "facts": [],
+            "oracle": {
+              "answer": "no",
+              "fired_rules": [],
+              "suppressed_rules": [],
+              "fired_priority_edges": [],
+              "active_rules": [],
+              "active_conclusions": []
+            }
+          },
+          "yes": {
+            "facts": [
+              "is_employee",
+              "has_manager_letter"
+            ],
+            "oracle": {
+              "answer": "yes",
+              "fired_rules": [
+                "r4"
+              ],
+              "suppressed_rules": [],
+              "fired_priority_edges": [],
+              "active_rules": [
+                "r4"
+              ],
+              "active_conclusions": [
+                "eligible"
+              ]
+            }
+          },
+          "conflict": {
+            "facts": [
+              "has_debt",
+              "is_employee",
+              "has_manager_letter"
+            ],
+            "oracle": {
+              "answer": "conflict",
+              "fired_rules": [
+                "r2",
+                "r4"
+              ],
+              "suppressed_rules": [],
+              "fired_priority_edges": [],
+              "active_rules": [
+                "r2",
+                "r4"
+              ],
+              "active_conclusions": [
+                "eligible",
+                "not_eligible"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "case_id": "rule_0003",
+      "expected": "conflict",
+      "baseline": {
+        "B_answer": "yes",
+        "B_correct": false,
+        "D_answer": "conflict",
+        "D_correct": true,
+        "O_answer": "conflict",
+        "O_correct": true
+      },
+      "readings": [
+        {
+          "condition": "T_free_schema_prompt",
+          "trial_id": 76,
+          "answer": "no",
+          "stored_correct": false,
+          "message_sha256": "cd31e903fcb1792d0569cf001a5ddf4841fc5d1a642497de6261ebcb55ddc172",
+          "whitespace_words": 247
+        },
+        {
+          "condition": "T_factlocked",
+          "trial_id": 80,
+          "answer": "conflict",
+          "stored_correct": true,
+          "message_sha256": "9c3b9c145e741796f222cc94d6c51d5b009c8495fc06687e4495e2a40ce12cfa",
+          "whitespace_words": 271
+        },
+        {
+          "condition": "T_free_case_hint_no_sections",
+          "trial_id": 79,
+          "answer": "conflict",
+          "stored_correct": true,
+          "message_sha256": "ba56b961b12fd6229655cec24a3822a807ce7d51221e264e8835d89b13928c6a",
+          "whitespace_words": 181
+        },
+        {
+          "condition": "T_oracle_contract_private_prose",
+          "trial_id": 535,
+          "answer": "conflict",
+          "stored_correct": true,
+          "message_sha256": "e7def749249d060c8729d5def2f84d871cdfe3ab774640a8d2cff1eca226a7ea",
+          "whitespace_words": 227
+        },
+        {
+          "condition": "T_oracle_text",
+          "trial_id": 81,
+          "answer": "conflict",
+          "stored_correct": true,
+          "message_sha256": "af85f0f2fd231eebb24aaa8bf88ad142c562eef5798a0d1bb843e41cb1562d7c",
+          "whitespace_words": 82
+        },
+        {
+          "condition": "T_self_contract_private_prose",
+          "trial_id": 77,
+          "answer": "conflict",
+          "stored_correct": true,
+          "message_sha256": "5e91cd8c9e4930a3d5c315a182e521ef9094ddfcbb9fe69d0aecb3ef2d597258",
+          "whitespace_words": 330
+        }
+      ],
+      "assistant_observation": "Case facts absent; a wrong conflict label does not isolate conflict decoding.",
+      "policy_without_case_facts": {
+        "answer_counts": {
+          "no": 33,
+          "yes": 18,
+          "conflict": 13
+        },
+        "witnesses": {
+          "no": {
+            "facts": [],
+            "oracle": {
+              "answer": "no",
+              "fired_rules": [],
+              "suppressed_rules": [],
+              "fired_priority_edges": [],
+              "active_rules": [],
+              "active_conclusions": []
+            }
+          },
+          "yes": {
+            "facts": [
+              "is_employee",
+              "has_manager_letter"
+            ],
+            "oracle": {
+              "answer": "yes",
+              "fired_rules": [
+                "r4"
+              ],
+              "suppressed_rules": [],
+              "fired_priority_edges": [],
+              "active_rules": [
+                "r4"
+              ],
+              "active_conclusions": [
+                "eligible"
+              ]
+            }
+          },
+          "conflict": {
+            "facts": [
+              "has_debt",
+              "is_employee",
+              "has_manager_letter"
+            ],
+            "oracle": {
+              "answer": "conflict",
+              "fired_rules": [
+                "r2",
+                "r4"
+              ],
+              "suppressed_rules": [],
+              "fired_priority_edges": [],
+              "active_rules": [
+                "r2",
+                "r4"
+              ],
+              "active_conclusions": [
+                "eligible",
+                "not_eligible"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ],
+  "trace_contrast": {
+    "selection": "Post-hoc illustrative f05.w0, replicate 0; not an error-rate sample.",
+    "readings": [
+      {
+        "trial_id": 6,
+        "provider": "reader-gpt-6-luna-low",
+        "public_input": {
+          "counterfactual_add": "p03",
+          "world": {
+            "facts": [
+              "p01"
+            ],
+            "priority": [],
+            "rules": [
+              {
+                "id": "r1",
+                "if": [
+                  "p01",
+                  "p03"
+                ],
+                "then": "eligible"
+              },
+              {
+                "id": "r2",
+                "if": [
+                  "p00",
+                  "p02"
+                ],
+                "then": "not_eligible"
+              },
+              {
+                "id": "r3",
+                "if": [
+                  "p01"
+                ],
+                "then": "eligible"
+              }
+            ]
+          }
+        },
+        "returned": {
+          "counterfactual": {
+            "active_conclusions": [
+              "eligible"
+            ],
+            "active_rules": [
+              "r1",
+              "r3"
+            ],
+            "answer": "yes",
+            "facts": [
+              "p01",
+              "p03"
+            ],
+            "fired_rules": [
+              "r1",
+              "r3"
+            ],
+            "suppressed_rules": []
+          },
+          "current": {
+            "active_conclusions": [
+              "eligible"
+            ],
+            "active_rules": [
+              "r3"
+            ],
+            "answer": "yes",
+            "facts": [
+              "p01"
+            ],
+            "fired_rules": [
+              "r3"
+            ],
+            "suppressed_rules": []
+          }
+        },
+        "stored_score": {
+          "all_trace_fields_correct": true,
+          "both_answers_correct": true,
+          "counterfactual_active_conclusions_correct": true,
+          "counterfactual_active_from_returned_fired_suppressed_consistent": true,
+          "counterfactual_active_rules_correct": true,
+          "counterfactual_answer_correct": true,
+          "counterfactual_answer_from_returned_conclusions_consistent": true,
+          "counterfactual_conclusions_from_returned_active_consistent": true,
+          "counterfactual_facts_correct": true,
+          "counterfactual_fired_from_returned_facts_consistent": true,
+          "counterfactual_fired_rules_correct": true,
+          "counterfactual_suppressed_from_returned_fired_consistent": true,
+          "counterfactual_suppressed_rules_correct": true,
+          "current_active_conclusions_correct": true,
+          "current_active_from_returned_fired_suppressed_consistent": true,
+          "current_active_rules_correct": true,
+          "current_answer_correct": true,
+          "current_answer_from_returned_conclusions_consistent": true,
+          "current_conclusions_from_returned_active_consistent": true,
+          "current_facts_correct": true,
+          "current_fired_from_returned_facts_consistent": true,
+          "current_fired_rules_correct": true,
+          "current_suppressed_from_returned_fired_consistent": true,
+          "current_suppressed_rules_correct": true,
+          "first_oracle_deviation": {
+            "counterfactual": null,
+            "current": null
+          },
+          "required_answer_invariance": true,
+          "schema_valid": true
+        },
+        "oracle": {
+          "current": {
+            "answer": "yes",
+            "fired_rules": [
+              "r3"
+            ],
+            "suppressed_rules": [],
+            "fired_priority_edges": [],
+            "active_rules": [
+              "r3"
+            ],
+            "active_conclusions": [
+              "eligible"
+            ]
+          },
+          "counterfactual": {
+            "answer": "yes",
+            "fired_rules": [
+              "r1",
+              "r3"
+            ],
+            "suppressed_rules": [],
+            "fired_priority_edges": [],
+            "active_rules": [
+              "r1",
+              "r3"
+            ],
+            "active_conclusions": [
+              "eligible"
+            ]
+          }
+        }
+      },
+      {
+        "trial_id": 16,
+        "provider": "reader-mistral-large-latest",
+        "public_input": {
+          "counterfactual_add": "p03",
+          "world": {
+            "facts": [
+              "p01"
+            ],
+            "priority": [],
+            "rules": [
+              {
+                "id": "r1",
+                "if": [
+                  "p01",
+                  "p03"
+                ],
+                "then": "eligible"
+              },
+              {
+                "id": "r2",
+                "if": [
+                  "p00",
+                  "p02"
+                ],
+                "then": "not_eligible"
+              },
+              {
+                "id": "r3",
+                "if": [
+                  "p01"
+                ],
+                "then": "eligible"
+              }
+            ]
+          }
+        },
+        "returned": {
+          "counterfactual": {
+            "active_conclusions": [
+              "eligible"
+            ],
+            "active_rules": [
+              "r1"
+            ],
+            "answer": "yes",
+            "facts": [
+              "p01",
+              "p03"
+            ],
+            "fired_rules": [
+              "r1",
+              "r3"
+            ],
+            "suppressed_rules": [
+              "r3"
+            ]
+          },
+          "current": {
+            "active_conclusions": [
+              "eligible"
+            ],
+            "active_rules": [
+              "r3"
+            ],
+            "answer": "yes",
+            "facts": [
+              "p01"
+            ],
+            "fired_rules": [
+              "r1",
+              "r3"
+            ],
+            "suppressed_rules": [
+              "r1"
+            ]
+          }
+        },
+        "stored_score": {
+          "all_trace_fields_correct": false,
+          "both_answers_correct": true,
+          "counterfactual_active_conclusions_correct": true,
+          "counterfactual_active_from_returned_fired_suppressed_consistent": true,
+          "counterfactual_active_rules_correct": false,
+          "counterfactual_answer_correct": true,
+          "counterfactual_answer_from_returned_conclusions_consistent": true,
+          "counterfactual_conclusions_from_returned_active_consistent": true,
+          "counterfactual_facts_correct": true,
+          "counterfactual_fired_from_returned_facts_consistent": true,
+          "counterfactual_fired_rules_correct": true,
+          "counterfactual_suppressed_from_returned_fired_consistent": false,
+          "counterfactual_suppressed_rules_correct": false,
+          "current_active_conclusions_correct": true,
+          "current_active_from_returned_fired_suppressed_consistent": true,
+          "current_active_rules_correct": true,
+          "current_answer_correct": true,
+          "current_answer_from_returned_conclusions_consistent": true,
+          "current_conclusions_from_returned_active_consistent": true,
+          "current_facts_correct": true,
+          "current_fired_from_returned_facts_consistent": false,
+          "current_fired_rules_correct": false,
+          "current_suppressed_from_returned_fired_consistent": false,
+          "current_suppressed_rules_correct": false,
+          "first_oracle_deviation": {
+            "counterfactual": "suppressed_rules",
+            "current": "fired_rules"
+          },
+          "required_answer_invariance": true,
+          "schema_valid": true
+        },
+        "oracle": {
+          "current": {
+            "answer": "yes",
+            "fired_rules": [
+              "r3"
+            ],
+            "suppressed_rules": [],
+            "fired_priority_edges": [],
+            "active_rules": [
+              "r3"
+            ],
+            "active_conclusions": [
+              "eligible"
+            ]
+          },
+          "counterfactual": {
+            "answer": "yes",
+            "fired_rules": [
+              "r1",
+              "r3"
+            ],
+            "suppressed_rules": [],
+            "fired_priority_edges": [],
+            "active_rules": [
+              "r1",
+              "r3"
+            ],
+            "active_conclusions": [
+              "eligible"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "non_sqlite_evidence": {
+    "pg_letters": "assets/analyses/pg_letters_live_2026_09_28/assistant_audit.json",
+    "human_partial": "local_only_not_exported"
+  }
+}

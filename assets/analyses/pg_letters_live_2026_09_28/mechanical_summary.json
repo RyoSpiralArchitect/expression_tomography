@@ -1,0 +1,83 @@
+{
+  "attempts": 15,
+  "audit_sha256": "f05f3a3ec765563abadd7e1187b4c6a7392ca2bda812aadf86d4864c1c7eda52",
+  "execution_sha256": "db963ae45956f2ddac9c5f0db2f92b25ce81d02d1d726610dee3677d43ae6bd3",
+  "format_groups": [
+    {
+      "condition": "direct_original",
+      "literal_quotes": 2,
+      "quotes": 27,
+      "reader": "mistral",
+      "responses": 3,
+      "schema_valid": 3,
+      "strict_json": 0,
+      "whitespace_folded_quotes": 23
+    },
+    {
+      "condition": "one_hop",
+      "literal_quotes": 17,
+      "quotes": 22,
+      "reader": "mistral",
+      "responses": 3,
+      "schema_valid": 3,
+      "strict_json": 0,
+      "whitespace_folded_quotes": 17
+    },
+    {
+      "condition": "direct_original",
+      "literal_quotes": 2,
+      "quotes": 25,
+      "reader": "claude",
+      "responses": 3,
+      "schema_valid": 3,
+      "strict_json": 0,
+      "whitespace_folded_quotes": 25
+    },
+    {
+      "condition": "one_hop",
+      "literal_quotes": 22,
+      "quotes": 27,
+      "reader": "claude",
+      "responses": 3,
+      "schema_valid": 3,
+      "strict_json": 0,
+      "whitespace_folded_quotes": 22
+    }
+  ],
+  "message_lengths": [
+    {
+      "case_id": "austen_v_travel",
+      "identity_copy": false,
+      "source_words": 277,
+      "within_word_budget": true,
+      "words": 212
+    },
+    {
+      "case_id": "darwin_murray_publication",
+      "identity_copy": false,
+      "source_words": 272,
+      "within_word_budget": true,
+      "words": 202
+    },
+    {
+      "case_id": "stevenson_colvin_visit",
+      "identity_copy": false,
+      "source_words": 298,
+      "within_word_budget": true,
+      "words": 229
+    }
+  ],
+  "q5_insufficient_status": 12,
+  "q5_responses": 12,
+  "raw_report_sha256": "01d610d3b2799340739fdbb6b6bce58acee055fff179a58cc999545851f7b899",
+  "replay_new_calls": 0,
+  "replay_records_identical": true,
+  "semantic_accuracy": null,
+  "semantic_audit": "provisional source-aware assistant review",
+  "status": "complete",
+  "statuses": {
+    "ok": 15
+  },
+  "terminal_slots": 15,
+  "version": "pg_letters.mechanical_readout.v1"
+}

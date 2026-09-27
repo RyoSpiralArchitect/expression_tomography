@@ -1,5 +1,11 @@
 # Live Rule-Z Contract Binding Note - 2026-07-02
 
+> September 28 rereading: the five paired recoveries remain valid, but the
+> [raw-text contrast audit](transmission_success_failure_contrasts_2026_09_28.md)
+> distinguishes missing facts, an incomplete table, and a wrong receiver answer
+> despite available facts/rules. They do not identify five identical binding
+> failures. Historical messages, scores and curation notes are unchanged.
+
 This run tests whether private communication contracts can recover Rule-Z
 transmission loss without exposing the contract to the receiver.
 

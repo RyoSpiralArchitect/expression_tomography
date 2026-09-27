@@ -3,7 +3,8 @@
 > Historical working map with dated additions. For current evidence weights,
 > corrected interpretation of repair and logical holdouts, field-ontology
 > diagnostics, and the complete run inventory, use the
-> [2026-09-04 all-run synthesis](all_run_hypothesis_synthesis_2026_09_04.md).
+> [2026-09-04 all-run synthesis](all_run_hypothesis_synthesis_2026_09_04.md) and
+> [2026-09-28 measurement reassessment](measurement_reassessment_2026_09_28.md).
 > The non-reduction clause below remains in force; older checkpoint statuses
 > and proposed next experiments are not declarations of current execution.
 
