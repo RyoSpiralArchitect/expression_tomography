@@ -225,6 +225,38 @@ def test_runner_end_to_end_resume_and_drift(bundle, tmp_path):
         store.close()
 
 
+@pytest.mark.parametrize("field", [
+    "condition", "provider", "case_id", "is_mock", "replicate_index",
+    "text_sha256", "reader_identity", "role_independence", "prompt_version",
+    "execution_status", "extra_metadata", "case_payload", "run_contract",
+])
+def test_stored_audit_fields_are_validated_before_any_new_call(bundle, tmp_path, field):
+    provider = CountingMock()
+    store = ExperimentStore(tmp_path / "tampered.sqlite")
+    try:
+        run_audit(bundle, [provider], store, max_new_calls=6)
+        # Leave an earlier independent slot missing to expose lazy validation.
+        store.conn.execute("DELETE FROM trials WHERE id=2")
+        if field in ("condition", "provider", "case_id"):
+            store.conn.execute(f"UPDATE trials SET {field}=? WHERE id=4", ("changed",))
+        elif field == "case_payload":
+            store.conn.execute("UPDATE cases SET payload_json='{}'")
+        elif field == "run_contract":
+            store.conn.execute("UPDATE experiment_runs SET contract_json='{}'")
+        else:
+            metadata = store.fetch_trials()[2]["metadata"]
+            metadata[field] = False if field == "is_mock" else "changed"
+            store.conn.execute("UPDATE trials SET metadata_json=? WHERE id=4", (json.dumps(metadata),))
+        store.conn.commit()
+        before = store.path.read_bytes()
+        with pytest.raises(ValueError, match="drift|contract"):
+            run_audit(bundle, [provider], store, max_new_calls=1)
+        assert provider.calls == 6
+        assert store.path.read_bytes() == before
+    finally:
+        store.close()
+
+
 def test_concurrent_runner_locks_before_reading_existing_trials(bundle, tmp_path):
     path = tmp_path / "concurrent.sqlite"
     contender_store = ExperimentStore(path)

@@ -107,7 +107,10 @@ makes no calls. Changing the call ceiling does not change the experiment.
 Exact same-contract reruns resume stored rows. A changed bundle, provider
 configuration, or repetition count requires a new database. Prompts, raw
 responses, parsed outputs, assessments, and source/reader identities are
-retained. A `.pending.json` journal prevents automatic retries when a request
+retained. Before any new call, replay reconstructs every stored trial and
+compares all trial fields, including role, provider, and live/mock metadata;
+stored cases and run contracts are also checked without repairing them.
+A `.pending.json` journal prevents automatic retries when a request
 may already have completed. It records a returned response before insertion
 into SQLite. If interrupted, inspect that journal and reconcile it with the
 database before manually continuing; do not erase it and assume no call ran.

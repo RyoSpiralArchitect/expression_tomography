@@ -61,6 +61,76 @@ def run_audit(
         )
 
 
+def _make_trial(case, provider, role, replicate, run_id, raw, reader=None):
+    if role == "auditor" and reader is None:
+        raise ValueError("Stored audit is missing its reader")
+    artifact = case.payload["public"]
+    intent = case.payload["private"]["intent"]
+    blocked = role == "auditor" and not reader["score"]["schema_valid"]
+    reader_id = reader["logical_trial_identity_sha256"] if reader else None
+    prompt = "" if blocked else make_prompt(
+        role, artifact, intent=intent,
+        reading=reader["parsed_response"] if reader else None,
+    )
+    prompt_hash = sha(prompt)
+    logical_id = sha([run_id, case.case_hash, provider.name, role, replicate])
+    lineage = {
+        "experiment_run_identity_sha256": run_id,
+        "logical_trial_identity_sha256": logical_id,
+        "generation_identity_sha256": sha(
+            [logical_id, "blocked_without_call", reader_id]
+            if blocked else [logical_id, prompt_hash]
+        ),
+        "assessment_identity_sha256": sha([logical_id, prompt_hash, VERSION, "score"]),
+    }
+    if blocked and raw != "":
+        raise ValueError("Blocked audit unexpectedly contains a response")
+    parsed = parse_json_lenient(raw)
+    return TrialResult(
+        case_id=case.case_id, case_hash=case.case_hash, task_type=TASK,
+        condition=role, provider=provider.name, prompt=prompt, raw_response=raw,
+        parsed_response=parsed,
+        score=_score(role, parsed, artifact, intent, blocked, isinstance(provider, AuditMockProvider)),
+        metadata={
+            **lineage,
+            "prompt_sha256": prompt_hash,
+            "replicate_index": replicate,
+            "text_sha256": sha(artifact["text"]),
+            "is_mock": isinstance(provider, AuditMockProvider),
+            "reader_identity": reader_id if role == "auditor" else None,
+            "role_independence": "conditional_on_recorded_reading" if role == "auditor" else "independent_context",
+            "prompt_version": VERSION,
+            "execution_status": "blocked_without_call" if blocked else "response_received",
+        },
+        **lineage,
+    )
+
+
+def _validate_trials(store, cases, providers, repetitions, run_id, lookup):
+    expected_cases = {c.case_hash: c.to_dict() for c in cases}
+    stored_cases = {c["case_hash"]: c for c in store.fetch_cases()}
+    if any(expected_cases.get(h) != c for h, c in stored_cases.items()):
+        raise ValueError("Stored case drift")
+    for replicate in range(repetitions):
+        for case in cases:
+            for provider in providers:
+                reader = None
+                for role in ROLES:
+                    identity = sha([run_id, case.case_hash, provider.name, role, replicate])
+                    if identity not in lookup:
+                        continue
+                    row = lookup[identity]
+                    if row["case_hash"] not in stored_cases:
+                        raise ValueError("Stored trial is missing its case")
+                    rebuilt = _make_trial(
+                        case, provider, role, replicate, run_id, row["raw_response"], reader
+                    ).to_row()
+                    if any(row[k] != v for k, v in rebuilt.items()):
+                        raise ValueError("Stored audit row drift (including prompt/parse drift)")
+                    if role == "reader":
+                        reader = rebuilt
+
+
 def _run_audit_locked(
     bundle: Path, providers, store: ExperimentStore, repetitions: int,
     max_new_calls: int | None, allow_live: bool,
@@ -80,10 +150,14 @@ def _run_audit_locked(
     }
     run_id = sha(contract)
     existing_runs = store.fetch_experiment_runs()
-    if any(r["experiment_run_identity_sha256"] != run_id for r in existing_runs):
+    if any(
+        r["experiment_run_identity_sha256"] != run_id
+        or r["task_type"] != TASK or r["contract"] != contract or r["metadata"] != {}
+        for r in existing_runs
+    ):
         raise ValueError("Output contains another run contract; choose a new database")
     existing = store.fetch_trials()
-    if any(
+    if (existing and not existing_runs) or any(
         r["task_type"] != TASK or r["experiment_run_identity_sha256"] != run_id
         for r in existing
     ):
@@ -109,79 +183,28 @@ def _run_audit_locked(
     }
     if set(lookup) - expected_ids:
         raise ValueError("Stored trials are outside the current schedule")
+    _validate_trials(store, cases, providers, repetitions, run_id, lookup)
     if expected_ids - set(lookup) and max_new_calls != 0 and any(
         not isinstance(p, AuditMockProvider) for p in providers
     ) and (not allow_live or max_new_calls is None):
         raise ValueError("Live execution requires allow_live and an explicit max_new_calls cap")
     store.register_experiment_run(ExperimentRun(run_id, TASK, contract))
     new_calls = 0
-    visited = set()
     for replicate in range(repetitions):
         for case in cases:
-            artifact = case.payload["public"]
-            aid = artifact["artifact_id"]
-            intent = private[aid]["intent"]
             store.upsert_case(case)
             for provider in providers:
-                readout = None
-                readout_score = None
-                reader_identity = None
+                reader = None
                 for role in ROLES:
                     logical_id = sha(
                         [run_id, case.case_hash, provider.name, role, replicate]
                     )
-                    visited.add(logical_id)
-                    blocked = role == "auditor" and not readout_score["schema_valid"]
-                    prompt = (
-                        ""
-                        if blocked
-                        else make_prompt(role, artifact, intent=intent, reading=readout)
-                    )
-                    prompt_hash = sha(prompt)
-                    lineage = {
-                        "experiment_run_identity_sha256": run_id,
-                        "logical_trial_identity_sha256": logical_id,
-                        "generation_identity_sha256": sha(
-                            [logical_id, "blocked_without_call", reader_identity]
-                            if blocked
-                            else [logical_id, prompt_hash]
-                        ),
-                        "assessment_identity_sha256": sha(
-                            [logical_id, prompt_hash, VERSION, "score"]
-                        ),
-                    }
                     if logical_id in lookup:
                         row = lookup[logical_id]
-                        if (
-                            row["prompt"] != prompt
-                            or row["metadata"]["prompt_sha256"] != prompt_hash
-                        ):
-                            raise ValueError(
-                                "Stored prompt drift; choose a new database"
-                            )
-                        if (
-                            parse_json_lenient(row["raw_response"])
-                            != row["parsed_response"]
-                        ):
-                            raise ValueError("Stored response parse drift")
-                        parsed = row["parsed_response"]
-                        expected_score = _score(
-                            role,
-                            parsed,
-                            artifact,
-                            intent,
-                            blocked,
-                            isinstance(provider, AuditMockProvider),
-                        )
-                        if row["score"] != expected_score:
-                            raise ValueError("Stored assessment drift")
-                        if any(
-                            row[k] != v or row["metadata"].get(k) != v
-                            for k, v in lineage.items()
-                        ):
-                            raise ValueError("Stored lineage drift")
                     else:
-                        raw = ""
+                        trial = _make_trial(case, provider, role, replicate, run_id, "", reader)
+                        blocked = trial.score["blocked_by_invalid_reading"]
+                        prompt, prompt_hash = trial.prompt, trial.metadata["prompt_sha256"]
                         if not blocked:
                             if max_new_calls is not None and new_calls >= max_new_calls:
                                 return summarize(store, manifest)
@@ -213,56 +236,13 @@ def _run_audit_locked(
                                 ),
                                 encoding="utf-8",
                             )
-                        parsed = parse_json_lenient(raw)
-                        score = _score(
-                            role,
-                            parsed,
-                            artifact,
-                            intent,
-                            blocked,
-                            isinstance(provider, AuditMockProvider),
-                        )
-                        trial = TrialResult(
-                            case_id=aid,
-                            case_hash=case.case_hash,
-                            task_type=TASK,
-                            condition=role,
-                            provider=provider.name,
-                            prompt=prompt,
-                            raw_response=raw,
-                            parsed_response=parsed,
-                            score=score,
-                            metadata={
-                                **lineage,
-                                "prompt_sha256": prompt_hash,
-                                "replicate_index": replicate,
-                                "text_sha256": sha(artifact["text"]),
-                                "is_mock": isinstance(provider, AuditMockProvider),
-                                "reader_identity": reader_identity
-                                if role == "auditor"
-                                else None,
-                                "role_independence": "independent_context"
-                                if role != "auditor"
-                                else "conditional_on_recorded_reading",
-                                "prompt_version": VERSION,
-                                "execution_status": "blocked_without_call"
-                                if blocked
-                                else "response_received",
-                            },
-                            **lineage,
-                        )
+                            trial = _make_trial(case, provider, role, replicate, run_id, raw, reader)
                         store.insert_trial(trial)
                         row = trial.to_row()
                         if not blocked:
                             pending.unlink()
                     if role == "reader":
-                        readout, readout_score, reader_identity = (
-                            parsed,
-                            row["score"],
-                            logical_id,
-                        )
-    if set(lookup) - visited:
-        raise ValueError("Stored trials are outside the current schedule")
+                        reader = row
     return summarize(store, manifest)
 
 
