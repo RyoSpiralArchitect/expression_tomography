@@ -94,6 +94,13 @@ carrier survival coexist; downstream use and intentional collusion remain
 unidentified. Raw responses, journals, paired contrasts and all 18 failure
 packets are included, with no additional B calls.
 
+The [B1 downstream contract](docs/carrier_downstream_execution_2026_09_27.md)
+now separates exact source claims from reader recomputation across original,
+sorted-rule and literal-prose channels. It freezes a bounded 18-rewrite /
+108-reader sequence, with GPT-6 Luna / low as the downstream reader and a
+pre-reader assertion-fidelity gate. It does not reinterpret carrier survival
+as evidence of use or collusion.
+
 ## Rule-Z Smoke
 
 ```bash

@@ -183,6 +183,19 @@ class ProviderTests(unittest.TestCase):
                 ):
                     OpenAICompatibleProvider(spec).complete("hello")
 
+    def test_gpt6_luna_low_request_uses_reasoning_token_limit(self) -> None:
+        spec = ProviderSpec(name="reader", type="openai_compatible", model="gpt-6-luna",
+                            reasoning_effort="low", max_tokens=4000, api_key_env="ET_TEST_OPENAI_KEY")
+        with mock.patch.dict(os.environ, {"ET_TEST_OPENAI_KEY": "sk-test"}):
+            with mock.patch.object(providers, "_post_json", return_value={"choices": [{"message": {"content": "ok"}}]}) as post:
+                self.assertEqual(OpenAICompatibleProvider(spec).complete("question"), "ok")
+        payload = post.call_args.kwargs["payload"]
+        self.assertEqual(payload["model"], "gpt-6-luna")
+        self.assertEqual(payload["max_completion_tokens"], 4000)
+        self.assertEqual(payload["reasoning_effort"], "low")
+        self.assertNotIn("max_tokens", payload)
+        self.assertNotIn("temperature", payload)
+
     def test_anthropic_payload_and_response_extraction(self) -> None:
         spec = ProviderSpec(
             name="claude",
