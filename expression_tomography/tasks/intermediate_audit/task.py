@@ -6,6 +6,7 @@ from collections import Counter
 from pathlib import Path
 
 from expression_tomography.core.providers import (
+    JSON_OBJECT_PARSE_CONTRACT_VERSION,
     build_providers_from_config,
     materialize_unique_providers,
     parse_json_lenient,
@@ -23,6 +24,8 @@ from .scorer import score_response
 
 TASK = "intermediate_audit"
 ROLES = ("reader", "critic", "auditor")
+EXECUTION_VERSION = "intermediate_audit.run.v2"
+SCORE_VERSION = "intermediate_audit.score.v1"
 
 
 def provider_config(provider) -> dict:
@@ -81,23 +84,40 @@ def _make_trial(case, provider, role, replicate, run_id, raw, reader=None):
             [logical_id, "blocked_without_call", reader_id]
             if blocked else [logical_id, prompt_hash]
         ),
-        "assessment_identity_sha256": sha([logical_id, prompt_hash, VERSION, "score"]),
     }
     if blocked and raw != "":
         raise ValueError("Blocked audit unexpectedly contains a response")
     parsed = parse_json_lenient(raw)
+    score = _score(role, parsed, artifact, intent, blocked, isinstance(provider, AuditMockProvider))
+    content_hashes = {
+        "raw_response_sha256": sha(raw),
+        "parsed_response_sha256": sha(parsed),
+        "score_sha256": sha(score),
+    }
+    reader_assessment = reader["assessment_identity_sha256"] if role == "auditor" else None
+    lineage["assessment_identity_sha256"] = sha({
+        "generation_identity_sha256": lineage["generation_identity_sha256"],
+        **content_hashes,
+        "parser_version": JSON_OBJECT_PARSE_CONTRACT_VERSION,
+        "score_version": SCORE_VERSION,
+        "reader_assessment_identity_sha256": reader_assessment,
+    })
     return TrialResult(
         case_id=case.case_id, case_hash=case.case_hash, task_type=TASK,
         condition=role, provider=provider.name, prompt=prompt, raw_response=raw,
         parsed_response=parsed,
-        score=_score(role, parsed, artifact, intent, blocked, isinstance(provider, AuditMockProvider)),
+        score=score,
         metadata={
             **lineage,
+            **content_hashes,
+            "parser_version": JSON_OBJECT_PARSE_CONTRACT_VERSION,
+            "score_version": SCORE_VERSION,
             "prompt_sha256": prompt_hash,
             "replicate_index": replicate,
             "text_sha256": sha(artifact["text"]),
             "is_mock": isinstance(provider, AuditMockProvider),
             "reader_identity": reader_id if role == "auditor" else None,
+            "reader_assessment_identity_sha256": reader_assessment,
             "role_independence": "conditional_on_recorded_reading" if role == "auditor" else "independent_context",
             "prompt_version": VERSION,
             "execution_status": "blocked_without_call" if blocked else "response_received",
@@ -143,6 +163,7 @@ def _run_audit_locked(
         raise ValueError("At least one provider is required")
     contract = {
         "version": VERSION,
+        "execution_version": EXECUTION_VERSION,
         "manifest_sha256": sha(manifest),
         "repetitions": repetitions,
         "providers": [provider_config(p) for p in providers],

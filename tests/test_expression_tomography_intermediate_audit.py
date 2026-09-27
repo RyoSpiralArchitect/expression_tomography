@@ -26,7 +26,8 @@ from expression_tomography.tasks.intermediate_audit.mock_provider import (
 )
 from expression_tomography.tasks.intermediate_audit.prompts import make_prompt
 from expression_tomography.tasks.intermediate_audit.scorer import AXES, score_response
-from expression_tomography.tasks.intermediate_audit.task import run_audit
+from expression_tomography.tasks.intermediate_audit.task import _make_trial, run_audit
+from expression_tomography.core.schema import Case
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -252,6 +253,62 @@ def test_stored_audit_fields_are_validated_before_any_new_call(bundle, tmp_path,
         with pytest.raises(ValueError, match="drift|contract"):
             run_audit(bundle, [provider], store, max_new_calls=1)
         assert provider.calls == 6
+        assert store.path.read_bytes() == before
+    finally:
+        store.close()
+
+
+@pytest.mark.parametrize("change", ["whitespace", "raw_parse_score", "content_metadata"])
+def test_response_content_is_bound_to_assessment_identity(bundle, tmp_path, change):
+    provider = CountingMock()
+    store = ExperimentStore(tmp_path / "content-tamper.sqlite")
+    try:
+        run_audit(bundle, [provider], store, max_new_calls=3)
+        row = store.fetch_trials()[1]
+        case = Case(**store.fetch_cases()[0])
+        raw = row["raw_response"] + " "
+        if change != "whitespace":
+            parsed = {**row["parsed_response"], "changed": "coordinated edit"}
+            raw = json.dumps(parsed)
+        rebuilt = _make_trial(
+            case, provider, "critic", 0, row["experiment_run_identity_sha256"], raw
+        ).to_row()
+        assert rebuilt["generation_identity_sha256"] == row["generation_identity_sha256"]
+        assert rebuilt["assessment_identity_sha256"] != row["assessment_identity_sha256"]
+        metadata = row["metadata"]
+        if change == "content_metadata":
+            for key in ("raw_response_sha256", "parsed_response_sha256", "score_sha256"):
+                metadata[key] = rebuilt["metadata"][key]
+        store.conn.execute(
+            "UPDATE trials SET raw_response=?, parsed_response_json=?, score_json=?, metadata_json=? WHERE id=2",
+            (raw, json.dumps(rebuilt["parsed_response"]), json.dumps(rebuilt["score"]), json.dumps(metadata)),
+        )
+        store.conn.commit()
+        before = store.path.read_bytes()
+        with pytest.raises(ValueError, match="row drift"):
+            run_audit(bundle, [provider], store, max_new_calls=1)
+        assert provider.calls == 3
+        assert store.path.read_bytes() == before
+    finally:
+        store.close()
+
+
+def test_legacy_audit_contract_is_not_silently_upgraded(bundle, tmp_path):
+    provider = CountingMock()
+    store = ExperimentStore(tmp_path / "legacy.sqlite")
+    try:
+        run_audit(bundle, [provider], store, max_new_calls=0)
+        contract = store.fetch_experiment_runs()[0]["contract"]
+        del contract["execution_version"]
+        store.conn.execute(
+            "UPDATE experiment_runs SET contract_json=?, experiment_run_identity_sha256=?",
+            (json.dumps(contract), sha(contract)),
+        )
+        store.conn.commit()
+        before = store.path.read_bytes()
+        with pytest.raises(ValueError, match="another run contract"):
+            run_audit(bundle, [provider], store)
+        assert provider.calls == 0
         assert store.path.read_bytes() == before
     finally:
         store.close()

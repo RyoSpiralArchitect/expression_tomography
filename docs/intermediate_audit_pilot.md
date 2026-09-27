@@ -110,6 +110,14 @@ responses, parsed outputs, assessments, and source/reader identities are
 retained. Before any new call, replay reconstructs every stored trial and
 compares all trial fields, including role, provider, and live/mock metadata;
 stored cases and run contracts are also checked without repairing them.
+Execution contract `intermediate_audit.run.v2` binds each assessment to the
+generation, exact raw response, parsed response, score, parser/score versions,
+and (for auditors) the reader's assessment. Content hashes are retained in
+metadata. These are integrity checks, not signatures against an actor who can
+rewrite every hash; frozen external manifests remain necessary.
+The corpus and prompts remain v1. Legacy execution-v1 databases have weaker
+assessment identities and are rejected by the new runner without rewriting
+them. Keep historical bundles unchanged; use a new database for v2 execution.
 A `.pending.json` journal prevents automatic retries when a request
 may already have completed. It records a returned response before insertion
 into SQLite. If interrupted, inspect that journal and reconcile it with the
