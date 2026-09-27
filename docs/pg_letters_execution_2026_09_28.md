@@ -115,3 +115,11 @@ successful responses still require their original raw-text hashes. Unsealed
 legacy error records are refused and require explicit recovery using archived
 evidence. Starting new calls from a v1 plan is prohibited. Freeze a new v2 plan
 for a new experiment rather than altering historical journal files.
+
+A second review found that syncing a new file alone did not persist its directory
+entry across a filesystem crash. New writes now sync the containing directory
+and its parent before any provider call. A sync failure blocks the call and
+leaves the attempt unresolved, never automatically retried. Historical runs
+retain their original implementation hashes and do not retroactively acquire
+this stronger durability property; replay them from their frozen source when
+implementation identity differs.

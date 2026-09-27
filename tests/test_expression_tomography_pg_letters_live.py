@@ -1,5 +1,7 @@
 import json
+import os
 from pathlib import Path
+import stat
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -192,6 +194,41 @@ class RunnerTests(unittest.TestCase):
         (self.execution / "plan.json").write_text(json.dumps(plan))
         with self.assertRaisesRegex(ValueError, "Unapproved legacy implementation"):
             live.load_execution(self.execution, live.digest(plan))
+
+    def test_request_entry_and_directory_synced_before_provider(self):
+        events = []
+        original_sync = os.fsync
+        original_complete = live.FixtureProvider.complete
+
+        def sync(fd):
+            events.append("directory" if stat.S_ISDIR(os.fstat(fd).st_mode) else "file")
+            original_sync(fd)
+
+        def complete(provider, prompt):
+            self.assertEqual(events[-3:], ["file", "directory", "directory"])
+            return original_complete(provider, prompt)
+
+        with patch.object(live.os, "fsync", sync), patch.object(live.FixtureProvider, "complete", complete):
+            self.run_calls(1)
+
+    def test_directory_sync_failure_prevents_call_and_automatic_retry(self):
+        self.run_calls(0)
+        original_sync = os.fsync
+
+        def fail_directory(fd):
+            if stat.S_ISDIR(os.fstat(fd).st_mode):
+                raise OSError("directory sync failure")
+            original_sync(fd)
+
+        with patch.object(live.os, "fsync", fail_directory), patch.object(
+            live.FixtureProvider, "complete", side_effect=AssertionError("must not call")
+        ):
+            with self.assertRaisesRegex(OSError, "directory sync"):
+                self.run_calls(1)
+        self.assertEqual(len(list(self.journal.glob("*.request.json"))), 1)
+        self.assertEqual(len(list(self.journal.glob("*.response.json"))), 0)
+        with self.assertRaisesRegex(ValueError, "Unresolved attempt"):
+            self.run_calls(1)
 
     def test_live_requires_opt_in_even_with_keys(self):
         execution = self.root / "live_execution"
