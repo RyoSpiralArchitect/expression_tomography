@@ -1,0 +1,298 @@
+{
+  "version": "carrier_downstream.fidelity_audit.v1",
+  "annotator": "Codex research operator: manual source-versus-rewrite reading before any downstream calls; not an independent human annotation",
+  "independent_human_annotation": false,
+  "reader_results_seen": false,
+  "rewrite_execution_sha256": "2d5c86cbd20798c90ae226a519f04067f12c949432ad8206008a685c24ba32a0",
+  "entries": [
+    {
+      "source_id": "14cfaf8a837b47e7b5ef081b7b5ab7032f80a7c601c89b2952d951a865c8b081",
+      "source_raw_sha256": "d7d4b087e10a2f5bf6ca9b5e81c94b16eed550ac7793e898f7d980d9be595b40",
+      "rewrite_raw_sha256": "a15cf020af0d51b6dda1e2124135eb875a8cd37f0fb9406307cf975e403e208e",
+      "fields": {
+        "facts": "pass",
+        "rules": "pass",
+        "priority": "pass",
+        "active_rules": "pass",
+        "answer": "pass",
+        "counterfactual_answer": "pass",
+        "scope_and_unknowns": "pass",
+        "no_added_assertions": "pass"
+      },
+      "evidence": "Facts p01; definitions in r3,r2,r1 order retain all antecedents and polarities; 'places r2 above r1'; source-attributed current r3/no and counterfactual no. No repair or extra assertion."
+    },
+    {
+      "source_id": "1fd56efd8a9771a7debeb0e6435b998a80b8a0dbed01ec6f9af88d9ad5c45fb3",
+      "source_raw_sha256": "ce02ee1c1f925dda9682b615b53aa5e0bbda9f9a13b903c6870daef66f46a292",
+      "rewrite_raw_sha256": "2f8ae332783abdb8860334611c13a013215cd0b9a82bd120a0229094e0d99361",
+      "fields": {
+        "facts": "pass",
+        "rules": "pass",
+        "priority": "pass",
+        "active_rules": "pass",
+        "answer": "pass",
+        "counterfactual_answer": "pass",
+        "scope_and_unknowns": "pass",
+        "no_added_assertions": "pass"
+      },
+      "evidence": "'facts p00 and p01'; three semicolon-separated definitions retain r3,r2,r1 and all conditions; r2 priority over r1; current r3 and r1; 'reported current answer is conflict' and counterfactual 'also conflict'."
+    },
+    {
+      "source_id": "217590a5dd45b13cc4ebd0c8d0d2842cb454170457c7ae34feacbef30680734b",
+      "source_raw_sha256": "2ac583e20d56633952803365037778decd1cb2756f3bb42bc662cccd05687587",
+      "rewrite_raw_sha256": "4919b91ca0465f34865db43d369a8d3ed414aea882a95dd9411fb5b73f40e4fa",
+      "fields": {
+        "facts": "pass",
+        "rules": "pass",
+        "priority": "pass",
+        "active_rules": "pass",
+        "answer": "pass",
+        "counterfactual_answer": "pass",
+        "scope_and_unknowns": "pass",
+        "no_added_assertions": "pass"
+      },
+      "evidence": "Facts p01; r3(p01)->not_eligible, r2(p00 and p01)->eligible, r1(p02)->eligible remain in source order; r2 priority over r3; current r3/no and counterfactual conflict are attributed to source."
+    },
+    {
+      "source_id": "2ae6b3ff9442a91ac01bec9a0590da058a01f9939e26ad3db9e1762b706a8770",
+      "source_raw_sha256": "0fc30e786f6ff442658f03e2c12a040957afd402d92c308137fbb4334ea769d2",
+      "rewrite_raw_sha256": "a10c481232ee5f525e2964234a8874cc483b404443796d16decdac3239774d0e",
+      "fields": {
+        "facts": "pass",
+        "rules": "pass",
+        "priority": "pass",
+        "active_rules": "pass",
+        "answer": "pass",
+        "counterfactual_answer": "pass",
+        "scope_and_unknowns": "pass",
+        "no_added_assertions": "pass"
+      },
+      "evidence": "'priority relation is empty'; r1(p01 and p03),r3(p01),r2(p00 and p02) preserve source rules/polarities. Current r3/yes and counterfactual conflict are both reported, even though the latter disagrees with public recomputation."
+    },
+    {
+      "source_id": "330a562197661f3b17330e40e1e49c66607787ad3d1558b64305e5e930d7a418",
+      "source_raw_sha256": "20f1cf09ec5002279fd85de05571d9cd8bc2540e51eac5a7b401bfc116c645ef",
+      "rewrite_raw_sha256": "6b0daa1717b14a8a3c1a4bae87099f96887d1bdf067b5cde0ccdfb469dd6eb11",
+      "fields": {
+        "facts": "pass",
+        "rules": "pass",
+        "priority": "pass",
+        "active_rules": "pass",
+        "answer": "pass",
+        "counterfactual_answer": "pass",
+        "scope_and_unknowns": "pass",
+        "no_added_assertions": "pass"
+      },
+      "evidence": "Facts p01; r2,r1,r3 definitions preserve all conditions and conclusions; 'r2 has priority over r1'; reported current r3/no and counterfactual 'also no'."
+    },
+    {
+      "source_id": "3bec0a91fa0a426c6efc83996e8163d2c7d2e6d031e73b82092b7666af67b263",
+      "source_raw_sha256": "925fe26e91af6b27e873623de70335e1844944d8341508a51f68a287a6bf388c",
+      "rewrite_raw_sha256": "070d3588d9decf1b561934b64333c21636d4cb6e387d2f7cace4478e33a5d395",
+      "fields": {
+        "facts": "pass",
+        "rules": "pass",
+        "priority": "pass",
+        "active_rules": "pass",
+        "answer": "pass",
+        "counterfactual_answer": "pass",
+        "scope_and_unknowns": "pass",
+        "no_added_assertions": "pass"
+      },
+      "evidence": "Facts p00,p01,p02; r2,r1,r3 preserve rules and polarities; 'priority relation is empty' explicitly retains []. Current r2 and r3; both reported answers conflict."
+    },
+    {
+      "source_id": "478795d9a1f50877a60d8c70f384a5e9f74ac09c29f59104a74fe07b0bcfd767",
+      "source_raw_sha256": "1f49dafd4a225ebc596f4bb8cec1130860482165eea5e54d4eefbc4f3b1b5e5b",
+      "rewrite_raw_sha256": "f3b8bcc1630c05867af7946990b302cba6677c471cfe6f0c363ee655b77979c1",
+      "fields": {
+        "facts": "pass",
+        "rules": "pass",
+        "priority": "pass",
+        "active_rules": "pass",
+        "answer": "pass",
+        "counterfactual_answer": "pass",
+        "scope_and_unknowns": "pass",
+        "no_added_assertions": "pass"
+      },
+      "evidence": "Facts p00 and p01; semicolon clauses preserve r2,r1,r3 definitions; r2 priority over r1; current r1 and r3; current conflict and counterfactual conflict retained."
+    },
+    {
+      "source_id": "508a43533f03b6dc745bf5e4328fc120601aa0de5843d8b4742dcd955e5f5d72",
+      "source_raw_sha256": "9333f3a5cca57423b05eef8f8274b848db66d4194ca02ad7aa30f10ba744f2d3",
+      "rewrite_raw_sha256": "c42d2a6a1aa8acdf967f91f6902790ec25301fe210dbf33a64e043a6c4d2d0b4",
+      "fields": {
+        "facts": "pass",
+        "rules": "pass",
+        "priority": "pass",
+        "active_rules": "pass",
+        "answer": "pass",
+        "counterfactual_answer": "pass",
+        "scope_and_unknowns": "pass",
+        "no_added_assertions": "pass"
+      },
+      "evidence": "Facts p00,p01,p02; r2(p00 and p01),r1(p02),r3(p01) preserve their conclusions and source order; r2 over r3; current r1,r2; current and counterfactual yes."
+    },
+    {
+      "source_id": "5343fa8059d4d5f7440b114d42ff2f9cc7c9cc994078425fbe300e282cdebf25",
+      "source_raw_sha256": "3a555a59ec8a65167296df04bf6f1f6e2ff42e082e88470bd53b221245c50e23",
+      "rewrite_raw_sha256": "63db0243407f76cc58906bda891ed578aeb818c1f370b73916bc628047a30bd8",
+      "fields": {
+        "facts": "pass",
+        "rules": "pass",
+        "priority": "pass",
+        "active_rules": "pass",
+        "answer": "pass",
+        "counterfactual_answer": "pass",
+        "scope_and_unknowns": "pass",
+        "no_added_assertions": "pass"
+      },
+      "evidence": "Facts p00,p01,p02; priority r2 over r3 is moved before definitions but unchanged; r3,r2,r1 definitions remain in order; current r2,r1; both reported answers yes."
+    },
+    {
+      "source_id": "5ed0ae6e0560af01351460eaec26008a640de15afa1833dbe4ff174c3840bc5c",
+      "source_raw_sha256": "ef4f5537ae1755685e6114cb832f0411b9858585073b3e7b29d6f0e193627b16",
+      "rewrite_raw_sha256": "71deed5079b145d594bae2d5756039c52fc056d987d5be9314265d7ac49acde3",
+      "fields": {
+        "facts": "pass",
+        "rules": "pass",
+        "priority": "pass",
+        "active_rules": "pass",
+        "answer": "pass",
+        "counterfactual_answer": "pass",
+        "scope_and_unknowns": "pass",
+        "no_added_assertions": "pass"
+      },
+      "evidence": "Facts p00,p01,p02; r3,r2,r1 preserve antecedents and polarity; 'There is no priority relation'; current r3 and r2; both answers explicitly conflict."
+    },
+    {
+      "source_id": "65957aa649c79b7dc0a033bbed0993d7238df85a26693edf7e2210832073010b",
+      "source_raw_sha256": "f26d682c6c67ae26b0b7133f0c1cb65d8231b840809061db8c47ca76a1302e39",
+      "rewrite_raw_sha256": "de661dfbbf2eca07d49439734ea091e9c04a35e79b60c4986179721f55b8f415",
+      "fields": {
+        "facts": "pass",
+        "rules": "pass",
+        "priority": "pass",
+        "active_rules": "pass",
+        "answer": "pass",
+        "counterfactual_answer": "pass",
+        "scope_and_unknowns": "pass",
+        "no_added_assertions": "pass"
+      },
+      "evidence": "'complete actual facts are p01'; r1,r3,r2 definitions preserve antecedents and polarity; r2 over r3; 'only current active rule' r3; current no and counterfactual conflict."
+    },
+    {
+      "source_id": "67c2d5c677936a826d9594c900e11b06ae4936c64f615e7d6719827624fd0f3a",
+      "source_raw_sha256": "9d256bbf8899bf5f08cdf28b68986daa8cda0c340a9a370ebf9a72e66dcc8373",
+      "rewrite_raw_sha256": "1e767a7f381f16ae6ba1d2e34a9992c011564faf125fefb574751557a9dece62",
+      "fields": {
+        "facts": "pass",
+        "rules": "pass",
+        "priority": "pass",
+        "active_rules": "pass",
+        "answer": "pass",
+        "counterfactual_answer": "pass",
+        "scope_and_unknowns": "pass",
+        "no_added_assertions": "pass"
+      },
+      "evidence": "Facts p00,p01,p02; semicolon clauses preserve r1,r3,r2 and their conjunctions/polarities; empty priority relation; current r2,r3; both reported answers conflict."
+    },
+    {
+      "source_id": "717b54a6335fc1a12aeda5cb2d7043ce3e4c20c722cf3292b1ecbb8dbe0063c6",
+      "source_raw_sha256": "913ae4ab03c3f049f2bd0cd2a972e7160dddf8d277cb8eb8c7adbafd129532a8",
+      "rewrite_raw_sha256": "d50a583e89c48694d966cc99dfb757ba9dc91f6219c5930536a62b05a147d68f",
+      "fields": {
+        "facts": "pass",
+        "rules": "pass",
+        "priority": "pass",
+        "active_rules": "pass",
+        "answer": "pass",
+        "counterfactual_answer": "pass",
+        "scope_and_unknowns": "pass",
+        "no_added_assertions": "pass"
+      },
+      "evidence": "Facts p01; semicolon clauses preserve r3,r2,r1; priority 'explicitly empty' and 'no priority relations'; current r3/yes and counterfactual yes."
+    },
+    {
+      "source_id": "84e3660f0d594f93262f0431463e09e4faca49c51ca5fa17fd535157903dddb9",
+      "source_raw_sha256": "18882fc2260643d9083afc7b322d68b577c8b64226b76d019f87367339b722e4",
+      "rewrite_raw_sha256": "c0bae34fc08207bf51e3c72576d39e3ef3fba11437aa5d4506c0024081c29994",
+      "fields": {
+        "facts": "pass",
+        "rules": "pass",
+        "priority": "pass",
+        "active_rules": "pass",
+        "answer": "pass",
+        "counterfactual_answer": "pass",
+        "scope_and_unknowns": "pass",
+        "no_added_assertions": "pass"
+      },
+      "evidence": "Facts p00,p01; semicolon clauses preserve r1,r3,r2 and exact conditions; priority r2 over r1; current r1,r3/conflict. The source's counterfactual no is retained, not repaired to the public-rule answer."
+    },
+    {
+      "source_id": "cd1ceee7d935f18b20a53bca1f34a83c62c3cc76e51512c1d9e097639ab9fdd0",
+      "source_raw_sha256": "d4daa7f0071292f33bc987861d885069cf65ed6a81497f96d3b851e32ad7ac1a",
+      "rewrite_raw_sha256": "23af5660d33e5adf6b21cf58f0665929d0b301401970613daac4966ac8311516",
+      "fields": {
+        "facts": "pass",
+        "rules": "pass",
+        "priority": "pass",
+        "active_rules": "pass",
+        "answer": "pass",
+        "counterfactual_answer": "pass",
+        "scope_and_unknowns": "pass",
+        "no_added_assertions": "pass"
+      },
+      "evidence": "Facts p01; r2,r1,r3 preserve their conditions/conclusions; priority 'an empty list, explicitly meaning none'; current r3/yes; counterfactual yes."
+    },
+    {
+      "source_id": "d29a00ac946ddc4b1116fd19ecd70d4c5ff3f7e9222e84bc566a709c11fa83a6",
+      "source_raw_sha256": "62d9068110bb3adc38c2790a05caf786bda98e2391123aa26080fcef73d4d872",
+      "rewrite_raw_sha256": "2a25721ef0e1128f99d7b00cc95926e47e00e5a512efc8dabfeaaff360089088",
+      "fields": {
+        "facts": "pass",
+        "rules": "pass",
+        "priority": "pass",
+        "active_rules": "pass",
+        "answer": "pass",
+        "counterfactual_answer": "pass",
+        "scope_and_unknowns": "pass",
+        "no_added_assertions": "pass"
+      },
+      "evidence": "Facts p00,p01,p02; r1,r3,r2 definitions preserve all predicates and conclusions; 'both p00 and p01' keeps conjunction; r2 over r3; current r1,r2 and both answers yes."
+    },
+    {
+      "source_id": "d792442f05902b6e43d4f5ec942fc485d1a7cb0e4d3c9ccfaab22c6302a387f2",
+      "source_raw_sha256": "ebe83b4faac34a417746c8d9be3e8f28c1afae8d2279c972de32bf90ae2edb34",
+      "rewrite_raw_sha256": "ed90cc861e016e1557ce24bedf758ca2986f6f44d86b0dec67e555c9ed61bd34",
+      "fields": {
+        "facts": "pass",
+        "rules": "pass",
+        "priority": "pass",
+        "active_rules": "pass",
+        "answer": "pass",
+        "counterfactual_answer": "pass",
+        "scope_and_unknowns": "pass",
+        "no_added_assertions": "pass"
+      },
+      "evidence": "'complete actual facts are p01'; semicolon clauses preserve r1,r3,r2 and exact predicates/conclusions; r2 over r1; current r3/no; counterfactual 'also no'."
+    },
+    {
+      "source_id": "dd903868dc6f2cf7764de9a5e2946be9ea4771baf31e1576ebba7c6bfcf534e2",
+      "source_raw_sha256": "6e4defe91b52fa4cf2a35667286ec188032e649d3b1289dd4bd91e87552589e7",
+      "rewrite_raw_sha256": "dd8036b4a5e2bbd7ddc789907f53bb8c8969735b05f930fcf7eec588eb6c1c26",
+      "fields": {
+        "facts": "pass",
+        "rules": "pass",
+        "priority": "pass",
+        "active_rules": "pass",
+        "answer": "pass",
+        "counterfactual_answer": "pass",
+        "scope_and_unknowns": "pass",
+        "no_added_assertions": "pass"
+      },
+      "evidence": "'complete actual facts are p01'; semicolon clauses preserve r2,r1,r3; conjunction 'both true' retained for r2; r2 over r3; current r3/no; counterfactual explicitly separated and conflict."
+    }
+  ],
+  "scope_note": "Judgments use the registered closed-world fact-list and priority conventions. No claim of stand-alone human accessibility. The operator knows the experiment design but has not seen downstream outcomes. Rule definition order is manually observed to survive all 18 rewrites; this does not replace or tune the frozen decoder."
+}
