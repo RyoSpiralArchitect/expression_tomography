@@ -1,0 +1,1887 @@
+{
+  "version": "carrier_state_calibration.run.v1",
+  "score_version": "carrier_state_calibration.score.v1",
+  "parser_version": "expression_tomography.parse_json_lenient.object.v1",
+  "is_mock": false,
+  "draft_manifest_sha256": "7a281a917c0a7801ec2e81df91264bade9838d7ea1648285c70ded3c04155ced",
+  "draft_fixture_sha256": "56711748fb2e14e5ef3835ab0c6658730e1f0ae00c196195acb0270766248f2a",
+  "implementation_sha256": {
+    "expression_tomography/__init__.py": "8a3237b7faa4d0f40b3875109362b97042ac53b452d284fe31d2da260cb3096d",
+    "expression_tomography/core/__init__.py": "07a103828addf3ba580ecad587d7cb73f5764bfbb558bbf9bdaeb43093fa99dc",
+    "expression_tomography/core/providers.py": "d9210d5d0a234721a62924aaa50e97cec0c7a73655a174b629b8883f98f41435",
+    "expression_tomography/core/report.py": "34085829fcf04e404d82b3f3c65b81e881c9b1d221a333280fa0beae3b6b5deb",
+    "expression_tomography/core/schema.py": "676827df7757edbeef971d5aaf685ea4e5a36363241add8356143b7e6fef29b2",
+    "expression_tomography/core/store.py": "86dd31cbe5c0420fb2d6aac075670bc40ab0b479750dfbfb654ed2b4e4e09bea",
+    "expression_tomography/tasks/__init__.py": "81a06a4709f20f33d47ee7e1e7cb911325389d61d4ce95f22e326d1996ce7c90",
+    "expression_tomography/tasks/carrier_calibration/__init__.py": "424dbe001af3084fa1ffa7a1b65771a64fe04d2ec532c110dc4c91b15a5b23fd",
+    "expression_tomography/tasks/carrier_calibration/corpus.py": "adc0affee58771967b2ee6321507c58e0101c235466a01ac54f9fa84ff3e45d3",
+    "expression_tomography/tasks/carrier_calibration/mock_provider.py": "eb3d907e5bbf57ddefdb4660c7d1cab505f9020624095bfda4c93c41645f7ed7",
+    "expression_tomography/tasks/carrier_calibration/protocol.py": "d32d45ec8ccce97bde25d1942713aadd255d06d7cbd17c07d05fc7e95abb6039",
+    "expression_tomography/tasks/carrier_calibration/report.py": "4bef685f3a97383278a78189815d6d8af5566a719d06844e24b04179f5623e51",
+    "expression_tomography/tasks/carrier_calibration/task.py": "8458265b9070c15083278d15d40146ce069efc7ffd94dd68576c39eb000b1ecb",
+    "expression_tomography/tasks/carrier_content_sensitivity/__init__.py": "3169162397a235bfcaaf42692c8eac1c00966e1551699544e09d64ec23a07719",
+    "expression_tomography/tasks/carrier_content_sensitivity/corpus.py": "77771ff9d06637a49c735268a35a4e0142806caa0997246bad1a1922b806eefe",
+    "expression_tomography/tasks/carrier_content_sensitivity/preflight.py": "26fc70df9fa4ac2f4570115d0720c4763b00162c1c5ed14bb2ab92910a4072a2",
+    "expression_tomography/tasks/carrier_content_sensitivity/protocol.py": "eccec53adb32bd74e08ba23c79e733187de98964adaa9f4e23aca02abbc3fb3f",
+    "expression_tomography/tasks/carrier_content_sensitivity/report.py": "81a4fd4f0e087591f07b3a4abe787e767227ce2102673ec3b050ed2e073cd563",
+    "expression_tomography/tasks/carrier_content_sensitivity/task.py": "33ccf090d22e4ffe5e5d9f6c070426319421904f7d79b864506922702d4baddb",
+    "expression_tomography/tasks/rule_z/__init__.py": "21b0e6700e512357385162eef1f6a62da497a3c555a741b2b08ec36bcc431ce9",
+    "expression_tomography/tasks/rule_z/oracle.py": "9fd79829cfb241e9a02043e21280525a17e0eb8206a745b1c5469306b2f6eec2",
+    "expression_tomography/tasks/text_boundary/__init__.py": "2e922b945fd1c80e67c4164d82b19c01fad84067393c166e138d9b82565dfa18",
+    "expression_tomography/tasks/text_boundary/fixtures.py": "898ab03392fa96a63e2d85a780cc059324437625e0873ed60160bc3da8f1fdde",
+    "expression_tomography/tasks/text_boundary/mock_provider.py": "51b31945ff09f34dd9a720b4d2bce9f8143dcf43d93a052d6b87bd06fa47134b",
+    "expression_tomography/tasks/text_boundary/protocol.py": "3ba6e4be1e4bb5e11880650df5f18a462b46a8719c0e626a2cdefc19f3432f0b",
+    "expression_tomography/tasks/text_boundary/report.py": "afb4075717a93c1c47ea274f48a8e3f484eb91ef159d552106cf67ae6124c400",
+    "expression_tomography/tasks/text_boundary/task.py": "c780199c4a3c39eda0fecaa589ad29e931da94c50f559e54839af8946ddc78d5",
+    "expression_tomography/tasks/carrier_downstream/__init__.py": "d700ec9ca9ea7342e738a5c317c282251669f31d2c4e27eefad87171584c4fa4",
+    "expression_tomography/tasks/carrier_downstream/protocol.py": "4dcb0e43486bcb4a078cad73287a73fe84736ed97fee073dcf123f2ca822b581",
+    "expression_tomography/tasks/carrier_downstream/report.py": "771dead71f12c4b8fbcd787f3439362132a5aafb82e0b3c050987588bcafcbba",
+    "expression_tomography/tasks/carrier_downstream/task.py": "8ff56da6396cd655fe17c62762fade6399087b6c99d06bb62cc9e76519441ddc",
+    "expression_tomography/tasks/carrier_reader_transfer/__init__.py": "7a9015838b9b878c4b0d5ff6a684a552ceef8c9c53f8730742727ef7e696f3f4",
+    "expression_tomography/tasks/carrier_reader_transfer/comparison.py": "1b028271c48cce0c6c9e49daee6ea96aa8ae15490d67aba130d3535d162a24be",
+    "expression_tomography/tasks/carrier_reader_transfer/task.py": "b198aa5aa869df227575eb399fa50aca90155a8a412840ba28e2cc8a03e34715",
+    "expression_tomography/tasks/carrier_state_calibration/__init__.py": "5382f5924f3066b5b87f522f5c07d3d034fd8430a427494fca611c8a538d7c94",
+    "expression_tomography/tasks/carrier_state_calibration/protocol.py": "95fbd9a49aafc9ffe26872299412635fdc22f72914049fdf278d3c5552dfde6f",
+    "expression_tomography/tasks/carrier_state_calibration/report.py": "69151b091136495521b5a5a365cd4008338ee4d227b433fab6ddb4d4a789b9f8",
+    "expression_tomography/tasks/carrier_state_calibration/task.py": "ddee9d27852e3e5a9015947e0b6c0b287efcd9ef9164ff5e029ea3b2fda99bef"
+  },
+  "worlds": {
+    "f02.w0": {
+      "base": {
+        "facts": [
+          "p01"
+        ],
+        "priority": [
+          [
+            "r2",
+            "r3"
+          ]
+        ],
+        "rules": [
+          {
+            "id": "r1",
+            "if": [
+              "p02"
+            ],
+            "then": "eligible"
+          },
+          {
+            "id": "r2",
+            "if": [
+              "p00",
+              "p01"
+            ],
+            "then": "eligible"
+          },
+          {
+            "id": "r3",
+            "if": [
+              "p01"
+            ],
+            "then": "not_eligible"
+          }
+        ]
+      },
+      "add": "p02"
+    },
+    "f02.w1": {
+      "base": {
+        "facts": [
+          "p00",
+          "p01",
+          "p02"
+        ],
+        "priority": [
+          [
+            "r2",
+            "r3"
+          ]
+        ],
+        "rules": [
+          {
+            "id": "r1",
+            "if": [
+              "p02"
+            ],
+            "then": "eligible"
+          },
+          {
+            "id": "r2",
+            "if": [
+              "p00",
+              "p01"
+            ],
+            "then": "eligible"
+          },
+          {
+            "id": "r3",
+            "if": [
+              "p01"
+            ],
+            "then": "not_eligible"
+          }
+        ]
+      },
+      "add": "p02"
+    },
+    "f05.w0": {
+      "base": {
+        "facts": [
+          "p01"
+        ],
+        "priority": [],
+        "rules": [
+          {
+            "id": "r1",
+            "if": [
+              "p01",
+              "p03"
+            ],
+            "then": "eligible"
+          },
+          {
+            "id": "r2",
+            "if": [
+              "p00",
+              "p02"
+            ],
+            "then": "not_eligible"
+          },
+          {
+            "id": "r3",
+            "if": [
+              "p01"
+            ],
+            "then": "eligible"
+          }
+        ]
+      },
+      "add": "p03"
+    },
+    "f05.w1": {
+      "base": {
+        "facts": [
+          "p00",
+          "p01",
+          "p02"
+        ],
+        "priority": [],
+        "rules": [
+          {
+            "id": "r1",
+            "if": [
+              "p01",
+              "p03"
+            ],
+            "then": "eligible"
+          },
+          {
+            "id": "r2",
+            "if": [
+              "p00",
+              "p02"
+            ],
+            "then": "not_eligible"
+          },
+          {
+            "id": "r3",
+            "if": [
+              "p01"
+            ],
+            "then": "eligible"
+          }
+        ]
+      },
+      "add": "p03"
+    },
+    "f08.w0": {
+      "base": {
+        "facts": [
+          "p01"
+        ],
+        "priority": [
+          [
+            "r2",
+            "r1"
+          ]
+        ],
+        "rules": [
+          {
+            "id": "r1",
+            "if": [
+              "p00",
+              "p01"
+            ],
+            "then": "eligible"
+          },
+          {
+            "id": "r2",
+            "if": [
+              "p02",
+              "p03"
+            ],
+            "then": "not_eligible"
+          },
+          {
+            "id": "r3",
+            "if": [
+              "p01"
+            ],
+            "then": "not_eligible"
+          }
+        ]
+      },
+      "add": "p03"
+    },
+    "f08.w1": {
+      "base": {
+        "facts": [
+          "p00",
+          "p01"
+        ],
+        "priority": [
+          [
+            "r2",
+            "r1"
+          ]
+        ],
+        "rules": [
+          {
+            "id": "r1",
+            "if": [
+              "p00",
+              "p01"
+            ],
+            "then": "eligible"
+          },
+          {
+            "id": "r2",
+            "if": [
+              "p02",
+              "p03"
+            ],
+            "then": "not_eligible"
+          },
+          {
+            "id": "r3",
+            "if": [
+              "p01"
+            ],
+            "then": "not_eligible"
+          }
+        ]
+      },
+      "add": "p03"
+    }
+  },
+  "fixtures": [
+    {
+      "world_id": "f02.w0",
+      "condition": "base_only_b1",
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"text\":\"{\\\"facts\\\":[\\\"p01\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r3\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p02\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+      "prompt_sha256": "f98398c5f057c66334642ead1f2cf0aca447536726d7d2e449f120756feb449a",
+      "private_current_trace": {
+        "facts": [
+          "p01"
+        ],
+        "answer": "no",
+        "fired_rules": [
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r3"
+        ],
+        "active_conclusions": [
+          "not_eligible"
+        ]
+      },
+      "private_counterfactual_trace": {
+        "facts": [
+          "p01",
+          "p02"
+        ],
+        "answer": "conflict",
+        "fired_rules": [
+          "r1",
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r1",
+          "r3"
+        ],
+        "active_conclusions": [
+          "eligible",
+          "not_eligible"
+        ]
+      }
+    },
+    {
+      "world_id": "f02.w0",
+      "condition": "materialized_single_state",
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p01\",\"p02\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+      "prompt_sha256": "e5283e584d64f8dafd5f0623d4b9812042edfb245f0905efd5d219c57fff4ee2",
+      "private_current_trace": {
+        "facts": [
+          "p01"
+        ],
+        "answer": "no",
+        "fired_rules": [
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r3"
+        ],
+        "active_conclusions": [
+          "not_eligible"
+        ]
+      },
+      "private_counterfactual_trace": {
+        "facts": [
+          "p01",
+          "p02"
+        ],
+        "answer": "conflict",
+        "fired_rules": [
+          "r1",
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r1",
+          "r3"
+        ],
+        "active_conclusions": [
+          "eligible",
+          "not_eligible"
+        ]
+      }
+    },
+    {
+      "world_id": "f02.w0",
+      "condition": "paired_public_trace",
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"world\":{\"facts\":[\"p01\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+      "prompt_sha256": "317371bd4462f4005a748583706904071a5998a386b01f0caac5879bafe6415a",
+      "private_current_trace": {
+        "facts": [
+          "p01"
+        ],
+        "answer": "no",
+        "fired_rules": [
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r3"
+        ],
+        "active_conclusions": [
+          "not_eligible"
+        ]
+      },
+      "private_counterfactual_trace": {
+        "facts": [
+          "p01",
+          "p02"
+        ],
+        "answer": "conflict",
+        "fired_rules": [
+          "r1",
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r1",
+          "r3"
+        ],
+        "active_conclusions": [
+          "eligible",
+          "not_eligible"
+        ]
+      }
+    },
+    {
+      "world_id": "f02.w1",
+      "condition": "base_only_b1",
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"text\":\"{\\\"facts\\\":[\\\"p00\\\",\\\"p01\\\",\\\"p02\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r3\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p02\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+      "prompt_sha256": "77e53aa7286272ebb1032152d7407e48b4303bb02f14cdcd799e474d5c8a0034",
+      "private_current_trace": {
+        "facts": [
+          "p00",
+          "p01",
+          "p02"
+        ],
+        "answer": "yes",
+        "fired_rules": [
+          "r1",
+          "r2",
+          "r3"
+        ],
+        "suppressed_rules": [
+          "r3"
+        ],
+        "fired_priority_edges": [
+          [
+            "r2",
+            "r3"
+          ]
+        ],
+        "active_rules": [
+          "r1",
+          "r2"
+        ],
+        "active_conclusions": [
+          "eligible"
+        ]
+      },
+      "private_counterfactual_trace": {
+        "facts": [
+          "p00",
+          "p01",
+          "p02"
+        ],
+        "answer": "yes",
+        "fired_rules": [
+          "r1",
+          "r2",
+          "r3"
+        ],
+        "suppressed_rules": [
+          "r3"
+        ],
+        "fired_priority_edges": [
+          [
+            "r2",
+            "r3"
+          ]
+        ],
+        "active_rules": [
+          "r1",
+          "r2"
+        ],
+        "active_conclusions": [
+          "eligible"
+        ]
+      }
+    },
+    {
+      "world_id": "f02.w1",
+      "condition": "materialized_single_state",
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p00\",\"p01\",\"p02\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+      "prompt_sha256": "82df88d424e03d234f7c2a2a71b91d883ed64475e1cbac809e49f1e2afeed4c9",
+      "private_current_trace": {
+        "facts": [
+          "p00",
+          "p01",
+          "p02"
+        ],
+        "answer": "yes",
+        "fired_rules": [
+          "r1",
+          "r2",
+          "r3"
+        ],
+        "suppressed_rules": [
+          "r3"
+        ],
+        "fired_priority_edges": [
+          [
+            "r2",
+            "r3"
+          ]
+        ],
+        "active_rules": [
+          "r1",
+          "r2"
+        ],
+        "active_conclusions": [
+          "eligible"
+        ]
+      },
+      "private_counterfactual_trace": {
+        "facts": [
+          "p00",
+          "p01",
+          "p02"
+        ],
+        "answer": "yes",
+        "fired_rules": [
+          "r1",
+          "r2",
+          "r3"
+        ],
+        "suppressed_rules": [
+          "r3"
+        ],
+        "fired_priority_edges": [
+          [
+            "r2",
+            "r3"
+          ]
+        ],
+        "active_rules": [
+          "r1",
+          "r2"
+        ],
+        "active_conclusions": [
+          "eligible"
+        ]
+      }
+    },
+    {
+      "world_id": "f02.w1",
+      "condition": "paired_public_trace",
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"world\":{\"facts\":[\"p00\",\"p01\",\"p02\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+      "prompt_sha256": "50c7a3983f06d49e0af25141ffb0a1cc701f8bd0366c42231b6c336900e1ba7f",
+      "private_current_trace": {
+        "facts": [
+          "p00",
+          "p01",
+          "p02"
+        ],
+        "answer": "yes",
+        "fired_rules": [
+          "r1",
+          "r2",
+          "r3"
+        ],
+        "suppressed_rules": [
+          "r3"
+        ],
+        "fired_priority_edges": [
+          [
+            "r2",
+            "r3"
+          ]
+        ],
+        "active_rules": [
+          "r1",
+          "r2"
+        ],
+        "active_conclusions": [
+          "eligible"
+        ]
+      },
+      "private_counterfactual_trace": {
+        "facts": [
+          "p00",
+          "p01",
+          "p02"
+        ],
+        "answer": "yes",
+        "fired_rules": [
+          "r1",
+          "r2",
+          "r3"
+        ],
+        "suppressed_rules": [
+          "r3"
+        ],
+        "fired_priority_edges": [
+          [
+            "r2",
+            "r3"
+          ]
+        ],
+        "active_rules": [
+          "r1",
+          "r2"
+        ],
+        "active_conclusions": [
+          "eligible"
+        ]
+      }
+    },
+    {
+      "world_id": "f05.w0",
+      "condition": "base_only_b1",
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p01\\\"],\\\"priority\\\":[],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p01\\\",\\\"p03\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p02\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"}]}\"}",
+      "prompt_sha256": "3cff26d49deb7aac8917b9ff10ba92d64a28b6c84358367365fbeef14eb35248",
+      "private_current_trace": {
+        "facts": [
+          "p01"
+        ],
+        "answer": "yes",
+        "fired_rules": [
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r3"
+        ],
+        "active_conclusions": [
+          "eligible"
+        ]
+      },
+      "private_counterfactual_trace": {
+        "facts": [
+          "p01",
+          "p03"
+        ],
+        "answer": "yes",
+        "fired_rules": [
+          "r1",
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r1",
+          "r3"
+        ],
+        "active_conclusions": [
+          "eligible"
+        ]
+      }
+    },
+    {
+      "world_id": "f05.w0",
+      "condition": "materialized_single_state",
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p01\",\"p03\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}",
+      "prompt_sha256": "b6f2772d48f146d916ce19742489ee0350a5387ce8827ed5606853ff7ae910f7",
+      "private_current_trace": {
+        "facts": [
+          "p01"
+        ],
+        "answer": "yes",
+        "fired_rules": [
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r3"
+        ],
+        "active_conclusions": [
+          "eligible"
+        ]
+      },
+      "private_counterfactual_trace": {
+        "facts": [
+          "p01",
+          "p03"
+        ],
+        "answer": "yes",
+        "fired_rules": [
+          "r1",
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r1",
+          "r3"
+        ],
+        "active_conclusions": [
+          "eligible"
+        ]
+      }
+    },
+    {
+      "world_id": "f05.w0",
+      "condition": "paired_public_trace",
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p01\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}}",
+      "prompt_sha256": "743b8c2eebf8411783c56b7ca89bfee9077bf7a04876ceb8282805e56fe115e1",
+      "private_current_trace": {
+        "facts": [
+          "p01"
+        ],
+        "answer": "yes",
+        "fired_rules": [
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r3"
+        ],
+        "active_conclusions": [
+          "eligible"
+        ]
+      },
+      "private_counterfactual_trace": {
+        "facts": [
+          "p01",
+          "p03"
+        ],
+        "answer": "yes",
+        "fired_rules": [
+          "r1",
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r1",
+          "r3"
+        ],
+        "active_conclusions": [
+          "eligible"
+        ]
+      }
+    },
+    {
+      "world_id": "f05.w1",
+      "condition": "base_only_b1",
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p00\\\",\\\"p01\\\",\\\"p02\\\"],\\\"priority\\\":[],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p01\\\",\\\"p03\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p02\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"}]}\"}",
+      "prompt_sha256": "b474e0fb60687048954d8642bd636d46317a30675cd167eb4a781753810e1ef1",
+      "private_current_trace": {
+        "facts": [
+          "p00",
+          "p01",
+          "p02"
+        ],
+        "answer": "conflict",
+        "fired_rules": [
+          "r2",
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r2",
+          "r3"
+        ],
+        "active_conclusions": [
+          "eligible",
+          "not_eligible"
+        ]
+      },
+      "private_counterfactual_trace": {
+        "facts": [
+          "p00",
+          "p01",
+          "p02",
+          "p03"
+        ],
+        "answer": "conflict",
+        "fired_rules": [
+          "r1",
+          "r2",
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r1",
+          "r2",
+          "r3"
+        ],
+        "active_conclusions": [
+          "eligible",
+          "not_eligible"
+        ]
+      }
+    },
+    {
+      "world_id": "f05.w1",
+      "condition": "materialized_single_state",
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p00\",\"p01\",\"p02\",\"p03\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}",
+      "prompt_sha256": "94e655cf800eaa8c0fcd66b1a28af36c0728028edb864a2e5f08ca207888424b",
+      "private_current_trace": {
+        "facts": [
+          "p00",
+          "p01",
+          "p02"
+        ],
+        "answer": "conflict",
+        "fired_rules": [
+          "r2",
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r2",
+          "r3"
+        ],
+        "active_conclusions": [
+          "eligible",
+          "not_eligible"
+        ]
+      },
+      "private_counterfactual_trace": {
+        "facts": [
+          "p00",
+          "p01",
+          "p02",
+          "p03"
+        ],
+        "answer": "conflict",
+        "fired_rules": [
+          "r1",
+          "r2",
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r1",
+          "r2",
+          "r3"
+        ],
+        "active_conclusions": [
+          "eligible",
+          "not_eligible"
+        ]
+      }
+    },
+    {
+      "world_id": "f05.w1",
+      "condition": "paired_public_trace",
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p00\",\"p01\",\"p02\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}}",
+      "prompt_sha256": "0aeb9d68b97b6ad00fb7421117f9464556a8d481c2af658674cc138730746a5e",
+      "private_current_trace": {
+        "facts": [
+          "p00",
+          "p01",
+          "p02"
+        ],
+        "answer": "conflict",
+        "fired_rules": [
+          "r2",
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r2",
+          "r3"
+        ],
+        "active_conclusions": [
+          "eligible",
+          "not_eligible"
+        ]
+      },
+      "private_counterfactual_trace": {
+        "facts": [
+          "p00",
+          "p01",
+          "p02",
+          "p03"
+        ],
+        "answer": "conflict",
+        "fired_rules": [
+          "r1",
+          "r2",
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r1",
+          "r2",
+          "r3"
+        ],
+        "active_conclusions": [
+          "eligible",
+          "not_eligible"
+        ]
+      }
+    },
+    {
+      "world_id": "f08.w0",
+      "condition": "base_only_b1",
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p01\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r1\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p02\\\",\\\"p03\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+      "prompt_sha256": "20803d6123294415ae12bb5c8f5daf62def17dea5e06c6ae02dcd79f5b1b28e3",
+      "private_current_trace": {
+        "facts": [
+          "p01"
+        ],
+        "answer": "no",
+        "fired_rules": [
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r3"
+        ],
+        "active_conclusions": [
+          "not_eligible"
+        ]
+      },
+      "private_counterfactual_trace": {
+        "facts": [
+          "p01",
+          "p03"
+        ],
+        "answer": "no",
+        "fired_rules": [
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r3"
+        ],
+        "active_conclusions": [
+          "not_eligible"
+        ]
+      }
+    },
+    {
+      "world_id": "f08.w0",
+      "condition": "materialized_single_state",
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p01\",\"p03\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+      "prompt_sha256": "f251dc2ce9331dbe6b4e30f537dc413a0cc62befadbdb7cc6a12e2931b87f5c5",
+      "private_current_trace": {
+        "facts": [
+          "p01"
+        ],
+        "answer": "no",
+        "fired_rules": [
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r3"
+        ],
+        "active_conclusions": [
+          "not_eligible"
+        ]
+      },
+      "private_counterfactual_trace": {
+        "facts": [
+          "p01",
+          "p03"
+        ],
+        "answer": "no",
+        "fired_rules": [
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r3"
+        ],
+        "active_conclusions": [
+          "not_eligible"
+        ]
+      }
+    },
+    {
+      "world_id": "f08.w0",
+      "condition": "paired_public_trace",
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p01\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+      "prompt_sha256": "f81d30a199981eaf7c8f1695b5a3d767930d281fd8e71aa24839208db8b2c6e8",
+      "private_current_trace": {
+        "facts": [
+          "p01"
+        ],
+        "answer": "no",
+        "fired_rules": [
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r3"
+        ],
+        "active_conclusions": [
+          "not_eligible"
+        ]
+      },
+      "private_counterfactual_trace": {
+        "facts": [
+          "p01",
+          "p03"
+        ],
+        "answer": "no",
+        "fired_rules": [
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r3"
+        ],
+        "active_conclusions": [
+          "not_eligible"
+        ]
+      }
+    },
+    {
+      "world_id": "f08.w1",
+      "condition": "base_only_b1",
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r1\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p02\\\",\\\"p03\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+      "prompt_sha256": "c0dab3e22ea90bd199a2b68a2c3b16cd5a33fa1c4933bac726b92ba99542bb9d",
+      "private_current_trace": {
+        "facts": [
+          "p00",
+          "p01"
+        ],
+        "answer": "conflict",
+        "fired_rules": [
+          "r1",
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r1",
+          "r3"
+        ],
+        "active_conclusions": [
+          "eligible",
+          "not_eligible"
+        ]
+      },
+      "private_counterfactual_trace": {
+        "facts": [
+          "p00",
+          "p01",
+          "p03"
+        ],
+        "answer": "conflict",
+        "fired_rules": [
+          "r1",
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r1",
+          "r3"
+        ],
+        "active_conclusions": [
+          "eligible",
+          "not_eligible"
+        ]
+      }
+    },
+    {
+      "world_id": "f08.w1",
+      "condition": "materialized_single_state",
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p00\",\"p01\",\"p03\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+      "prompt_sha256": "b94324e5280fbaf4966694c6d780db1bb4e4ea40ef0cbde499e2de5a1c237133",
+      "private_current_trace": {
+        "facts": [
+          "p00",
+          "p01"
+        ],
+        "answer": "conflict",
+        "fired_rules": [
+          "r1",
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r1",
+          "r3"
+        ],
+        "active_conclusions": [
+          "eligible",
+          "not_eligible"
+        ]
+      },
+      "private_counterfactual_trace": {
+        "facts": [
+          "p00",
+          "p01",
+          "p03"
+        ],
+        "answer": "conflict",
+        "fired_rules": [
+          "r1",
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r1",
+          "r3"
+        ],
+        "active_conclusions": [
+          "eligible",
+          "not_eligible"
+        ]
+      }
+    },
+    {
+      "world_id": "f08.w1",
+      "condition": "paired_public_trace",
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p00\",\"p01\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+      "prompt_sha256": "13f7890a3ebadee7398144bb675ebdf97f29dbb54405f10997f1c6377a2a9c7a",
+      "private_current_trace": {
+        "facts": [
+          "p00",
+          "p01"
+        ],
+        "answer": "conflict",
+        "fired_rules": [
+          "r1",
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r1",
+          "r3"
+        ],
+        "active_conclusions": [
+          "eligible",
+          "not_eligible"
+        ]
+      },
+      "private_counterfactual_trace": {
+        "facts": [
+          "p00",
+          "p01",
+          "p03"
+        ],
+        "answer": "conflict",
+        "fired_rules": [
+          "r1",
+          "r3"
+        ],
+        "suppressed_rules": [],
+        "fired_priority_edges": [],
+        "active_rules": [
+          "r1",
+          "r3"
+        ],
+        "active_conclusions": [
+          "eligible",
+          "not_eligible"
+        ]
+      }
+    }
+  ],
+  "provider_specs": {
+    "gpt6_luna": {
+      "name": "reader-gpt-6-luna-low",
+      "type": "openai_compatible",
+      "model": "gpt-6-luna",
+      "base_url": "https://api.openai.com/v1",
+      "api_key_env": "OPENAI_API_KEY",
+      "timeout_s": 120.0,
+      "max_tokens": 4000,
+      "temperature": null,
+      "reasoning_effort": "low",
+      "device": "auto",
+      "dtype": "auto"
+    },
+    "mistral_large": {
+      "name": "reader-mistral-large-latest",
+      "type": "openai_compatible",
+      "model": "mistral-large-latest",
+      "base_url": "https://api.mistral.ai/v1",
+      "api_key_env": "MISTRAL_API_KEY",
+      "timeout_s": 120.0,
+      "max_tokens": 4000,
+      "temperature": null,
+      "reasoning_effort": null,
+      "device": "auto",
+      "dtype": "auto"
+    }
+  },
+  "call_cap": 72,
+  "per_reader_call_cap": 36,
+  "repetitions": 2,
+  "transport": "fresh_single_user_prompt.no_history.no_retries.v1",
+  "selection": "All six previously inspected worlds; targeted calibration, not held-out confirmation.",
+  "limitations": [
+    "Canonicalization and removal of source claims change several input properties together.",
+    "Single-state materialization also reduces task/output burden; no isolated field-name effect.",
+    "Public trace is a scaffold intervention, not access to hidden reasoning.",
+    "Reader family, capability, reasoning and provider-default sampling are not matched.",
+    "No codebook use, collusion, general expression or intelligence verdict."
+  ],
+  "slots": [
+    {
+      "world_id": "f02.w1",
+      "condition": "base_only_b1",
+      "reader": "gpt6_luna",
+      "replicate": 0,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"text\":\"{\\\"facts\\\":[\\\"p00\\\",\\\"p01\\\",\\\"p02\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r3\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p02\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+      "prompt_sha256": "77e53aa7286272ebb1032152d7407e48b4303bb02f14cdcd799e474d5c8a0034",
+      "slot_sha256": "00b648182b8ae039b21be6e732067165794052962728c80a0075ba8e830b8d0f"
+    },
+    {
+      "world_id": "f02.w0",
+      "condition": "paired_public_trace",
+      "reader": "gpt6_luna",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"world\":{\"facts\":[\"p01\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+      "prompt_sha256": "317371bd4462f4005a748583706904071a5998a386b01f0caac5879bafe6415a",
+      "slot_sha256": "082bcf9395642807d9a110c3e4238b3f36a6845aeed122aaddc5bd25be271c18"
+    },
+    {
+      "world_id": "f05.w0",
+      "condition": "base_only_b1",
+      "reader": "gpt6_luna",
+      "replicate": 0,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p01\\\"],\\\"priority\\\":[],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p01\\\",\\\"p03\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p02\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"}]}\"}",
+      "prompt_sha256": "3cff26d49deb7aac8917b9ff10ba92d64a28b6c84358367365fbeef14eb35248",
+      "slot_sha256": "0d854edf31ac9512404e9388972f0c6379974d5548565659844f4c8cf28f582a"
+    },
+    {
+      "world_id": "f05.w1",
+      "condition": "base_only_b1",
+      "reader": "gpt6_luna",
+      "replicate": 0,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p00\\\",\\\"p01\\\",\\\"p02\\\"],\\\"priority\\\":[],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p01\\\",\\\"p03\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p02\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"}]}\"}",
+      "prompt_sha256": "b474e0fb60687048954d8642bd636d46317a30675cd167eb4a781753810e1ef1",
+      "slot_sha256": "14a96bee29cd4de098bec94d65565ae2e31ae3ec4e7922d2c703a46c60fbacf9"
+    },
+    {
+      "world_id": "f08.w1",
+      "condition": "base_only_b1",
+      "reader": "gpt6_luna",
+      "replicate": 0,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r1\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p02\\\",\\\"p03\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+      "prompt_sha256": "c0dab3e22ea90bd199a2b68a2c3b16cd5a33fa1c4933bac726b92ba99542bb9d",
+      "slot_sha256": "188eaf873d960311f423e5eea6cab11003647d287a78ff6ed317cd0137edf338"
+    },
+    {
+      "world_id": "f05.w0",
+      "condition": "paired_public_trace",
+      "reader": "gpt6_luna",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p01\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}}",
+      "prompt_sha256": "743b8c2eebf8411783c56b7ca89bfee9077bf7a04876ceb8282805e56fe115e1",
+      "slot_sha256": "1efe1bd108589d8fe86ec11fc633d43d57a274ec60f7c2031a8e0954bbba4b50"
+    },
+    {
+      "world_id": "f08.w1",
+      "condition": "paired_public_trace",
+      "reader": "gpt6_luna",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p00\",\"p01\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+      "prompt_sha256": "13f7890a3ebadee7398144bb675ebdf97f29dbb54405f10997f1c6377a2a9c7a",
+      "slot_sha256": "1f1f927b11df7ec9e4ef387308f79faee38f7bbafafaf8f9265442ec919b0cf6"
+    },
+    {
+      "world_id": "f08.w1",
+      "condition": "base_only_b1",
+      "reader": "mistral_large",
+      "replicate": 0,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r1\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p02\\\",\\\"p03\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+      "prompt_sha256": "c0dab3e22ea90bd199a2b68a2c3b16cd5a33fa1c4933bac726b92ba99542bb9d",
+      "slot_sha256": "34be3361a487c06bb06a8762eea100c036a08aac619b710cdb594d1858f4b920"
+    },
+    {
+      "world_id": "f08.w0",
+      "condition": "paired_public_trace",
+      "reader": "mistral_large",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p01\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+      "prompt_sha256": "f81d30a199981eaf7c8f1695b5a3d767930d281fd8e71aa24839208db8b2c6e8",
+      "slot_sha256": "411d98771956fdf7f016314cbaa2db3466b964683a6272b2c605271460dbbd08"
+    },
+    {
+      "world_id": "f02.w0",
+      "condition": "materialized_single_state",
+      "reader": "gpt6_luna",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p01\",\"p02\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+      "prompt_sha256": "e5283e584d64f8dafd5f0623d4b9812042edfb245f0905efd5d219c57fff4ee2",
+      "slot_sha256": "4868f8b3b6a00cfb55dbf085501c2f490b363e739bd97837de09583a8f283e69"
+    },
+    {
+      "world_id": "f02.w1",
+      "condition": "materialized_single_state",
+      "reader": "mistral_large",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p00\",\"p01\",\"p02\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+      "prompt_sha256": "82df88d424e03d234f7c2a2a71b91d883ed64475e1cbac809e49f1e2afeed4c9",
+      "slot_sha256": "4a227760fc1bc0d4877a10d4bedf9b746916478a20ad8cd3c8edba873e79caa1"
+    },
+    {
+      "world_id": "f05.w1",
+      "condition": "materialized_single_state",
+      "reader": "gpt6_luna",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p00\",\"p01\",\"p02\",\"p03\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}",
+      "prompt_sha256": "94e655cf800eaa8c0fcd66b1a28af36c0728028edb864a2e5f08ca207888424b",
+      "slot_sha256": "5078a938966189dc9887fdebcbce61a27e0cf5ac58406f7e90bda2bd07d7f25c"
+    },
+    {
+      "world_id": "f08.w0",
+      "condition": "base_only_b1",
+      "reader": "mistral_large",
+      "replicate": 0,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p01\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r1\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p02\\\",\\\"p03\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+      "prompt_sha256": "20803d6123294415ae12bb5c8f5daf62def17dea5e06c6ae02dcd79f5b1b28e3",
+      "slot_sha256": "582ce934550d1ac72037692a449a9904d6f6dc98abe587b5b4066b0b47ad98dd"
+    },
+    {
+      "world_id": "f08.w1",
+      "condition": "materialized_single_state",
+      "reader": "gpt6_luna",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p00\",\"p01\",\"p03\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+      "prompt_sha256": "b94324e5280fbaf4966694c6d780db1bb4e4ea40ef0cbde499e2de5a1c237133",
+      "slot_sha256": "5d63d453c768b012c9983b244f515d25c57342f7d079f03d8410591e8c2d7882"
+    },
+    {
+      "world_id": "f08.w0",
+      "condition": "materialized_single_state",
+      "reader": "gpt6_luna",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p01\",\"p03\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+      "prompt_sha256": "f251dc2ce9331dbe6b4e30f537dc413a0cc62befadbdb7cc6a12e2931b87f5c5",
+      "slot_sha256": "5e72c2cf99fbf1f08eb1250f48adf0093d29f88373021404a181755e85d1b4ef"
+    },
+    {
+      "world_id": "f05.w0",
+      "condition": "paired_public_trace",
+      "reader": "mistral_large",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p01\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}}",
+      "prompt_sha256": "743b8c2eebf8411783c56b7ca89bfee9077bf7a04876ceb8282805e56fe115e1",
+      "slot_sha256": "64cfe7817c848a9489011b861d1ac8459bda11f4b104b59e7ee027415591f208"
+    },
+    {
+      "world_id": "f02.w0",
+      "condition": "base_only_b1",
+      "reader": "gpt6_luna",
+      "replicate": 0,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"text\":\"{\\\"facts\\\":[\\\"p01\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r3\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p02\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+      "prompt_sha256": "f98398c5f057c66334642ead1f2cf0aca447536726d7d2e449f120756feb449a",
+      "slot_sha256": "66465d3492695b7471c7341592b54028c4cf51c6ac77d5cead823315f86858df"
+    },
+    {
+      "world_id": "f05.w1",
+      "condition": "base_only_b1",
+      "reader": "mistral_large",
+      "replicate": 0,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p00\\\",\\\"p01\\\",\\\"p02\\\"],\\\"priority\\\":[],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p01\\\",\\\"p03\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p02\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"}]}\"}",
+      "prompt_sha256": "b474e0fb60687048954d8642bd636d46317a30675cd167eb4a781753810e1ef1",
+      "slot_sha256": "7aa44b2ce0f7ee06d90a817855740d06334ebada5fd874c51ce119e21fd0735c"
+    },
+    {
+      "world_id": "f02.w1",
+      "condition": "paired_public_trace",
+      "reader": "mistral_large",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"world\":{\"facts\":[\"p00\",\"p01\",\"p02\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+      "prompt_sha256": "50c7a3983f06d49e0af25141ffb0a1cc701f8bd0366c42231b6c336900e1ba7f",
+      "slot_sha256": "7c1d8c732bd145fbacf47289010f41d7aa5664275cbe963ac3986cf692ee242e"
+    },
+    {
+      "world_id": "f08.w1",
+      "condition": "paired_public_trace",
+      "reader": "mistral_large",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p00\",\"p01\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+      "prompt_sha256": "13f7890a3ebadee7398144bb675ebdf97f29dbb54405f10997f1c6377a2a9c7a",
+      "slot_sha256": "8127ac0906d699de8edd5b1784a9ab477b6406b5ffbbf1fc0b6ff92e63cbf6a2"
+    },
+    {
+      "world_id": "f02.w1",
+      "condition": "base_only_b1",
+      "reader": "mistral_large",
+      "replicate": 0,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"text\":\"{\\\"facts\\\":[\\\"p00\\\",\\\"p01\\\",\\\"p02\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r3\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p02\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+      "prompt_sha256": "77e53aa7286272ebb1032152d7407e48b4303bb02f14cdcd799e474d5c8a0034",
+      "slot_sha256": "870b53269b539e49cd30cbae51a3859b8b65abbfd5231fc461d474efd1d11cbd"
+    },
+    {
+      "world_id": "f05.w0",
+      "condition": "materialized_single_state",
+      "reader": "mistral_large",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p01\",\"p03\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}",
+      "prompt_sha256": "b6f2772d48f146d916ce19742489ee0350a5387ce8827ed5606853ff7ae910f7",
+      "slot_sha256": "963f4bf396713a3bcfbd09adac33703be20b56888bb41ed7a048769398218da9"
+    },
+    {
+      "world_id": "f05.w0",
+      "condition": "materialized_single_state",
+      "reader": "gpt6_luna",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p01\",\"p03\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}",
+      "prompt_sha256": "b6f2772d48f146d916ce19742489ee0350a5387ce8827ed5606853ff7ae910f7",
+      "slot_sha256": "998ee7443c914609accdd2f215d7d1f0ca537ac939c979008ce1f4c740003510"
+    },
+    {
+      "world_id": "f05.w1",
+      "condition": "paired_public_trace",
+      "reader": "mistral_large",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p00\",\"p01\",\"p02\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}}",
+      "prompt_sha256": "0aeb9d68b97b6ad00fb7421117f9464556a8d481c2af658674cc138730746a5e",
+      "slot_sha256": "9aa479eeb863a3dc257c9b6d486179fd5ba0f72c2c284202eb95c908e00e9423"
+    },
+    {
+      "world_id": "f08.w1",
+      "condition": "materialized_single_state",
+      "reader": "mistral_large",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p00\",\"p01\",\"p03\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+      "prompt_sha256": "b94324e5280fbaf4966694c6d780db1bb4e4ea40ef0cbde499e2de5a1c237133",
+      "slot_sha256": "a094671e427e79b0a89a8a80ff4fd624f92cf5072022b251f355ecf09501e1d4"
+    },
+    {
+      "world_id": "f05.w1",
+      "condition": "paired_public_trace",
+      "reader": "gpt6_luna",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p00\",\"p01\",\"p02\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}}",
+      "prompt_sha256": "0aeb9d68b97b6ad00fb7421117f9464556a8d481c2af658674cc138730746a5e",
+      "slot_sha256": "a1dfb1ce2a03322869618a041e5a97b1f548561b2b19d076274791d9cf180d91"
+    },
+    {
+      "world_id": "f05.w1",
+      "condition": "materialized_single_state",
+      "reader": "mistral_large",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p00\",\"p01\",\"p02\",\"p03\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}",
+      "prompt_sha256": "94e655cf800eaa8c0fcd66b1a28af36c0728028edb864a2e5f08ca207888424b",
+      "slot_sha256": "a37420c8221aa94fe0c9676c68bdb24d3bf247b7d55d1f1af9168af4a6beaedd"
+    },
+    {
+      "world_id": "f08.w0",
+      "condition": "materialized_single_state",
+      "reader": "mistral_large",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p01\",\"p03\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+      "prompt_sha256": "f251dc2ce9331dbe6b4e30f537dc413a0cc62befadbdb7cc6a12e2931b87f5c5",
+      "slot_sha256": "b2417e2e409a88a76394d1be4a7792f2d4c0671c4aa05f70896e6d313da37670"
+    },
+    {
+      "world_id": "f02.w1",
+      "condition": "paired_public_trace",
+      "reader": "gpt6_luna",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"world\":{\"facts\":[\"p00\",\"p01\",\"p02\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+      "prompt_sha256": "50c7a3983f06d49e0af25141ffb0a1cc701f8bd0366c42231b6c336900e1ba7f",
+      "slot_sha256": "b39377a6b2bdb4f7b40461cf854ea8e5aa96dbc60312c1cef9d24aa60e6fe776"
+    },
+    {
+      "world_id": "f08.w0",
+      "condition": "paired_public_trace",
+      "reader": "gpt6_luna",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p01\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+      "prompt_sha256": "f81d30a199981eaf7c8f1695b5a3d767930d281fd8e71aa24839208db8b2c6e8",
+      "slot_sha256": "beadb14c5ae232a60ccb9ea8176381b87f54057c72d7e220d3ebf22a3e09d566"
+    },
+    {
+      "world_id": "f02.w0",
+      "condition": "materialized_single_state",
+      "reader": "mistral_large",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p01\",\"p02\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+      "prompt_sha256": "e5283e584d64f8dafd5f0623d4b9812042edfb245f0905efd5d219c57fff4ee2",
+      "slot_sha256": "ccb217103a7657614fb914a57cb94751ebeb82403bbf63922a23673c2e1c52f5"
+    },
+    {
+      "world_id": "f02.w1",
+      "condition": "materialized_single_state",
+      "reader": "gpt6_luna",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p00\",\"p01\",\"p02\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+      "prompt_sha256": "82df88d424e03d234f7c2a2a71b91d883ed64475e1cbac809e49f1e2afeed4c9",
+      "slot_sha256": "d7d6e7a385babfbbe8b83babfcd4c2773d5e17cd44df77df6a4f6eca254bfca8"
+    },
+    {
+      "world_id": "f08.w0",
+      "condition": "base_only_b1",
+      "reader": "gpt6_luna",
+      "replicate": 0,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p01\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r1\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p02\\\",\\\"p03\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+      "prompt_sha256": "20803d6123294415ae12bb5c8f5daf62def17dea5e06c6ae02dcd79f5b1b28e3",
+      "slot_sha256": "e3ce288668c55fdbd45145a3dd3d032aacc588c27d651137e56ebeb51b5fbc05"
+    },
+    {
+      "world_id": "f05.w0",
+      "condition": "base_only_b1",
+      "reader": "mistral_large",
+      "replicate": 0,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p01\\\"],\\\"priority\\\":[],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p01\\\",\\\"p03\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p02\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"}]}\"}",
+      "prompt_sha256": "3cff26d49deb7aac8917b9ff10ba92d64a28b6c84358367365fbeef14eb35248",
+      "slot_sha256": "ee243a019ab013eb165bc519c49f9bb6a9b8a1a38467bc599f2ce33b45f245b9"
+    },
+    {
+      "world_id": "f02.w0",
+      "condition": "paired_public_trace",
+      "reader": "mistral_large",
+      "replicate": 0,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"world\":{\"facts\":[\"p01\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+      "prompt_sha256": "317371bd4462f4005a748583706904071a5998a386b01f0caac5879bafe6415a",
+      "slot_sha256": "f51812b208ccb9576b5f74d45e435a2d704c130b1e59d451f362decc953c43b9"
+    },
+    {
+      "world_id": "f02.w0",
+      "condition": "base_only_b1",
+      "reader": "mistral_large",
+      "replicate": 0,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"text\":\"{\\\"facts\\\":[\\\"p01\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r3\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p02\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+      "prompt_sha256": "f98398c5f057c66334642ead1f2cf0aca447536726d7d2e449f120756feb449a",
+      "slot_sha256": "f72bb69e561da3bce10d9a0303a7768c32652445a8288755aaf2745fc5c5231e"
+    },
+    {
+      "world_id": "f05.w0",
+      "condition": "base_only_b1",
+      "reader": "gpt6_luna",
+      "replicate": 1,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p01\\\"],\\\"priority\\\":[],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p01\\\",\\\"p03\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p02\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"}]}\"}",
+      "prompt_sha256": "3cff26d49deb7aac8917b9ff10ba92d64a28b6c84358367365fbeef14eb35248",
+      "slot_sha256": "06a0dff9c2c5603ff05065c7b0117df804682650a9c944a9436053fc50fc1221"
+    },
+    {
+      "world_id": "f08.w0",
+      "condition": "paired_public_trace",
+      "reader": "gpt6_luna",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p01\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+      "prompt_sha256": "f81d30a199981eaf7c8f1695b5a3d767930d281fd8e71aa24839208db8b2c6e8",
+      "slot_sha256": "0d4d9b71044063dcaa6b5d8978d502263e7f168231bac2744bec16a9ffc0e88d"
+    },
+    {
+      "world_id": "f08.w1",
+      "condition": "paired_public_trace",
+      "reader": "mistral_large",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p00\",\"p01\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+      "prompt_sha256": "13f7890a3ebadee7398144bb675ebdf97f29dbb54405f10997f1c6377a2a9c7a",
+      "slot_sha256": "14ea88813595e761bda9928bfa7ec531ae2931bd59101dcb2d95b65a3e7cdc3b"
+    },
+    {
+      "world_id": "f02.w1",
+      "condition": "paired_public_trace",
+      "reader": "mistral_large",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"world\":{\"facts\":[\"p00\",\"p01\",\"p02\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+      "prompt_sha256": "50c7a3983f06d49e0af25141ffb0a1cc701f8bd0366c42231b6c336900e1ba7f",
+      "slot_sha256": "190bc24df996a86a418a46b75cecce1610dcf0ce8e082b7c68b5f4e7b38ed11e"
+    },
+    {
+      "world_id": "f05.w1",
+      "condition": "materialized_single_state",
+      "reader": "mistral_large",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p00\",\"p01\",\"p02\",\"p03\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}",
+      "prompt_sha256": "94e655cf800eaa8c0fcd66b1a28af36c0728028edb864a2e5f08ca207888424b",
+      "slot_sha256": "25336625b37c33f5d2d2894318f23674ea7abc6c1d3b9940234992f28918c5f2"
+    },
+    {
+      "world_id": "f02.w1",
+      "condition": "materialized_single_state",
+      "reader": "mistral_large",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p00\",\"p01\",\"p02\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+      "prompt_sha256": "82df88d424e03d234f7c2a2a71b91d883ed64475e1cbac809e49f1e2afeed4c9",
+      "slot_sha256": "2e1f8f3408246315820f6ea946d3b25bc866b412d770ddd887dae5e1be1444d2"
+    },
+    {
+      "world_id": "f02.w1",
+      "condition": "base_only_b1",
+      "reader": "mistral_large",
+      "replicate": 1,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"text\":\"{\\\"facts\\\":[\\\"p00\\\",\\\"p01\\\",\\\"p02\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r3\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p02\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+      "prompt_sha256": "77e53aa7286272ebb1032152d7407e48b4303bb02f14cdcd799e474d5c8a0034",
+      "slot_sha256": "307437dd907d004bcaadc0976f9d1835ec510a5bf9d3edad138826f9c3124c10"
+    },
+    {
+      "world_id": "f08.w0",
+      "condition": "materialized_single_state",
+      "reader": "mistral_large",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p01\",\"p03\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+      "prompt_sha256": "f251dc2ce9331dbe6b4e30f537dc413a0cc62befadbdb7cc6a12e2931b87f5c5",
+      "slot_sha256": "364084090edcaec1d8890ca9716a6be9189c5b1096b18846b36f2d3ae274635b"
+    },
+    {
+      "world_id": "f05.w0",
+      "condition": "base_only_b1",
+      "reader": "mistral_large",
+      "replicate": 1,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p01\\\"],\\\"priority\\\":[],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p01\\\",\\\"p03\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p02\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"}]}\"}",
+      "prompt_sha256": "3cff26d49deb7aac8917b9ff10ba92d64a28b6c84358367365fbeef14eb35248",
+      "slot_sha256": "4019c621caa354482e9d239db12d834dd7d1c4baa6299e75917e6c9ee75dc7b2"
+    },
+    {
+      "world_id": "f05.w1",
+      "condition": "paired_public_trace",
+      "reader": "mistral_large",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p00\",\"p01\",\"p02\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}}",
+      "prompt_sha256": "0aeb9d68b97b6ad00fb7421117f9464556a8d481c2af658674cc138730746a5e",
+      "slot_sha256": "45223a3e6769d8ff74969a29da1a13c8d2178ef272c834ecc6dd88cba6c2d840"
+    },
+    {
+      "world_id": "f08.w0",
+      "condition": "materialized_single_state",
+      "reader": "gpt6_luna",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p01\",\"p03\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+      "prompt_sha256": "f251dc2ce9331dbe6b4e30f537dc413a0cc62befadbdb7cc6a12e2931b87f5c5",
+      "slot_sha256": "5be51efdc83f61a03e6f2db7c674e476fc58a5f288ae04656428062d46919670"
+    },
+    {
+      "world_id": "f05.w0",
+      "condition": "materialized_single_state",
+      "reader": "mistral_large",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p01\",\"p03\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}",
+      "prompt_sha256": "b6f2772d48f146d916ce19742489ee0350a5387ce8827ed5606853ff7ae910f7",
+      "slot_sha256": "62a31f3570053a5941298e186ae8276786250272cac8955fcccbbd4fb384d37e"
+    },
+    {
+      "world_id": "f02.w1",
+      "condition": "paired_public_trace",
+      "reader": "gpt6_luna",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"world\":{\"facts\":[\"p00\",\"p01\",\"p02\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+      "prompt_sha256": "50c7a3983f06d49e0af25141ffb0a1cc701f8bd0366c42231b6c336900e1ba7f",
+      "slot_sha256": "6e39d38b72309ae37555137fcd06d3fa4362c6cdc427c99504179cd8d11d0f12"
+    },
+    {
+      "world_id": "f05.w0",
+      "condition": "materialized_single_state",
+      "reader": "gpt6_luna",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p01\",\"p03\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}",
+      "prompt_sha256": "b6f2772d48f146d916ce19742489ee0350a5387ce8827ed5606853ff7ae910f7",
+      "slot_sha256": "6ee74fe2f408d0e0c10b54de5bfec2ce5d275f9a6e4b5f398d3bd3e4e32e05cd"
+    },
+    {
+      "world_id": "f05.w0",
+      "condition": "paired_public_trace",
+      "reader": "mistral_large",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p01\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}}",
+      "prompt_sha256": "743b8c2eebf8411783c56b7ca89bfee9077bf7a04876ceb8282805e56fe115e1",
+      "slot_sha256": "71558bcff1e81ddae04404e85a58a6960e9f44bbe996d032ed9a055c48165d3e"
+    },
+    {
+      "world_id": "f05.w1",
+      "condition": "base_only_b1",
+      "reader": "gpt6_luna",
+      "replicate": 1,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p00\\\",\\\"p01\\\",\\\"p02\\\"],\\\"priority\\\":[],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p01\\\",\\\"p03\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p02\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"}]}\"}",
+      "prompt_sha256": "b474e0fb60687048954d8642bd636d46317a30675cd167eb4a781753810e1ef1",
+      "slot_sha256": "8773d49d542237681a9e549e878a111685943953628b4ed152079c96b049a328"
+    },
+    {
+      "world_id": "f02.w0",
+      "condition": "materialized_single_state",
+      "reader": "gpt6_luna",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p01\",\"p02\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+      "prompt_sha256": "e5283e584d64f8dafd5f0623d4b9812042edfb245f0905efd5d219c57fff4ee2",
+      "slot_sha256": "88eb9508ecf7a17924dbc42a84ac68be8f3574c3f87eaa957d37ebcb64846af3"
+    },
+    {
+      "world_id": "f08.w0",
+      "condition": "paired_public_trace",
+      "reader": "mistral_large",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p01\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+      "prompt_sha256": "f81d30a199981eaf7c8f1695b5a3d767930d281fd8e71aa24839208db8b2c6e8",
+      "slot_sha256": "961d35edcf21ca84a16f749a06acd52f79b54f757a8152a82be9aa8d7cb24afa"
+    },
+    {
+      "world_id": "f08.w1",
+      "condition": "base_only_b1",
+      "reader": "mistral_large",
+      "replicate": 1,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r1\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p02\\\",\\\"p03\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+      "prompt_sha256": "c0dab3e22ea90bd199a2b68a2c3b16cd5a33fa1c4933bac726b92ba99542bb9d",
+      "slot_sha256": "99e73247a2eb8439b9ab065802018f3d9c6e5a1f1c479ec3fc752cdc1f9ea2e1"
+    },
+    {
+      "world_id": "f08.w1",
+      "condition": "materialized_single_state",
+      "reader": "gpt6_luna",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p00\",\"p01\",\"p03\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+      "prompt_sha256": "b94324e5280fbaf4966694c6d780db1bb4e4ea40ef0cbde499e2de5a1c237133",
+      "slot_sha256": "9c240fe6940a9ec7c1c9f15709fc5ea9a05ed3d841e482b368a884856182b547"
+    },
+    {
+      "world_id": "f08.w0",
+      "condition": "base_only_b1",
+      "reader": "gpt6_luna",
+      "replicate": 1,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p01\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r1\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p02\\\",\\\"p03\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+      "prompt_sha256": "20803d6123294415ae12bb5c8f5daf62def17dea5e06c6ae02dcd79f5b1b28e3",
+      "slot_sha256": "a16a30884f034250986f16513ddbaa8e91a5dbf608a19f9c85b02fe2d65a2996"
+    },
+    {
+      "world_id": "f05.w1",
+      "condition": "paired_public_trace",
+      "reader": "gpt6_luna",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p00\",\"p01\",\"p02\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}}",
+      "prompt_sha256": "0aeb9d68b97b6ad00fb7421117f9464556a8d481c2af658674cc138730746a5e",
+      "slot_sha256": "a2f298a8ee58c442b4feca8ffbb71ba6771c5f8cf626a5ed1ea8ddab329fc54b"
+    },
+    {
+      "world_id": "f05.w1",
+      "condition": "materialized_single_state",
+      "reader": "gpt6_luna",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p00\",\"p01\",\"p02\",\"p03\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}",
+      "prompt_sha256": "94e655cf800eaa8c0fcd66b1a28af36c0728028edb864a2e5f08ca207888424b",
+      "slot_sha256": "a5128bc16c8e8095ac18324a91c7fda4dffdb6cde3009cddc9087dd823daa7d3"
+    },
+    {
+      "world_id": "f02.w0",
+      "condition": "base_only_b1",
+      "reader": "mistral_large",
+      "replicate": 1,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"text\":\"{\\\"facts\\\":[\\\"p01\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r3\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p02\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+      "prompt_sha256": "f98398c5f057c66334642ead1f2cf0aca447536726d7d2e449f120756feb449a",
+      "slot_sha256": "ae3d89bc9830f03f438d9b1a353e442579e1d6ea402c24f1beaa1054342c40dd"
+    },
+    {
+      "world_id": "f02.w1",
+      "condition": "materialized_single_state",
+      "reader": "gpt6_luna",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p00\",\"p01\",\"p02\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+      "prompt_sha256": "82df88d424e03d234f7c2a2a71b91d883ed64475e1cbac809e49f1e2afeed4c9",
+      "slot_sha256": "b2fa70ff448e3eb72dc76fe5d3d1975880c5ad9791294665d1663f95232ff6b9"
+    },
+    {
+      "world_id": "f08.w1",
+      "condition": "materialized_single_state",
+      "reader": "mistral_large",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p00\",\"p01\",\"p03\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+      "prompt_sha256": "b94324e5280fbaf4966694c6d780db1bb4e4ea40ef0cbde499e2de5a1c237133",
+      "slot_sha256": "b6c52aa7f1f7fefe983e81d7482b4704d820be2f6db6dc8eccc0aaea541a869a"
+    },
+    {
+      "world_id": "f02.w0",
+      "condition": "materialized_single_state",
+      "reader": "mistral_large",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p01\",\"p02\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+      "prompt_sha256": "e5283e584d64f8dafd5f0623d4b9812042edfb245f0905efd5d219c57fff4ee2",
+      "slot_sha256": "b77ac8ef4a19acd23082f42166e3a84554a175688eed9bcc83731b835fbddb5e"
+    },
+    {
+      "world_id": "f02.w0",
+      "condition": "paired_public_trace",
+      "reader": "mistral_large",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"world\":{\"facts\":[\"p01\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+      "prompt_sha256": "317371bd4462f4005a748583706904071a5998a386b01f0caac5879bafe6415a",
+      "slot_sha256": "bccc047e13bc8e2b473ecd026f51d5983c49b5c1c8154224c0b4f5d92f6fc9d9"
+    },
+    {
+      "world_id": "f08.w0",
+      "condition": "base_only_b1",
+      "reader": "mistral_large",
+      "replicate": 1,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p01\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r1\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p02\\\",\\\"p03\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+      "prompt_sha256": "20803d6123294415ae12bb5c8f5daf62def17dea5e06c6ae02dcd79f5b1b28e3",
+      "slot_sha256": "bcdca6956751fb532c601daa0227167958c1a8f86ee6b4d5e908a796a694c6b6"
+    },
+    {
+      "world_id": "f05.w0",
+      "condition": "paired_public_trace",
+      "reader": "gpt6_luna",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p01\"],\"priority\":[],\"rules\":[{\"id\":\"r1\",\"if\":[\"p01\",\"p03\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p02\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"eligible\"}]}}",
+      "prompt_sha256": "743b8c2eebf8411783c56b7ca89bfee9077bf7a04876ceb8282805e56fe115e1",
+      "slot_sha256": "bf249456d9f820d37c2521f8b211fb5bd1652df343f600a0858ccf552de11d6a"
+    },
+    {
+      "world_id": "f02.w0",
+      "condition": "paired_public_trace",
+      "reader": "gpt6_luna",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"world\":{\"facts\":[\"p01\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+      "prompt_sha256": "317371bd4462f4005a748583706904071a5998a386b01f0caac5879bafe6415a",
+      "slot_sha256": "ccecabfba7d92d20eefab119df9affcc9a1613fa1361216c435baa6a4d8913ee"
+    },
+    {
+      "world_id": "f02.w1",
+      "condition": "base_only_b1",
+      "reader": "gpt6_luna",
+      "replicate": 1,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"text\":\"{\\\"facts\\\":[\\\"p00\\\",\\\"p01\\\",\\\"p02\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r3\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p02\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+      "prompt_sha256": "77e53aa7286272ebb1032152d7407e48b4303bb02f14cdcd799e474d5c8a0034",
+      "slot_sha256": "cdda672534c3d845cc87490ae7939c4fd71cca2228e65f3c4da27266384aee26"
+    },
+    {
+      "world_id": "f02.w0",
+      "condition": "base_only_b1",
+      "reader": "gpt6_luna",
+      "replicate": 1,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"text\":\"{\\\"facts\\\":[\\\"p01\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r3\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p02\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+      "prompt_sha256": "f98398c5f057c66334642ead1f2cf0aca447536726d7d2e449f120756feb449a",
+      "slot_sha256": "d80b7341ecba462f4d01e764545a8b22674e0deecdbea591b1989157cf363230"
+    },
+    {
+      "world_id": "f05.w1",
+      "condition": "base_only_b1",
+      "reader": "mistral_large",
+      "replicate": 1,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p00\\\",\\\"p01\\\",\\\"p02\\\"],\\\"priority\\\":[],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p01\\\",\\\"p03\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p02\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"}]}\"}",
+      "prompt_sha256": "b474e0fb60687048954d8642bd636d46317a30675cd167eb4a781753810e1ef1",
+      "slot_sha256": "dbd4e0a15e024e9a813af2c62a68b935023a163aba8d55ca56a949bcc35afe9d"
+    },
+    {
+      "world_id": "f08.w1",
+      "condition": "base_only_b1",
+      "reader": "gpt6_luna",
+      "replicate": 1,
+      "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"text\":\"{\\\"facts\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r1\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p02\\\",\\\"p03\\\"],\\\"then\\\":\\\"not_eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+      "prompt_sha256": "c0dab3e22ea90bd199a2b68a2c3b16cd5a33fa1c4933bac726b92ba99542bb9d",
+      "slot_sha256": "ed677316089f782a24baf9211a4ffe7a66906a4f896d6a75450e450efe261f50"
+    },
+    {
+      "world_id": "f08.w1",
+      "condition": "paired_public_trace",
+      "reader": "gpt6_luna",
+      "replicate": 1,
+      "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p00\",\"p01\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+      "prompt_sha256": "13f7890a3ebadee7398144bb675ebdf97f29dbb54405f10997f1c6377a2a9c7a",
+      "slot_sha256": "fd16f22a8473a0af40502a7c5a4158dd6b6e9ca8fb119ede62ce6ac8117deb0e"
+    }
+  ],
+  "providers": {
+    "gpt6_luna": {
+      "name": "reader-gpt-6-luna-low",
+      "settings": {
+        "type": "openai_compatible",
+        "model": "gpt-6-luna",
+        "temperature": null,
+        "max_tokens": 4000,
+        "timeout_s": 120.0,
+        "reasoning_effort": "low",
+        "device": "auto",
+        "dtype": "auto"
+      },
+      "base_url": "https://api.openai.com/v1",
+      "implementation": "expression_tomography.core.providers.OpenAICompatibleProvider",
+      "request_contract": "openai_compatible.chat_completions.temperature_optional.v3",
+      "is_mock": false
+    },
+    "mistral_large": {
+      "name": "reader-mistral-large-latest",
+      "settings": {
+        "type": "openai_compatible",
+        "model": "mistral-large-latest",
+        "temperature": null,
+        "max_tokens": 4000,
+        "timeout_s": 120.0,
+        "reasoning_effort": null,
+        "device": "auto",
+        "dtype": "auto"
+      },
+      "base_url": "https://api.mistral.ai/v1",
+      "implementation": "expression_tomography.core.providers.OpenAICompatibleProvider",
+      "request_contract": "openai_compatible.chat_completions.temperature_optional.v3",
+      "is_mock": false
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "status": "response_received",
+  "execution_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+  "logical_trial_identity_sha256": "95f4a37715df0f350f69b3e9eef729466d4dd9e41a963b2edbdc2c7dce68d656",
+  "slot_sha256": "ccb217103a7657614fb914a57cb94751ebeb82403bbf63922a23673c2e1c52f5",
+  "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. Return only one JSON object: {\"answer\":\"yes | no | conflict\"}. Derive the answer for the supplied state.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p01\",\"p02\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p02\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}",
+  "provider": {
+    "name": "reader-mistral-large-latest",
+    "settings": {
+      "type": "openai_compatible",
+      "model": "mistral-large-latest",
+      "temperature": null,
+      "max_tokens": 4000,
+      "timeout_s": 120.0,
+      "reasoning_effort": null,
+      "device": "auto",
+      "dtype": "auto"
+    },
+    "base_url": "https://api.mistral.ai/v1",
+    "implementation": "expression_tomography.core.providers.OpenAICompatibleProvider",
+    "request_contract": "openai_compatible.chat_completions.temperature_optional.v3",
+    "is_mock": false
+  },
+  "model_call": true,
+  "raw_response": "```json\n{\"answer\":\"no\"}\n```",
+  "raw_response_sha256": "6f39323bccad37fe8af88544d63cb23dad8d0dd6f32085e1fd7cdf111fccf80d"
+}

@@ -1,0 +1,25 @@
+{
+  "status": "request_started",
+  "execution_sha256": "190871f5f82d394b092248cae50e0083361fefeae80e13bf9c9539f45ea36ea6",
+  "logical_trial_identity_sha256": "5f88a698ea6b404930b4bcb960feab511235823d7da226ec431c461bbde188d8",
+  "slot_sha256": "ff56bfc76ef84d85b8de108a8963c6eb36a71460490101d6668abedf5b1ebb7b",
+  "prompt": "Evaluate one public operation independently.\nThe facts list is complete. Unlisted predicates do not hold. The given rule fires exactly when ALL predicates in its 'if' list hold. Its 'then' conclusion does not affect whether it fires. Does this rule fire?\nReturn only a JSON object with exactly one key, \"holds\", whose value is the JSON boolean true or false. No explanation or additional fields.\nPUBLIC_INPUT_JSON:\n{\"facts\":[\"p00\",\"p01\"],\"rule\":{\"id\":\"r2\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"}}",
+  "provider": {
+    "name": "reader-gpt-6-luna-low",
+    "settings": {
+      "type": "openai_compatible",
+      "model": "gpt-6-luna",
+      "temperature": null,
+      "max_tokens": 4000,
+      "timeout_s": 120.0,
+      "reasoning_effort": "low",
+      "device": "auto",
+      "dtype": "auto"
+    },
+    "base_url": "https://api.openai.com/v1",
+    "implementation": "expression_tomography.core.providers.OpenAICompatibleProvider",
+    "request_contract": "openai_compatible.chat_completions.temperature_optional.v3",
+    "is_mock": false
+  },
+  "model_call": true
+}

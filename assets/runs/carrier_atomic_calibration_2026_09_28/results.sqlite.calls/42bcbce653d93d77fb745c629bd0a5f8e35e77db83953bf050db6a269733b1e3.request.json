@@ -1,0 +1,25 @@
+{
+  "status": "request_started",
+  "execution_sha256": "190871f5f82d394b092248cae50e0083361fefeae80e13bf9c9539f45ea36ea6",
+  "logical_trial_identity_sha256": "42bcbce653d93d77fb745c629bd0a5f8e35e77db83953bf050db6a269733b1e3",
+  "slot_sha256": "60453ec88de94d735e0657dd45e9856e90c131cd72590d4e5bec897e216900be",
+  "prompt": "Evaluate one public operation independently.\nTreat active_conclusions as the supplied complete list. Repetitions do not add a new conclusion. Only eligible maps to yes; only not_eligible maps to no; both maps to conflict; the empty set maps to no. Does candidate_answer equal the label for this conclusion set?\nReturn only a JSON object with exactly one key, \"holds\", whose value is the JSON boolean true or false. No explanation or additional fields.\nPUBLIC_INPUT_JSON:\n{\"active_conclusions\":[\"eligible\",\"not_eligible\"],\"candidate_answer\":\"yes\"}",
+  "provider": {
+    "name": "reader-mistral-large-latest",
+    "settings": {
+      "type": "openai_compatible",
+      "model": "mistral-large-latest",
+      "temperature": null,
+      "max_tokens": 4000,
+      "timeout_s": 120.0,
+      "reasoning_effort": null,
+      "device": "auto",
+      "dtype": "auto"
+    },
+    "base_url": "https://api.mistral.ai/v1",
+    "implementation": "expression_tomography.core.providers.OpenAICompatibleProvider",
+    "request_contract": "openai_compatible.chat_completions.temperature_optional.v3",
+    "is_mock": false
+  },
+  "model_call": true
+}

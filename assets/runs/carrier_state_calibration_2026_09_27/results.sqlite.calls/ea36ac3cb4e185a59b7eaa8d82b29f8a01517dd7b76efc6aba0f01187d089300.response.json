@@ -1,0 +1,27 @@
+{
+  "status": "response_received",
+  "execution_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+  "logical_trial_identity_sha256": "ea36ac3cb4e185a59b7eaa8d82b29f8a01517dd7b76efc6aba0f01187d089300",
+  "slot_sha256": "411d98771956fdf7f016314cbaa2db3466b964683a6272b2c605271460dbbd08",
+  "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p01\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+  "provider": {
+    "name": "reader-mistral-large-latest",
+    "settings": {
+      "type": "openai_compatible",
+      "model": "mistral-large-latest",
+      "temperature": null,
+      "max_tokens": 4000,
+      "timeout_s": 120.0,
+      "reasoning_effort": null,
+      "device": "auto",
+      "dtype": "auto"
+    },
+    "base_url": "https://api.mistral.ai/v1",
+    "implementation": "expression_tomography.core.providers.OpenAICompatibleProvider",
+    "request_contract": "openai_compatible.chat_completions.temperature_optional.v3",
+    "is_mock": false
+  },
+  "model_call": true,
+  "raw_response": "```json\n{\n  \"current\": {\n    \"active_conclusions\": [\"not_eligible\"],\n    \"active_rules\": [\"r3\"],\n    \"answer\": \"no\",\n    \"facts\": [\"p01\"],\n    \"fired_rules\": [\"r3\"],\n    \"suppressed_rules\": []\n  },\n  \"counterfactual\": {\n    \"active_conclusions\": [\"eligible\", \"not_eligible\"],\n    \"active_rules\": [\"r1\", \"r2\"],\n    \"answer\": \"conflict\",\n    \"facts\": [\"p01\", \"p03\"],\n    \"fired_rules\": [\"r1\", \"r2\", \"r3\"],\n    \"suppressed_rules\": [\"r1\"]\n  }\n}\n```",
+  "raw_response_sha256": "e7b1d347137658cf797b9d2060fe55af00accf5435c39d10cebf30ccd52c5d21"
+}

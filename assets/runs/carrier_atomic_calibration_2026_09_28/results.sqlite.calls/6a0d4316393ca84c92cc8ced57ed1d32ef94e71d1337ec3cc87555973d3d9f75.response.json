@@ -1,0 +1,27 @@
+{
+  "status": "response_received",
+  "execution_sha256": "190871f5f82d394b092248cae50e0083361fefeae80e13bf9c9539f45ea36ea6",
+  "logical_trial_identity_sha256": "6a0d4316393ca84c92cc8ced57ed1d32ef94e71d1337ec3cc87555973d3d9f75",
+  "slot_sha256": "377e941c40f7472c7a5477166a9894938dfbe6b96d704df35bc380f51839abf9",
+  "prompt": "Evaluate one public operation independently.\nTreat fired_rules as the supplied complete fired set; do not infer it again. Each priority [winner, loser] suppresses the loser only when BOTH are fired. Only listed edges apply; there is no default preference for a conclusion. All supplied edges join opposite conclusions. Is target_rule suppressed?\nReturn only a JSON object with exactly one key, \"holds\", whose value is the JSON boolean true or false. No explanation or additional fields.\nPUBLIC_INPUT_JSON:\n{\"fired_rules\":[\"r1\",\"r2\",\"r3\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r1\",\"then\":\"eligible\"},{\"id\":\"r2\",\"then\":\"eligible\"},{\"id\":\"r3\",\"then\":\"not_eligible\"}],\"target_rule\":\"r3\"}",
+  "provider": {
+    "name": "reader-mistral-large-latest",
+    "settings": {
+      "type": "openai_compatible",
+      "model": "mistral-large-latest",
+      "temperature": null,
+      "max_tokens": 4000,
+      "timeout_s": 120.0,
+      "reasoning_effort": null,
+      "device": "auto",
+      "dtype": "auto"
+    },
+    "base_url": "https://api.mistral.ai/v1",
+    "implementation": "expression_tomography.core.providers.OpenAICompatibleProvider",
+    "request_contract": "openai_compatible.chat_completions.temperature_optional.v3",
+    "is_mock": false
+  },
+  "model_call": true,
+  "raw_response": "```json\n{\"holds\":true}\n```",
+  "raw_response_sha256": "4b921e73044dbaace9ce10948ee9924fde8a5cb2a3aa950efcbe2e0094f338ff"
+}

@@ -20,6 +20,12 @@ The forward question is whether increasing expressive ability can expand
 independently measured reasoning and discovery, beyond successful transmission
 or receiver-side compensation under shared conventions.
 
+The [A-to-B3 synthesis and document handoff](docs/carrier_to_document_synthesis_2026_09_28.md)
+now brings together carrier survival, reader use, non-monotone scaffolding and
+the separation of output format from recoverable content. It preserves both
+primary and post-hoc evidence, and identifies human-origin source selection as
+the next checkpoint without authorizing new model calls or training.
+
 The [blind-reading and literary audit pilot](docs/intermediate_audit_pilot.md)
 adds independent reader and critic contexts, a source-aware audit of the
 recorded reading, and local human response packets for 12 primary and 6
@@ -115,6 +121,41 @@ sets match in 108/108, but current and counterfactual answers are correct in
 97/108 and 30/108. The known order survives 35/36 prose readouts. Structural
 readout transfers across families; correct answer recomputation does not in
 this configuration. This is reader sensitivity, not isolated same-family bias.
+
+An [offline mechanism audit](docs/carrier_reader_mechanism_audit_2026_09_27.md)
+finds 75/90 Mistral current/counterfactual disagreements where the public
+conclusion set is unchanged, versus zero for GPT-6. Explicit alternative
+interpretations overlap and leave one entire world's errors unexplained;
+they are compatibility checks, not inferred algorithms. Canonical base-only,
+materialized-state and public-trace fixtures outline a 72-call follow-up,
+without authorizing or performing new calls.
+
+The subsequently authorized [72-call B2 calibration](docs/carrier_state_calibration_2026_09_27.md)
+is complete. GPT-6 scores 12/12 in each condition; Mistral scores 2/12 on
+base-only counterfactuals and 6/12 on both materialized and trace endpoints.
+Only 1/12 Mistral paired traces is fully correct, and five of its six correct
+counterfactual labels conceal a preceding trace error. Canonicalization and
+removing source answer claims do not eliminate the difference; neither carrier
+use nor a general expression/intelligence claim is identified. Raw evidence and
+the [pre-call contract](docs/carrier_state_calibration_execution_2026_09_27.md)
+are preserved separately from B1.
+
+The separate [B3 atomic calibration](docs/carrier_atomic_calibration_execution_2026_09_28.md)
+implements 16 minimal pairs for firing, suppression, active-set membership and
+label verification. Each asks for one boolean, with balanced truth keys and
+explicit flip/invariance controls. Its [128-call live result](docs/carrier_atomic_calibration_2026_09_28.md)
+is complete: GPT passes 64/64; all 64 Mistral outputs fail the strict format
+contract because they are fenced JSON, a wrapper already present in B2.
+A separate, post-hoc fence-only audit finds 61/64 correct Mistral contents,
+with three remaining suppression errors. Primary scores are unchanged. Supplied
+intermediate sets test scaffolded verification, not end-to-end derivation.
+
+The [human-origin document plan](docs/natural_document_transmission_plan_2026_09_28.md)
+then moves beyond task-generated text to independently authored letters and
+news. It requires source provenance, reuse/privacy checks, a source-grounded
+ambiguity-aware ledger and a direct-original baseline before a telephone chain.
+Human readability, literary quality, message fidelity and reader recovery stay
+separate. No documents or additional live calls are admitted by this proposal.
 
 ## Rule-Z Smoke
 

@@ -1,0 +1,27 @@
+{
+  "status": "response_received",
+  "execution_sha256": "190871f5f82d394b092248cae50e0083361fefeae80e13bf9c9539f45ea36ea6",
+  "logical_trial_identity_sha256": "5c4fdb8380e23456d460dfe32d8e8951b4f42880f91a288b12a33b33120bfe4b",
+  "slot_sha256": "f8d817b81d3db39e527c5b482c10c4482cfba030a9a273f6abdf2228a59f86ff",
+  "prompt": "Evaluate one public operation independently.\nTreat active_conclusions as the supplied complete list. Repetitions do not add a new conclusion. Only eligible maps to yes; only not_eligible maps to no; both maps to conflict; the empty set maps to no. Does candidate_answer equal the label for this conclusion set?\nReturn only a JSON object with exactly one key, \"holds\", whose value is the JSON boolean true or false. No explanation or additional fields.\nPUBLIC_INPUT_JSON:\n{\"active_conclusions\":[\"eligible\"],\"candidate_answer\":\"conflict\"}",
+  "provider": {
+    "name": "reader-gpt-6-luna-low",
+    "settings": {
+      "type": "openai_compatible",
+      "model": "gpt-6-luna",
+      "temperature": null,
+      "max_tokens": 4000,
+      "timeout_s": 120.0,
+      "reasoning_effort": "low",
+      "device": "auto",
+      "dtype": "auto"
+    },
+    "base_url": "https://api.openai.com/v1",
+    "implementation": "expression_tomography.core.providers.OpenAICompatibleProvider",
+    "request_contract": "openai_compatible.chat_completions.temperature_optional.v3",
+    "is_mock": false
+  },
+  "model_call": true,
+  "raw_response": "{\"holds\":false}",
+  "raw_response_sha256": "01699785bcc63f0e6d0f754e7aa2eb543714019894d4618b4c128c9c05b51c2d"
+}

@@ -1,0 +1,5088 @@
+{
+  "n_planned": 72,
+  "n_recorded": 72,
+  "n_live_calls": 72,
+  "n_mock_calls": 0,
+  "n_invalid": 0,
+  "groups": {
+    "gpt6_luna": {
+      "base_only_b1": {
+        "n_planned": 12,
+        "n_recorded": 12,
+        "n_valid": 12,
+        "n_invalid": 0,
+        "n_missing": 0,
+        "metrics": {
+          "schema_valid": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "counterfactual_answer_correct": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "current_answer_correct": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "both_answers_correct": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "required_answer_invariance": {
+            "n_eligible": 10,
+            "n_true": 10,
+            "n_false": 0,
+            "n_assessed": 10,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "assertion_fidelity": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "current_active_rules_correct": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "current_answer_from_returned_active": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          }
+        }
+      },
+      "materialized_single_state": {
+        "n_planned": 12,
+        "n_recorded": 12,
+        "n_valid": 12,
+        "n_invalid": 0,
+        "n_missing": 0,
+        "metrics": {
+          "schema_valid": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "counterfactual_answer_correct": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          }
+        }
+      },
+      "paired_public_trace": {
+        "n_planned": 12,
+        "n_recorded": 12,
+        "n_valid": 12,
+        "n_invalid": 0,
+        "n_missing": 0,
+        "metrics": {
+          "schema_valid": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "counterfactual_answer_correct": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "current_answer_correct": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "both_answers_correct": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "required_answer_invariance": {
+            "n_eligible": 10,
+            "n_true": 10,
+            "n_false": 0,
+            "n_assessed": 10,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "current_facts_correct": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "current_fired_rules_correct": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "current_suppressed_rules_correct": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "current_active_rules_correct": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "current_active_conclusions_correct": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "counterfactual_facts_correct": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "counterfactual_fired_rules_correct": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "counterfactual_suppressed_rules_correct": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "counterfactual_active_rules_correct": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "counterfactual_active_conclusions_correct": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "current_fired_from_returned_facts_consistent": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "current_suppressed_from_returned_fired_consistent": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "current_active_from_returned_fired_suppressed_consistent": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "current_conclusions_from_returned_active_consistent": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "current_answer_from_returned_conclusions_consistent": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "counterfactual_fired_from_returned_facts_consistent": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "counterfactual_suppressed_from_returned_fired_consistent": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "counterfactual_active_from_returned_fired_suppressed_consistent": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "counterfactual_conclusions_from_returned_active_consistent": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "counterfactual_answer_from_returned_conclusions_consistent": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "all_trace_fields_correct": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          }
+        },
+        "first_oracle_deviation": {
+          "current": {
+            "none": 12
+          },
+          "counterfactual": {
+            "none": 12
+          }
+        }
+      }
+    },
+    "mistral_large": {
+      "base_only_b1": {
+        "n_planned": 12,
+        "n_recorded": 12,
+        "n_valid": 12,
+        "n_invalid": 0,
+        "n_missing": 0,
+        "metrics": {
+          "schema_valid": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "counterfactual_answer_correct": {
+            "n_eligible": 12,
+            "n_true": 2,
+            "n_false": 10,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.16666666666666666,
+            "rate_on_assessed": 0.16666666666666666
+          },
+          "current_answer_correct": {
+            "n_eligible": 12,
+            "n_true": 10,
+            "n_false": 2,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.8333333333333334,
+            "rate_on_assessed": 0.8333333333333334
+          },
+          "both_answers_correct": {
+            "n_eligible": 12,
+            "n_true": 2,
+            "n_false": 10,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.16666666666666666,
+            "rate_on_assessed": 0.16666666666666666
+          },
+          "required_answer_invariance": {
+            "n_eligible": 10,
+            "n_true": 2,
+            "n_false": 8,
+            "n_assessed": 10,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.2,
+            "rate_on_assessed": 0.2
+          },
+          "assertion_fidelity": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "current_active_rules_correct": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "current_answer_from_returned_active": {
+            "n_eligible": 12,
+            "n_true": 10,
+            "n_false": 2,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.8333333333333334,
+            "rate_on_assessed": 0.8333333333333334
+          }
+        }
+      },
+      "materialized_single_state": {
+        "n_planned": 12,
+        "n_recorded": 12,
+        "n_valid": 12,
+        "n_invalid": 0,
+        "n_missing": 0,
+        "metrics": {
+          "schema_valid": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "counterfactual_answer_correct": {
+            "n_eligible": 12,
+            "n_true": 6,
+            "n_false": 6,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.5,
+            "rate_on_assessed": 0.5
+          }
+        }
+      },
+      "paired_public_trace": {
+        "n_planned": 12,
+        "n_recorded": 12,
+        "n_valid": 12,
+        "n_invalid": 0,
+        "n_missing": 0,
+        "metrics": {
+          "schema_valid": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "counterfactual_answer_correct": {
+            "n_eligible": 12,
+            "n_true": 6,
+            "n_false": 6,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.5,
+            "rate_on_assessed": 0.5
+          },
+          "current_answer_correct": {
+            "n_eligible": 12,
+            "n_true": 6,
+            "n_false": 6,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.5,
+            "rate_on_assessed": 0.5
+          },
+          "both_answers_correct": {
+            "n_eligible": 12,
+            "n_true": 4,
+            "n_false": 8,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.3333333333333333,
+            "rate_on_assessed": 0.3333333333333333
+          },
+          "required_answer_invariance": {
+            "n_eligible": 10,
+            "n_true": 2,
+            "n_false": 8,
+            "n_assessed": 10,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.2,
+            "rate_on_assessed": 0.2
+          },
+          "current_facts_correct": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "current_fired_rules_correct": {
+            "n_eligible": 12,
+            "n_true": 7,
+            "n_false": 5,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.5833333333333334,
+            "rate_on_assessed": 0.5833333333333334
+          },
+          "current_suppressed_rules_correct": {
+            "n_eligible": 12,
+            "n_true": 6,
+            "n_false": 6,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.5,
+            "rate_on_assessed": 0.5
+          },
+          "current_active_rules_correct": {
+            "n_eligible": 12,
+            "n_true": 6,
+            "n_false": 6,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.5,
+            "rate_on_assessed": 0.5
+          },
+          "current_active_conclusions_correct": {
+            "n_eligible": 12,
+            "n_true": 6,
+            "n_false": 6,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.5,
+            "rate_on_assessed": 0.5
+          },
+          "counterfactual_facts_correct": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "counterfactual_fired_rules_correct": {
+            "n_eligible": 12,
+            "n_true": 8,
+            "n_false": 4,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.6666666666666666,
+            "rate_on_assessed": 0.6666666666666666
+          },
+          "counterfactual_suppressed_rules_correct": {
+            "n_eligible": 12,
+            "n_true": 3,
+            "n_false": 9,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.25,
+            "rate_on_assessed": 0.25
+          },
+          "counterfactual_active_rules_correct": {
+            "n_eligible": 12,
+            "n_true": 3,
+            "n_false": 9,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.25,
+            "rate_on_assessed": 0.25
+          },
+          "counterfactual_active_conclusions_correct": {
+            "n_eligible": 12,
+            "n_true": 6,
+            "n_false": 6,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.5,
+            "rate_on_assessed": 0.5
+          },
+          "current_fired_from_returned_facts_consistent": {
+            "n_eligible": 12,
+            "n_true": 7,
+            "n_false": 5,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.5833333333333334,
+            "rate_on_assessed": 0.5833333333333334
+          },
+          "current_suppressed_from_returned_fired_consistent": {
+            "n_eligible": 12,
+            "n_true": 6,
+            "n_false": 6,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.5,
+            "rate_on_assessed": 0.5
+          },
+          "current_active_from_returned_fired_suppressed_consistent": {
+            "n_eligible": 12,
+            "n_true": 9,
+            "n_false": 3,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.75,
+            "rate_on_assessed": 0.75
+          },
+          "current_conclusions_from_returned_active_consistent": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "current_answer_from_returned_conclusions_consistent": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "counterfactual_fired_from_returned_facts_consistent": {
+            "n_eligible": 12,
+            "n_true": 8,
+            "n_false": 4,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.6666666666666666,
+            "rate_on_assessed": 0.6666666666666666
+          },
+          "counterfactual_suppressed_from_returned_fired_consistent": {
+            "n_eligible": 12,
+            "n_true": 7,
+            "n_false": 5,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.5833333333333334,
+            "rate_on_assessed": 0.5833333333333334
+          },
+          "counterfactual_active_from_returned_fired_suppressed_consistent": {
+            "n_eligible": 12,
+            "n_true": 7,
+            "n_false": 5,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.5833333333333334,
+            "rate_on_assessed": 0.5833333333333334
+          },
+          "counterfactual_conclusions_from_returned_active_consistent": {
+            "n_eligible": 12,
+            "n_true": 12,
+            "n_false": 0,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "counterfactual_answer_from_returned_conclusions_consistent": {
+            "n_eligible": 12,
+            "n_true": 10,
+            "n_false": 2,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.8333333333333334,
+            "rate_on_assessed": 0.8333333333333334
+          },
+          "all_trace_fields_correct": {
+            "n_eligible": 12,
+            "n_true": 1,
+            "n_false": 11,
+            "n_assessed": 12,
+            "n_unassessed": 0,
+            "rate_on_planned": 0.08333333333333333,
+            "rate_on_assessed": 0.08333333333333333
+          }
+        },
+        "first_oracle_deviation": {
+          "current": {
+            "fired_rules": 5,
+            "none": 4,
+            "suppressed_rules": 3
+          },
+          "counterfactual": {
+            "active_rules": 1,
+            "answer": 1,
+            "fired_rules": 4,
+            "none": 1,
+            "suppressed_rules": 5
+          }
+        }
+      }
+    }
+  },
+  "worlds": {
+    "gpt6_luna": {
+      "base_only_b1": {
+        "f02.w0": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 0,
+              "n_true": 0,
+              "n_false": 0,
+              "n_assessed": 0,
+              "n_unassessed": 0,
+              "rate_on_planned": null,
+              "rate_on_assessed": null
+            },
+            "assertion_fidelity": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_active": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          }
+        },
+        "f02.w1": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "assertion_fidelity": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_active": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          }
+        },
+        "f05.w0": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "assertion_fidelity": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_active": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          }
+        },
+        "f05.w1": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "assertion_fidelity": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_active": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          }
+        },
+        "f08.w0": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "assertion_fidelity": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_active": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          }
+        },
+        "f08.w1": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "assertion_fidelity": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_active": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          }
+        }
+      },
+      "materialized_single_state": {
+        "f02.w0": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          }
+        },
+        "f02.w1": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          }
+        },
+        "f05.w0": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          }
+        },
+        "f05.w1": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          }
+        },
+        "f08.w0": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          }
+        },
+        "f08.w1": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          }
+        }
+      },
+      "paired_public_trace": {
+        "f02.w0": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 0,
+              "n_true": 0,
+              "n_false": 0,
+              "n_assessed": 0,
+              "n_unassessed": 0,
+              "rate_on_planned": null,
+              "rate_on_assessed": null
+            },
+            "current_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "all_trace_fields_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          },
+          "first_oracle_deviation": {
+            "current": {
+              "none": 2
+            },
+            "counterfactual": {
+              "none": 2
+            }
+          }
+        },
+        "f02.w1": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "all_trace_fields_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          },
+          "first_oracle_deviation": {
+            "current": {
+              "none": 2
+            },
+            "counterfactual": {
+              "none": 2
+            }
+          }
+        },
+        "f05.w0": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "all_trace_fields_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          },
+          "first_oracle_deviation": {
+            "current": {
+              "none": 2
+            },
+            "counterfactual": {
+              "none": 2
+            }
+          }
+        },
+        "f05.w1": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "all_trace_fields_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          },
+          "first_oracle_deviation": {
+            "current": {
+              "none": 2
+            },
+            "counterfactual": {
+              "none": 2
+            }
+          }
+        },
+        "f08.w0": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "all_trace_fields_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          },
+          "first_oracle_deviation": {
+            "current": {
+              "none": 2
+            },
+            "counterfactual": {
+              "none": 2
+            }
+          }
+        },
+        "f08.w1": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "all_trace_fields_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          },
+          "first_oracle_deviation": {
+            "current": {
+              "none": 2
+            },
+            "counterfactual": {
+              "none": 2
+            }
+          }
+        }
+      }
+    },
+    "mistral_large": {
+      "base_only_b1": {
+        "f02.w0": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 0,
+              "n_true": 0,
+              "n_false": 0,
+              "n_assessed": 0,
+              "n_unassessed": 0,
+              "rate_on_planned": null,
+              "rate_on_assessed": null
+            },
+            "assertion_fidelity": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_active": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          }
+        },
+        "f02.w1": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "assertion_fidelity": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_active": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            }
+          }
+        },
+        "f05.w0": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "assertion_fidelity": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_active": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          }
+        },
+        "f05.w1": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "assertion_fidelity": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_active": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          }
+        },
+        "f08.w0": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "assertion_fidelity": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_active": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          }
+        },
+        "f08.w1": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "assertion_fidelity": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_active": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          }
+        }
+      },
+      "materialized_single_state": {
+        "f02.w0": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            }
+          }
+        },
+        "f02.w1": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            }
+          }
+        },
+        "f05.w0": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          }
+        },
+        "f05.w1": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          }
+        },
+        "f08.w0": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            }
+          }
+        },
+        "f08.w1": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            }
+          }
+        }
+      },
+      "paired_public_trace": {
+        "f02.w0": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 0,
+              "n_true": 0,
+              "n_false": 0,
+              "n_assessed": 0,
+              "n_unassessed": 0,
+              "rate_on_planned": null,
+              "rate_on_assessed": null
+            },
+            "current_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "counterfactual_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "counterfactual_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "all_trace_fields_correct": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            }
+          },
+          "first_oracle_deviation": {
+            "current": {
+              "none": 2
+            },
+            "counterfactual": {
+              "none": 1,
+              "suppressed_rules": 1
+            }
+          }
+        },
+        "f02.w1": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "counterfactual_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "counterfactual_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "counterfactual_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "current_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "counterfactual_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "counterfactual_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "all_trace_fields_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            }
+          },
+          "first_oracle_deviation": {
+            "current": {
+              "suppressed_rules": 2
+            },
+            "counterfactual": {
+              "answer": 1,
+              "suppressed_rules": 1
+            }
+          }
+        },
+        "f05.w0": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "counterfactual_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "counterfactual_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "counterfactual_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "all_trace_fields_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            }
+          },
+          "first_oracle_deviation": {
+            "current": {
+              "fired_rules": 2
+            },
+            "counterfactual": {
+              "suppressed_rules": 2
+            }
+          }
+        },
+        "f05.w1": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "counterfactual_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "counterfactual_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "counterfactual_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "current_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "current_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "counterfactual_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "counterfactual_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "all_trace_fields_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            }
+          },
+          "first_oracle_deviation": {
+            "current": {
+              "fired_rules": 2
+            },
+            "counterfactual": {
+              "active_rules": 1,
+              "suppressed_rules": 1
+            }
+          }
+        },
+        "f08.w0": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "counterfactual_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "counterfactual_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "counterfactual_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "counterfactual_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "counterfactual_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "all_trace_fields_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            }
+          },
+          "first_oracle_deviation": {
+            "current": {
+              "none": 2
+            },
+            "counterfactual": {
+              "fired_rules": 2
+            }
+          }
+        },
+        "f08.w1": {
+          "n_planned": 2,
+          "n_recorded": 2,
+          "n_valid": 2,
+          "n_invalid": 0,
+          "n_missing": 0,
+          "metrics": {
+            "schema_valid": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "current_answer_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "both_answers_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "required_answer_invariance": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "current_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "current_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "current_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "counterfactual_facts_correct": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "counterfactual_suppressed_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "counterfactual_active_rules_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "counterfactual_active_conclusions_correct": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "current_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "current_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "current_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "current_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_fired_from_returned_facts_consistent": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            },
+            "counterfactual_suppressed_from_returned_fired_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_active_from_returned_fired_suppressed_consistent": {
+              "n_eligible": 2,
+              "n_true": 1,
+              "n_false": 1,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.5,
+              "rate_on_assessed": 0.5
+            },
+            "counterfactual_conclusions_from_returned_active_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "counterfactual_answer_from_returned_conclusions_consistent": {
+              "n_eligible": 2,
+              "n_true": 2,
+              "n_false": 0,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 1.0,
+              "rate_on_assessed": 1.0
+            },
+            "all_trace_fields_correct": {
+              "n_eligible": 2,
+              "n_true": 0,
+              "n_false": 2,
+              "n_assessed": 2,
+              "n_unassessed": 0,
+              "rate_on_planned": 0.0,
+              "rate_on_assessed": 0.0
+            }
+          },
+          "first_oracle_deviation": {
+            "current": {
+              "fired_rules": 1,
+              "suppressed_rules": 1
+            },
+            "counterfactual": {
+              "fired_rules": 2
+            }
+          }
+        }
+      }
+    }
+  },
+  "pairs": {
+    "conditions": {
+      "n_planned": 72,
+      "n_both_recorded": 72,
+      "n_both_valid": 72,
+      "n_counterfactual_changed": 22
+    },
+    "readers": {
+      "n_planned": 36,
+      "n_both_recorded": 36,
+      "n_both_valid": 36,
+      "n_counterfactual_changed": 22
+    },
+    "repetitions": {
+      "n_planned": 36,
+      "n_both_recorded": 36,
+      "n_both_valid": 36,
+      "n_counterfactual_changed": 2
+    }
+  },
+  "interpretation": "Targeted, dependent six-world calibration. Public trace is an intervention. No isolated family, field-name, carrier-use or collusion effect."
+}

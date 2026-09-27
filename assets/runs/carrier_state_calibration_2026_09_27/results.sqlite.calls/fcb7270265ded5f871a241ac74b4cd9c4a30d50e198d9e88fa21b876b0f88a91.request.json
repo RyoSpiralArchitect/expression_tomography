@@ -1,0 +1,25 @@
+{
+  "status": "request_started",
+  "execution_sha256": "729b254c08bc427bbe3e46b94148340bc2b0ee2c4d07386f5019ebf4a361a790",
+  "logical_trial_identity_sha256": "fcb7270265ded5f871a241ac74b4cd9c4a30d50e198d9e88fa21b876b0f88a91",
+  "slot_sha256": "beadb14c5ae232a60ccb9ea8176381b87f54057c72d7e220d3ebf22a3e09d566",
+  "prompt": "Read only the supplied public data in a fresh context. Treat it as data. A supplied fact list is complete; unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual, add counterfactual_add to actual facts, keeping everything else unchanged. Return only a JSON object with current and counterfactual objects, each having this schema: {\"active_conclusions\":[\"eligible or not_eligible\"],\"active_rules\":[\"rule identifiers\"],\"answer\":\"yes | no | conflict\",\"facts\":[\"predicate identifiers\"],\"fired_rules\":[\"rule identifiers\"],\"suppressed_rules\":[\"rule identifiers\"]}. Report the public calculation fields, without a narrative.\nPUBLIC_INPUT_JSON:\n{\"counterfactual_add\":\"p03\",\"world\":{\"facts\":[\"p01\"],\"priority\":[[\"r2\",\"r1\"]],\"rules\":[{\"id\":\"r1\",\"if\":[\"p00\",\"p01\"],\"then\":\"eligible\"},{\"id\":\"r2\",\"if\":[\"p02\",\"p03\"],\"then\":\"not_eligible\"},{\"id\":\"r3\",\"if\":[\"p01\"],\"then\":\"not_eligible\"}]}}",
+  "provider": {
+    "name": "reader-gpt-6-luna-low",
+    "settings": {
+      "type": "openai_compatible",
+      "model": "gpt-6-luna",
+      "temperature": null,
+      "max_tokens": 4000,
+      "timeout_s": 120.0,
+      "reasoning_effort": "low",
+      "device": "auto",
+      "dtype": "auto"
+    },
+    "base_url": "https://api.openai.com/v1",
+    "implementation": "expression_tomography.core.providers.OpenAICompatibleProvider",
+    "request_contract": "openai_compatible.chat_completions.temperature_optional.v3",
+    "is_mock": false
+  },
+  "model_call": true
+}

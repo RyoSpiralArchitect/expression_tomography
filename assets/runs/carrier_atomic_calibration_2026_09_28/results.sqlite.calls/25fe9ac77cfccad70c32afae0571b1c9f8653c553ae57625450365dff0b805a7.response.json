@@ -1,0 +1,27 @@
+{
+  "status": "response_received",
+  "execution_sha256": "190871f5f82d394b092248cae50e0083361fefeae80e13bf9c9539f45ea36ea6",
+  "logical_trial_identity_sha256": "25fe9ac77cfccad70c32afae0571b1c9f8653c553ae57625450365dff0b805a7",
+  "slot_sha256": "2866556ae7eb0307f0fdb87ca8e9d73a596556223bca3f24d99c5328747c5858",
+  "prompt": "Evaluate one public operation independently.\nTreat fired_rules as the supplied complete fired set; do not infer it again. Each priority [winner, loser] suppresses the loser only when BOTH are fired. Only listed edges apply; there is no default preference for a conclusion. All supplied edges join opposite conclusions. Is target_rule suppressed?\nReturn only a JSON object with exactly one key, \"holds\", whose value is the JSON boolean true or false. No explanation or additional fields.\nPUBLIC_INPUT_JSON:\n{\"fired_rules\":[\"r2\",\"r3\"],\"priority\":[[\"r2\",\"r3\"]],\"rules\":[{\"id\":\"r2\",\"then\":\"eligible\"},{\"id\":\"r3\",\"then\":\"not_eligible\"}],\"target_rule\":\"r3\"}",
+  "provider": {
+    "name": "reader-gpt-6-luna-low",
+    "settings": {
+      "type": "openai_compatible",
+      "model": "gpt-6-luna",
+      "temperature": null,
+      "max_tokens": 4000,
+      "timeout_s": 120.0,
+      "reasoning_effort": "low",
+      "device": "auto",
+      "dtype": "auto"
+    },
+    "base_url": "https://api.openai.com/v1",
+    "implementation": "expression_tomography.core.providers.OpenAICompatibleProvider",
+    "request_contract": "openai_compatible.chat_completions.temperature_optional.v3",
+    "is_mock": false
+  },
+  "model_call": true,
+  "raw_response": "{\"holds\":true}",
+  "raw_response_sha256": "dc0214a08c9d2b596a1d9da717072de453d0706de2c8c627065f933e7771c1bf"
+}

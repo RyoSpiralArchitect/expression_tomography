@@ -1,0 +1,20 @@
+```json
+{
+  "current": {
+    "active_conclusions": ["eligible"],
+    "active_rules": ["r3"],
+    "answer": "yes",
+    "facts": ["p01"],
+    "fired_rules": ["r1", "r3"],
+    "suppressed_rules": ["r1"]
+  },
+  "counterfactual": {
+    "active_conclusions": ["eligible"],
+    "active_rules": ["r1"],
+    "answer": "yes",
+    "facts": ["p01", "p03"],
+    "fired_rules": ["r1", "r3"],
+    "suppressed_rules": ["r3"]
+  }
+}
+```

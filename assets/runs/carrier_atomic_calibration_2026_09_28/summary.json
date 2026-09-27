@@ -1,0 +1,473 @@
+{
+  "n_planned": 128,
+  "n_recorded": 128,
+  "n_live_calls": 128,
+  "n_mock_calls": 0,
+  "n_invalid": 64,
+  "n_unique_prompts": 32,
+  "groups": {
+    "gpt6_luna": {
+      "firing": {
+        "n_planned": 16,
+        "n_recorded": 16,
+        "n_missing": 0,
+        "n_invalid": 0,
+        "n_predicted_true": 8,
+        "correct": {
+          "n_eligible": 16,
+          "n_true": 16,
+          "n_false": 0,
+          "n_assessed": 16,
+          "n_unassessed": 0,
+          "rate_on_planned": 1.0,
+          "rate_on_assessed": 1.0
+        },
+        "by_expected_truth": {
+          "true": {
+            "n_eligible": 8,
+            "n_true": 8,
+            "n_false": 0,
+            "n_assessed": 8,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "false": {
+            "n_eligible": 8,
+            "n_true": 8,
+            "n_false": 0,
+            "n_assessed": 8,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          }
+        },
+        "minimal_pairs": {
+          "flip": {
+            "n_planned": 4,
+            "n_both_recorded": 4,
+            "n_both_valid": 4,
+            "n_changed": 4,
+            "n_relation_correct": 4,
+            "n_both_correct": 4
+          },
+          "invariant": {
+            "n_planned": 4,
+            "n_both_recorded": 4,
+            "n_both_valid": 4,
+            "n_changed": 0,
+            "n_relation_correct": 4,
+            "n_both_correct": 4
+          }
+        }
+      },
+      "suppression": {
+        "n_planned": 16,
+        "n_recorded": 16,
+        "n_missing": 0,
+        "n_invalid": 0,
+        "n_predicted_true": 8,
+        "correct": {
+          "n_eligible": 16,
+          "n_true": 16,
+          "n_false": 0,
+          "n_assessed": 16,
+          "n_unassessed": 0,
+          "rate_on_planned": 1.0,
+          "rate_on_assessed": 1.0
+        },
+        "by_expected_truth": {
+          "true": {
+            "n_eligible": 8,
+            "n_true": 8,
+            "n_false": 0,
+            "n_assessed": 8,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "false": {
+            "n_eligible": 8,
+            "n_true": 8,
+            "n_false": 0,
+            "n_assessed": 8,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          }
+        },
+        "minimal_pairs": {
+          "flip": {
+            "n_planned": 4,
+            "n_both_recorded": 4,
+            "n_both_valid": 4,
+            "n_changed": 4,
+            "n_relation_correct": 4,
+            "n_both_correct": 4
+          },
+          "invariant": {
+            "n_planned": 4,
+            "n_both_recorded": 4,
+            "n_both_valid": 4,
+            "n_changed": 0,
+            "n_relation_correct": 4,
+            "n_both_correct": 4
+          }
+        }
+      },
+      "active_membership": {
+        "n_planned": 16,
+        "n_recorded": 16,
+        "n_missing": 0,
+        "n_invalid": 0,
+        "n_predicted_true": 8,
+        "correct": {
+          "n_eligible": 16,
+          "n_true": 16,
+          "n_false": 0,
+          "n_assessed": 16,
+          "n_unassessed": 0,
+          "rate_on_planned": 1.0,
+          "rate_on_assessed": 1.0
+        },
+        "by_expected_truth": {
+          "true": {
+            "n_eligible": 8,
+            "n_true": 8,
+            "n_false": 0,
+            "n_assessed": 8,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "false": {
+            "n_eligible": 8,
+            "n_true": 8,
+            "n_false": 0,
+            "n_assessed": 8,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          }
+        },
+        "minimal_pairs": {
+          "flip": {
+            "n_planned": 4,
+            "n_both_recorded": 4,
+            "n_both_valid": 4,
+            "n_changed": 4,
+            "n_relation_correct": 4,
+            "n_both_correct": 4
+          },
+          "invariant": {
+            "n_planned": 4,
+            "n_both_recorded": 4,
+            "n_both_valid": 4,
+            "n_changed": 0,
+            "n_relation_correct": 4,
+            "n_both_correct": 4
+          }
+        }
+      },
+      "label_mapping": {
+        "n_planned": 16,
+        "n_recorded": 16,
+        "n_missing": 0,
+        "n_invalid": 0,
+        "n_predicted_true": 8,
+        "correct": {
+          "n_eligible": 16,
+          "n_true": 16,
+          "n_false": 0,
+          "n_assessed": 16,
+          "n_unassessed": 0,
+          "rate_on_planned": 1.0,
+          "rate_on_assessed": 1.0
+        },
+        "by_expected_truth": {
+          "true": {
+            "n_eligible": 8,
+            "n_true": 8,
+            "n_false": 0,
+            "n_assessed": 8,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          },
+          "false": {
+            "n_eligible": 8,
+            "n_true": 8,
+            "n_false": 0,
+            "n_assessed": 8,
+            "n_unassessed": 0,
+            "rate_on_planned": 1.0,
+            "rate_on_assessed": 1.0
+          }
+        },
+        "minimal_pairs": {
+          "flip": {
+            "n_planned": 4,
+            "n_both_recorded": 4,
+            "n_both_valid": 4,
+            "n_changed": 4,
+            "n_relation_correct": 4,
+            "n_both_correct": 4
+          },
+          "invariant": {
+            "n_planned": 4,
+            "n_both_recorded": 4,
+            "n_both_valid": 4,
+            "n_changed": 0,
+            "n_relation_correct": 4,
+            "n_both_correct": 4
+          }
+        }
+      }
+    },
+    "mistral_large": {
+      "firing": {
+        "n_planned": 16,
+        "n_recorded": 16,
+        "n_missing": 0,
+        "n_invalid": 16,
+        "n_predicted_true": 0,
+        "correct": {
+          "n_eligible": 16,
+          "n_true": 0,
+          "n_false": 0,
+          "n_assessed": 0,
+          "n_unassessed": 16,
+          "rate_on_planned": 0.0,
+          "rate_on_assessed": null
+        },
+        "by_expected_truth": {
+          "true": {
+            "n_eligible": 8,
+            "n_true": 0,
+            "n_false": 0,
+            "n_assessed": 0,
+            "n_unassessed": 8,
+            "rate_on_planned": 0.0,
+            "rate_on_assessed": null
+          },
+          "false": {
+            "n_eligible": 8,
+            "n_true": 0,
+            "n_false": 0,
+            "n_assessed": 0,
+            "n_unassessed": 8,
+            "rate_on_planned": 0.0,
+            "rate_on_assessed": null
+          }
+        },
+        "minimal_pairs": {
+          "flip": {
+            "n_planned": 4,
+            "n_both_recorded": 4,
+            "n_both_valid": 0,
+            "n_changed": 0,
+            "n_relation_correct": 0,
+            "n_both_correct": 0
+          },
+          "invariant": {
+            "n_planned": 4,
+            "n_both_recorded": 4,
+            "n_both_valid": 0,
+            "n_changed": 0,
+            "n_relation_correct": 0,
+            "n_both_correct": 0
+          }
+        }
+      },
+      "suppression": {
+        "n_planned": 16,
+        "n_recorded": 16,
+        "n_missing": 0,
+        "n_invalid": 16,
+        "n_predicted_true": 0,
+        "correct": {
+          "n_eligible": 16,
+          "n_true": 0,
+          "n_false": 0,
+          "n_assessed": 0,
+          "n_unassessed": 16,
+          "rate_on_planned": 0.0,
+          "rate_on_assessed": null
+        },
+        "by_expected_truth": {
+          "true": {
+            "n_eligible": 8,
+            "n_true": 0,
+            "n_false": 0,
+            "n_assessed": 0,
+            "n_unassessed": 8,
+            "rate_on_planned": 0.0,
+            "rate_on_assessed": null
+          },
+          "false": {
+            "n_eligible": 8,
+            "n_true": 0,
+            "n_false": 0,
+            "n_assessed": 0,
+            "n_unassessed": 8,
+            "rate_on_planned": 0.0,
+            "rate_on_assessed": null
+          }
+        },
+        "minimal_pairs": {
+          "flip": {
+            "n_planned": 4,
+            "n_both_recorded": 4,
+            "n_both_valid": 0,
+            "n_changed": 0,
+            "n_relation_correct": 0,
+            "n_both_correct": 0
+          },
+          "invariant": {
+            "n_planned": 4,
+            "n_both_recorded": 4,
+            "n_both_valid": 0,
+            "n_changed": 0,
+            "n_relation_correct": 0,
+            "n_both_correct": 0
+          }
+        }
+      },
+      "active_membership": {
+        "n_planned": 16,
+        "n_recorded": 16,
+        "n_missing": 0,
+        "n_invalid": 16,
+        "n_predicted_true": 0,
+        "correct": {
+          "n_eligible": 16,
+          "n_true": 0,
+          "n_false": 0,
+          "n_assessed": 0,
+          "n_unassessed": 16,
+          "rate_on_planned": 0.0,
+          "rate_on_assessed": null
+        },
+        "by_expected_truth": {
+          "true": {
+            "n_eligible": 8,
+            "n_true": 0,
+            "n_false": 0,
+            "n_assessed": 0,
+            "n_unassessed": 8,
+            "rate_on_planned": 0.0,
+            "rate_on_assessed": null
+          },
+          "false": {
+            "n_eligible": 8,
+            "n_true": 0,
+            "n_false": 0,
+            "n_assessed": 0,
+            "n_unassessed": 8,
+            "rate_on_planned": 0.0,
+            "rate_on_assessed": null
+          }
+        },
+        "minimal_pairs": {
+          "flip": {
+            "n_planned": 4,
+            "n_both_recorded": 4,
+            "n_both_valid": 0,
+            "n_changed": 0,
+            "n_relation_correct": 0,
+            "n_both_correct": 0
+          },
+          "invariant": {
+            "n_planned": 4,
+            "n_both_recorded": 4,
+            "n_both_valid": 0,
+            "n_changed": 0,
+            "n_relation_correct": 0,
+            "n_both_correct": 0
+          }
+        }
+      },
+      "label_mapping": {
+        "n_planned": 16,
+        "n_recorded": 16,
+        "n_missing": 0,
+        "n_invalid": 16,
+        "n_predicted_true": 0,
+        "correct": {
+          "n_eligible": 16,
+          "n_true": 0,
+          "n_false": 0,
+          "n_assessed": 0,
+          "n_unassessed": 16,
+          "rate_on_planned": 0.0,
+          "rate_on_assessed": null
+        },
+        "by_expected_truth": {
+          "true": {
+            "n_eligible": 8,
+            "n_true": 0,
+            "n_false": 0,
+            "n_assessed": 0,
+            "n_unassessed": 8,
+            "rate_on_planned": 0.0,
+            "rate_on_assessed": null
+          },
+          "false": {
+            "n_eligible": 8,
+            "n_true": 0,
+            "n_false": 0,
+            "n_assessed": 0,
+            "n_unassessed": 8,
+            "rate_on_planned": 0.0,
+            "rate_on_assessed": null
+          }
+        },
+        "minimal_pairs": {
+          "flip": {
+            "n_planned": 4,
+            "n_both_recorded": 4,
+            "n_both_valid": 0,
+            "n_changed": 0,
+            "n_relation_correct": 0,
+            "n_both_correct": 0
+          },
+          "invariant": {
+            "n_planned": 4,
+            "n_both_recorded": 4,
+            "n_both_valid": 0,
+            "n_changed": 0,
+            "n_relation_correct": 0,
+            "n_both_correct": 0
+          }
+        }
+      }
+    }
+  },
+  "pairs": {
+    "minimal_pairs": {
+      "n_planned": 64,
+      "n_both_recorded": 64,
+      "n_both_valid": 32,
+      "n_changed": 16,
+      "n_relation_correct": 32,
+      "n_both_correct": 32
+    },
+    "readers": {
+      "n_planned": 64,
+      "n_both_recorded": 64,
+      "n_both_valid": 0,
+      "n_changed": 0,
+      "n_relation_correct": 0,
+      "n_both_correct": 0
+    },
+    "repetitions": {
+      "n_planned": 64,
+      "n_both_recorded": 64,
+      "n_both_valid": 32,
+      "n_changed": 0,
+      "n_relation_correct": 32,
+      "n_both_correct": 32
+    }
+  },
+  "interpretation": "Binary verification of scaffolded atomic operations; not end-to-end generation or internal fault localization. Minimal pairs, reused motifs and repeated reads are dependent."
+}

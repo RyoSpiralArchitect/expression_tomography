@@ -1,0 +1,27 @@
+{
+  "status": "response_received",
+  "execution_sha256": "190871f5f82d394b092248cae50e0083361fefeae80e13bf9c9539f45ea36ea6",
+  "logical_trial_identity_sha256": "c14cffd47230b42b1d4a2c09b03faf481a13c49add826df318ca97610d9e1a38",
+  "slot_sha256": "f799b68dee3c837f18c1547494cbcc8649aa684ef01c38a28b58f1086b3d3a9c",
+  "prompt": "Evaluate one public operation independently.\nTreat fired_rules and suppressed_rules as supplied complete sets. Active rules are fired_rules MINUS suppressed_rules. Do not recompute either supplied set. Is target_rule active?\nReturn only a JSON object with exactly one key, \"holds\", whose value is the JSON boolean true or false. No explanation or additional fields.\nPUBLIC_INPUT_JSON:\n{\"fired_rules\":[\"r1\",\"r2\",\"r3\"],\"suppressed_rules\":[\"r3\"],\"target_rule\":\"r1\"}",
+  "provider": {
+    "name": "reader-mistral-large-latest",
+    "settings": {
+      "type": "openai_compatible",
+      "model": "mistral-large-latest",
+      "temperature": null,
+      "max_tokens": 4000,
+      "timeout_s": 120.0,
+      "reasoning_effort": null,
+      "device": "auto",
+      "dtype": "auto"
+    },
+    "base_url": "https://api.mistral.ai/v1",
+    "implementation": "expression_tomography.core.providers.OpenAICompatibleProvider",
+    "request_contract": "openai_compatible.chat_completions.temperature_optional.v3",
+    "is_mock": false
+  },
+  "model_call": true,
+  "raw_response": "```json\n{\"holds\": true}\n```",
+  "raw_response_sha256": "ac8d8c1e3601677fa5a56e86a4000ae04e928adbbbfcfb04edeffab17a1bba8c"
+}

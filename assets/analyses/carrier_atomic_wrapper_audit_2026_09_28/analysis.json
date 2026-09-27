@@ -1,0 +1,194 @@
+{
+  "version": "carrier_atomic_wrapper_audit.posthoc.v1",
+  "post_hoc": true,
+  "new_model_calls": 0,
+  "source_manifest_sha256": "29c620edadcee282f54263faf7410b039fb9d93da7f5e71d73d99bb4b5cd1afb",
+  "source_execution_sha256": "190871f5f82d394b092248cae50e0083361fefeae80e13bf9c9539f45ea36ea6",
+  "wrapper_rule": "Remove exactly one outer ```json LF / LF ``` pair only if it encloses the entire response and there are exactly two triple-backtick tokens; otherwise leave bytes unchanged. Reuse the frozen strict parser and scorer on the inner text.",
+  "primary_counts": {
+    "n_recorded": 128,
+    "n_invalid": 64
+  },
+  "operations": {
+    "unchanged": 64,
+    "remove_single_json_fence": 64
+  },
+  "readers": {
+    "gpt6_luna": {
+      "n_recorded": 64,
+      "n_primary_valid": 64,
+      "n_fences_removed": 0,
+      "n_secondary_valid": 64,
+      "n_secondary_correct": 64,
+      "n_secondary_incorrect": 0,
+      "n_secondary_unassessed": 0,
+      "secondary_rate_on_recorded": 1.0,
+      "secondary_rate_on_assessed": 1.0,
+      "stages": {
+        "firing": {
+          "n_recorded": 16,
+          "n_primary_valid": 16,
+          "n_fences_removed": 0,
+          "n_secondary_valid": 16,
+          "n_secondary_correct": 16,
+          "n_secondary_incorrect": 0,
+          "n_secondary_unassessed": 0,
+          "secondary_rate_on_recorded": 1.0,
+          "secondary_rate_on_assessed": 1.0
+        },
+        "suppression": {
+          "n_recorded": 16,
+          "n_primary_valid": 16,
+          "n_fences_removed": 0,
+          "n_secondary_valid": 16,
+          "n_secondary_correct": 16,
+          "n_secondary_incorrect": 0,
+          "n_secondary_unassessed": 0,
+          "secondary_rate_on_recorded": 1.0,
+          "secondary_rate_on_assessed": 1.0
+        },
+        "active_membership": {
+          "n_recorded": 16,
+          "n_primary_valid": 16,
+          "n_fences_removed": 0,
+          "n_secondary_valid": 16,
+          "n_secondary_correct": 16,
+          "n_secondary_incorrect": 0,
+          "n_secondary_unassessed": 0,
+          "secondary_rate_on_recorded": 1.0,
+          "secondary_rate_on_assessed": 1.0
+        },
+        "label_mapping": {
+          "n_recorded": 16,
+          "n_primary_valid": 16,
+          "n_fences_removed": 0,
+          "n_secondary_valid": 16,
+          "n_secondary_correct": 16,
+          "n_secondary_incorrect": 0,
+          "n_secondary_unassessed": 0,
+          "secondary_rate_on_recorded": 1.0,
+          "secondary_rate_on_assessed": 1.0
+        }
+      },
+      "minimal_pairs": {
+        "flip": {
+          "n_planned": 16,
+          "n_secondary_both_valid": 16,
+          "n_secondary_changed": 16,
+          "n_secondary_relation_correct": 16,
+          "n_secondary_both_correct": 16
+        },
+        "invariant": {
+          "n_planned": 16,
+          "n_secondary_both_valid": 16,
+          "n_secondary_changed": 0,
+          "n_secondary_relation_correct": 16,
+          "n_secondary_both_correct": 16
+        }
+      }
+    },
+    "mistral_large": {
+      "n_recorded": 64,
+      "n_primary_valid": 0,
+      "n_fences_removed": 64,
+      "n_secondary_valid": 64,
+      "n_secondary_correct": 61,
+      "n_secondary_incorrect": 3,
+      "n_secondary_unassessed": 0,
+      "secondary_rate_on_recorded": 0.953125,
+      "secondary_rate_on_assessed": 0.953125,
+      "stages": {
+        "firing": {
+          "n_recorded": 16,
+          "n_primary_valid": 0,
+          "n_fences_removed": 16,
+          "n_secondary_valid": 16,
+          "n_secondary_correct": 16,
+          "n_secondary_incorrect": 0,
+          "n_secondary_unassessed": 0,
+          "secondary_rate_on_recorded": 1.0,
+          "secondary_rate_on_assessed": 1.0
+        },
+        "suppression": {
+          "n_recorded": 16,
+          "n_primary_valid": 0,
+          "n_fences_removed": 16,
+          "n_secondary_valid": 16,
+          "n_secondary_correct": 13,
+          "n_secondary_incorrect": 3,
+          "n_secondary_unassessed": 0,
+          "secondary_rate_on_recorded": 0.8125,
+          "secondary_rate_on_assessed": 0.8125
+        },
+        "active_membership": {
+          "n_recorded": 16,
+          "n_primary_valid": 0,
+          "n_fences_removed": 16,
+          "n_secondary_valid": 16,
+          "n_secondary_correct": 16,
+          "n_secondary_incorrect": 0,
+          "n_secondary_unassessed": 0,
+          "secondary_rate_on_recorded": 1.0,
+          "secondary_rate_on_assessed": 1.0
+        },
+        "label_mapping": {
+          "n_recorded": 16,
+          "n_primary_valid": 0,
+          "n_fences_removed": 16,
+          "n_secondary_valid": 16,
+          "n_secondary_correct": 16,
+          "n_secondary_incorrect": 0,
+          "n_secondary_unassessed": 0,
+          "secondary_rate_on_recorded": 1.0,
+          "secondary_rate_on_assessed": 1.0
+        }
+      },
+      "minimal_pairs": {
+        "flip": {
+          "n_planned": 16,
+          "n_secondary_both_valid": 16,
+          "n_secondary_changed": 13,
+          "n_secondary_relation_correct": 13,
+          "n_secondary_both_correct": 13
+        },
+        "invariant": {
+          "n_planned": 16,
+          "n_secondary_both_valid": 16,
+          "n_secondary_changed": 0,
+          "n_secondary_relation_correct": 16,
+          "n_secondary_both_correct": 16
+        }
+      }
+    }
+  },
+  "pairs": {
+    "minimal_pairs": {
+      "n_planned": 64,
+      "n_secondary_both_valid": 64,
+      "n_secondary_changed": 29,
+      "n_secondary_relation_correct": 61,
+      "n_secondary_both_correct": 61
+    },
+    "readers": {
+      "n_planned": 64,
+      "n_secondary_both_valid": 64,
+      "n_secondary_changed": 3,
+      "n_secondary_relation_correct": 61,
+      "n_secondary_both_correct": 61
+    },
+    "repetitions": {
+      "n_planned": 64,
+      "n_secondary_both_valid": 64,
+      "n_secondary_changed": 1,
+      "n_secondary_relation_correct": 63,
+      "n_secondary_both_correct": 62
+    }
+  },
+  "limitations": [
+    "Wrapper rule was chosen after inspecting raw responses. This is not the primary or a preregistered score.",
+    "No content, key, boolean, candidate answer or oracle correction is applied; no model repair call.",
+    "Strict primary format failures remain failures of the requested output contract, not scored logical errors.",
+    "Binary verification with supplied predecessors is not full derivation or hidden reasoning.",
+    "No independent-binomial, isolated-family, general-expression or collusion inference."
+  ]
+}
