@@ -183,6 +183,14 @@ restrictions and attribution can change and propagate across readers. Format
 and semantic evidence remain separate; source texts stay local and semantic
 annotations are provisional assistant review, not validated human gold.
 
+The [24-call question-reuse follow-up](docs/pg_letters_reuse_note_2026_09_28.md)
+keeps those texts fixed and adds targeted conditional, attribution and temporal
+questions. Some decisions survive while distinctions needed by other questions
+are lost; original-input reader failures also remain visible. Twenty responses
+pass the frozen schema and four remain invalid. No semantic accuracy, hidden-code
+finding or intelligence gain is inferred. The next proposed intervention is a
+minimal source-grounded restoration against a benign-edit control.
+
 ## Rule-Z Smoke
 
 ```bash

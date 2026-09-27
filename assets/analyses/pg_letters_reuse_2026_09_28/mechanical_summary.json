@@ -1,0 +1,72 @@
+{
+  "attempts": 24,
+  "audit_findings": 9,
+  "audit_sha256": "3343b30b3865eadd5990cc23afd778c9eade8e5d9f8daa2b7d46943c4c67c40b",
+  "execution_sha256": "c997492047ec349c7a5812f38b9bf98dbe85f5f730acfd60f848ca7a7b6350c7",
+  "format_groups": [
+    {
+      "condition": "original",
+      "literal_quotes": 3,
+      "quotes": 45,
+      "reader": "mistral",
+      "responses": 6,
+      "schema_valid": 4,
+      "strict_json": 0,
+      "whitespace_folded_quotes": 30
+    },
+    {
+      "condition": "frozen_relay",
+      "literal_quotes": 35,
+      "quotes": 47,
+      "reader": "mistral",
+      "responses": 6,
+      "schema_valid": 4,
+      "strict_json": 0,
+      "whitespace_folded_quotes": 35
+    },
+    {
+      "condition": "original",
+      "literal_quotes": 8,
+      "quotes": 73,
+      "reader": "claude",
+      "responses": 6,
+      "schema_valid": 6,
+      "strict_json": 0,
+      "whitespace_folded_quotes": 71
+    },
+    {
+      "condition": "frozen_relay",
+      "literal_quotes": 62,
+      "quotes": 69,
+      "reader": "claude",
+      "responses": 6,
+      "schema_valid": 6,
+      "strict_json": 0,
+      "whitespace_folded_quotes": 62
+    }
+  ],
+  "invalid_format_slots": [
+    "09_austen_v_travel_mistral_frozen_relay_r0",
+    "12_austen_v_travel_mistral_frozen_relay_r1",
+    "18_austen_v_travel_mistral_original_r1",
+    "20_austen_v_travel_mistral_original_r0"
+  ],
+  "is_mock": false,
+  "parent_execution_sha256": "db963ae45956f2ddac9c5f0db2f92b25ce81d02d1d726610dee3677d43ae6bd3",
+  "planned_question_answer_items": 144,
+  "planned_slots": 24,
+  "question_answer_items": 120,
+  "raw_report_sha256": "05ce60c3939fffa2b2236158e42cb324a7b57afe9008dc07f08db24661c911cf",
+  "replay_new_calls": 0,
+  "replay_records_identical": true,
+  "selection_status": "Sender-unseen but analyst-targeted after inspecting the first relay. Not an untouched held-out query benchmark.",
+  "semantic_accuracy": null,
+  "semantic_assessment": "Assistant draft obligations; no automatic semantic gold or independent human validation.",
+  "status": "complete",
+  "statuses": {
+    "ok": 24
+  },
+  "terminal_slots": 24,
+  "unit_of_independence": "Three selected documents with paired inputs and repeated readers; not 144 independent samples.",
+  "version": "pg_letters_reuse.mechanical_readout.v1"
+}

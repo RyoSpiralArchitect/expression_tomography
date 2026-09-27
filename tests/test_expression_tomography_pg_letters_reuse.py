@@ -7,7 +7,7 @@ import pytest
 from expression_tomography.tasks.pg_letters import live
 from expression_tomography.tasks.pg_letters.prepare import prepare, sha256
 from expression_tomography.tasks.pg_letters_reuse import task
-from scripts.pg_letters_reuse_readout import summarize, validate_audit
+from scripts.pg_letters_reuse_readout import summarize, validate_audit, write_manifest
 
 
 @pytest.fixture
@@ -142,6 +142,9 @@ def test_readout_is_replayed_and_not_a_semantic_score(frozen):
     assert summary["replay_records_identical"] and summary["replay_new_calls"] == 0
     assert summary["semantic_accuracy"] is None and summary["is_mock"]
     assert "PRIVATE DRAFT GOLD" in (root / "packet.md").read_text()
+    manifest = write_manifest(root, root / "integrity.json")
+    assert len([p for p in manifest["files"] if p.endswith(".request.json")]) == 24
+    assert manifest["files"]["raw_report.json"] == sha256((root / "raw_report.json").read_bytes())
     with pytest.raises(FileExistsError):
         summarize(root, root / "summary.json", root / "new_packet.md")
 
@@ -173,4 +176,22 @@ def test_audit_witnesses_are_source_and_answer_bound(frozen):
     validate_audit(audit, report, plan)
     audit["findings"][0]["witnesses"][0]["answer_fragment"] = "not a real answer"
     with pytest.raises(ValueError, match="answer fragment"):
+        validate_audit(audit, report, plan)
+
+
+def test_invalid_raw_audit_cannot_silently_become_a_scored_answer(frozen):
+    with patch.object(live.FixtureProvider, "complete", return_value="unparseable qualitative observation"):
+        report = task.run(*frozen[:3], max_new_calls=1)
+    plan = live.read(frozen[0] / "plan.json")
+    row = report["records"][0]
+    cid = row["slot"]["case_id"]
+    doc = next(d for d in plan["documents"] if d["case_id"] == cid)
+    witness = {"slot_id": row["slot"]["slot_id"], "surface": "raw_response",
+               "unscored_raw_inspection": True, "answer_fragment": "qualitative observation"}
+    audit = {"execution_sha256": frozen[1], "findings": [{
+        "id": "f1", "case_id": cid, "question_id": "p0", "source_fragment": "Please wait",
+        "relay_fragment": doc["texts"]["frozen_relay"], "witnesses": [witness]}]}
+    validate_audit(audit, report, plan)
+    witness["unscored_raw_inspection"] = False
+    with pytest.raises(ValueError, match="invalid-format boundary"):
         validate_audit(audit, report, plan)

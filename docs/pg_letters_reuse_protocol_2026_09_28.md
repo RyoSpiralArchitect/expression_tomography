@@ -83,3 +83,9 @@ The next intervention, after this readout and source adjudication, is minimal
 restoration of a lost distinction versus a benign edit, with unchanged source
 evidence and frozen future-use questions. That separate experiment can ask
 whether preserving a particular distinction improves subsequent reasoning.
+
+## Execution Addendum
+
+The completed [24-call readout](pg_letters_reuse_note_2026_09_28.md) reports both
+returned and schema-valid outputs, retained controls and source-bound failures.
+This addendum does not modify the frozen question ledger or draft obligations.

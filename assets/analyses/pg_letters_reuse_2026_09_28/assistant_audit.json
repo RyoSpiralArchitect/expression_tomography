@@ -1,0 +1,119 @@
+{
+  "version": "pg_letters_reuse.assistant_audit.v1",
+  "execution_sha256": "c997492047ec349c7a5812f38b9bf98dbe85f5f730acfd60f848ca7a7b6350c7",
+  "status": "Provisional source-aware assistant inspection, not independent human gold or a semantic accuracy score.",
+  "selection": "Eighteen sender-unseen, analyst-targeted questions on three previously inspected sources. Two reader repetitions per input; clustered observations, not independent documents.",
+  "findings": [
+    {
+      "id": "numeric_example_erased", "case_id": "darwin_murray_publication", "question_id": "p2",
+      "source_fragment": "such as half risk and half profit", "relay_fragment": "including sharing both the risk and the profits",
+      "interpretation": "All four original readings recover half risk and half profit as illustrative, not exclusive. All four relay readings say the fractions are unspecified. Correct relay-side abstention exposes lost source information; it is not a receiver reasoning error.",
+      "witnesses": [
+        {"slot_id": "08_darwin_murray_publication_claude_original_r0", "answer_fragment": "illustrative example ('such as'), not as an exclusive or fixed requirement"},
+        {"slot_id": "07_darwin_murray_publication_mistral_original_r0", "answer_fragment": "half risk and half profit"},
+        {"slot_id": "04_darwin_murray_publication_claude_frozen_relay_r1", "answer_fragment": "No exact fractions are mentioned anywhere in the document."},
+        {"slot_id": "17_darwin_murray_publication_mistral_frozen_relay_r0", "answer_fragment": "does not specify numbers"}
+      ]
+    },
+    {
+      "id": "negative_scope_erased", "case_id": "darwin_murray_publication", "question_id": "p3",
+      "source_fragment": "who care for Natural History, but no others", "relay_fragment": "general readers who enjoy natural history",
+      "interpretation": "Original readings restrict predicted interest; relay readings consistently deny an explicit exclusion. Readability and predicted interest remain different dimensions. Mistral original repeat 0 says restricts but uses a less explicit gloss than its repeat 1; do not overstate verbatim agreement.",
+      "witnesses": [
+        {"slot_id": "08_darwin_murray_publication_claude_original_r0", "answer_fragment": "those who do not care for Natural History are excluded"},
+        {"slot_id": "15_darwin_murray_publication_mistral_original_r1", "answer_fragment": "but no others"},
+        {"slot_id": "21_darwin_murray_publication_claude_frozen_relay_r0", "answer_fragment": "No exclusion of any group is stated"},
+        {"slot_id": "17_darwin_murray_publication_mistral_frozen_relay_r0", "answer_fragment": "No exclusion is implied."}
+      ]
+    },
+    {
+      "id": "opinion_holder_rebound", "case_id": "darwin_murray_publication", "question_id": "p4",
+      "source_fragment": "I believe you think very little books objectionable", "relay_fragment": "The writer thinks the book would be very short and worries that short books may not be worthwhile.",
+      "interpretation": "All four original readings attribute the short-book objection to the recipient, separately from the writer's doubts. All four relay readings attribute that concern to the writer and state no recipient view is provided. The change is publicly expressed in the relay; no hidden-code explanation is needed.",
+      "witnesses": [
+        {"slot_id": "16_darwin_murray_publication_claude_original_r1", "answer_fragment": "The writer attributes to the recipient"},
+        {"slot_id": "15_darwin_murray_publication_mistral_original_r1", "answer_fragment": "The recipient is said to"},
+        {"slot_id": "21_darwin_murray_publication_claude_frozen_relay_r0", "answer_fragment": "It is the writer himself who worries"},
+        {"slot_id": "17_darwin_murray_publication_mistral_frozen_relay_r0", "answer_fragment": "No objection or worry about short books is attributed to the recipient."}
+      ]
+    },
+    {
+      "id": "unsupported_specificity_transmitted", "case_id": "stevenson_colvin_visit", "question_id": "p2",
+      "source_fragment": "until the session is over (end of March)", "relay_fragment": "until the parliamentary session ends in March",
+      "interpretation": "All four original readings say the session type is unspecified; all four relay readings say parliamentary. This is faithful reading of an unsupported source-level addition, not proof that the historical session was not parliamentary and not evidence of covert decoding.",
+      "witnesses": [
+        {"slot_id": "03_stevenson_colvin_visit_claude_original_r1", "answer_fragment": "does not identify the institution or kind of session"},
+        {"slot_id": "11_stevenson_colvin_visit_mistral_original_r0", "answer_fragment": "it is unspecified"},
+        {"slot_id": "02_stevenson_colvin_visit_claude_frozen_relay_r0", "answer_fragment": "the parliamentary session"},
+        {"slot_id": "01_stevenson_colvin_visit_mistral_frozen_relay_r0", "answer_fragment": "parliamentary session"}
+      ]
+    },
+    {
+      "id": "tentative_naming_flattened", "case_id": "stevenson_colvin_visit", "question_id": "p6",
+      "source_fragment": "the Parnassiens, I think they call them", "relay_fragment": "the modern French poets known as the Parnassians",
+      "interpretation": "All four original readings preserve tentative naming; all four relay readings find no naming hedge. Both conditions preserve the imaginative status of the story's Italy. This isolates one lost epistemic qualification alongside one retained qualification in the same answer.",
+      "witnesses": [
+        {"slot_id": "03_stevenson_colvin_visit_claude_original_r1", "answer_fragment": "The name of the French poetic school is marked as tentative"},
+        {"slot_id": "11_stevenson_colvin_visit_mistral_original_r0", "answer_fragment": "The name for the French poetic school is tentative"},
+        {"slot_id": "02_stevenson_colvin_visit_claude_frozen_relay_r0", "answer_fragment": "no marker of tentativeness or uncertainty"},
+        {"slot_id": "01_stevenson_colvin_visit_mistral_frozen_relay_r0", "answer_fragment": "without any indication of tentativeness"}
+      ]
+    },
+    {
+      "id": "time_precision_erased_without_action_flip", "case_id": "stevenson_colvin_visit", "question_id": "p1",
+      "source_fragment": "the session is over (end of March)", "relay_fragment": "the parliamentary session ends in March",
+      "interpretation": "Original readings recover end of March; relay readings retain only session end somewhere in March. Neither condition licenses a confirmed trip at March's beginning. Thus a preserved decision endpoint can coexist with lost temporal precision.",
+      "witnesses": [
+        {"slot_id": "03_stevenson_colvin_visit_claude_original_r1", "answer_fragment": "end of March"},
+        {"slot_id": "14_stevenson_colvin_visit_mistral_original_r1", "answer_fragment": "end of March"},
+        {"slot_id": "06_stevenson_colvin_visit_claude_frozen_relay_r1", "answer_fragment": "some unspecified point within March"},
+        {"slot_id": "10_stevenson_colvin_visit_mistral_frozen_relay_r1", "answer_fragment": "until the parliamentary session ends in March"}
+      ]
+    },
+    {
+      "id": "commitment_wording_candidate", "case_id": "austen_v_travel", "question_id": "p4",
+      "source_fragment": "Edward has been so good as to promise", "relay_fragment": "Edward has kindly offered",
+      "interpretation": "Both valid Claude original readings call it a conditional promise; both relay readings insist on an offer rather than a promise. The downstream lexical distinction is observable, but whether offered pragmatically preserves commitment is disputed and not resolved by this audit. Mistral's four Austen responses are format-invalid and excluded from accepted-response counts.",
+      "witnesses": [
+        {"slot_id": "23_austen_v_travel_claude_original_r0", "answer_fragment": "a firm promise"},
+        {"slot_id": "00_austen_v_travel_claude_original_r1", "answer_fragment": "stronger than a mere offer or possibility"},
+        {"slot_id": "05_austen_v_travel_claude_frozen_relay_r0", "answer_fragment": "not a promise or completed action"},
+        {"slot_id": "19_austen_v_travel_claude_frozen_relay_r1", "answer_fragment": "an offer, not a promise"}
+      ]
+    },
+    {
+      "id": "reader_branch_conflation_raw_only", "case_id": "austen_v_travel", "question_id": "p1",
+      "source_fragment": "If I have no answer at all on Tuesday, I must suppose Mary is not at home, and must wait till I do hear", "relay_fragment": "If no reply comes by Tuesday, I will assume Mary is away and wait until I hear from her.",
+      "interpretation": "Unscored inspection: all four Mistral raw replies initially say wait, but later treat silence/assumed absence as a route to the Monday arrangement. The original already preserves the needed branch distinction, so this is not attributable solely to the sender. All four responses remain format-invalid; no JSON repair or relaxed semantic denominator is applied. Claude's four valid replies keep silence and the Monday branch distinct.",
+      "witnesses": [
+        {"slot_id": "18_austen_v_travel_mistral_original_r1", "surface": "raw_response", "unscored_raw_inspection": true, "answer_fragment": "confirm the Pearsons' unavailability (via silence or explicit refusal)"},
+        {"slot_id": "20_austen_v_travel_mistral_original_r0", "surface": "raw_response", "unscored_raw_inspection": true, "answer_fragment": "or if no reply is received and the writer infers the Pearsons are not at home"},
+        {"slot_id": "09_austen_v_travel_mistral_frozen_relay_r0", "surface": "raw_response", "unscored_raw_inspection": true, "answer_fragment": "or if the writer assumes Mary is away (due to no reply)"},
+        {"slot_id": "12_austen_v_travel_mistral_frozen_relay_r1", "surface": "raw_response", "unscored_raw_inspection": true, "answer_fragment": "or if no reply is received and the writer assumes Mary is away"},
+        {"slot_id": "19_austen_v_travel_claude_frozen_relay_r1", "answer_fragment": "No-reply-by-Tuesday triggers waiting, not the Monday arrangement."}
+      ]
+    },
+    {
+      "id": "support_label_varies_without_answer_reversal", "case_id": "darwin_murray_publication", "question_id": "p3",
+      "source_fragment": "who care for Natural History, but no others", "relay_fragment": "general readers who enjoy natural history",
+      "interpretation": "Claude's relay repetitions agree that no exclusion is specified but alternate supported and insufficient. These are model-emitted labels, not calibrated confidence or independent audit judgments. A single support label cannot stand in for source fidelity or semantic answer quality.",
+      "witnesses": [
+        {"slot_id": "21_darwin_murray_publication_claude_frozen_relay_r0", "source_status": "supported", "answer_fragment": "No exclusion of any group is stated"},
+        {"slot_id": "04_darwin_murray_publication_claude_frozen_relay_r1", "source_status": "insufficient", "answer_fragment": "No explicit restriction is placed on who else might be interested"}
+      ]
+    }
+  ],
+  "retained_controls": [
+    {"case_id": "darwin_murray_publication", "question_id": "p1", "observation": "All eight valid readings reject sole author risk despite the hypothetical half-profit offer; the erased exact example is not needed for that decision."},
+    {"case_id": "stevenson_colvin_visit", "question_ids": ["p3", "p4", "p5"], "observation": "Both input conditions retain desire versus non-imposition, financial versus household constraints, and the story/Portfolio/Appleton dependencies in all four readings per condition. This is scoped preservation, not a claim that every gloss is source-entailed."},
+    {"case_id": "austen_v_travel", "question_ids": ["p1", "p3", "p5", "p6"], "observation": "The four valid Claude responses preserve waiting versus assumed absence and distinguish hypothetical travel permission, actual departure and invitation outcome. Occasional categorical wording about non-occurrence deserves further calibration."}
+  ],
+  "limits": [
+    "The sender never saw these questions, but the analyst selected them after inspecting the relays; not an untouched held-out benchmark.",
+    "Six questions share one prompt; nearby questions may cue distinctions or supply hypothetical vocabulary. Query packaging is a future control.",
+    "Literal or folded quote membership is not entailment, and evidence quotes are not private model reasoning.",
+    "Three selected documents, one frozen sender output each, two readers and two repetitions do not support population failure rates or a causal model-family claim.",
+    "Visible omissions and substitutions explain these contrasts without covert encoding. Hidden-code use elsewhere remains an untested separate hypothesis.",
+    "There is no representation-repair intervention here, hence no demonstrated intelligence gain or proof that a minimal repair would recover downstream reasoning."
+  ]
+}

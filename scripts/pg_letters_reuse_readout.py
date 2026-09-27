@@ -8,6 +8,18 @@ from expression_tomography.tasks.pg_letters.prepare import normalized_quote, sha
 from expression_tomography.tasks.pg_letters_reuse.task import CONDITIONS, READERS, run
 
 
+def write_manifest(run_dir, output):
+    files = [run_dir / "raw_report.json", run_dir / "execution/plan.json",
+             run_dir / "execution/private_protocol.json"]
+    files += list((run_dir / "execution/source").rglob("*.py"))
+    files += list((run_dir / "journal").glob("*.json"))
+    manifest = {"version": "pg_letters_reuse.integrity.v1",
+                "execution_sha256": read(run_dir / "raw_report.json")["execution_sha256"],
+                "files": {p.relative_to(run_dir).as_posix(): sha256(p.read_bytes()) for p in sorted(files)}}
+    write_new(output, manifest)
+    return manifest
+
+
 def validate_audit(audit, report, plan):
     if audit["execution_sha256"] != report["execution_sha256"]:
         raise ValueError("Audit execution mismatch")
@@ -28,10 +40,19 @@ def validate_audit(audit, report, plan):
             row = records[witness["slot_id"]]
             if row["slot"]["case_id"] != finding["case_id"] or row["status"] != "ok":
                 raise ValueError("Audit witness lineage mismatch")
+            if witness.get("surface") == "raw_response":
+                if row["format"]["schema_valid"] or witness.get("unscored_raw_inspection") is not True:
+                    raise ValueError("Raw inspection must retain the invalid-format boundary")
+                fragment = normalized_quote(witness["answer_fragment"])
+                if not fragment or fragment not in normalized_quote(row["raw_response"]):
+                    raise ValueError("Audit raw fragment mismatch")
+                continue
             parsed = row["format"]["parsed"] if row["format"]["schema_valid"] else None
             if not parsed:
                 raise ValueError("Unparseable audit witness")
             answer = next(a for a in parsed["answers"] if a["id"] == finding["question_id"])
+            if "source_status" in witness and answer["source_status"] != witness["source_status"]:
+                raise ValueError("Audit source-status mismatch")
             fragment = normalized_quote(witness["answer_fragment"])
             if not fragment or fragment not in normalized_quote(answer["answer"]):
                 raise ValueError("Audit answer fragment mismatch")
@@ -72,6 +93,11 @@ def summarize(run_dir, summary_path, packet_path, audit_path=None):
         "statuses": dict(Counter(r["status"] for r in records)),
         "replay_new_calls": 0, "replay_records_identical": True,
         "question_answer_items": sum(len(r["format"]["parsed"]["answers"]) for r in parsed),
+        "planned_question_answer_items": sum(
+            len(next(d["questions"] for d in plan["documents"] if d["case_id"] == s["case_id"]))
+            for s in plan["slots"]
+        ),
+        "invalid_format_slots": [r["slot"]["slot_id"] for r in ok if not r["format"]["schema_valid"]],
         "unit_of_independence": "Three selected documents with paired inputs and repeated readers; not 144 independent samples.",
         "format_groups": groups, "selection_status": plan["selection_status"],
         "semantic_accuracy": None, "semantic_assessment": plan["assessment_status"],
@@ -105,6 +131,11 @@ def summarize(run_dir, summary_path, packet_path, audit_path=None):
                         answer = next(a for a in row["format"]["parsed"]["answers"] if a["id"] == q["id"])
                         lines += [f"Record: `{row['slot']['slot_id']}`; status: `{answer['source_status']}`", "",
                                   answer["answer"], "", "Evidence as returned: " + json.dumps(answer["evidence"]), ""]
+    lines += ["## Invalid-Format Raw Appendix", "",
+              "Unscored qualitative inspection only; no repair or change to parser acceptance.", ""]
+    for row in ok:
+        if not row["format"]["schema_valid"]:
+            lines += [f"### {row['slot']['slot_id']}", "", row["raw_response"], ""]
     with packet_path.open("x", encoding="utf-8") as stream:
         stream.write("\n".join(lines))
     write_new(summary_path, summary)
