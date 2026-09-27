@@ -1,0 +1,11 @@
+{
+  "status": "response_received",
+  "experiment_run_identity_sha256": "5f82a9345e317e090f07259c65dc0d56a57b3c894a41110e05d8d0be416de490",
+  "logical_trial_identity_sha256": "707a02610bf92b12f117d29db0c8e6aadf77c690c1262ed778af747f708e20a0",
+  "candidate_slot_sha256": "f3646811f6753cca603741a3d75c9b5541674e1df2ae1b7fdb9dcfc723480a37",
+  "provider": "openai-gpt-5.6-luna-low-text-boundary",
+  "prompt": "Read the supplied document in a fresh context. Use only information in the document; do not guess missing case facts or invent rules. Rule presentation order does not create a priority. Null is unknown, not an empty set. If multiple completions allowed by the document give different answers, use underdetermined. A reported eligibility label supplies that label but not the underlying facts, rules, or derivation. For the counterfactual, add counterfactual_add to the person's actual facts while keeping all other facts and the policy unchanged. Return just one JSON object with exactly these fields:\n{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"}\nCARRIER_READER_INPUT_JSON:\n{\"counterfactual_add\":\"p00\",\"text\":\"The case's eligibility is no. No case facts or rules are supplied.\"}",
+  "prompt_sha256": "ca72622a888bfecc93bc197055b5483eb48e3d73be06205d813460170ad05cc3",
+  "raw_response": "{\"active_rules\":null,\"answer\":\"no\",\"counterfactual_answer\":\"underdetermined\",\"facts\":null,\"priority\":null,\"rules\":null}",
+  "raw_response_sha256": "7ca934123316b38a3ff13ecd8496be442385df1c0ed61c61dfced17df53a673a"
+}

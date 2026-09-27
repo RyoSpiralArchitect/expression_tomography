@@ -75,6 +75,25 @@ order and explicit review questions for this accumulated work. The
 separates varied-fact sensitivity, carrier survival through rewriting, and
 downstream use. It is a design for review, not an approved or launched run.
 
+The [content-sensitivity fixture preflight](docs/carrier_content_sensitivity_preflight_2026_09_27.md)
+now implements experiment A's offline inputs: nine distinct policies, eighteen
+fact-paired worlds, identifier twins, known-order codes and missing-information
+controls. Its 304-slot prospective ledger is not executed; structured shortcut
+checks and frozen prompts precede a separately reviewed live runner.
+
+The [execution contract](docs/carrier_content_sensitivity_execution_2026_09_27.md)
+adds the bounded runner, durable request/response journals, literal-versus-
+recomputed scoring, raw-order decoding, paired summaries and a prospective
+18-source selector for B. B is not authorized by A's 304-slot call cap.
+
+The [304-call Luna readout](docs/carrier_content_sensitivity_luna_2026_09_27.md)
+is now frozen: current answers are correct in 302/304 calls, counterfactuals in
+288/304, and the known order payload survives in 216/216 coded outputs. Both
+current answers are correct in 142/144 fact pairs. Content sensitivity and
+carrier survival coexist; downstream use and intentional collusion remain
+unidentified. Raw responses, journals, paired contrasts and all 18 failure
+packets are included, with no additional B calls.
+
 ## Rule-Z Smoke
 
 ```bash

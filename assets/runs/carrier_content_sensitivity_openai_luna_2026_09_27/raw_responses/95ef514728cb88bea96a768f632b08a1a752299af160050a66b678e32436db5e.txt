@@ -1,0 +1,1 @@
+{"active_rules":["r1"],"answer":"no","counterfactual_answer":"no","facts":["p01"],"priority":[["r3","r2"]],"rules":[{"id":"r3","if":["p01","p02"],"then":"not_eligible"},{"id":"r2","if":["p00"],"then":"eligible"},{"id":"r1","if":["p01"],"then":"not_eligible"}]}

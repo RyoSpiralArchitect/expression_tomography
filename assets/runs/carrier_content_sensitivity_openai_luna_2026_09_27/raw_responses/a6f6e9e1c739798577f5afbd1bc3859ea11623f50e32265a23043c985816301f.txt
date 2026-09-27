@@ -1,0 +1,1 @@
+{"active_rules":null,"answer":"yes","counterfactual_answer":"underdetermined","facts":null,"priority":null,"rules":null}

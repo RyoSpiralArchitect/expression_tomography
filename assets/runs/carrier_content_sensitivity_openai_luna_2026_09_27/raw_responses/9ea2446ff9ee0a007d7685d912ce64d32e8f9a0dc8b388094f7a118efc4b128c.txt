@@ -1,0 +1,1 @@
+{"active_rules":null,"answer":"underdetermined","counterfactual_answer":"underdetermined","facts":null,"priority":[["r3","r1"]],"rules":[{"id":"r1","if":["p01","p03"],"then":"eligible"},{"id":"r2","if":["p02"],"then":"not_eligible"},{"id":"r3","if":["p00","p02"],"then":"not_eligible"}]}
