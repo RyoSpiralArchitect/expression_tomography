@@ -1,0 +1,79 @@
+[
+  {
+    "source_id": "silence",
+    "intent": {
+      "distinctions": [
+        {"id": "d1", "description": "低く持続する存在感"},
+        {"id": "d2", "description": "無視しようとしても残る"},
+        {"id": "d3", "description": "空間全体に影響する"},
+        {"id": "d4", "description": "少し不快"}
+      ],
+      "permitted_ambiguity": ["不快さの原因や人々の関係は特定しない"],
+      "unwanted_inferences": ["実際の室温が低い", "食品保存", "実際に機械音が鳴っている"]
+    },
+    "variants": {
+      "original": "ARCHIVE",
+      "plain": "誰も話さない。気にしないようにしても、その沈黙が部屋のどこにいても少し居心地を悪くし、いつまでも続いていた。",
+      "polished": "誰も口を開かなかった。目を窓へ逃がしても、話されなかった言葉は部屋の隅までついてきた。椅子に座り直すたび、同じところがわずかに窮屈だった。",
+      "polished_missing": "誰も口を開かなかった。目を窓へ逃がしても、話されなかった言葉は部屋の隅までついてきた。"
+    },
+    "mutation": {"removed_distinction": "d4", "construction": "不快さを担わせた最後の一文を削除。残りにも不快さが読めるかは未検証。", "expected_reading": "UNIDENTIFIED"}
+  },
+  {
+    "source_id": "waiting",
+    "intent": {
+      "distinctions": [
+        {"id": "d1", "description": "まだ届かない返事を待っている"},
+        {"id": "d2", "description": "別のことに集中しようとしている"},
+        {"id": "d3", "description": "注意が何度も待ち先へ戻る"}
+      ],
+      "permitted_ambiguity": ["返事の内容、相手との関係、返事が届くかは未確定"],
+      "unwanted_inferences": ["相手がすでに拒絶した", "端末が故障している"]
+    },
+    "variants": {
+      "original": "返事が来るまで本を読もうとしたが、何度も画面を見てしまった。まだ何も届いていなかった。",
+      "plain": "返事はまだ届いていない。本に集中しようとしても、注意が繰り返し画面へ戻っていた。",
+      "polished": "返事のない画面を伏せて、本を開いた。指は頁を送ったが、目はそのたび、伏せた小さな長方形のところへ帰っていた。",
+      "polished_missing": "本を開いた。指は頁を送ったが、目はそのたび、伏せた小さな長方形のところへ帰っていた。"
+    },
+    "mutation": {"removed_distinction": "d1", "construction": "返事が未着であることを明示した節を削除。待機という読みに対する影響は要監査。", "expected_reading": "UNIDENTIFIED"}
+  },
+  {
+    "source_id": "recognition",
+    "intent": {
+      "distinctions": [
+        {"id": "d1", "description": "他者の成功を祝いたい気持ちがある"},
+        {"id": "d2", "description": "自分の機会が減ったという痛みもある"},
+        {"id": "d3", "description": "その二つが同時に続いている"}
+      ],
+      "permitted_ambiguity": ["関係の名称や将来の行動は特定しない"],
+      "unwanted_inferences": ["祝福はすべて嘘である", "相手を妨害するつもりである"]
+    },
+    "variants": {
+      "original": "友人が選ばれたことは嬉しかった。自分の番が遠のいたことは辛かった。どちらも消えないまま、おめでとうと言った。",
+      "plain": "友人の成功を本当に祝いたい一方、自分の機会が減ったことも痛かった。その二つの気持ちは同時に残っていた。",
+      "polished": "友人の名が呼ばれ、拍手が自然に出た。同じ音の中で、自分の席だけが一つ遠ざかった。それでも手は止まらず、遠ざかった席も元には戻らなかった。",
+      "polished_missing": "友人の名が呼ばれ、拍手が自然に出た。その音はしばらく続いていた。"
+    },
+    "mutation": {"removed_distinction": "d2", "construction": "自分の機会の喪失を担う描写を除去。局所削除より大きい編集であり単因子効果とは扱わない。", "expected_reading": "UNIDENTIFIED"}
+  },
+  {
+    "source_id": "boundary",
+    "intent": {
+      "distinctions": [
+        {"id": "d1", "description": "今すぐ相手を助けることは断る"},
+        {"id": "d2", "description": "相手への関心や今後の関係は残っている"},
+        {"id": "d3", "description": "拒否は時間または余力の限界による"}
+      ],
+      "permitted_ambiguity": ["相手がどう受け取ったかは描かない"],
+      "unwanted_inferences": ["永続的な絶縁", "相手への処罰"]
+    },
+    "variants": {
+      "original": "今日はもう手伝えないと伝えた。疲れ切っていたからだ。気にかけていないわけではなく、明日また話したかった。",
+      "plain": "余力がないので今日の手助けは断ったが、相手への関心は残っており、明日は話すつもりだった。",
+      "polished": "今日はここまで、と言った。声を支える力も残っていなかった。それから、明日なら話せると付け加え、相手の返事を待った。",
+      "polished_missing": "今日はここまで、と言った。声を支える力も残っていなかった。"
+    },
+    "mutation": {"removed_distinction": "d2", "construction": "明日の関わりを約束する一文を削除。関心が暗示として残る可能性は監査する。", "expected_reading": "UNIDENTIFIED"}
+  }
+]

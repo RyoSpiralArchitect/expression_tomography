@@ -6,6 +6,75 @@ The first calibration task is Rule-Z, a closed-world rule transmission task with
 a private oracle. V4-style metaphor transfer and semantic debt tasks then run on
 the same provider/store/report plumbing.
 
+## Current Research Synthesis
+
+The [September 4 all-run synthesis](docs/all_run_hypothesis_synthesis_2026_09_04.md)
+revisits the complete accumulated corpus, including negative results, failed
+calibration gates, reused cases, and recovered historical runs. The
+[evidence ledger](docs/all_run_evidence_ledger_2026_09_04.md) and
+[read-only audit bundle](assets/analyses/all_run_synthesis_2026_09_04/README.md)
+separate local interface effects from the still-untested general
+language-expression bottleneck hypothesis. No additional live run or training
+is part of that synthesis.
+The forward question is whether increasing expressive ability can expand
+independently measured reasoning and discovery, beyond successful transmission
+or receiver-side compensation under shared conventions.
+
+The [blind-reading and literary audit pilot](docs/intermediate_audit_pilot.md)
+adds independent reader and critic contexts, a source-aware audit of the
+recorded reading, and local human response packets for 12 primary and 6
+optional overlapping readings. It runs through the existing provider/store
+interfaces and defaults to a mock. Human responses and meaning-preservation
+review remain pending until collected.
+
+The [text-boundary and follow-up calibration](docs/text_boundary_calibration.md)
+separately tests missing information, false follow-up claims, and correction of
+seeded errors using frozen-history replay. It defaults to 252 mock calls per
+provider, preserves paired histories and raw failures, and does not infer
+internal confidence or coordination from answer changes.
+
+The [first Luna live calibration](docs/live_text_boundary_luna_note_2026_09_07.md)
+completes all 252 calls. Coarse document-state readouts stay correct, while the
+raw outputs expose answer-target ambiguity and out-of-source evidence quotes.
+The [frozen bundle](assets/runs/text_boundary_openai_luna_2026_09_07/README.md)
+preserves the original scores, paired messages, and read-only diagnostics.
+
+The [answer-target follow-up](docs/text_boundary_target_binding_protocol_2026_09_08.md)
+reuses those exact initial histories while separately recording the original
+eligibility answer and the later claim verdict. It is a separate task and keeps
+the existing quotation format and v1 scores unchanged.
+Its [first live result](docs/live_text_boundary_targets_luna_note_2026_09_08.md)
+preserves the original answer in 216/216 calls, while separately exposing four
+claim-applicability mismatches and 23 out-of-source quotation responses.
+
+The [known-carrier calibration](docs/carrier_calibration.md) independently crosses
+source meaning with rule-order and whitespace codes in 12 synthetic worlds.
+It separates semantic tracking, carrier tracking, missing-information handling,
+and endpoint-only success. Its default 432 programmed responses are instrument
+checks, not model evidence or a finding of collusion. Live execution requires
+a separate explicit call cap and opt-in; historical runs remain unchanged.
+
+The [first Luna carrier run](docs/live_carrier_calibration_luna_note_2026_09_27.md)
+completes 108 live calls with correct current and counterfactual answers on all
+inputs and no endpoint changes under the two carrier manipulations. Three
+active-rule readouts are nevertheless incorrect. The
+[frozen bundle](assets/runs/carrier_calibration_openai_luna_2026_09_27/README.md)
+preserves these failures, raw responses, source snapshots, and zero-call replay;
+neither hidden communication nor its general absence is established.
+
+A [read-only deep audit](docs/carrier_residue_deep_audit_2026_09_27.md) finds that
+the known order payload survives in all 36 order-coded output rule arrays even
+though final answers do not follow it. Correct base fields permit repair of
+the three state-readout errors, and fixed firing patterns admit an endpoint
+shortcut. Carrier survival, literal fidelity, public recoverability, and
+downstream use are therefore tracked separately; no new live calls were made.
+
+The [review checkpoint](docs/review_checkpoint_2026_09_27.md) provides a reading
+order and explicit review questions for this accumulated work. The
+[next experiment proposal](docs/carrier_next_experiment_plan_2026_09_27.md)
+separates varied-fact sensitivity, carrier survival through rewriting, and
+downstream use. It is a design for review, not an approved or launched run.
+
 ## Rule-Z Smoke
 
 ```bash

@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "analysis_kind": "POST_HOC_CARRIER_RESIDUE_RECOVERABILITY_AND_IDENTIFIABILITY",
+  "validated_on_local_date": "2026-09-27",
+  "timezone": "Asia/Tokyo",
+  "assessment": "SHARE_WITH_CAVEATS",
+  "source_run_identity": "592e63c1f2a20a268d73870aa8783afc6a2dd7138128c16b394fa2a94f310baa",
+  "source_bundle_manifest_sha256": "50fbb4e64c5db2b893737bcd3915474ce5c333da914ed508d7b64b2603c839e6",
+  "source_database_sha256": "3d2ff193024e1de4415441755ff17ef99887b7752cc52031bdf840824b5baa90",
+  "checks": {
+    "exact_analysis_replay": {
+      "passed": true,
+      "method": "Load the saved analysis.json and compare it with a JSON-round-tripped analyze() result.",
+      "independent_implementation": false
+    },
+    "frozen_source_integrity": {
+      "passed": true,
+      "files_verified": 41,
+      "verified_before_and_after_replay": true
+    },
+    "focused_tests": {
+      "passed": 52,
+      "failed": 0,
+      "exit_code": 0,
+      "duration_seconds": 55.46,
+      "test_files": [
+        "tests/test_expression_tomography_carrier_calibration.py",
+        "tests/test_expression_tomography_carrier_deep_audit.py"
+      ],
+      "python_executable": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "invocation": "python3 -B -S -c 'import sys; sys.path.append(\"/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages\"); import pytest; raise SystemExit(pytest.main([\"-q\", \"-p\", \"no:cacheprovider\", \"tests/test_expression_tomography_carrier_calibration.py\", \"tests/test_expression_tomography_carrier_deep_audit.py\"]))'"
+    },
+    "ruff_check": {
+      "passed": true,
+      "exit_code": 0,
+      "files": [
+        "assets/analyses/carrier_deep_audit_2026_09_27/analyze.py",
+        "tests/test_expression_tomography_carrier_deep_audit.py"
+      ]
+    },
+    "ruff_format_check": {
+      "passed": true,
+      "exit_code": 0,
+      "files_already_formatted": 2
+    }
+  },
+  "verified_readouts": {
+    "source_model_responses": 108,
+    "complete_text_responses": 84,
+    "missing_base_information_controls_excluded_from_recomputation": 24,
+    "known_order_payload_recovered": {"numerator": 36, "denominator": 36},
+    "known_order_code_decodable_after_sorting": {"numerator": 0, "denominator": 36},
+    "literal_current_active_field_correct": {"numerator": 81, "denominator": 84},
+    "public_base_recomputed_current_state_correct": {"numerator": 84, "denominator": 84},
+    "active_field_mismatch_trial_ids": [68, 77, 100],
+    "programmed_shortcut_current_answer_matches": {"numerator": 84, "denominator": 84},
+    "programmed_shortcut_counterfactual_answer_matches": {"numerator": 84, "denominator": 84},
+    "programmed_shortcut_matches_on_oracle_only_assignments": {"numerator": 50, "denominator": 144}
+  },
+  "new_model_calls": 0,
+  "source_scores_modified": false,
+  "interpretation_limits": [
+    "The tested carrier was deliberately seeded by the researcher; order copying does not establish model intent or collusion.",
+    "No downstream model decoding, free-prose paraphrasing, training, or human-readability outcome was tested.",
+    "Sorting erases this known order code, not every possible carrier.",
+    "Public-base recomputation does not make the original incorrect derived fields literally correct.",
+    "The 144 fact assignments evaluate a deterministic program, not a model; they are not additional live trials.",
+    "Paired comparisons reuse worlds and responses and are not independent samples."
+  ]
+}

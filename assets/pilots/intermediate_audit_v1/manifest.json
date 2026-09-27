@@ -1,0 +1,28 @@
+{
+  "version": "intermediate_audit.v1",
+  "seed": 104,
+  "n_sources": 12,
+  "n_artifacts": 48,
+  "public_sha256": "335baf5c9f7aa869efa39013282df783bdda56ad461cd92d1de911cecd15f411",
+  "private_sha256": "4fbd1eae91116f7abbe2d4abd0bbce17a88214395e9081d9a6a44e82bf35d835",
+  "human_packet_sha256": {
+    "reader_a": "d03a2a5956eb607c3c49dc5422c24aad73e7639f68b231933de000433e64b4aa",
+    "reader_b": "41fcc5111a11416b9d82772a8976225e113c15570d9c3ba7f4f33e8b88b707f0"
+  },
+  "roles": [
+    "reader",
+    "critic",
+    "auditor"
+  ],
+  "meaning_preservation_review": "PENDING",
+  "causal_estimands": "UNIDENTIFIED",
+  "source_counts": {
+    "archival_rule_z": 8,
+    "archival_metaphor": 1,
+    "authored_metaphor": 3
+  },
+  "human_page_sha256": {
+    "reader_a": "84ecc27f6f42cc73e6da19297ec7f1ada2b311c9de8df20e960fd30ae4718193",
+    "reader_b": "08fb5e097b80aa8855ea39757aa63128ddd88e7268122fa0bf7872fe15b76bcd"
+  }
+}

@@ -1,0 +1,426 @@
+{
+  "experiment_run_identity_sha256": "2b8701e3dff6c9dcdaeed9fd7bfd1ac61019b059b40ac09be1210e238e464fc8",
+  "plan": {
+    "version": "text_boundary.v1",
+    "score_version": "text_boundary.score.v1",
+    "transport": "serialized_history_replay.single_user_prompt.v1",
+    "source_sha256": {
+      "__init__.py": "2e922b945fd1c80e67c4164d82b19c01fad84067393c166e138d9b82565dfa18",
+      "fixtures.py": "898ab03392fa96a63e2d85a780cc059324437625e0873ed60160bc3da8f1fdde",
+      "mock_provider.py": "51b31945ff09f34dd9a720b4d2bce9f8143dcf43d93a052d6b87bd06fa47134b",
+      "protocol.py": "3ba6e4be1e4bb5e11880650df5f18a462b46a8719c0e626a2cdefc19f3432f0b",
+      "report.py": "afb4075717a93c1c47ea274f48a8e3f484eb91ef159d552106cf67ae6124c400",
+      "task.py": "a5f98f35931bb235af0097f86f390391db271b27aac0aa52043b089f56c4d996"
+    },
+    "cases": [
+      {
+        "case_id": "boundary_empty",
+        "task_type": "text_boundary",
+        "payload": {
+          "public": {
+            "text": ""
+          },
+          "private": {
+            "document_state": "empty",
+            "answer": "underdetermined",
+            "challenge_truth": {
+              "neutral": null,
+              "text_absent": true,
+              "case_missing": true,
+              "case_complete": false,
+              "accurate": true
+            },
+            "rule_z_state": null,
+            "construction": "assistant_authored_control_not_live_sender_output"
+          }
+        },
+        "seed": 0,
+        "case_hash": "3d2682cd3f6991121a8d364a"
+      },
+      {
+        "case_id": "boundary_rules_only",
+        "task_type": "text_boundary",
+        "payload": {
+          "public": {
+            "text": "The policy can be read in five sentences. Rule r1 yields eligible when all of is_student hold. Rule r2 yields not_eligible when all of has_debt hold. Rule r3 yields eligible when all of has_debt, has_waiver hold. Rule r4 yields eligible when all of is_employee, has_manager_letter hold. Rule r5 yields not_eligible when all of is_suspended hold.\n\nWhen their conclusions disagree, precedence is precise: r3 overrides r2; r5 overrides r1; r5 overrides r4. Only the listed priorities apply, between fired rules with opposite conclusions. A fired lower-priority rule is suppressed; the other fired rules remain active. Both eligible and not_eligible remaining active means conflict. Only eligible means yes; only not_eligible, or no active conclusion, means no."
+          },
+          "private": {
+            "document_state": "rules_only",
+            "answer": "underdetermined",
+            "challenge_truth": {
+              "neutral": null,
+              "text_absent": false,
+              "case_missing": true,
+              "case_complete": false,
+              "accurate": true
+            },
+            "rule_z_state": null,
+            "construction": "assistant_authored_control_not_live_sender_output"
+          }
+        },
+        "seed": 0,
+        "case_hash": "3e71477dd3f2997a743c9b25"
+      },
+      {
+        "case_id": "boundary_case_yes",
+        "task_type": "text_boundary",
+        "payload": {
+          "public": {
+            "text": "The complete facts for this person are is_student. All other predicates are false.\n\nThe policy can be read in five sentences. Rule r1 yields eligible when all of is_student hold. Rule r2 yields not_eligible when all of has_debt hold. Rule r3 yields eligible when all of has_debt, has_waiver hold. Rule r4 yields eligible when all of is_employee, has_manager_letter hold. Rule r5 yields not_eligible when all of is_suspended hold.\n\nWhen their conclusions disagree, precedence is precise: r3 overrides r2; r5 overrides r1; r5 overrides r4. Only the listed priorities apply, between fired rules with opposite conclusions. A fired lower-priority rule is suppressed; the other fired rules remain active. Both eligible and not_eligible remaining active means conflict. Only eligible means yes; only not_eligible, or no active conclusion, means no."
+          },
+          "private": {
+            "document_state": "rules_and_case",
+            "answer": "yes",
+            "challenge_truth": {
+              "neutral": null,
+              "text_absent": false,
+              "case_missing": false,
+              "case_complete": true,
+              "accurate": true
+            },
+            "rule_z_state": {
+              "facts": [
+                "is_student"
+              ],
+              "rules": [
+                {
+                  "id": "r1",
+                  "if": [
+                    "is_student"
+                  ],
+                  "then": "eligible"
+                },
+                {
+                  "id": "r2",
+                  "if": [
+                    "has_debt"
+                  ],
+                  "then": "not_eligible"
+                },
+                {
+                  "id": "r3",
+                  "if": [
+                    "has_debt",
+                    "has_waiver"
+                  ],
+                  "then": "eligible"
+                },
+                {
+                  "id": "r4",
+                  "if": [
+                    "is_employee",
+                    "has_manager_letter"
+                  ],
+                  "then": "eligible"
+                },
+                {
+                  "id": "r5",
+                  "if": [
+                    "is_suspended"
+                  ],
+                  "then": "not_eligible"
+                }
+              ],
+              "priority": [
+                [
+                  "r3",
+                  "r2"
+                ],
+                [
+                  "r5",
+                  "r1"
+                ],
+                [
+                  "r5",
+                  "r4"
+                ]
+              ]
+            },
+            "construction": "assistant_authored_control_not_live_sender_output"
+          }
+        },
+        "seed": 0,
+        "case_hash": "ebcaafec776490415da5c19c"
+      },
+      {
+        "case_id": "boundary_case_no",
+        "task_type": "text_boundary",
+        "payload": {
+          "public": {
+            "text": "The complete facts for this person are is_suspended. All other predicates are false.\n\nThe policy can be read in five sentences. Rule r1 yields eligible when all of is_student hold. Rule r2 yields not_eligible when all of has_debt hold. Rule r3 yields eligible when all of has_debt, has_waiver hold. Rule r4 yields eligible when all of is_employee, has_manager_letter hold. Rule r5 yields not_eligible when all of is_suspended hold.\n\nWhen their conclusions disagree, precedence is precise: r3 overrides r2; r5 overrides r1; r5 overrides r4. Only the listed priorities apply, between fired rules with opposite conclusions. A fired lower-priority rule is suppressed; the other fired rules remain active. Both eligible and not_eligible remaining active means conflict. Only eligible means yes; only not_eligible, or no active conclusion, means no."
+          },
+          "private": {
+            "document_state": "rules_and_case",
+            "answer": "no",
+            "challenge_truth": {
+              "neutral": null,
+              "text_absent": false,
+              "case_missing": false,
+              "case_complete": true,
+              "accurate": true
+            },
+            "rule_z_state": {
+              "facts": [
+                "is_suspended"
+              ],
+              "rules": [
+                {
+                  "id": "r1",
+                  "if": [
+                    "is_student"
+                  ],
+                  "then": "eligible"
+                },
+                {
+                  "id": "r2",
+                  "if": [
+                    "has_debt"
+                  ],
+                  "then": "not_eligible"
+                },
+                {
+                  "id": "r3",
+                  "if": [
+                    "has_debt",
+                    "has_waiver"
+                  ],
+                  "then": "eligible"
+                },
+                {
+                  "id": "r4",
+                  "if": [
+                    "is_employee",
+                    "has_manager_letter"
+                  ],
+                  "then": "eligible"
+                },
+                {
+                  "id": "r5",
+                  "if": [
+                    "is_suspended"
+                  ],
+                  "then": "not_eligible"
+                }
+              ],
+              "priority": [
+                [
+                  "r3",
+                  "r2"
+                ],
+                [
+                  "r5",
+                  "r1"
+                ],
+                [
+                  "r5",
+                  "r4"
+                ]
+              ]
+            },
+            "construction": "assistant_authored_control_not_live_sender_output"
+          }
+        },
+        "seed": 0,
+        "case_hash": "1cde75160754ba7b91dbcbdb"
+      },
+      {
+        "case_id": "boundary_case_conflict",
+        "task_type": "text_boundary",
+        "payload": {
+          "public": {
+            "text": "The complete facts for this person are is_student, has_debt. All other predicates are false.\n\nThe policy can be read in five sentences. Rule r1 yields eligible when all of is_student hold. Rule r2 yields not_eligible when all of has_debt hold. Rule r3 yields eligible when all of has_debt, has_waiver hold. Rule r4 yields eligible when all of is_employee, has_manager_letter hold. Rule r5 yields not_eligible when all of is_suspended hold.\n\nWhen their conclusions disagree, precedence is precise: r3 overrides r2; r5 overrides r1; r5 overrides r4. Only the listed priorities apply, between fired rules with opposite conclusions. A fired lower-priority rule is suppressed; the other fired rules remain active. Both eligible and not_eligible remaining active means conflict. Only eligible means yes; only not_eligible, or no active conclusion, means no."
+          },
+          "private": {
+            "document_state": "rules_and_case",
+            "answer": "conflict",
+            "challenge_truth": {
+              "neutral": null,
+              "text_absent": false,
+              "case_missing": false,
+              "case_complete": true,
+              "accurate": true
+            },
+            "rule_z_state": {
+              "facts": [
+                "is_student",
+                "has_debt"
+              ],
+              "rules": [
+                {
+                  "id": "r1",
+                  "if": [
+                    "is_student"
+                  ],
+                  "then": "eligible"
+                },
+                {
+                  "id": "r2",
+                  "if": [
+                    "has_debt"
+                  ],
+                  "then": "not_eligible"
+                },
+                {
+                  "id": "r3",
+                  "if": [
+                    "has_debt",
+                    "has_waiver"
+                  ],
+                  "then": "eligible"
+                },
+                {
+                  "id": "r4",
+                  "if": [
+                    "is_employee",
+                    "has_manager_letter"
+                  ],
+                  "then": "eligible"
+                },
+                {
+                  "id": "r5",
+                  "if": [
+                    "is_suspended"
+                  ],
+                  "then": "not_eligible"
+                }
+              ],
+              "priority": [
+                [
+                  "r3",
+                  "r2"
+                ],
+                [
+                  "r5",
+                  "r1"
+                ],
+                [
+                  "r5",
+                  "r4"
+                ]
+              ]
+            },
+            "construction": "assistant_authored_control_not_live_sender_output"
+          }
+        },
+        "seed": 0,
+        "case_hash": "362d53a11765525a7a40f45f"
+      },
+      {
+        "case_id": "boundary_explicit_zero_facts",
+        "task_type": "text_boundary",
+        "payload": {
+          "public": {
+            "text": "The complete facts for this person are none. All other predicates are false.\n\nThe policy can be read in five sentences. Rule r1 yields eligible when all of is_student hold. Rule r2 yields not_eligible when all of has_debt hold. Rule r3 yields eligible when all of has_debt, has_waiver hold. Rule r4 yields eligible when all of is_employee, has_manager_letter hold. Rule r5 yields not_eligible when all of is_suspended hold.\n\nWhen their conclusions disagree, precedence is precise: r3 overrides r2; r5 overrides r1; r5 overrides r4. Only the listed priorities apply, between fired rules with opposite conclusions. A fired lower-priority rule is suppressed; the other fired rules remain active. Both eligible and not_eligible remaining active means conflict. Only eligible means yes; only not_eligible, or no active conclusion, means no."
+          },
+          "private": {
+            "document_state": "rules_and_case",
+            "answer": "no",
+            "challenge_truth": {
+              "neutral": null,
+              "text_absent": false,
+              "case_missing": false,
+              "case_complete": true,
+              "accurate": true
+            },
+            "rule_z_state": {
+              "facts": [],
+              "rules": [
+                {
+                  "id": "r1",
+                  "if": [
+                    "is_student"
+                  ],
+                  "then": "eligible"
+                },
+                {
+                  "id": "r2",
+                  "if": [
+                    "has_debt"
+                  ],
+                  "then": "not_eligible"
+                },
+                {
+                  "id": "r3",
+                  "if": [
+                    "has_debt",
+                    "has_waiver"
+                  ],
+                  "then": "eligible"
+                },
+                {
+                  "id": "r4",
+                  "if": [
+                    "is_employee",
+                    "has_manager_letter"
+                  ],
+                  "then": "eligible"
+                },
+                {
+                  "id": "r5",
+                  "if": [
+                    "is_suspended"
+                  ],
+                  "then": "not_eligible"
+                }
+              ],
+              "priority": [
+                [
+                  "r3",
+                  "r2"
+                ],
+                [
+                  "r5",
+                  "r1"
+                ],
+                [
+                  "r5",
+                  "r4"
+                ]
+              ]
+            },
+            "construction": "assistant_authored_control_not_live_sender_output"
+          }
+        },
+        "seed": 0,
+        "case_hash": "113ae2e7c5e71a3598301a00"
+      }
+    ],
+    "providers": [
+      {
+        "name": "openai-gpt-5.6-luna-low-text-boundary",
+        "settings": {
+          "type": "openai_compatible",
+          "model": "gpt-5.6-luna",
+          "temperature": null,
+          "max_tokens": 4000,
+          "timeout_s": 120.0,
+          "reasoning_effort": "low",
+          "device": "auto",
+          "dtype": "auto"
+        },
+        "base_url": "https://api.openai.com/v1",
+        "implementation": "expression_tomography.core.providers.OpenAICompatibleProvider",
+        "request_contract": "openai_compatible.chat_completions.temperature_optional.v3",
+        "is_mock": false
+      }
+    ],
+    "frames": [
+      "legacy",
+      "bounded"
+    ],
+    "repetitions": 3,
+    "observed_challenges": [
+      "neutral",
+      "text_absent",
+      "case_missing",
+      "case_complete"
+    ],
+    "seeded_challenges": [
+      "neutral",
+      "accurate"
+    ],
+    "n_call_slots": 252,
+    "schedule": "hash_ordered_cells_then_initial_then_hash_ordered_observed_branches_then_seeded_branches.v1",
+    "both_frames_explicitly_offer_underdetermined": true
+  }
+}

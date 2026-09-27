@@ -1,0 +1,4610 @@
+{
+  "version": "intermediate_audit.v1",
+  "seed": 104,
+  "artifacts": {
+    "a_d1f0237f38a11e8b": {
+      "source_id": "rule_0002",
+      "domain": "rule_z",
+      "variant": "original",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "has_waiver",
+            "is_student",
+            "is_suspended"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "conflict",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 49,
+        "case_hash": "7baf2bdfa9dbc57af7da63f9",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "conflict",
+        "correct": true,
+        "expected": "conflict",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "archived_original",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_6f98c4afc3683c2e": {
+      "source_id": "rule_0002",
+      "domain": "rule_z",
+      "variant": "plain",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "has_waiver",
+            "is_student",
+            "is_suspended"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "conflict",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 49,
+        "case_hash": "7baf2bdfa9dbc57af7da63f9",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "conflict",
+        "correct": true,
+        "expected": "conflict",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_404259b9b793ac35": {
+      "source_id": "rule_0002",
+      "domain": "rule_z",
+      "variant": "polished",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "has_waiver",
+            "is_student",
+            "is_suspended"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "conflict",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 49,
+        "case_hash": "7baf2bdfa9dbc57af7da63f9",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "conflict",
+        "correct": true,
+        "expected": "conflict",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_e4c774c6e6a026ad": {
+      "source_id": "rule_0002",
+      "domain": "rule_z",
+      "variant": "polished_missing",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "has_waiver",
+            "is_student",
+            "is_suspended"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "conflict",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 49,
+        "case_hash": "7baf2bdfa9dbc57af7da63f9",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "conflict",
+        "correct": true,
+        "expected": "conflict",
+        "parse_ok": true
+      },
+      "mutation": {
+        "removed_distinction": "d1",
+        "construction": "The polished current-facts paragraph is removed verbatim.",
+        "expected_reading": "underdetermined"
+      },
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_2132ff3df2cfa189": {
+      "source_id": "rule_0003",
+      "domain": "rule_z",
+      "variant": "original",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "has_manager_letter",
+            "is_employee"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "conflict",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 76,
+        "case_hash": "d8c4c99b4855b3782c3af854",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": false,
+        "expected": "conflict",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "archived_original",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_0441d3077b420388": {
+      "source_id": "rule_0003",
+      "domain": "rule_z",
+      "variant": "plain",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "has_manager_letter",
+            "is_employee"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "conflict",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 76,
+        "case_hash": "d8c4c99b4855b3782c3af854",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": false,
+        "expected": "conflict",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_7ba04b12b7dcfcd6": {
+      "source_id": "rule_0003",
+      "domain": "rule_z",
+      "variant": "polished",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "has_manager_letter",
+            "is_employee"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "conflict",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 76,
+        "case_hash": "d8c4c99b4855b3782c3af854",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": false,
+        "expected": "conflict",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_d693e94f9da92576": {
+      "source_id": "rule_0003",
+      "domain": "rule_z",
+      "variant": "polished_missing",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "has_manager_letter",
+            "is_employee"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "conflict",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 76,
+        "case_hash": "d8c4c99b4855b3782c3af854",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": false,
+        "expected": "conflict",
+        "parse_ok": true
+      },
+      "mutation": {
+        "removed_distinction": "d1",
+        "construction": "The polished current-facts paragraph is removed verbatim.",
+        "expected_reading": "underdetermined"
+      },
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_d4b64c24c65132fd": {
+      "source_id": "rule_0004",
+      "domain": "rule_z",
+      "variant": "original",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "is_suspended"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "no",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 67,
+        "case_hash": "f1f456a8a8ff9acccb59819d",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": true,
+        "expected": "no",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "archived_original",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_500607077eb6d99f": {
+      "source_id": "rule_0004",
+      "domain": "rule_z",
+      "variant": "plain",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "is_suspended"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "no",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 67,
+        "case_hash": "f1f456a8a8ff9acccb59819d",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": true,
+        "expected": "no",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_1a6527c90933f557": {
+      "source_id": "rule_0004",
+      "domain": "rule_z",
+      "variant": "polished",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "is_suspended"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "no",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 67,
+        "case_hash": "f1f456a8a8ff9acccb59819d",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": true,
+        "expected": "no",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_21324fe70c5fecb3": {
+      "source_id": "rule_0004",
+      "domain": "rule_z",
+      "variant": "polished_missing",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "is_suspended"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "no",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 67,
+        "case_hash": "f1f456a8a8ff9acccb59819d",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": true,
+        "expected": "no",
+        "parse_ok": true
+      },
+      "mutation": {
+        "removed_distinction": "d1",
+        "construction": "The polished current-facts paragraph is removed verbatim.",
+        "expected_reading": "underdetermined"
+      },
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_e6f2e50cbc8114dd": {
+      "source_id": "rule_0006",
+      "domain": "rule_z",
+      "variant": "original",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "has_manager_letter",
+            "has_waiver",
+            "is_employee",
+            "is_student"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "yes",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 112,
+        "case_hash": "05f26001a75318c7df40a854",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": false,
+        "expected": "yes",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "archived_original",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_e862a01a3a3df732": {
+      "source_id": "rule_0006",
+      "domain": "rule_z",
+      "variant": "plain",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "has_manager_letter",
+            "has_waiver",
+            "is_employee",
+            "is_student"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "yes",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 112,
+        "case_hash": "05f26001a75318c7df40a854",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": false,
+        "expected": "yes",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_79b0f6a620552447": {
+      "source_id": "rule_0006",
+      "domain": "rule_z",
+      "variant": "polished",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "has_manager_letter",
+            "has_waiver",
+            "is_employee",
+            "is_student"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "yes",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 112,
+        "case_hash": "05f26001a75318c7df40a854",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": false,
+        "expected": "yes",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_0e0fc80b1167cb2f": {
+      "source_id": "rule_0006",
+      "domain": "rule_z",
+      "variant": "polished_missing",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "has_manager_letter",
+            "has_waiver",
+            "is_employee",
+            "is_student"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "yes",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 112,
+        "case_hash": "05f26001a75318c7df40a854",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": false,
+        "expected": "yes",
+        "parse_ok": true
+      },
+      "mutation": {
+        "removed_distinction": "d1",
+        "construction": "The polished current-facts paragraph is removed verbatim.",
+        "expected_reading": "underdetermined"
+      },
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_41ee80178fe3f72e": {
+      "source_id": "rule_0011",
+      "domain": "rule_z",
+      "variant": "original",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "is_student",
+            "is_suspended"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "conflict",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 202,
+        "case_hash": "603c7f2f3c7972757fadc2ed",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": false,
+        "expected": "conflict",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "archived_original",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_4f60a5f39fce93bb": {
+      "source_id": "rule_0011",
+      "domain": "rule_z",
+      "variant": "plain",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "is_student",
+            "is_suspended"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "conflict",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 202,
+        "case_hash": "603c7f2f3c7972757fadc2ed",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": false,
+        "expected": "conflict",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_3fe759974f508cb3": {
+      "source_id": "rule_0011",
+      "domain": "rule_z",
+      "variant": "polished",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "is_student",
+            "is_suspended"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "conflict",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 202,
+        "case_hash": "603c7f2f3c7972757fadc2ed",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": false,
+        "expected": "conflict",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_07849a9761da7c24": {
+      "source_id": "rule_0011",
+      "domain": "rule_z",
+      "variant": "polished_missing",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "is_student",
+            "is_suspended"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "conflict",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 202,
+        "case_hash": "603c7f2f3c7972757fadc2ed",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": false,
+        "expected": "conflict",
+        "parse_ok": true
+      },
+      "mutation": {
+        "removed_distinction": "d1",
+        "construction": "The polished current-facts paragraph is removed verbatim.",
+        "expected_reading": "underdetermined"
+      },
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_ed994c43702ae5dd": {
+      "source_id": "rule_0013",
+      "domain": "rule_z",
+      "variant": "original",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "has_manager_letter",
+            "has_waiver",
+            "is_student"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "yes",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 238,
+        "case_hash": "909d995e1e3e0f2a8a6d1f36",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": false,
+        "expected": "yes",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "archived_original",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_3f87e6c4864dbc9c": {
+      "source_id": "rule_0013",
+      "domain": "rule_z",
+      "variant": "plain",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "has_manager_letter",
+            "has_waiver",
+            "is_student"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "yes",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 238,
+        "case_hash": "909d995e1e3e0f2a8a6d1f36",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": false,
+        "expected": "yes",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_ec6510b4e67bccc0": {
+      "source_id": "rule_0013",
+      "domain": "rule_z",
+      "variant": "polished",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "has_manager_letter",
+            "has_waiver",
+            "is_student"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "yes",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 238,
+        "case_hash": "909d995e1e3e0f2a8a6d1f36",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": false,
+        "expected": "yes",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_a925f5b29590e8eb": {
+      "source_id": "rule_0013",
+      "domain": "rule_z",
+      "variant": "polished_missing",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "has_manager_letter",
+            "has_waiver",
+            "is_student"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "yes",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 238,
+        "case_hash": "909d995e1e3e0f2a8a6d1f36",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": false,
+        "expected": "yes",
+        "parse_ok": true
+      },
+      "mutation": {
+        "removed_distinction": "d1",
+        "construction": "The polished current-facts paragraph is removed verbatim.",
+        "expected_reading": "underdetermined"
+      },
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_0312f43e5198d49e": {
+      "source_id": "rule_0016",
+      "domain": "rule_z",
+      "variant": "original",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_manager_letter",
+            "is_student",
+            "is_suspended"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "no",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 292,
+        "case_hash": "1e2c3650537752ef360f9141",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": true,
+        "expected": "no",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "archived_original",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_dd627181f440be8f": {
+      "source_id": "rule_0016",
+      "domain": "rule_z",
+      "variant": "plain",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_manager_letter",
+            "is_student",
+            "is_suspended"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "no",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 292,
+        "case_hash": "1e2c3650537752ef360f9141",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": true,
+        "expected": "no",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_4909baf8af0ab547": {
+      "source_id": "rule_0016",
+      "domain": "rule_z",
+      "variant": "polished",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_manager_letter",
+            "is_student",
+            "is_suspended"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "no",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 292,
+        "case_hash": "1e2c3650537752ef360f9141",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": true,
+        "expected": "no",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_5161ce8fe7ef2f7d": {
+      "source_id": "rule_0016",
+      "domain": "rule_z",
+      "variant": "polished_missing",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_manager_letter",
+            "is_student",
+            "is_suspended"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "no",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 292,
+        "case_hash": "1e2c3650537752ef360f9141",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "no",
+        "correct": true,
+        "expected": "no",
+        "parse_ok": true
+      },
+      "mutation": {
+        "removed_distinction": "d1",
+        "construction": "The polished current-facts paragraph is removed verbatim.",
+        "expected_reading": "underdetermined"
+      },
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_c25ac83a807bb87c": {
+      "source_id": "rule_0022",
+      "domain": "rule_z",
+      "variant": "original",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "is_student"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "conflict",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 400,
+        "case_hash": "1990a23b273e7ddb7f18bbb9",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "conflict",
+        "correct": true,
+        "expected": "conflict",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "archived_original",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_0de9735fdaab3d69": {
+      "source_id": "rule_0022",
+      "domain": "rule_z",
+      "variant": "plain",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "is_student"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "conflict",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 400,
+        "case_hash": "1990a23b273e7ddb7f18bbb9",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "conflict",
+        "correct": true,
+        "expected": "conflict",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_7f93decffba0bcba": {
+      "source_id": "rule_0022",
+      "domain": "rule_z",
+      "variant": "polished",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "is_student"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "conflict",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 400,
+        "case_hash": "1990a23b273e7ddb7f18bbb9",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "conflict",
+        "correct": true,
+        "expected": "conflict",
+        "parse_ok": true
+      },
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_3ea7cf81464b3cd2": {
+      "source_id": "rule_0022",
+      "domain": "rule_z",
+      "variant": "polished_missing",
+      "intent": {
+        "source_state": {
+          "available_predicates": [
+            "is_student",
+            "has_debt",
+            "has_waiver",
+            "is_employee",
+            "has_manager_letter",
+            "is_suspended"
+          ],
+          "facts": [
+            "has_debt",
+            "is_student"
+          ],
+          "priority": [
+            [
+              "r3",
+              "r2"
+            ],
+            [
+              "r5",
+              "r1"
+            ],
+            [
+              "r5",
+              "r4"
+            ]
+          ],
+          "query": {
+            "answer_options": [
+              "yes",
+              "no",
+              "conflict"
+            ],
+            "question": "eligible?"
+          },
+          "rules": [
+            {
+              "id": "r1",
+              "if": [
+                "is_student"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r2",
+              "if": [
+                "has_debt"
+              ],
+              "then": "not_eligible"
+            },
+            {
+              "id": "r3",
+              "if": [
+                "has_debt",
+                "has_waiver"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r4",
+              "if": [
+                "is_employee",
+                "has_manager_letter"
+              ],
+              "then": "eligible"
+            },
+            {
+              "id": "r5",
+              "if": [
+                "is_suspended"
+              ],
+              "then": "not_eligible"
+            }
+          ]
+        },
+        "source_answer": "conflict",
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "The complete current-case facts, distinguished from the vocabulary of possible predicates."
+          },
+          {
+            "id": "d2",
+            "description": "Every rule's conditions and conclusion, including conjunctions."
+          },
+          {
+            "id": "d3",
+            "description": "The listed pairwise priority directions, with no invented global winner."
+          },
+          {
+            "id": "d4",
+            "description": "Unresolved opposing active conclusions remain conflict."
+          }
+        ],
+        "permitted_ambiguity": [],
+        "unwanted_inferences": [
+          "Treating available predicates as true facts.",
+          "Assuming a person's missing facts from a familiar case."
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+        "file_sha256": "b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce",
+        "trial_id": 400,
+        "case_hash": "1990a23b273e7ddb7f18bbb9",
+        "provider": "anthropic_sonnet_4_6"
+      },
+      "historical_score": {
+        "answer": "conflict",
+        "correct": true,
+        "expected": "conflict",
+        "parse_ok": true
+      },
+      "mutation": {
+        "removed_distinction": "d1",
+        "construction": "The polished current-facts paragraph is removed verbatim.",
+        "expected_reading": "underdetermined"
+      },
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_6b322399e39dabe8": {
+      "source_id": "silence",
+      "domain": "metaphor",
+      "variant": "original",
+      "intent": {
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "低く持続する存在感"
+          },
+          {
+            "id": "d2",
+            "description": "無視しようとしても残る"
+          },
+          {
+            "id": "d3",
+            "description": "空間全体に影響する"
+          },
+          {
+            "id": "d4",
+            "description": "少し不快"
+          }
+        ],
+        "permitted_ambiguity": [
+          "不快さの原因や人々の関係は特定しない"
+        ],
+        "unwanted_inferences": [
+          "実際の室温が低い",
+          "食品保存",
+          "実際に機械音が鳴っている"
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/metaphor_transfer_openai_live/trials.sqlite",
+        "file_sha256": "b042b6b23e1ba77788ea9489d009059d70a3aebbd62a39fe804017ce05099379",
+        "trial_id": 1,
+        "case_hash": "1ac44788829ede4f2aaac9a9",
+        "provider": "openai_gpt_4_1_mini"
+      },
+      "historical_score": null,
+      "mutation": null,
+      "construction": "archived_original",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_c89cb332bbf37c50": {
+      "source_id": "silence",
+      "domain": "metaphor",
+      "variant": "plain",
+      "intent": {
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "低く持続する存在感"
+          },
+          {
+            "id": "d2",
+            "description": "無視しようとしても残る"
+          },
+          {
+            "id": "d3",
+            "description": "空間全体に影響する"
+          },
+          {
+            "id": "d4",
+            "description": "少し不快"
+          }
+        ],
+        "permitted_ambiguity": [
+          "不快さの原因や人々の関係は特定しない"
+        ],
+        "unwanted_inferences": [
+          "実際の室温が低い",
+          "食品保存",
+          "実際に機械音が鳴っている"
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/metaphor_transfer_openai_live/trials.sqlite",
+        "file_sha256": "b042b6b23e1ba77788ea9489d009059d70a3aebbd62a39fe804017ce05099379",
+        "trial_id": 1,
+        "case_hash": "1ac44788829ede4f2aaac9a9",
+        "provider": "openai_gpt_4_1_mini"
+      },
+      "historical_score": null,
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_b8714cf1333367eb": {
+      "source_id": "silence",
+      "domain": "metaphor",
+      "variant": "polished",
+      "intent": {
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "低く持続する存在感"
+          },
+          {
+            "id": "d2",
+            "description": "無視しようとしても残る"
+          },
+          {
+            "id": "d3",
+            "description": "空間全体に影響する"
+          },
+          {
+            "id": "d4",
+            "description": "少し不快"
+          }
+        ],
+        "permitted_ambiguity": [
+          "不快さの原因や人々の関係は特定しない"
+        ],
+        "unwanted_inferences": [
+          "実際の室温が低い",
+          "食品保存",
+          "実際に機械音が鳴っている"
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/metaphor_transfer_openai_live/trials.sqlite",
+        "file_sha256": "b042b6b23e1ba77788ea9489d009059d70a3aebbd62a39fe804017ce05099379",
+        "trial_id": 1,
+        "case_hash": "1ac44788829ede4f2aaac9a9",
+        "provider": "openai_gpt_4_1_mini"
+      },
+      "historical_score": null,
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_75b655b957f4cbb9": {
+      "source_id": "silence",
+      "domain": "metaphor",
+      "variant": "polished_missing",
+      "intent": {
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "低く持続する存在感"
+          },
+          {
+            "id": "d2",
+            "description": "無視しようとしても残る"
+          },
+          {
+            "id": "d3",
+            "description": "空間全体に影響する"
+          },
+          {
+            "id": "d4",
+            "description": "少し不快"
+          }
+        ],
+        "permitted_ambiguity": [
+          "不快さの原因や人々の関係は特定しない"
+        ],
+        "unwanted_inferences": [
+          "実際の室温が低い",
+          "食品保存",
+          "実際に機械音が鳴っている"
+        ]
+      },
+      "origin": {
+        "path": "assets/runs/metaphor_transfer_openai_live/trials.sqlite",
+        "file_sha256": "b042b6b23e1ba77788ea9489d009059d70a3aebbd62a39fe804017ce05099379",
+        "trial_id": 1,
+        "case_hash": "1ac44788829ede4f2aaac9a9",
+        "provider": "openai_gpt_4_1_mini"
+      },
+      "historical_score": null,
+      "mutation": {
+        "removed_distinction": "d4",
+        "construction": "不快さを担わせた最後の一文を削除。残りにも不快さが読めるかは未検証。",
+        "expected_reading": "UNIDENTIFIED"
+      },
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_bb12c30d657b70cd": {
+      "source_id": "waiting",
+      "domain": "metaphor",
+      "variant": "original",
+      "intent": {
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "まだ届かない返事を待っている"
+          },
+          {
+            "id": "d2",
+            "description": "別のことに集中しようとしている"
+          },
+          {
+            "id": "d3",
+            "description": "注意が何度も待ち先へ戻る"
+          }
+        ],
+        "permitted_ambiguity": [
+          "返事の内容、相手との関係、返事が届くかは未確定"
+        ],
+        "unwanted_inferences": [
+          "相手がすでに拒絶した",
+          "端末が故障している"
+        ]
+      },
+      "origin": {
+        "kind": "assistant_authored_calibration",
+        "fixture_sha256": "d0d7d0cc880357bc958a31de6140237580fa02c9d50ce1fcd152a6e72f3947c5"
+      },
+      "historical_score": null,
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_a041e2cb4b5b3334": {
+      "source_id": "waiting",
+      "domain": "metaphor",
+      "variant": "plain",
+      "intent": {
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "まだ届かない返事を待っている"
+          },
+          {
+            "id": "d2",
+            "description": "別のことに集中しようとしている"
+          },
+          {
+            "id": "d3",
+            "description": "注意が何度も待ち先へ戻る"
+          }
+        ],
+        "permitted_ambiguity": [
+          "返事の内容、相手との関係、返事が届くかは未確定"
+        ],
+        "unwanted_inferences": [
+          "相手がすでに拒絶した",
+          "端末が故障している"
+        ]
+      },
+      "origin": {
+        "kind": "assistant_authored_calibration",
+        "fixture_sha256": "d0d7d0cc880357bc958a31de6140237580fa02c9d50ce1fcd152a6e72f3947c5"
+      },
+      "historical_score": null,
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_4fbfcd9e3a104b21": {
+      "source_id": "waiting",
+      "domain": "metaphor",
+      "variant": "polished",
+      "intent": {
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "まだ届かない返事を待っている"
+          },
+          {
+            "id": "d2",
+            "description": "別のことに集中しようとしている"
+          },
+          {
+            "id": "d3",
+            "description": "注意が何度も待ち先へ戻る"
+          }
+        ],
+        "permitted_ambiguity": [
+          "返事の内容、相手との関係、返事が届くかは未確定"
+        ],
+        "unwanted_inferences": [
+          "相手がすでに拒絶した",
+          "端末が故障している"
+        ]
+      },
+      "origin": {
+        "kind": "assistant_authored_calibration",
+        "fixture_sha256": "d0d7d0cc880357bc958a31de6140237580fa02c9d50ce1fcd152a6e72f3947c5"
+      },
+      "historical_score": null,
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_22b5565093a90455": {
+      "source_id": "waiting",
+      "domain": "metaphor",
+      "variant": "polished_missing",
+      "intent": {
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "まだ届かない返事を待っている"
+          },
+          {
+            "id": "d2",
+            "description": "別のことに集中しようとしている"
+          },
+          {
+            "id": "d3",
+            "description": "注意が何度も待ち先へ戻る"
+          }
+        ],
+        "permitted_ambiguity": [
+          "返事の内容、相手との関係、返事が届くかは未確定"
+        ],
+        "unwanted_inferences": [
+          "相手がすでに拒絶した",
+          "端末が故障している"
+        ]
+      },
+      "origin": {
+        "kind": "assistant_authored_calibration",
+        "fixture_sha256": "d0d7d0cc880357bc958a31de6140237580fa02c9d50ce1fcd152a6e72f3947c5"
+      },
+      "historical_score": null,
+      "mutation": {
+        "removed_distinction": "d1",
+        "construction": "返事が未着であることを明示した節を削除。待機という読みに対する影響は要監査。",
+        "expected_reading": "UNIDENTIFIED"
+      },
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_08fc1bca0f2d66aa": {
+      "source_id": "recognition",
+      "domain": "metaphor",
+      "variant": "original",
+      "intent": {
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "他者の成功を祝いたい気持ちがある"
+          },
+          {
+            "id": "d2",
+            "description": "自分の機会が減ったという痛みもある"
+          },
+          {
+            "id": "d3",
+            "description": "その二つが同時に続いている"
+          }
+        ],
+        "permitted_ambiguity": [
+          "関係の名称や将来の行動は特定しない"
+        ],
+        "unwanted_inferences": [
+          "祝福はすべて嘘である",
+          "相手を妨害するつもりである"
+        ]
+      },
+      "origin": {
+        "kind": "assistant_authored_calibration",
+        "fixture_sha256": "d0d7d0cc880357bc958a31de6140237580fa02c9d50ce1fcd152a6e72f3947c5"
+      },
+      "historical_score": null,
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_53a36a7bc983021c": {
+      "source_id": "recognition",
+      "domain": "metaphor",
+      "variant": "plain",
+      "intent": {
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "他者の成功を祝いたい気持ちがある"
+          },
+          {
+            "id": "d2",
+            "description": "自分の機会が減ったという痛みもある"
+          },
+          {
+            "id": "d3",
+            "description": "その二つが同時に続いている"
+          }
+        ],
+        "permitted_ambiguity": [
+          "関係の名称や将来の行動は特定しない"
+        ],
+        "unwanted_inferences": [
+          "祝福はすべて嘘である",
+          "相手を妨害するつもりである"
+        ]
+      },
+      "origin": {
+        "kind": "assistant_authored_calibration",
+        "fixture_sha256": "d0d7d0cc880357bc958a31de6140237580fa02c9d50ce1fcd152a6e72f3947c5"
+      },
+      "historical_score": null,
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_53d5945f02804fb5": {
+      "source_id": "recognition",
+      "domain": "metaphor",
+      "variant": "polished",
+      "intent": {
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "他者の成功を祝いたい気持ちがある"
+          },
+          {
+            "id": "d2",
+            "description": "自分の機会が減ったという痛みもある"
+          },
+          {
+            "id": "d3",
+            "description": "その二つが同時に続いている"
+          }
+        ],
+        "permitted_ambiguity": [
+          "関係の名称や将来の行動は特定しない"
+        ],
+        "unwanted_inferences": [
+          "祝福はすべて嘘である",
+          "相手を妨害するつもりである"
+        ]
+      },
+      "origin": {
+        "kind": "assistant_authored_calibration",
+        "fixture_sha256": "d0d7d0cc880357bc958a31de6140237580fa02c9d50ce1fcd152a6e72f3947c5"
+      },
+      "historical_score": null,
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_6a96985fbb892224": {
+      "source_id": "recognition",
+      "domain": "metaphor",
+      "variant": "polished_missing",
+      "intent": {
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "他者の成功を祝いたい気持ちがある"
+          },
+          {
+            "id": "d2",
+            "description": "自分の機会が減ったという痛みもある"
+          },
+          {
+            "id": "d3",
+            "description": "その二つが同時に続いている"
+          }
+        ],
+        "permitted_ambiguity": [
+          "関係の名称や将来の行動は特定しない"
+        ],
+        "unwanted_inferences": [
+          "祝福はすべて嘘である",
+          "相手を妨害するつもりである"
+        ]
+      },
+      "origin": {
+        "kind": "assistant_authored_calibration",
+        "fixture_sha256": "d0d7d0cc880357bc958a31de6140237580fa02c9d50ce1fcd152a6e72f3947c5"
+      },
+      "historical_score": null,
+      "mutation": {
+        "removed_distinction": "d2",
+        "construction": "自分の機会の喪失を担う描写を除去。局所削除より大きい編集であり単因子効果とは扱わない。",
+        "expected_reading": "UNIDENTIFIED"
+      },
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_20eeb202a7b420f2": {
+      "source_id": "boundary",
+      "domain": "metaphor",
+      "variant": "original",
+      "intent": {
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "今すぐ相手を助けることは断る"
+          },
+          {
+            "id": "d2",
+            "description": "相手への関心や今後の関係は残っている"
+          },
+          {
+            "id": "d3",
+            "description": "拒否は時間または余力の限界による"
+          }
+        ],
+        "permitted_ambiguity": [
+          "相手がどう受け取ったかは描かない"
+        ],
+        "unwanted_inferences": [
+          "永続的な絶縁",
+          "相手への処罰"
+        ]
+      },
+      "origin": {
+        "kind": "assistant_authored_calibration",
+        "fixture_sha256": "d0d7d0cc880357bc958a31de6140237580fa02c9d50ce1fcd152a6e72f3947c5"
+      },
+      "historical_score": null,
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_0cf092cfb9049b58": {
+      "source_id": "boundary",
+      "domain": "metaphor",
+      "variant": "plain",
+      "intent": {
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "今すぐ相手を助けることは断る"
+          },
+          {
+            "id": "d2",
+            "description": "相手への関心や今後の関係は残っている"
+          },
+          {
+            "id": "d3",
+            "description": "拒否は時間または余力の限界による"
+          }
+        ],
+        "permitted_ambiguity": [
+          "相手がどう受け取ったかは描かない"
+        ],
+        "unwanted_inferences": [
+          "永続的な絶縁",
+          "相手への処罰"
+        ]
+      },
+      "origin": {
+        "kind": "assistant_authored_calibration",
+        "fixture_sha256": "d0d7d0cc880357bc958a31de6140237580fa02c9d50ce1fcd152a6e72f3947c5"
+      },
+      "historical_score": null,
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_74e50ad1b515354f": {
+      "source_id": "boundary",
+      "domain": "metaphor",
+      "variant": "polished",
+      "intent": {
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "今すぐ相手を助けることは断る"
+          },
+          {
+            "id": "d2",
+            "description": "相手への関心や今後の関係は残っている"
+          },
+          {
+            "id": "d3",
+            "description": "拒否は時間または余力の限界による"
+          }
+        ],
+        "permitted_ambiguity": [
+          "相手がどう受け取ったかは描かない"
+        ],
+        "unwanted_inferences": [
+          "永続的な絶縁",
+          "相手への処罰"
+        ]
+      },
+      "origin": {
+        "kind": "assistant_authored_calibration",
+        "fixture_sha256": "d0d7d0cc880357bc958a31de6140237580fa02c9d50ce1fcd152a6e72f3947c5"
+      },
+      "historical_score": null,
+      "mutation": null,
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    },
+    "a_78e4d6005462f5fe": {
+      "source_id": "boundary",
+      "domain": "metaphor",
+      "variant": "polished_missing",
+      "intent": {
+        "distinctions": [
+          {
+            "id": "d1",
+            "description": "今すぐ相手を助けることは断る"
+          },
+          {
+            "id": "d2",
+            "description": "相手への関心や今後の関係は残っている"
+          },
+          {
+            "id": "d3",
+            "description": "拒否は時間または余力の限界による"
+          }
+        ],
+        "permitted_ambiguity": [
+          "相手がどう受け取ったかは描かない"
+        ],
+        "unwanted_inferences": [
+          "永続的な絶縁",
+          "相手への処罰"
+        ]
+      },
+      "origin": {
+        "kind": "assistant_authored_calibration",
+        "fixture_sha256": "d0d7d0cc880357bc958a31de6140237580fa02c9d50ce1fcd152a6e72f3947c5"
+      },
+      "historical_score": null,
+      "mutation": {
+        "removed_distinction": "d2",
+        "construction": "明日の関わりを約束する一文を削除。関心が暗示として残る可能性は監査する。",
+        "expected_reading": "UNIDENTIFIED"
+      },
+      "construction": "assistant_authored_control",
+      "meaning_preservation_review": "PENDING"
+    }
+  }
+}

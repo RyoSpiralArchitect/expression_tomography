@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "analysis_kind": "POST_HOC_CARRIER_RESIDUE_RECOVERABILITY_AND_IDENTIFIABILITY",
+  "created_on_local_date": "2026-09-27",
+  "timezone": "Asia/Tokyo",
+  "source_bundle": "assets/runs/carrier_calibration_openai_luna_2026_09_27",
+  "source_run_identity": "592e63c1f2a20a268d73870aa8783afc6a2dd7138128c16b394fa2a94f310baa",
+  "source_bundle_manifest_sha256": "50fbb4e64c5db2b893737bcd3915474ce5c333da914ed508d7b64b2603c839e6",
+  "files_sha256": {
+    "README.md": "eb7c379f12511515d7bd68c53a0eb979b6c9275bc5716c1926f9515aeb442a5a",
+    "analyze.py": "9966b6ddcb207be6619b8a3a029deac3a6354ef38bc4be4b1438109287dd2573",
+    "analysis.json": "c8a7f634fcb2e783a37345633276ff99d3d2a62bcb48d9cd2287c82850ed5671",
+    "validation.json": "b190ba9d1139589868a85324c877a5e8fe7f977937fc0cbc8ff5cff91c7f901f"
+  },
+  "supporting_repository_files_sha256": {
+    "docs/carrier_residue_deep_audit_2026_09_27.md": "17e5b8d478352355cb53e139d3b9fcb5a5d92ab2b55762a13889423019ee2974",
+    "tests/test_expression_tomography_carrier_deep_audit.py": "1f20c24d8d4213e07a2acfdc7be624de840a07a2f1fad5f5868084140cd79f44"
+  },
+  "scope": "files_sha256 paths are relative to this analysis directory; supporting_repository_files_sha256 paths are relative to the repository root. This manifest excludes itself and does not replace the frozen source bundle manifest."
+}

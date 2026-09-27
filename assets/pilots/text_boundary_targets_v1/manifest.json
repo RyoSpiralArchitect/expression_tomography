@@ -1,0 +1,30 @@
+{
+  "version": "text_boundary_targets.mock_bundle.v1",
+  "source_database_sha256": "06c68fe9ff4df2d4937588813ecea83a43218d9e6ef5872311cd56a952012869",
+  "mock_run_identity": "af4c7c6b9bdc819a52b0dae23dc9dc318689e78303ff5e819ab83644741194c9",
+  "n_mock_responses": 216,
+  "n_live_responses": 0,
+  "zero_call_revalidated": 216,
+  "files": {
+    ".gitignore": {
+      "sha256": "f9615aa5927f329d2fbebfc5972918bba7e44652defb385653d70082cd15ce08",
+      "size_bytes": 14
+    },
+    "README.md": {
+      "sha256": "dba2c32510c9c76adff6bc7d85ddf9f56524e1ce536b3b6a868978e93a287cfd",
+      "size_bytes": 1034
+    },
+    "mock/revalidation.json": {
+      "sha256": "fd770202ba92776c7b3426d17474813f01e1bf923f88b0db3a32bf86f7ac3bea",
+      "size_bytes": 15459
+    },
+    "mock/summary.json": {
+      "sha256": "5193664c740d3729643b395c5c38586645c3f9d2212763c66b03b7ef494a4a28",
+      "size_bytes": 15459
+    },
+    "mock/trials.sqlite": {
+      "sha256": "096a581485c1ca961954a08b6ec1fe980d3834085dd47277f6c6bfd5b0dad892",
+      "size_bytes": 1957888
+    }
+  }
+}

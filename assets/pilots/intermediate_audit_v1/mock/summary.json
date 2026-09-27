@@ -1,0 +1,39 @@
+{
+  "version": "intermediate_audit.v1",
+  "n_sources": 12,
+  "n_artifacts": 48,
+  "n_trials": 144,
+  "n_model_calls": 144,
+  "n_live_calls": 0,
+  "n_mock_calls": 144,
+  "n_human_observations": 0,
+  "roles": [
+    {
+      "provider": "audit_mock",
+      "role": "auditor",
+      "is_mock": true,
+      "n": 48,
+      "n_schema_valid": 48,
+      "n_bad_quotes": 0
+    },
+    {
+      "provider": "audit_mock",
+      "role": "critic",
+      "is_mock": true,
+      "n": 48,
+      "n_schema_valid": 48,
+      "n_bad_quotes": 0
+    },
+    {
+      "provider": "audit_mock",
+      "role": "reader",
+      "is_mock": true,
+      "n": 48,
+      "n_schema_valid": 48,
+      "n_bad_quotes": 0
+    }
+  ],
+  "interpretation": "Role observations are not independent participants. Source-answer agreement is not message comprehension accuracy. Human observations use separate receipts.",
+  "meaning_preservation_review": "PENDING",
+  "compensatory_coordination": "UNIDENTIFIED"
+}

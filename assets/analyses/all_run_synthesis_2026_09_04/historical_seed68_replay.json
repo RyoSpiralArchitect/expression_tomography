@@ -1,0 +1,17 @@
+{
+  "source_commit": "33f3d44fad97c75ca0976d4da4905158d8a2192e",
+  "path": "assets/runs/rule_z_extraction_intervention_luna_seed68_16x2/trials.sqlite",
+  "sha256": "f1cfb931367d81d643ebb4fac748cf303ec1d280fc482b5f1a8a48a8d9fc89e3",
+  "provider_calls": 0,
+  "validation": {
+    "validated_cases": 64,
+    "validated_trials": 2816,
+    "parse_matches": 2816,
+    "prompt_matches": 2816,
+    "score_matches": 2816,
+    "validated_model_upstream_references": 2048,
+    "validated_lineage_trials": 2816,
+    "validated_experiment_runs": 1
+  },
+  "status": "passed_under_recorded_post_run_implementation"
+}

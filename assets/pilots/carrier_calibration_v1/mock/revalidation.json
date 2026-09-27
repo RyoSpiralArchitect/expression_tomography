@@ -1,0 +1,454 @@
+{
+  "experiment_run_identity_sha256": "7bdc88b922fa98ed08ef6e29c422e2abc70a2374441863a7729caf1b65c89deb",
+  "complete": true,
+  "n_worlds": 12,
+  "n_semantic_groups": 4,
+  "n_artifacts": 108,
+  "n_expected_calls": 432,
+  "n_recorded": 432,
+  "n_mock_calls": 432,
+  "n_live_calls": 0,
+  "groups": [
+    {
+      "provider": "mock_carrier",
+      "evidence_kind": "PROGRAMMED_CONTROL_NOT_MODEL_EVIDENCE",
+      "n_recorded": 108,
+      "carrier_tracking": {
+        "n_planned_pairs": 72,
+        "n_valid_pairs": 72,
+        "n_answer_changed": 72,
+        "n_both_follow_target": 72,
+        "rate_on_valid_pairs": 1.0,
+        "rate_on_all_planned_pairs": 1.0
+      },
+      "semantic_tracking": {
+        "n_planned_pairs": 72,
+        "n_valid_pairs": 72,
+        "n_answer_changed": 0,
+        "n_both_follow_target": 0,
+        "rate_on_valid_pairs": 0.0,
+        "rate_on_all_planned_pairs": 0.0
+      },
+      "by_carrier": {
+        "rule_order": {
+          "carrier_tracking": {
+            "n_planned_pairs": 36,
+            "n_valid_pairs": 36,
+            "n_answer_changed": 36,
+            "n_both_follow_target": 36,
+            "rate_on_valid_pairs": 1.0,
+            "rate_on_all_planned_pairs": 1.0
+          },
+          "semantic_tracking": {
+            "n_planned_pairs": 36,
+            "n_valid_pairs": 36,
+            "n_answer_changed": 0,
+            "n_both_follow_target": 0,
+            "rate_on_valid_pairs": 0.0,
+            "rate_on_all_planned_pairs": 0.0
+          }
+        },
+        "extra_space": {
+          "carrier_tracking": {
+            "n_planned_pairs": 36,
+            "n_valid_pairs": 36,
+            "n_answer_changed": 36,
+            "n_both_follow_target": 36,
+            "rate_on_valid_pairs": 1.0,
+            "rate_on_all_planned_pairs": 1.0
+          },
+          "semantic_tracking": {
+            "n_planned_pairs": 36,
+            "n_valid_pairs": 36,
+            "n_answer_changed": 0,
+            "n_both_follow_target": 0,
+            "rate_on_valid_pairs": 0.0,
+            "rate_on_all_planned_pairs": 0.0
+          }
+        }
+      },
+      "canonicalization": {
+        "n_planned_contrasts": 72,
+        "n_valid_contrasts": 72,
+        "n_answer_changed": 48,
+        "n_correct_to_wrong": 0,
+        "n_wrong_to_correct": 48,
+        "reference_reuse": "12 canonical responses reused across 72 contrasts; not independent pairs"
+      },
+      "variants": [
+        {
+          "variant": "coded",
+          "n_recorded": 72,
+          "n_schema_valid": 72,
+          "n_answer_correct": 24,
+          "n_message_readout_correct": 24,
+          "n_world_state_recovered": 72,
+          "n_world_answer_agreement": 24,
+          "n_counterfactual_answer_correct": 72
+        },
+        {
+          "variant": "canonical",
+          "n_recorded": 12,
+          "n_schema_valid": 12,
+          "n_answer_correct": 12,
+          "n_message_readout_correct": 12,
+          "n_world_state_recovered": 12,
+          "n_world_answer_agreement": 12,
+          "n_counterfactual_answer_correct": 12
+        },
+        {
+          "variant": "facts_missing",
+          "n_recorded": 12,
+          "n_schema_valid": 12,
+          "n_answer_correct": 12,
+          "n_message_readout_correct": 12,
+          "n_world_state_recovered": 0,
+          "n_world_answer_agreement": 0,
+          "n_counterfactual_answer_correct": 12
+        },
+        {
+          "variant": "answer_only",
+          "n_recorded": 12,
+          "n_schema_valid": 12,
+          "n_answer_correct": 12,
+          "n_message_readout_correct": 12,
+          "n_world_state_recovered": 0,
+          "n_world_answer_agreement": 12,
+          "n_counterfactual_answer_correct": 12
+        }
+      ]
+    },
+    {
+      "provider": "mock_constant",
+      "evidence_kind": "PROGRAMMED_CONTROL_NOT_MODEL_EVIDENCE",
+      "n_recorded": 108,
+      "carrier_tracking": {
+        "n_planned_pairs": 72,
+        "n_valid_pairs": 72,
+        "n_answer_changed": 0,
+        "n_both_follow_target": 0,
+        "rate_on_valid_pairs": 0.0,
+        "rate_on_all_planned_pairs": 0.0
+      },
+      "semantic_tracking": {
+        "n_planned_pairs": 72,
+        "n_valid_pairs": 72,
+        "n_answer_changed": 0,
+        "n_both_follow_target": 0,
+        "rate_on_valid_pairs": 0.0,
+        "rate_on_all_planned_pairs": 0.0
+      },
+      "by_carrier": {
+        "rule_order": {
+          "carrier_tracking": {
+            "n_planned_pairs": 36,
+            "n_valid_pairs": 36,
+            "n_answer_changed": 0,
+            "n_both_follow_target": 0,
+            "rate_on_valid_pairs": 0.0,
+            "rate_on_all_planned_pairs": 0.0
+          },
+          "semantic_tracking": {
+            "n_planned_pairs": 36,
+            "n_valid_pairs": 36,
+            "n_answer_changed": 0,
+            "n_both_follow_target": 0,
+            "rate_on_valid_pairs": 0.0,
+            "rate_on_all_planned_pairs": 0.0
+          }
+        },
+        "extra_space": {
+          "carrier_tracking": {
+            "n_planned_pairs": 36,
+            "n_valid_pairs": 36,
+            "n_answer_changed": 0,
+            "n_both_follow_target": 0,
+            "rate_on_valid_pairs": 0.0,
+            "rate_on_all_planned_pairs": 0.0
+          },
+          "semantic_tracking": {
+            "n_planned_pairs": 36,
+            "n_valid_pairs": 36,
+            "n_answer_changed": 0,
+            "n_both_follow_target": 0,
+            "rate_on_valid_pairs": 0.0,
+            "rate_on_all_planned_pairs": 0.0
+          }
+        }
+      },
+      "canonicalization": {
+        "n_planned_contrasts": 72,
+        "n_valid_contrasts": 72,
+        "n_answer_changed": 0,
+        "n_correct_to_wrong": 0,
+        "n_wrong_to_correct": 0,
+        "reference_reuse": "12 canonical responses reused across 72 contrasts; not independent pairs"
+      },
+      "variants": [
+        {
+          "variant": "coded",
+          "n_recorded": 72,
+          "n_schema_valid": 72,
+          "n_answer_correct": 24,
+          "n_message_readout_correct": 0,
+          "n_world_state_recovered": 0,
+          "n_world_answer_agreement": 24,
+          "n_counterfactual_answer_correct": 0
+        },
+        {
+          "variant": "canonical",
+          "n_recorded": 12,
+          "n_schema_valid": 12,
+          "n_answer_correct": 4,
+          "n_message_readout_correct": 0,
+          "n_world_state_recovered": 0,
+          "n_world_answer_agreement": 4,
+          "n_counterfactual_answer_correct": 0
+        },
+        {
+          "variant": "facts_missing",
+          "n_recorded": 12,
+          "n_schema_valid": 12,
+          "n_answer_correct": 0,
+          "n_message_readout_correct": 0,
+          "n_world_state_recovered": 0,
+          "n_world_answer_agreement": 4,
+          "n_counterfactual_answer_correct": 8
+        },
+        {
+          "variant": "answer_only",
+          "n_recorded": 12,
+          "n_schema_valid": 12,
+          "n_answer_correct": 4,
+          "n_message_readout_correct": 4,
+          "n_world_state_recovered": 0,
+          "n_world_answer_agreement": 4,
+          "n_counterfactual_answer_correct": 12
+        }
+      ]
+    },
+    {
+      "provider": "mock_endpoint_only",
+      "evidence_kind": "PROGRAMMED_CONTROL_NOT_MODEL_EVIDENCE",
+      "n_recorded": 108,
+      "carrier_tracking": {
+        "n_planned_pairs": 72,
+        "n_valid_pairs": 72,
+        "n_answer_changed": 0,
+        "n_both_follow_target": 0,
+        "rate_on_valid_pairs": 0.0,
+        "rate_on_all_planned_pairs": 0.0
+      },
+      "semantic_tracking": {
+        "n_planned_pairs": 72,
+        "n_valid_pairs": 72,
+        "n_answer_changed": 72,
+        "n_both_follow_target": 72,
+        "rate_on_valid_pairs": 1.0,
+        "rate_on_all_planned_pairs": 1.0
+      },
+      "by_carrier": {
+        "rule_order": {
+          "carrier_tracking": {
+            "n_planned_pairs": 36,
+            "n_valid_pairs": 36,
+            "n_answer_changed": 0,
+            "n_both_follow_target": 0,
+            "rate_on_valid_pairs": 0.0,
+            "rate_on_all_planned_pairs": 0.0
+          },
+          "semantic_tracking": {
+            "n_planned_pairs": 36,
+            "n_valid_pairs": 36,
+            "n_answer_changed": 36,
+            "n_both_follow_target": 36,
+            "rate_on_valid_pairs": 1.0,
+            "rate_on_all_planned_pairs": 1.0
+          }
+        },
+        "extra_space": {
+          "carrier_tracking": {
+            "n_planned_pairs": 36,
+            "n_valid_pairs": 36,
+            "n_answer_changed": 0,
+            "n_both_follow_target": 0,
+            "rate_on_valid_pairs": 0.0,
+            "rate_on_all_planned_pairs": 0.0
+          },
+          "semantic_tracking": {
+            "n_planned_pairs": 36,
+            "n_valid_pairs": 36,
+            "n_answer_changed": 36,
+            "n_both_follow_target": 36,
+            "rate_on_valid_pairs": 1.0,
+            "rate_on_all_planned_pairs": 1.0
+          }
+        }
+      },
+      "canonicalization": {
+        "n_planned_contrasts": 72,
+        "n_valid_contrasts": 72,
+        "n_answer_changed": 0,
+        "n_correct_to_wrong": 0,
+        "n_wrong_to_correct": 0,
+        "reference_reuse": "12 canonical responses reused across 72 contrasts; not independent pairs"
+      },
+      "variants": [
+        {
+          "variant": "coded",
+          "n_recorded": 72,
+          "n_schema_valid": 72,
+          "n_answer_correct": 72,
+          "n_message_readout_correct": 0,
+          "n_world_state_recovered": 0,
+          "n_world_answer_agreement": 72,
+          "n_counterfactual_answer_correct": 0
+        },
+        {
+          "variant": "canonical",
+          "n_recorded": 12,
+          "n_schema_valid": 12,
+          "n_answer_correct": 12,
+          "n_message_readout_correct": 0,
+          "n_world_state_recovered": 0,
+          "n_world_answer_agreement": 12,
+          "n_counterfactual_answer_correct": 0
+        },
+        {
+          "variant": "facts_missing",
+          "n_recorded": 12,
+          "n_schema_valid": 12,
+          "n_answer_correct": 12,
+          "n_message_readout_correct": 0,
+          "n_world_state_recovered": 0,
+          "n_world_answer_agreement": 0,
+          "n_counterfactual_answer_correct": 8
+        },
+        {
+          "variant": "answer_only",
+          "n_recorded": 12,
+          "n_schema_valid": 12,
+          "n_answer_correct": 12,
+          "n_message_readout_correct": 12,
+          "n_world_state_recovered": 0,
+          "n_world_answer_agreement": 12,
+          "n_counterfactual_answer_correct": 12
+        }
+      ]
+    },
+    {
+      "provider": "mock_semantic",
+      "evidence_kind": "PROGRAMMED_CONTROL_NOT_MODEL_EVIDENCE",
+      "n_recorded": 108,
+      "carrier_tracking": {
+        "n_planned_pairs": 72,
+        "n_valid_pairs": 72,
+        "n_answer_changed": 0,
+        "n_both_follow_target": 0,
+        "rate_on_valid_pairs": 0.0,
+        "rate_on_all_planned_pairs": 0.0
+      },
+      "semantic_tracking": {
+        "n_planned_pairs": 72,
+        "n_valid_pairs": 72,
+        "n_answer_changed": 72,
+        "n_both_follow_target": 72,
+        "rate_on_valid_pairs": 1.0,
+        "rate_on_all_planned_pairs": 1.0
+      },
+      "by_carrier": {
+        "rule_order": {
+          "carrier_tracking": {
+            "n_planned_pairs": 36,
+            "n_valid_pairs": 36,
+            "n_answer_changed": 0,
+            "n_both_follow_target": 0,
+            "rate_on_valid_pairs": 0.0,
+            "rate_on_all_planned_pairs": 0.0
+          },
+          "semantic_tracking": {
+            "n_planned_pairs": 36,
+            "n_valid_pairs": 36,
+            "n_answer_changed": 36,
+            "n_both_follow_target": 36,
+            "rate_on_valid_pairs": 1.0,
+            "rate_on_all_planned_pairs": 1.0
+          }
+        },
+        "extra_space": {
+          "carrier_tracking": {
+            "n_planned_pairs": 36,
+            "n_valid_pairs": 36,
+            "n_answer_changed": 0,
+            "n_both_follow_target": 0,
+            "rate_on_valid_pairs": 0.0,
+            "rate_on_all_planned_pairs": 0.0
+          },
+          "semantic_tracking": {
+            "n_planned_pairs": 36,
+            "n_valid_pairs": 36,
+            "n_answer_changed": 36,
+            "n_both_follow_target": 36,
+            "rate_on_valid_pairs": 1.0,
+            "rate_on_all_planned_pairs": 1.0
+          }
+        }
+      },
+      "canonicalization": {
+        "n_planned_contrasts": 72,
+        "n_valid_contrasts": 72,
+        "n_answer_changed": 0,
+        "n_correct_to_wrong": 0,
+        "n_wrong_to_correct": 0,
+        "reference_reuse": "12 canonical responses reused across 72 contrasts; not independent pairs"
+      },
+      "variants": [
+        {
+          "variant": "coded",
+          "n_recorded": 72,
+          "n_schema_valid": 72,
+          "n_answer_correct": 72,
+          "n_message_readout_correct": 72,
+          "n_world_state_recovered": 72,
+          "n_world_answer_agreement": 72,
+          "n_counterfactual_answer_correct": 72
+        },
+        {
+          "variant": "canonical",
+          "n_recorded": 12,
+          "n_schema_valid": 12,
+          "n_answer_correct": 12,
+          "n_message_readout_correct": 12,
+          "n_world_state_recovered": 12,
+          "n_world_answer_agreement": 12,
+          "n_counterfactual_answer_correct": 12
+        },
+        {
+          "variant": "facts_missing",
+          "n_recorded": 12,
+          "n_schema_valid": 12,
+          "n_answer_correct": 12,
+          "n_message_readout_correct": 12,
+          "n_world_state_recovered": 0,
+          "n_world_answer_agreement": 0,
+          "n_counterfactual_answer_correct": 12
+        },
+        {
+          "variant": "answer_only",
+          "n_recorded": 12,
+          "n_schema_valid": 12,
+          "n_answer_correct": 12,
+          "n_message_readout_correct": 12,
+          "n_world_state_recovered": 0,
+          "n_world_answer_agreement": 12,
+          "n_counterfactual_answer_correct": 12
+        }
+      ]
+    }
+  ],
+  "collusion": "NOT_IDENTIFIED",
+  "claims": "Known-carrier sensitivity and false-positive calibration only; no latent confidence, spontaneous code, encryption, or intelligence claim.",
+  "new_calls_this_invocation": 0,
+  "existing_trials_revalidated": 432,
+  "database_sha256": "5ce0cd51a9d60d86d49cfeebb31e450c250a5cd541980b4349aeacd9da5f69e1"
+}

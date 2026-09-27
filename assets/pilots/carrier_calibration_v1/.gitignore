@@ -1,0 +1,3 @@
+*.sqlite.lock
+!mock/trials.sqlite
+__pycache__/

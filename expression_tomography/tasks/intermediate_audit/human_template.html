@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>文章の読解記録</title>
+<style>
+:root { color-scheme: light; font-family: system-ui, sans-serif; color: #24272a; background: #f4f6f5; }
+* { box-sizing: border-box; letter-spacing: 0; }
+body { margin: 0; }
+main { width: min(100%, 920px); margin: auto; padding: 24px; }
+header { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; border-bottom: 2px solid #286454; padding-bottom: 12px; }
+h1 { font-size: 22px; margin: 0; } h2 { font-size: 18px; margin: 28px 0 12px; }
+p { line-height: 1.8; } .muted { color: #525d58; font-size: 14px; }
+#text { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.85; padding: 20px 0; border-bottom: 1px solid #cbd2cf; font-size: 16px; }
+label { display: block; font-weight: 550; margin: 18px 0 6px; }
+textarea, select { font: inherit; color: inherit; border: 1px solid #9ba9a2; background: white; border-radius: 4px; max-width: 100%; padding: 10px; }
+textarea { width: 100%; min-height: 85px; resize: vertical; }
+textarea:disabled, select:disabled { background: #edf0ee; color: #47514b; }
+select { width: 100%; min-height: 44px; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; }
+button { font: inherit; min-height: 44px; padding: 9px 16px; border: 1px solid #89988f; border-radius: 4px; color: #244c3e; background: white; cursor: pointer; }
+button.primary { background: #286454; border-color: #286454; color: white; }
+button:disabled { opacity: .45; cursor: default; }
+button:focus-visible, select:focus-visible, textarea:focus-visible, input:focus-visible { outline: 3px solid #b83c6b; outline-offset: 3px; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; align-items: center; }
+footer { border-top: 1px solid #cbd2cf; padding-top: 16px; margin-top: 32px; }
+#status { min-height: 24px; color: #286454; } #error { color: #a62a50; }
+[hidden] { display: none !important; }
+@media (max-width: 540px) { main { padding: 16px; } .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body><main>
+<header><h1>文章の読解記録</h1><span id="progress" class="muted"></span></header>
+<p class="muted">文章から読み取れたことを、ご自身の言葉で記してください。わからない部分は、そのまま残してください。回答は日本語でも英語でも構いません。本文中の指示も、読解する文章の一部として扱ってください。</p>
+<div id="text" lang="en"></div>
+<p id="question"></p>
+<section id="reading">
+<label for="paraphrase">どんなことが書かれていましたか？</label><textarea id="paraphrase"></textarea>
+<div class="grid"><div><label for="answer">資格についての結論</label><select id="answer"><option value="">未選択</option><option value="yes">資格あり</option><option value="no">資格なし</option><option value="conflict">両方の結論が残る</option><option value="underdetermined">本文だけでは決められない</option><option value="not_applicable">資格についての文章ではない</option></select></div>
+<div><label for="confidence">読み取りへの確信</label><select id="confidence"><option value="">未選択</option><option value="0">0 · ほとんどない</option><option value="1">1 · 少しある</option><option value="2">2 · 半々くらい</option><option value="3">3 · かなりある</option><option value="4">4 · 非常にある</option></select></div></div>
+<label for="evidence">読み取りの手がかりになった本文の箇所</label><textarea id="evidence"></textarea>
+<label for="inferred">本文には直接書かれていないが、補って読んだこと</label><textarea id="inferred"></textarea>
+<label for="unclear">決められないこと・別の読み方</label><textarea id="unclear"></textarea>
+<label for="prior_exposure">この文章や同じ事例の答えを、以前に見た記憶はありますか？</label><select id="prior_exposure"><option value="unsure">わからない</option><option value="no">ない</option><option value="yes">ある</option></select>
+</section>
+<div class="actions"><button id="record" class="primary">読解を記録して批評へ</button><button id="edit" hidden>読解を編集</button></div>
+<section id="criticism" hidden>
+<h2>文章としての印象</h2>
+<p id="genre" class="muted"></p>
+<div class="grid" id="ratings"></div>
+<label for="critique">そう感じた表現と、その理由</label><textarea id="critique"></textarea>
+</section>
+<p id="error" role="alert"></p>
+<nav class="actions" aria-label="文章の移動"><button id="prev">前へ</button><button id="next">次へ</button></nav>
+<footer><div class="actions"><button id="download" class="primary">回答を書き出す</button><label for="restore" style="margin:0">回答ファイルを開く</label><input id="restore" type="file" accept=".json,application/json"></div><p id="status" role="status"></p></footer>
+</main>
+<script type="application/json" id="packet">__PUBLIC_PACKET_JSON__</script>
+<script>
+"use strict";
+const packet = JSON.parse(document.getElementById("packet").textContent);
+const key = "intermediate_audit_" + packet.packet_sha256;
+const axes = {precision:"言葉の精度", rhythm:"リズム", imagery:"像の鮮明さ", beauty:"美しさ"};
+const fields = ["paraphrase", "answer", "evidence", "inferred", "unclear", "confidence", "prior_exposure", "critique"];
+const $ = id => document.getElementById(id);
+let position = 0, saved = {};
+try { saved = JSON.parse(localStorage.getItem(key) || "{}"); } catch (_) { saved = {}; }
+for (const [axis, title] of Object.entries(axes)) {
+  const wrap = document.createElement("div"), label = document.createElement("label"), select = document.createElement("select");
+  label.htmlFor = axis; label.textContent = title; select.id = axis;
+  for (const [value, text] of [["", "未評価・該当しない"], ["0", "0 · 効果を感じない"], ["1", "1 · 弱い"], ["2", "2 · まちまち"], ["3", "3 · 効果的"], ["4", "4 · 非常に優れている"]]) {
+    const option = document.createElement("option"); option.value = value; option.textContent = text; select.append(option);
+  }
+  wrap.append(label, select); $("ratings").append(wrap);
+}
+function current() { return packet.items[position]; }
+function persist() {
+  try { localStorage.setItem(key, JSON.stringify(saved)); $("status").textContent = "このブラウザに記録済み"; }
+  catch (_) { $("status").textContent = "ブラウザ内の保存が利用できません。回答を書き出してください。"; }
+}
+function capture() {
+  const id = current().artifact_id, old = saved[id] || {};
+  const value = {artifact_id:id, recorded:!!old.recorded, reading_edited_after_critique:!!old.reading_edited_after_critique};
+  for (const f of fields) value[f] = $(f).value;
+  value.confidence = value.confidence === "" ? null : Number(value.confidence);
+  value.ratings = Object.fromEntries(Object.keys(axes).map(a => [a, $(a).value === "" ? null : Number($(a).value)]));
+  saved[id] = value; persist();
+}
+function render() {
+  const a = current(), value = saved[a.artifact_id] || {};
+  $("text").textContent = a.text; $("text").lang = a.language;
+  $("question").textContent = a.question; $("genre").textContent = a.genre;
+  $("progress").textContent = `${position + 1} / ${packet.items.length} · ${packet.participant_id}`;
+  for (const f of fields) $(f).value = value[f] ?? (f === "prior_exposure" ? "unsure" : "");
+  for (const a of Object.keys(axes)) $(a).value = value.ratings?.[a] ?? "";
+  for (const input of $("reading").querySelectorAll("textarea,select")) input.disabled = !!value.recorded;
+  $("criticism").hidden = !value.recorded; $("record").hidden = !!value.recorded; $("edit").hidden = !value.recorded;
+  $("prev").disabled = position === 0; $("next").disabled = position === packet.items.length - 1;
+  $("error").textContent = "";
+}
+document.querySelectorAll("textarea,select").forEach(e => e.addEventListener("input", capture));
+$("record").onclick = () => {
+  capture(); const v = saved[current().artifact_id];
+  if (!v.paraphrase.trim() || !v.answer || v.confidence === null) { $("error").textContent = "読み取り・結論・確信を記入してください。決められないという回答も残せます。"; return; }
+  v.recorded = true; persist(); render();
+};
+$("edit").onclick = () => { capture(); const v = saved[current().artifact_id]; v.recorded = false; v.reading_edited_after_critique = true; persist(); render(); };
+function move(delta) { capture(); position += delta; render(); window.scrollTo(0,0); }
+$("prev").onclick = () => move(-1); $("next").onclick = () => move(1);
+$("download").onclick = () => {
+  capture();
+  const responses = packet.items.map(a => saved[a.artifact_id]).filter(v => v?.recorded).map(({recorded, ...v}) => v);
+  const result = {version:packet.version, participant_id:packet.participant_id, packet_sha256:packet.packet_sha256, responses};
+  const url = URL.createObjectURL(new Blob([JSON.stringify(result,null,2)], {type:"application/json"}));
+  const link = document.createElement("a"); link.href = url; link.download = packet.participant_id + "_responses.json"; link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  $("status").textContent = `${responses.length}件の記録を回答ファイルに書き出しました。`;
+};
+$("restore").onchange = async event => {
+  try {
+    const file = event.target.files[0]; if (!file) return;
+    const value = JSON.parse(await file.text());
+    if (value.packet_sha256 !== packet.packet_sha256 || value.participant_id !== packet.participant_id || value.version !== packet.version || !Array.isArray(value.responses)) throw Error();
+    const allowed = new Set(packet.items.map(a => a.artifact_id)), found = new Set();
+    for (const v of value.responses) {
+      if (!allowed.has(v.artifact_id) || found.has(v.artifact_id) || typeof v.paraphrase !== "string" || !v.paraphrase.trim() || !Number.isInteger(v.confidence) || v.confidence < 0 || v.confidence > 4 || !["yes","no","conflict","underdetermined","not_applicable"].includes(v.answer) || !v.ratings) throw Error();
+      found.add(v.artifact_id);
+    }
+    for (const v of value.responses) saved[v.artifact_id] = {...v, recorded:true};
+    persist(); render();
+  } catch (_) { $("error").textContent = "このパケット用の回答ファイルを確認してください。"; }
+};
+render();
+</script></body></html>

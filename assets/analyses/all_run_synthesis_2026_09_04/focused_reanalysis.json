@@ -1,0 +1,880 @@
+{
+  "modern_replay": [
+    {
+      "path": "assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/trials.sqlite",
+      "result": {
+        "status": "passed",
+        "validation": {
+          "parse_matches": 704,
+          "prompt_matches": 704,
+          "score_matches": 704,
+          "validated_cases": 16,
+          "validated_experiment_runs": 0,
+          "validated_lineage_trials": 0,
+          "validated_model_upstream_references": 512,
+          "validated_trials": 704
+        }
+      },
+      "sha256": "6213fb1cb99cbac2bb25b1eeab52060bbb411fe3a00b723c33bbd47e1eea23a2",
+      "validator": "validate_extraction_intervention_store"
+    },
+    {
+      "path": "assets/runs/rule_z_extraction_intervention_luna_seed68_16x2/trials.sqlite",
+      "result": {
+        "error": "Stored trial 1 requested cue modes do not match its experiment run",
+        "status": "current_code_replay_rejected"
+      },
+      "sha256": "f1cfb931367d81d643ebb4fac748cf303ec1d280fc482b5f1a8a48a8d9fc89e3",
+      "validator": "validate_extraction_intervention_store"
+    },
+    {
+      "path": "assets/runs/rule_z_extraction_intervention_luna_seed68_target_null_16x2/trials.sqlite",
+      "result": {
+        "status": "passed",
+        "validation": {
+          "parse_matches": 2816,
+          "prompt_matches": 2816,
+          "score_matches": 2816,
+          "validated_cases": 64,
+          "validated_experiment_runs": 1,
+          "validated_lineage_trials": 2816,
+          "validated_model_upstream_references": 2048,
+          "validated_trials": 2816
+        }
+      },
+      "sha256": "ad93ec8f27ec57f5916e61a339b5f541414dcdc1fcba7f296a17c61f8aac6097",
+      "validator": "validate_extraction_intervention_store"
+    },
+    {
+      "path": "assets/runs/rule_z_rule_revision_leakage_luna_seed83_288x2/trials.sqlite",
+      "result": {
+        "status": "passed",
+        "validation": {
+          "lineage_matches": 4032,
+          "missing_logical_identities": 0,
+          "parse_matches": 4032,
+          "prompt_matches": 4032,
+          "score_matches": 4032,
+          "sqlite_integrity_check": "ok",
+          "surface_complete": true,
+          "unexpected_logical_identities": 0,
+          "validated_cases": 288,
+          "validated_experiment_runs": 1,
+          "validated_trials": 4032
+        }
+      },
+      "sha256": "415f9f62812764b74a547299761840ad2bd520f976fdaa5a2960d64dace49165",
+      "validator": "validate_rule_revision_store"
+    },
+    {
+      "path": "assets/runs/rule_z_revision_interface_luna_seed101_108x2/trials.sqlite",
+      "result": {
+        "status": "passed",
+        "validation": {
+          "lineage_matches": 3024,
+          "missing_logical_identities": 0,
+          "parse_matches": 3024,
+          "prompt_matches": 3024,
+          "score_matches": 3024,
+          "sqlite_integrity_check": "ok",
+          "surface_complete": true,
+          "unexpected_logical_identities": 0,
+          "validated_cases": 108,
+          "validated_experiment_runs": 1,
+          "validated_trials": 3024
+        }
+      },
+      "sha256": "42f87904d857cbcfc1da06434566f9e7c7e54fa87df6a324206662e440320c70",
+      "validator": "validate_revision_interface_store"
+    },
+    {
+      "path": "assets/runs/rule_z_revision_ear_ladder_luna_seed101_108x2/trials.sqlite",
+      "result": {
+        "status": "passed",
+        "validation": {
+          "lineage_matches": 2808,
+          "missing_logical_identities": 0,
+          "parse_matches": 2808,
+          "prompt_matches": 2808,
+          "score_matches": 2808,
+          "sqlite_integrity_check": "ok",
+          "surface_complete": true,
+          "unexpected_logical_identities": 0,
+          "validated_cases": 108,
+          "validated_experiment_runs": 1,
+          "validated_trials": 2808
+        }
+      },
+      "sha256": "1395e7136c46b1f5dcbbdf4ce3013b774e7d01ad2323694e5b5266104fbd60cd",
+      "validator": "validate_revision_ear_store"
+    },
+    {
+      "path": "assets/runs/rule_z_revision_decoder_luna_seed101_36x2/trials.sqlite",
+      "result": {
+        "status": "passed",
+        "validation": {
+          "case_count": 36,
+          "missing_trials": 0,
+          "planned_trials": 288,
+          "reproduced_trials": 288,
+          "run_count": 1,
+          "sqlite_integrity": "ok",
+          "surface_complete": true,
+          "trial_count": 288
+        }
+      },
+      "sha256": "62acca41d55c2abf5428c157b7f0044fc9b987304a6bd6c3607ccd6f2ffc61a0",
+      "validator": "validate_decoder_store"
+    }
+  ],
+  "provider_calls": 0,
+  "recovered_conditions": {
+    "rule_z_contract_perturbation_anthropic_seed29_30": {
+      "conditions": {
+        "B": {
+          "conflict_correct": 0,
+          "conflict_n": 6,
+          "correct": 8,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "D": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 30,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "O": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 30,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_contract_only_private_prose": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 30,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_factlocked": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 30,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_free_case_hint_no_sections": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 29,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_free_schema_prompt": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 29,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_generic_contract_private_prose": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 30,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_oracle_contract_private_prose": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 30,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_oracle_text": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 30,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_scrambled_contract_private_prose": {
+          "conflict_correct": 5,
+          "conflict_n": 6,
+          "correct": 24,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_self_contract_private_prose": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 30,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_wrong_contract_private_prose": {
+          "conflict_correct": 1,
+          "conflict_n": 6,
+          "correct": 7,
+          "n": 30,
+          "parse_ok": 30
+        }
+      },
+      "source": {
+        "path": "assets/runs/rule_z_contract_perturbation_anthropic_seed29_30/trials.sqlite",
+        "sha256": "b3e7c75716aaa1acf05e9afd344195ace91df27d29d8edf7d8d9e3753c9f634a"
+      }
+    },
+    "rule_z_free_prompt_ladder_anthropic_seed29_30": {
+      "conditions": {
+        "B": {
+          "conflict_correct": 0,
+          "conflict_n": 6,
+          "correct": 8,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "D": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 30,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "O": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 30,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_factlocked": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 30,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_free_case_hint": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 30,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_free_case_hint_no_sections": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 30,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_free_schema_prompt": {
+          "conflict_correct": 4,
+          "conflict_n": 6,
+          "correct": 26,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_oracle_text": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 30,
+          "n": 30,
+          "parse_ok": 30
+        }
+      },
+      "source": {
+        "path": "assets/runs/rule_z_free_prompt_ladder_anthropic_seed29_30/trials.sqlite",
+        "sha256": "457145f454455f3cb87fc8f55dd1c810e729e6352f3d4e7b6adfb1fe36edfc2b"
+      }
+    },
+    "rule_z_free_prompt_ladder_openai_seed29_30": {
+      "conditions": {
+        "B": {
+          "conflict_correct": 0,
+          "conflict_n": 6,
+          "correct": 16,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "D": {
+          "conflict_correct": 0,
+          "conflict_n": 6,
+          "correct": 22,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "O": {
+          "conflict_correct": 0,
+          "conflict_n": 6,
+          "correct": 22,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_factlocked": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 29,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_free_case_hint": {
+          "conflict_correct": 3,
+          "conflict_n": 6,
+          "correct": 27,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_free_case_hint_no_sections": {
+          "conflict_correct": 0,
+          "conflict_n": 6,
+          "correct": 22,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_free_schema_prompt": {
+          "conflict_correct": 3,
+          "conflict_n": 6,
+          "correct": 21,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_oracle_text": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 30,
+          "n": 30,
+          "parse_ok": 30
+        }
+      },
+      "source": {
+        "path": "assets/runs/rule_z_free_prompt_ladder_openai_seed29_30/trials.sqlite",
+        "sha256": "2e75ce5e3a0f9f7b42dfa440180e9f34efc50f69c1040e512893be04c7b35c0c"
+      }
+    },
+    "rule_z_iterative_repair_anthropic_seed29_30": {
+      "conditions": {
+        "B": {
+          "conflict_correct": 0,
+          "conflict_n": 6,
+          "correct": 8,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "D": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 30,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "O": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 30,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_factlocked": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 30,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_free_case_hint_no_sections": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 30,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_free_schema_prompt": {
+          "conflict_correct": 5,
+          "conflict_n": 6,
+          "correct": 27,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_free_schema_prompt_self_repair_no_sections": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 30,
+          "n": 30,
+          "parse_ok": 30
+        },
+        "T_oracle_text": {
+          "conflict_correct": 6,
+          "conflict_n": 6,
+          "correct": 30,
+          "n": 30,
+          "parse_ok": 30
+        }
+      },
+      "source": {
+        "path": "assets/runs/rule_z_iterative_repair_anthropic_seed29_30/trials.sqlite",
+        "sha256": "050f753a69a0c95ed2eb507d4dab6caf501994e40b2f924cfee33cc7ce036865"
+      }
+    }
+  },
+  "repair_pairing": {
+    "cases": 30,
+    "free_correct": 27,
+    "initial_equals_free_message": 0,
+    "initial_messages_observed": 30,
+    "limit": "Repair generated fresh drafts with structured source access; no receiver baseline on those same drafts.",
+    "repair_correct": 30,
+    "source": {
+      "path": "assets/runs/rule_z_iterative_repair_anthropic_seed29_30/trials.sqlite",
+      "sha256": "050f753a69a0c95ed2eb507d4dab6caf501994e40b2f924cfee33cc7ce036865"
+    }
+  },
+  "revision_field_diagnostics": {
+    "counts": {
+      "E_typed_neutral_joint": {
+        "active_rules_equals_entire_current_catalog_but_not_fired_active": 42,
+        "derivation_inexact": 83,
+        "endpoint_correct": 216,
+        "inexact:active_rules": 57,
+        "inexact:fired_priority_edges": 4,
+        "inexact:suppressed_rules": 70,
+        "nonempty_suppressed_without_any_fired_priority_edge": 55,
+        "rows": 216,
+        "same_conclusion_priority_but_empty_suppressed": 15,
+        "same_conclusion_priority_edge_rows": 18
+      },
+      "E_typed_strong_full_restate_joint": {
+        "active_rules_equals_entire_current_catalog_but_not_fired_active": 53,
+        "derivation_inexact": 118,
+        "endpoint_correct": 216,
+        "inexact:active_rules": 72,
+        "inexact:fired_priority_edges": 5,
+        "inexact:fired_rules": 5,
+        "inexact:suppressed_rules": 114,
+        "nonempty_suppressed_without_any_fired_priority_edge": 99,
+        "rows": 216,
+        "same_conclusion_priority_but_empty_suppressed": 15,
+        "same_conclusion_priority_edge_rows": 18
+      },
+      "E_typed_strong_joint": {
+        "active_rules_equals_entire_current_catalog_but_not_fired_active": 29,
+        "derivation_inexact": 112,
+        "endpoint_correct": 213,
+        "inexact:active_conclusions": 3,
+        "inexact:active_rules": 51,
+        "inexact:fired_priority_edges": 3,
+        "inexact:fired_rules": 5,
+        "inexact:suppressed_rules": 106,
+        "nonempty_suppressed_without_any_fired_priority_edge": 88,
+        "rows": 216,
+        "same_conclusion_priority_but_empty_suppressed": 18,
+        "same_conclusion_priority_edge_rows": 18
+      }
+    },
+    "limit": "Pattern localization only; no aliases accepted, no primary score or gate changed.",
+    "packets": {
+      "catalog_vs_fired_active": {
+        "case_hash": "6bd359644655fcbd89acdc7a",
+        "case_id": "ric_change__rrl_no_to_conflict__antecedent_rebind__h32__v00",
+        "condition": "E_typed_strong_full_restate_joint",
+        "expected": {
+          "active_conclusions": [
+            "eligible",
+            "not_eligible"
+          ],
+          "active_rules": [
+            "r_0744e0dce400_00",
+            "r_0744e0dce400_01"
+          ],
+          "fired_priority_edges": [],
+          "fired_rules": [
+            "r_0744e0dce400_00",
+            "r_0744e0dce400_01"
+          ],
+          "suppressed_rules": []
+        },
+        "prompt_sha256": "f057b54a1efc99b95afc7f1e15ea7f3d5ad4ff1b0d8304b98c11ac4366784625",
+        "raw_response_sha256": "f4448939fdee50a8c619eee4d314c507bf1feeb68ccaeb3e1a9b98f3bd1e9172",
+        "replicate": 0,
+        "reported": {
+          "active_conclusions": [
+            "eligible",
+            "not_eligible"
+          ],
+          "active_rules": [
+            "r_0744e0dce400_04",
+            "r_0744e0dce400_08",
+            "r_0744e0dce400_01",
+            "r_0744e0dce400_18",
+            "r_0744e0dce400_31",
+            "r_0744e0dce400_20",
+            "r_0744e0dce400_16",
+            "r_0744e0dce400_02",
+            "r_0744e0dce400_12",
+            "r_0744e0dce400_00",
+            "r_0744e0dce400_05",
+            "r_0744e0dce400_15",
+            "r_0744e0dce400_17",
+            "r_0744e0dce400_13",
+            "r_0744e0dce400_29",
+            "r_0744e0dce400_30",
+            "r_0744e0dce400_11",
+            "r_0744e0dce400_19",
+            "r_0744e0dce400_23",
+            "r_0744e0dce400_28",
+            "r_0744e0dce400_10",
+            "r_0744e0dce400_14",
+            "r_0744e0dce400_09",
+            "r_0744e0dce400_22",
+            "r_0744e0dce400_03",
+            "r_0744e0dce400_07",
+            "r_0744e0dce400_26",
+            "r_0744e0dce400_25",
+            "r_0744e0dce400_27",
+            "r_0744e0dce400_06",
+            "r_0744e0dce400_21",
+            "r_0744e0dce400_24"
+          ],
+          "fired_priority_edges": [],
+          "fired_rules": [
+            {
+              "conclusion": "not_eligible",
+              "id": "r_0744e0dce400_00",
+              "matched_facts": [
+                "p_0744e0dce400_00"
+              ]
+            },
+            {
+              "conclusion": "eligible",
+              "id": "r_0744e0dce400_01",
+              "matched_facts": [
+                "p_0744e0dce400_01"
+              ]
+            }
+          ],
+          "suppressed_rules": []
+        },
+        "revision": {
+          "changed_fields": [
+            "if"
+          ],
+          "from_version": "v1",
+          "mutation_family": "antecedent_rebind",
+          "new_rule": {
+            "id": "r_0744e0dce400_01",
+            "if": [
+              "p_0744e0dce400_01"
+            ],
+            "then": "eligible"
+          },
+          "old_rule": {
+            "id": "r_0744e0dce400_01",
+            "if": [
+              "p_0744e0dce400_02"
+            ],
+            "then": "eligible"
+          },
+          "operation": "replace_rule",
+          "to_version": "v2"
+        },
+        "selection": "first stored matching row, post-hoc diagnostic",
+        "stored_score": {
+          "answer": "conflict",
+          "answer_changed": true,
+          "answer_current": true,
+          "answer_old_distinct": false,
+          "case_class": "answer_changing",
+          "correct": false,
+          "current_surface_exact": true,
+          "derivation_exact": false,
+          "history_canonical_exact": true,
+          "history_content_complete": true,
+          "history_diagnostic_status": "canonical_exact",
+          "history_role_unidentified": false,
+          "history_semantic_role_complete": true,
+          "new_atom_current": true,
+          "old_atom_current": false,
+          "packet_exact": false,
+          "parse_ok": true,
+          "revision_uptake": true,
+          "schema_valid": true,
+          "strict_sender_legacy_leak": false
+        },
+        "trial_id": 5
+      },
+      "same_conclusion_suppression_omitted": {
+        "case_hash": "4d75f04ceb68d03d2b8fdd72",
+        "case_id": "ric_silent__yes_to_yes__priority_reversal__h32__v00",
+        "condition": "E_typed_strong_joint",
+        "expected": {
+          "active_conclusions": [
+            "eligible"
+          ],
+          "active_rules": [
+            "s_37d64ce99f00_00",
+            "s_37d64ce99f00_02"
+          ],
+          "fired_priority_edges": [
+            [
+              "s_37d64ce99f00_02",
+              "s_37d64ce99f00_01"
+            ]
+          ],
+          "fired_rules": [
+            "s_37d64ce99f00_00",
+            "s_37d64ce99f00_01",
+            "s_37d64ce99f00_02"
+          ],
+          "suppressed_rules": [
+            "s_37d64ce99f00_01"
+          ]
+        },
+        "prompt_sha256": "5c6d0f84c9622b6153fc7c6a33015c5a3f1edd24372a7be08637b3ac5580b12d",
+        "raw_response_sha256": "7b4c1ab1f54c92fd6fd138d1eff018e77510a30437b215b3ecb8d2a1ed69b308",
+        "replicate": 0,
+        "reported": {
+          "active_conclusions": [
+            "eligible"
+          ],
+          "active_rules": [
+            "s_37d64ce99f00_02",
+            "s_37d64ce99f00_01",
+            "s_37d64ce99f00_00"
+          ],
+          "fired_priority_edges": [
+            [
+              "s_37d64ce99f00_02",
+              "s_37d64ce99f00_01"
+            ]
+          ],
+          "fired_rules": [
+            "s_37d64ce99f00_02",
+            "s_37d64ce99f00_01",
+            "s_37d64ce99f00_00"
+          ],
+          "suppressed_rules": []
+        },
+        "revision": {
+          "from_version": "v1",
+          "mutation_family": "priority_reversal",
+          "new_edge": [
+            "s_37d64ce99f00_02",
+            "s_37d64ce99f00_01"
+          ],
+          "old_edge": [
+            "s_37d64ce99f00_01",
+            "s_37d64ce99f00_02"
+          ],
+          "operation": "replace_priority_edge",
+          "to_version": "v2"
+        },
+        "selection": "first stored matching row, post-hoc diagnostic",
+        "stored_score": {
+          "answer": "yes",
+          "answer_changed": false,
+          "answer_current": true,
+          "answer_old_distinct": false,
+          "case_class": "answer_preserving",
+          "correct": false,
+          "current_surface_exact": true,
+          "derivation_exact": false,
+          "history_canonical_exact": true,
+          "history_content_complete": true,
+          "history_diagnostic_status": "canonical_exact",
+          "history_role_unidentified": false,
+          "history_semantic_role_complete": true,
+          "new_atom_current": true,
+          "old_atom_current": false,
+          "packet_exact": false,
+          "parse_ok": true,
+          "revision_uptake": true,
+          "schema_valid": true,
+          "strict_sender_legacy_leak": false
+        },
+        "trial_id": 48
+      },
+      "suppression_without_fired_priority": {
+        "case_hash": "7783783986aeb16c687d17a8",
+        "case_id": "ric_change__rrl_no_to_yes__rule_retirement_replacement__h16__v00",
+        "condition": "E_typed_neutral_joint",
+        "expected": {
+          "active_conclusions": [
+            "eligible"
+          ],
+          "active_rules": [
+            "r_e200ccc17c00_16"
+          ],
+          "fired_priority_edges": [],
+          "fired_rules": [
+            "r_e200ccc17c00_16"
+          ],
+          "suppressed_rules": []
+        },
+        "prompt_sha256": "43d71074d454185e094f5dfccdb9fae08e94a96a31fb137ca4cfe3d812ebe3d5",
+        "raw_response_sha256": "161c2a11cbee822c6e50809da66c48eeaf969584268a2b9fcf33748338276838",
+        "replicate": 1,
+        "reported": {
+          "active_conclusions": [
+            "eligible"
+          ],
+          "active_rules": [
+            "r_e200ccc17c00_07",
+            "r_e200ccc17c00_04",
+            "r_e200ccc17c00_03",
+            "r_e200ccc17c00_11",
+            "r_e200ccc17c00_06",
+            "r_e200ccc17c00_10",
+            "r_e200ccc17c00_02",
+            "r_e200ccc17c00_05",
+            "r_e200ccc17c00_09",
+            "r_e200ccc17c00_12",
+            "r_e200ccc17c00_08",
+            "r_e200ccc17c00_14",
+            "r_e200ccc17c00_13",
+            "r_e200ccc17c00_01",
+            "r_e200ccc17c00_15",
+            "r_e200ccc17c00_16"
+          ],
+          "fired_priority_edges": [],
+          "fired_rules": [
+            "r_e200ccc17c00_16"
+          ],
+          "suppressed_rules": [
+            "r_e200ccc17c00_00"
+          ]
+        },
+        "revision": {
+          "from_version": "v1",
+          "mutation_family": "rule_retirement_replacement",
+          "operation": "retire_and_replace_rule",
+          "replacement_rule": {
+            "id": "r_e200ccc17c00_16",
+            "if": [
+              "p_e200ccc17c00_00"
+            ],
+            "then": "eligible"
+          },
+          "retired_rule": {
+            "id": "r_e200ccc17c00_00",
+            "if": [
+              "p_e200ccc17c00_00"
+            ],
+            "then": "not_eligible"
+          },
+          "to_version": "v2"
+        },
+        "selection": "first stored matching row, post-hoc diagnostic",
+        "stored_score": {
+          "answer": "yes",
+          "answer_changed": true,
+          "answer_current": true,
+          "answer_old_distinct": false,
+          "case_class": "answer_changing",
+          "correct": false,
+          "current_surface_exact": true,
+          "derivation_exact": false,
+          "history_canonical_exact": true,
+          "history_content_complete": true,
+          "history_diagnostic_status": "canonical_exact",
+          "history_role_unidentified": false,
+          "history_semantic_role_complete": true,
+          "new_atom_current": true,
+          "old_atom_current": false,
+          "packet_exact": false,
+          "parse_ok": true,
+          "revision_uptake": true,
+          "schema_valid": true,
+          "strict_sender_legacy_leak": false
+        },
+        "trial_id": 6
+      }
+    },
+    "patterns": {
+      "E_typed_neutral_joint": {
+        "active_rules": 13,
+        "fired_priority_edges+suppressed_rules+active_rules": 4,
+        "none": 133,
+        "suppressed_rules": 26,
+        "suppressed_rules+active_rules": 40
+      },
+      "E_typed_strong_full_restate_joint": {
+        "active_rules": 3,
+        "fired_priority_edges+suppressed_rules+active_rules": 5,
+        "fired_rules+active_rules": 1,
+        "fired_rules+suppressed_rules": 1,
+        "fired_rules+suppressed_rules+active_rules": 3,
+        "none": 98,
+        "suppressed_rules": 45,
+        "suppressed_rules+active_rules": 60
+      },
+      "E_typed_strong_joint": {
+        "active_rules": 4,
+        "fired_priority_edges+suppressed_rules+active_rules": 2,
+        "fired_rules+active_rules": 1,
+        "fired_rules+active_rules+active_conclusions": 1,
+        "fired_rules+fired_priority_edges+suppressed_rules+active_rules+active_conclusions": 1,
+        "fired_rules+suppressed_rules": 1,
+        "fired_rules+suppressed_rules+active_rules+active_conclusions": 1,
+        "none": 104,
+        "suppressed_rules": 60,
+        "suppressed_rules+active_rules": 41
+      }
+    },
+    "source": {
+      "path": "assets/runs/rule_z_revision_interface_luna_seed101_108x2/trials.sqlite",
+      "sha256": "42f87904d857cbcfc1da06434566f9e7c7e54fa87df6a324206662e440320c70"
+    }
+  },
+  "status": "posthoc_synthesis_not_preregistered",
+  "world_overlap": {
+    "limit": "Disjoint case hashes are not proof of disjoint logical worlds.",
+    "matches": [
+      {
+        "seed67_pair": "xcf_pair_0001",
+        "seed68_pair": "xcf_pair_0009",
+        "world_intervention_sha256": "cce58491f170e99e42fb377915270a3064d43f725e322f7ab428664a77582737"
+      }
+    ],
+    "method": "Undo this generator's name substitution, not general graph isomorphism.\n\n    _rename_candidate preserves available-predicate and rule list order. Bind\n    identifiers to those slots, retaining facts, topology, and intervention.\n    ",
+    "sources": [
+      {
+        "path": "assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/trials.sqlite",
+        "sha256": "6213fb1cb99cbac2bb25b1eeab52060bbb411fe3a00b723c33bbd47e1eea23a2"
+      },
+      {
+        "path": "assets/runs/rule_z_extraction_intervention_luna_seed68_16x2/trials.sqlite",
+        "sha256": "f1cfb931367d81d643ebb4fac748cf303ec1d280fc482b5f1a8a48a8d9fc89e3"
+      }
+    ],
+    "surfaces": {
+      "rule_z_extraction_intervention_luna_seed67_4x2": {
+        "xcf_pair_0000": "b81557c4fcc9183bb037204425e9250450fc2a87c5cde52e44a02a0ae1c8ef53",
+        "xcf_pair_0001": "cce58491f170e99e42fb377915270a3064d43f725e322f7ab428664a77582737",
+        "xcf_pair_0002": "67a71cd1331a0713cf42c1de5d8e26531291e58397f35526c0029c4a5dde9988",
+        "xcf_pair_0003": "16efb6e398a6a1f6c5d009a3ab24ec8e6483cbb5c11f8489eba6f21d508857cb"
+      },
+      "rule_z_extraction_intervention_luna_seed68_16x2": {
+        "xcf_pair_0000": "1172982d1309bf9f7e47b57a72c28102e286688b55487c45bf346ae477f9c4c1",
+        "xcf_pair_0001": "10788fd2d2f455d42c72379ae6a2f19be49ed0a3dd80707bb89daf40bad90a7e",
+        "xcf_pair_0002": "cc401afc773ec26e5dcd6bbdd91018c7cf0f6d7b055f032d989e4e69f7499db8",
+        "xcf_pair_0003": "43169b60653acd895766a0d973ec97a911a28501ee6037ef519243d1ddff1f95",
+        "xcf_pair_0004": "87a2aa346ec55542bba169d842e51b443db5130634b835aa66f90e69d54e124b",
+        "xcf_pair_0005": "68c4e583c08c7ea3a89aa705bc1184f502cea1adfbd5831c537ebf017020bf48",
+        "xcf_pair_0006": "e03e15779f6e4c9d11caac82dab759bc326d59254b129bf600ed60b591fd43b3",
+        "xcf_pair_0007": "fb700e517b6b43fe5f8df09a62920cbcef174436c83587fc53d0aa0ed6653001",
+        "xcf_pair_0008": "cb87f331d4ac538ff2e6b1dddad024599543d2f9dfbccc1fdc8a58809ecdd7b9",
+        "xcf_pair_0009": "cce58491f170e99e42fb377915270a3064d43f725e322f7ab428664a77582737",
+        "xcf_pair_0010": "6dc6fb7e60984e7b640054e713f20464012009954a050678b2440311233be5ef",
+        "xcf_pair_0011": "9d8a09b40296e5275486a1a6d6173a8335b6898996440fc7df99c250b4727bda",
+        "xcf_pair_0012": "840f6ddd56efc8cf784b79282d7bb3f7db815d37ff3a2313d93bf1d58d4162d5",
+        "xcf_pair_0013": "e28062ffafd95a98867d1ba696b8f56fbe040ee929c395f405eaa397b7246ecb",
+        "xcf_pair_0014": "a939efa8ee27eb7590f8ecb538887371fb181fd72b7cd67773370bfae6d2e6e5",
+        "xcf_pair_0015": "27ee8ed8f09fd2a19b981ea33e2c31cb7c7b3a583fe7b0365dd208eb0ff86f64"
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "validated_at_utc": "2026-09-26T17:38:19.011335+00:00",
+  "run_identity": "592e63c1f2a20a268d73870aa8783afc6a2dd7138128c16b394fa2a94f310baa",
+  "database_sha256": "3d2ff193024e1de4415441755ff17ef99887b7752cc52031bdf840824b5baa90",
+  "live_calls": 108,
+  "revalidation_new_calls": [
+    0,
+    0
+  ],
+  "revalidated_existing_trials_each": 108,
+  "focused_tests_passed": 134,
+  "subtests_passed": 2,
+  "test_files": [
+    "tests/test_expression_tomography_carrier_calibration.py",
+    "tests/test_expression_tomography_providers.py",
+    "tests/test_expression_tomography_store.py",
+    "tests/test_expression_tomography_architecture.py",
+    "tests/test_expression_tomography_text_boundary.py",
+    "tests/test_expression_tomography_text_boundary_targets.py"
+  ],
+  "source_files_verified_unchanged": 21,
+  "report_files_verified": 28,
+  "post_hoc_audit_exact_replay": true,
+  "audit_ruff_check": "passed",
+  "audit_ruff_format_check": "passed",
+  "unresolved_request_journals": 0,
+  "reused_credential_material_in_generated_bundle": false,
+  "old_scores_modified": false
+}
