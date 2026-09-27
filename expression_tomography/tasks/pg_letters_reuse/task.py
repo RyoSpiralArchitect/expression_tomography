@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[2]
 VERSION = "pg_letters_reuse.live.v1"
 CONDITIONS = ("original", "frozen_relay")
 READERS = ("mistral", "claude")
+PARENT_COMPATIBILITY_SHA256 = "95b43028dbe1cd9baef0a121a9d37fc289fd770833e9f7341784490073992dde"
 
 
 def implementation():
@@ -38,7 +39,8 @@ def make_plan(parent, protocol, mock=False):
         raise ValueError("This protocol has a fixed 24-call cap")
     if not mock and old["execution_sha256"] != key["parent_execution_sha256"]:
         raise ValueError("Unapproved parent execution")
-    replay = parent_live.run(parent / "execution", old["execution_sha256"], parent / "journal")
+    replay = parent_live.run(parent / "execution", old["execution_sha256"], parent / "journal",
+                             expected_compatibility_sha256=PARENT_COMPATIBILITY_SHA256)
     if old["status"] != "complete" or replay["records"] != old["records"] or replay["new_calls"]:
         raise ValueError("Parent replay mismatch or incomplete parent")
     old_plan = read(parent / "execution/plan.json")
