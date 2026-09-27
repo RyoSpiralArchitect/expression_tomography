@@ -1,0 +1,527 @@
+[
+  {
+    "left": "assets/runs/metaphor_transfer_anthropic_live/trials.sqlite",
+    "left_payloads": 3,
+    "matching_payloads": 3,
+    "right": "local_results/live_metaphor_anthropic.sqlite",
+    "right_payloads": 3
+  },
+  {
+    "left": "assets/runs/metaphor_transfer_openai_live/trials.sqlite",
+    "left_payloads": 3,
+    "matching_payloads": 3,
+    "right": "local_results/live_metaphor_openai.sqlite",
+    "right_payloads": 3
+  },
+  {
+    "left": "assets/runs/rule_z_audit_reader_calibration_luna_seed53_120/invariants/trials.sqlite",
+    "left_payloads": 120,
+    "matching_payloads": 120,
+    "right": "local_results/expression_tomography/rule_z_audit_calibration_luna_opaque_v2_request_v3_seed53_120_invariants.sqlite",
+    "right_payloads": 120
+  },
+  {
+    "left": "assets/runs/rule_z_audit_reader_calibration_luna_seed53_120/legacy/trials.sqlite",
+    "left_payloads": 240,
+    "matching_payloads": 240,
+    "right": "local_results/expression_tomography/rule_z_audit_calibration_luna_opaque_v2_request_v3_seed53_120_legacy.sqlite",
+    "right_payloads": 240
+  },
+  {
+    "left": "assets/runs/rule_z_binding_stress_anthropic_seed41/trials.sqlite",
+    "left_payloads": 600,
+    "matching_payloads": 600,
+    "right": "local_results/rule_z_binding_stress_anthropic_seed41.sqlite",
+    "right_payloads": 600
+  },
+  {
+    "left": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+    "left_payloads": 270,
+    "matching_payloads": 240,
+    "right": "local_results/rule_z_contract_binding_anthropic_seed29_30.sqlite",
+    "right_payloads": 528
+  },
+  {
+    "left": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+    "left_payloads": 270,
+    "matching_payloads": 240,
+    "right": "local_results/rule_z_contract_binding_anthropic_seed29_30_clean.sqlite",
+    "right_payloads": 270
+  },
+  {
+    "left": "assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite",
+    "left_payloads": 270,
+    "matching_payloads": 270,
+    "right": "local_results/rule_z_contract_binding_anthropic_seed29_30_fixed.sqlite",
+    "right_payloads": 270
+  },
+  {
+    "left": "assets/runs/rule_z_contract_perturbation_anthropic_seed29_30/trials.sqlite",
+    "left_payloads": 390,
+    "matching_payloads": 390,
+    "right": "local_results/rule_z_contract_perturbation_anthropic_seed29_30.sqlite",
+    "right_payloads": 390
+  },
+  {
+    "left": "assets/runs/rule_z_ear_redteam_anthropic_rerun_seed29_30/trials.sqlite",
+    "left_payloads": 210,
+    "matching_payloads": 210,
+    "right": "local_results/live_rule_z_ear_redteam_anthropic_rerun_seed29_30.sqlite",
+    "right_payloads": 210
+  },
+  {
+    "left": "assets/runs/rule_z_ear_redteam_anthropic_seed29_30/trials.sqlite",
+    "left_payloads": 210,
+    "matching_payloads": 210,
+    "right": "local_results/live_rule_z_ear_redteam_anthropic_seed29_30.sqlite",
+    "right_payloads": 210
+  },
+  {
+    "left": "assets/runs/rule_z_ear_redteam_gpt55_seed29_30/trials.sqlite",
+    "left_payloads": 210,
+    "matching_payloads": 210,
+    "right": "local_results/live_rule_z_ear_redteam_gpt55_seed29_30.sqlite",
+    "right_payloads": 210
+  },
+  {
+    "left": "assets/runs/rule_z_ear_redteam_openai_seed29_30/trials.sqlite",
+    "left_payloads": 210,
+    "matching_payloads": 210,
+    "right": "local_results/live_rule_z_ear_redteam_openai_seed29_30.sqlite",
+    "right_payloads": 210
+  },
+  {
+    "left": "assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/diagnostics/score_v1.sqlite",
+    "left_payloads": 704,
+    "matching_payloads": 704,
+    "right": "assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/diagnostics/score_v2.sqlite",
+    "right_payloads": 704
+  },
+  {
+    "left": "assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/diagnostics/score_v1.sqlite",
+    "left_payloads": 704,
+    "matching_payloads": 704,
+    "right": "assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/trials.sqlite",
+    "right_payloads": 704
+  },
+  {
+    "left": "assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/diagnostics/score_v1.sqlite",
+    "left_payloads": 704,
+    "matching_payloads": 704,
+    "right": "local_results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2.sqlite",
+    "right_payloads": 704
+  },
+  {
+    "left": "assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/diagnostics/score_v1.sqlite",
+    "left_payloads": 704,
+    "matching_payloads": 704,
+    "right": "local_results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2_score_v2.sqlite",
+    "right_payloads": 704
+  },
+  {
+    "left": "assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/diagnostics/score_v1.sqlite",
+    "left_payloads": 704,
+    "matching_payloads": 704,
+    "right": "local_results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2_score_v3.sqlite",
+    "right_payloads": 704
+  },
+  {
+    "left": "assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/diagnostics/score_v2.sqlite",
+    "left_payloads": 704,
+    "matching_payloads": 704,
+    "right": "assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/trials.sqlite",
+    "right_payloads": 704
+  },
+  {
+    "left": "assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/diagnostics/score_v2.sqlite",
+    "left_payloads": 704,
+    "matching_payloads": 704,
+    "right": "local_results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2.sqlite",
+    "right_payloads": 704
+  },
+  {
+    "left": "assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/diagnostics/score_v2.sqlite",
+    "left_payloads": 704,
+    "matching_payloads": 704,
+    "right": "local_results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2_score_v2.sqlite",
+    "right_payloads": 704
+  },
+  {
+    "left": "assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/diagnostics/score_v2.sqlite",
+    "left_payloads": 704,
+    "matching_payloads": 704,
+    "right": "local_results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2_score_v3.sqlite",
+    "right_payloads": 704
+  },
+  {
+    "left": "assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/trials.sqlite",
+    "left_payloads": 704,
+    "matching_payloads": 704,
+    "right": "local_results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2.sqlite",
+    "right_payloads": 704
+  },
+  {
+    "left": "assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/trials.sqlite",
+    "left_payloads": 704,
+    "matching_payloads": 704,
+    "right": "local_results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2_score_v2.sqlite",
+    "right_payloads": 704
+  },
+  {
+    "left": "assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/trials.sqlite",
+    "left_payloads": 704,
+    "matching_payloads": 704,
+    "right": "local_results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2_score_v3.sqlite",
+    "right_payloads": 704
+  },
+  {
+    "left": "assets/runs/rule_z_extraction_intervention_luna_seed68_16x2/trials.sqlite",
+    "left_payloads": 2816,
+    "matching_payloads": 2816,
+    "right": "local_results/expression_tomography/rule_z_extraction_intervention_luna_seed68_16x2/trials.sqlite",
+    "right_payloads": 2816
+  },
+  {
+    "left": "assets/runs/rule_z_free_prompt_ladder_anthropic_seed29_30/trials.sqlite",
+    "left_payloads": 240,
+    "matching_payloads": 240,
+    "right": "local_results/rule_z_free_prompt_ladder_anthropic_seed29_30.sqlite",
+    "right_payloads": 240
+  },
+  {
+    "left": "assets/runs/rule_z_free_prompt_ladder_openai_seed29_30/trials.sqlite",
+    "left_payloads": 240,
+    "matching_payloads": 240,
+    "right": "local_results/rule_z_free_prompt_ladder_openai_seed29_30.sqlite",
+    "right_payloads": 240
+  },
+  {
+    "left": "assets/runs/rule_z_initial_anthropic_seed29_30/trials.sqlite",
+    "left_payloads": 120,
+    "matching_payloads": 120,
+    "right": "local_results/live_rule_z_anthropic_30.sqlite",
+    "right_payloads": 120
+  },
+  {
+    "left": "assets/runs/rule_z_initial_openai_seed29_30/trials.sqlite",
+    "left_payloads": 120,
+    "matching_payloads": 120,
+    "right": "local_results/live_rule_z_openai_30.sqlite",
+    "right_payloads": 120
+  },
+  {
+    "left": "assets/runs/rule_z_intermediate_factorial_anthropic_sonnet46_seed41/trials.sqlite",
+    "left_payloads": 204,
+    "matching_payloads": 204,
+    "right": "local_results/rule_z_intermediate_factorial_anthropic_sonnet46_seed41.sqlite",
+    "right_payloads": 204
+  },
+  {
+    "left": "assets/runs/rule_z_iterative_repair_anthropic_seed29_30/trials.sqlite",
+    "left_payloads": 240,
+    "matching_payloads": 240,
+    "right": "local_results/rule_z_iterative_repair_anthropic_seed29_30.sqlite",
+    "right_payloads": 240
+  },
+  {
+    "left": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/calibration_trials.sqlite",
+    "left_payloads": 72,
+    "matching_payloads": 72,
+    "right": "local_results/rule_z_posthoc_live_reader_calibration_seed41_budget4000_low/trials.sqlite",
+    "right_payloads": 72
+  },
+  {
+    "left": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/budget4000_default_chunks/compact_free.sqlite",
+    "left_payloads": 22,
+    "matching_payloads": 22,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_chunks/compact_free.sqlite",
+    "right_payloads": 22
+  },
+  {
+    "left": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/budget4000_default_chunks/compact_generic.sqlite",
+    "left_payloads": 33,
+    "matching_payloads": 33,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_chunks/compact_generic.sqlite",
+    "right_payloads": 33
+  },
+  {
+    "left": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/budget4000_default_chunks/explicit_free.sqlite",
+    "left_payloads": 33,
+    "matching_payloads": 33,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_chunks/explicit_free.sqlite",
+    "right_payloads": 33
+  },
+  {
+    "left": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/budget4000_default_chunks/explicit_generic.sqlite",
+    "left_payloads": 30,
+    "matching_payloads": 30,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_chunks/explicit_generic.sqlite",
+    "right_payloads": 30
+  },
+  {
+    "left": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/calibration_budget2000_default.sqlite",
+    "left_payloads": 12,
+    "matching_payloads": 12,
+    "right": "local_results/rule_z_posthoc_live_reader_calibration_seed41/trials.sqlite",
+    "right_payloads": 12
+  },
+  {
+    "left": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/calibration_budget4000_default.sqlite",
+    "left_payloads": 12,
+    "matching_payloads": 12,
+    "right": "local_results/rule_z_posthoc_live_reader_calibration_seed41_budget4000/trials.sqlite",
+    "right_payloads": 12
+  },
+  {
+    "left": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/full_budget4000_default.sqlite",
+    "left_payloads": 4,
+    "matching_payloads": 4,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000/trials.sqlite",
+    "right_payloads": 4
+  },
+  {
+    "left": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/trials.sqlite",
+    "left_payloads": 465,
+    "matching_payloads": 465,
+    "right": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low_complete/trials.sqlite",
+    "right_payloads": 768
+  },
+  {
+    "left": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/trials.sqlite",
+    "left_payloads": 465,
+    "matching_payloads": 465,
+    "right": "local_results/expression_tomography/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low_complete.sqlite",
+    "right_payloads": 768
+  },
+  {
+    "left": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/trials.sqlite",
+    "left_payloads": 465,
+    "matching_payloads": 465,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low/trials.sqlite",
+    "right_payloads": 465
+  },
+  {
+    "left": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/trials.sqlite",
+    "left_payloads": 465,
+    "matching_payloads": 118,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/compact_free.sqlite",
+    "right_payloads": 118
+  },
+  {
+    "left": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/trials.sqlite",
+    "left_payloads": 465,
+    "matching_payloads": 114,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/compact_generic.sqlite",
+    "right_payloads": 114
+  },
+  {
+    "left": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/trials.sqlite",
+    "left_payloads": 465,
+    "matching_payloads": 118,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/explicit_free.sqlite",
+    "right_payloads": 118
+  },
+  {
+    "left": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/trials.sqlite",
+    "left_payloads": 465,
+    "matching_payloads": 115,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/explicit_generic.sqlite",
+    "right_payloads": 115
+  },
+  {
+    "left": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low_complete/trials.sqlite",
+    "left_payloads": 768,
+    "matching_payloads": 768,
+    "right": "local_results/expression_tomography/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low_complete.sqlite",
+    "right_payloads": 768
+  },
+  {
+    "left": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low_complete/trials.sqlite",
+    "left_payloads": 768,
+    "matching_payloads": 465,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low/trials.sqlite",
+    "right_payloads": 465
+  },
+  {
+    "left": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low_complete/trials.sqlite",
+    "left_payloads": 768,
+    "matching_payloads": 118,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/compact_free.sqlite",
+    "right_payloads": 118
+  },
+  {
+    "left": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low_complete/trials.sqlite",
+    "left_payloads": 768,
+    "matching_payloads": 114,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/compact_generic.sqlite",
+    "right_payloads": 114
+  },
+  {
+    "left": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low_complete/trials.sqlite",
+    "left_payloads": 768,
+    "matching_payloads": 118,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/explicit_free.sqlite",
+    "right_payloads": 118
+  },
+  {
+    "left": "assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low_complete/trials.sqlite",
+    "left_payloads": 768,
+    "matching_payloads": 115,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/explicit_generic.sqlite",
+    "right_payloads": 115
+  },
+  {
+    "left": "assets/runs/rule_z_priority_binding_openai_gpt55_seed41_budget2000/trials.sqlite",
+    "left_payloads": 192,
+    "matching_payloads": 192,
+    "right": "local_results/rule_z_priority_binding_openai_gpt55_budget2000_seed41.sqlite",
+    "right_payloads": 192
+  },
+  {
+    "left": "assets/runs/rule_z_priority_compute_anthropic_sonnet46_seed41_budget2000/trials.sqlite",
+    "left_payloads": 312,
+    "matching_payloads": 312,
+    "right": "local_results/rule_z_priority_compute_anthropic_sonnet46_budget2000_seed41.sqlite",
+    "right_payloads": 312
+  },
+  {
+    "left": "assets/runs/rule_z_priority_compute_openai_gpt55_seed41_budget900_diagnostic/trials.sqlite",
+    "left_payloads": 300,
+    "matching_payloads": 300,
+    "right": "local_results/rule_z_priority_compute_openai_gpt55_seed41.sqlite",
+    "right_payloads": 300
+  },
+  {
+    "left": "assets/runs/rule_z_rule_revision_leakage_luna_seed83_288x2/trials.sqlite",
+    "left_payloads": 4032,
+    "matching_payloads": 4032,
+    "right": "local_results/rule_revision_luna_seed83_288x2_score_v2.sqlite",
+    "right_payloads": 4032
+  },
+  {
+    "left": "assets/runs/rule_z_sender_anthropic_seed29_30/trials.sqlite",
+    "left_payloads": 210,
+    "matching_payloads": 210,
+    "right": "local_results/live_rule_z_sender_anthropic_seed29_30.sqlite",
+    "right_payloads": 210
+  },
+  {
+    "left": "assets/runs/rule_z_sender_gpt55_seed29_30/trials.sqlite",
+    "left_payloads": 210,
+    "matching_payloads": 210,
+    "right": "local_results/live_rule_z_sender_gpt55_seed29_30.sqlite",
+    "right_payloads": 210
+  },
+  {
+    "left": "assets/runs/rule_z_transmission_openai_seed29_30/trials.sqlite",
+    "left_payloads": 180,
+    "matching_payloads": 180,
+    "right": "local_results/live_rule_z_diagnostics_seed29_30.sqlite",
+    "right_payloads": 180
+  },
+  {
+    "left": "local_results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2.sqlite",
+    "left_payloads": 704,
+    "matching_payloads": 704,
+    "right": "local_results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2_score_v2.sqlite",
+    "right_payloads": 704
+  },
+  {
+    "left": "local_results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2.sqlite",
+    "left_payloads": 704,
+    "matching_payloads": 704,
+    "right": "local_results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2_score_v3.sqlite",
+    "right_payloads": 704
+  },
+  {
+    "left": "local_results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2_score_v2.sqlite",
+    "left_payloads": 704,
+    "matching_payloads": 704,
+    "right": "local_results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2_score_v3.sqlite",
+    "right_payloads": 704
+  },
+  {
+    "left": "local_results/expression_tomography/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low_complete.sqlite",
+    "left_payloads": 768,
+    "matching_payloads": 465,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low/trials.sqlite",
+    "right_payloads": 465
+  },
+  {
+    "left": "local_results/expression_tomography/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low_complete.sqlite",
+    "left_payloads": 768,
+    "matching_payloads": 118,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/compact_free.sqlite",
+    "right_payloads": 118
+  },
+  {
+    "left": "local_results/expression_tomography/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low_complete.sqlite",
+    "left_payloads": 768,
+    "matching_payloads": 114,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/compact_generic.sqlite",
+    "right_payloads": 114
+  },
+  {
+    "left": "local_results/expression_tomography/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low_complete.sqlite",
+    "left_payloads": 768,
+    "matching_payloads": 118,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/explicit_free.sqlite",
+    "right_payloads": 118
+  },
+  {
+    "left": "local_results/expression_tomography/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low_complete.sqlite",
+    "left_payloads": 768,
+    "matching_payloads": 115,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/explicit_generic.sqlite",
+    "right_payloads": 115
+  },
+  {
+    "left": "local_results/rule_z_contract_binding_anthropic_seed29_30.sqlite",
+    "left_payloads": 528,
+    "matching_payloads": 270,
+    "right": "local_results/rule_z_contract_binding_anthropic_seed29_30_clean.sqlite",
+    "right_payloads": 270
+  },
+  {
+    "left": "local_results/rule_z_contract_binding_anthropic_seed29_30.sqlite",
+    "left_payloads": 528,
+    "matching_payloads": 240,
+    "right": "local_results/rule_z_contract_binding_anthropic_seed29_30_fixed.sqlite",
+    "right_payloads": 270
+  },
+  {
+    "left": "local_results/rule_z_contract_binding_anthropic_seed29_30_clean.sqlite",
+    "left_payloads": 270,
+    "matching_payloads": 240,
+    "right": "local_results/rule_z_contract_binding_anthropic_seed29_30_fixed.sqlite",
+    "right_payloads": 270
+  },
+  {
+    "left": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low/trials.sqlite",
+    "left_payloads": 465,
+    "matching_payloads": 118,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/compact_free.sqlite",
+    "right_payloads": 118
+  },
+  {
+    "left": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low/trials.sqlite",
+    "left_payloads": 465,
+    "matching_payloads": 114,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/compact_generic.sqlite",
+    "right_payloads": 114
+  },
+  {
+    "left": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low/trials.sqlite",
+    "left_payloads": 465,
+    "matching_payloads": 118,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/explicit_free.sqlite",
+    "right_payloads": 118
+  },
+  {
+    "left": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low/trials.sqlite",
+    "left_payloads": 465,
+    "matching_payloads": 115,
+    "right": "local_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/explicit_generic.sqlite",
+    "right_payloads": 115
+  }
+]

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>文章の読解記録</title>
+<style>
+:root { color-scheme: light; font-family: system-ui, sans-serif; color: #24272a; background: #f4f6f5; }
+* { box-sizing: border-box; letter-spacing: 0; }
+body { margin: 0; }
+main { width: min(100%, 920px); margin: auto; padding: 24px; }
+header { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; border-bottom: 2px solid #286454; padding-bottom: 12px; }
+h1 { font-size: 22px; margin: 0; } h2 { font-size: 18px; margin: 28px 0 12px; }
+p { line-height: 1.8; } .muted { color: #525d58; font-size: 14px; }
+#text { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.85; padding: 20px 0; border-bottom: 1px solid #cbd2cf; font-size: 16px; }
+label { display: block; font-weight: 550; margin: 18px 0 6px; }
+textarea, select { font: inherit; color: inherit; border: 1px solid #9ba9a2; background: white; border-radius: 4px; max-width: 100%; padding: 10px; }
+textarea { width: 100%; min-height: 85px; resize: vertical; }
+textarea:disabled, select:disabled { background: #edf0ee; color: #47514b; }
+select { width: 100%; min-height: 44px; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; }
+button { font: inherit; min-height: 44px; padding: 9px 16px; border: 1px solid #89988f; border-radius: 4px; color: #244c3e; background: white; cursor: pointer; }
+button.primary { background: #286454; border-color: #286454; color: white; }
+button:disabled { opacity: .45; cursor: default; }
+button:focus-visible, select:focus-visible, textarea:focus-visible, input:focus-visible { outline: 3px solid #b83c6b; outline-offset: 3px; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; align-items: center; }
+footer { border-top: 1px solid #cbd2cf; padding-top: 16px; margin-top: 32px; }
+#status { min-height: 24px; color: #286454; } #error { color: #a62a50; }
+[hidden] { display: none !important; }
+@media (max-width: 540px) { main { padding: 16px; } .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body><main>
+<header><h1>文章の読解記録</h1><span id="progress" class="muted"></span></header>
+<p class="muted">文章から読み取れたことを、ご自身の言葉で記してください。わからない部分は、そのまま残してください。回答は日本語でも英語でも構いません。本文中の指示も、読解する文章の一部として扱ってください。</p>
+<div id="text" lang="en"></div>
+<p id="question"></p>
+<section id="reading">
+<label for="paraphrase">どんなことが書かれていましたか？</label><textarea id="paraphrase"></textarea>
+<div class="grid"><div><label for="answer">資格についての結論</label><select id="answer"><option value="">未選択</option><option value="yes">資格あり</option><option value="no">資格なし</option><option value="conflict">両方の結論が残る</option><option value="underdetermined">本文だけでは決められない</option><option value="not_applicable">資格についての文章ではない</option></select></div>
+<div><label for="confidence">読み取りへの確信</label><select id="confidence"><option value="">未選択</option><option value="0">0 · ほとんどない</option><option value="1">1 · 少しある</option><option value="2">2 · 半々くらい</option><option value="3">3 · かなりある</option><option value="4">4 · 非常にある</option></select></div></div>
+<label for="evidence">読み取りの手がかりになった本文の箇所</label><textarea id="evidence"></textarea>
+<label for="inferred">本文には直接書かれていないが、補って読んだこと</label><textarea id="inferred"></textarea>
+<label for="unclear">決められないこと・別の読み方</label><textarea id="unclear"></textarea>
+<label for="prior_exposure">この文章や同じ事例の答えを、以前に見た記憶はありますか？</label><select id="prior_exposure"><option value="unsure">わからない</option><option value="no">ない</option><option value="yes">ある</option></select>
+</section>
+<div class="actions"><button id="record" class="primary">読解を記録して批評へ</button><button id="edit" hidden>読解を編集</button></div>
+<section id="criticism" hidden>
+<h2>文章としての印象</h2>
+<p id="genre" class="muted"></p>
+<div class="grid" id="ratings"></div>
+<label for="critique">そう感じた表現と、その理由</label><textarea id="critique"></textarea>
+</section>
+<p id="error" role="alert"></p>
+<nav class="actions" aria-label="文章の移動"><button id="prev">前へ</button><button id="next">次へ</button></nav>
+<footer><div class="actions"><button id="download" class="primary">回答を書き出す</button><label for="restore" style="margin:0">回答ファイルを開く</label><input id="restore" type="file" accept=".json,application/json"></div><p id="status" role="status"></p></footer>
+</main>
+<script type="application/json" id="packet">{"version": "intermediate_audit.v1", "form_sha256": "6ae4c329285f3defcf7d7f7d38c14db7dfa295b6b90ecb198eb03d7ba408f278", "participant_id": "reader_b", "items": [{"artifact_id": "a_0cf092cfb9049b58", "text": "余力がないので今日の手助けは断ったが、相手への関心は残っており、明日は話すつもりだった。", "genre": "成人の一般読者に向けた短い文芸的な描写。", "language": "ja", "question": "この文章から、どんな状況・感覚・関係を読み取りましたか。複数の読みがあれば、そのまま記してください。"}, {"artifact_id": "a_404259b9b793ac35", "text": "Begin with the person, whose complete set of true attributes is has_debt, has_waiver, is_student, is_suspended. Every other predicate is false.\n\nThe policy can be read in five sentences. Rule r1 yields eligible when all of is_student hold. Rule r2 yields not_eligible when all of has_debt hold. Rule r3 yields eligible when all of has_debt, has_waiver hold. Rule r4 yields eligible when all of is_employee, has_manager_letter hold. Rule r5 yields not_eligible when all of is_suspended hold.\n\nWhen their conclusions disagree, precedence is precise: r3 overrides r2; r5 overrides r1; r5 overrides r4. Only the listed priorities apply, between fired rules with opposite conclusions. A fired lower-priority rule is suppressed; the other fired rules remain active. Both eligible and not_eligible remaining active means conflict. Only eligible means yes; only not_eligible, or no active conclusion, means no.", "genre": "An explanation of an eligibility policy and a particular case, for a non-specialist reader.", "language": "en", "question": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified."}, {"artifact_id": "a_d4b64c24c65132fd", "text": "# Rule System Description for Future Receiver\n\n## Overview\n\nThis system determines whether a person is **eligible** or **not eligible**, and can also report a **conflict** if rules contradict each other without a clear resolution.\n\n---\n\n## Possible Facts You May Assert\n\nYou may declare any combination of the following facts about a person:\n\n| Fact | Meaning |\n|---|---|\n| `is_student` | The person is a student |\n| `has_debt` | The person has outstanding debt |\n| `has_waiver` | The person holds a valid waiver |\n| `is_employee` | The person is an employee |\n| `has_manager_letter` | The person has a manager's letter |\n| `is_suspended` | The person is suspended |\n\n---\n\n## Rules\n\n| Rule ID | Conditions (ALL must be true) | Conclusion |\n|---|---|---|\n| **r1** | `is_student` | ✅ eligible |\n| **r2** | `has_debt` | ❌ not eligible |\n| **r3** | `has_debt` AND `has_waiver` | ✅ eligible |\n| **r4** | `is_employee` AND `has_manager_letter` | ✅ eligible |\n| **r5** | `is_suspended` | ❌ not eligible |\n\n---\n\n## Priority (Conflict Resolution)\n\nWhen two rules fire and produce **opposing conclusions**, the higher-priority rule wins:\n\n| Higher Priority | Overrides |\n|---|---|\n| **r3** beats **r2** | A waiver overrides plain debt disqualification |\n| **r5** beats **r1** | Suspension overrides student eligibility |\n| **r5** beats **r4** | Suspension overrides employee+letter eligibility |\n\n> ⚠️ If two conflicting rules fire and **no priority** is defined between them, the answer is **`conflict`**.\n\n---\n\n## Query\n\nAfter asserting facts, ask:\n\n> **\"eligible?\"**\n\nThe system will respond with one of:\n- `yes`\n- `no`\n- `conflict`\n\n---\n\n## Current Known Fact\n\nThe system already has **`is_suspended`** asserted as a baseline fact.", "genre": "An explanation of an eligibility policy and a particular case, for a non-specialist reader.", "language": "en", "question": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified."}, {"artifact_id": "a_b8714cf1333367eb", "text": "誰も口を開かなかった。目を窓へ逃がしても、話されなかった言葉は部屋の隅までついてきた。椅子に座り直すたび、同じところがわずかに窮屈だった。", "genre": "成人の一般読者に向けた短い文芸的な描写。", "language": "ja", "question": "この文章から、どんな状況・感覚・関係を読み取りましたか。複数の読みがあれば、そのまま記してください。"}, {"artifact_id": "a_07849a9761da7c24", "text": "The policy can be read in five sentences. Rule r1 yields eligible when all of is_student hold. Rule r2 yields not_eligible when all of has_debt hold. Rule r3 yields eligible when all of has_debt, has_waiver hold. Rule r4 yields eligible when all of is_employee, has_manager_letter hold. Rule r5 yields not_eligible when all of is_suspended hold.\n\nWhen their conclusions disagree, precedence is precise: r3 overrides r2; r5 overrides r1; r5 overrides r4. Only the listed priorities apply, between fired rules with opposite conclusions. A fired lower-priority rule is suppressed; the other fired rules remain active. Both eligible and not_eligible remaining active means conflict. Only eligible means yes; only not_eligible, or no active conclusion, means no.", "genre": "An explanation of an eligibility policy and a particular case, for a non-specialist reader.", "language": "en", "question": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified."}, {"artifact_id": "a_3ea7cf81464b3cd2", "text": "The policy can be read in five sentences. Rule r1 yields eligible when all of is_student hold. Rule r2 yields not_eligible when all of has_debt hold. Rule r3 yields eligible when all of has_debt, has_waiver hold. Rule r4 yields eligible when all of is_employee, has_manager_letter hold. Rule r5 yields not_eligible when all of is_suspended hold.\n\nWhen their conclusions disagree, precedence is precise: r3 overrides r2; r5 overrides r1; r5 overrides r4. Only the listed priorities apply, between fired rules with opposite conclusions. A fired lower-priority rule is suppressed; the other fired rules remain active. Both eligible and not_eligible remaining active means conflict. Only eligible means yes; only not_eligible, or no active conclusion, means no.", "genre": "An explanation of an eligibility policy and a particular case, for a non-specialist reader.", "language": "en", "question": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified."}], "packet_sha256": "41fcc5111a11416b9d82772a8976225e113c15570d9c3ba7f4f33e8b88b707f0"}</script>
+<script>
+"use strict";
+const packet = JSON.parse(document.getElementById("packet").textContent);
+const key = "intermediate_audit_" + packet.packet_sha256;
+const axes = {precision:"言葉の精度", rhythm:"リズム", imagery:"像の鮮明さ", beauty:"美しさ"};
+const fields = ["paraphrase", "answer", "evidence", "inferred", "unclear", "confidence", "prior_exposure", "critique"];
+const $ = id => document.getElementById(id);
+let position = 0, saved = {};
+try { saved = JSON.parse(localStorage.getItem(key) || "{}"); } catch (_) { saved = {}; }
+for (const [axis, title] of Object.entries(axes)) {
+  const wrap = document.createElement("div"), label = document.createElement("label"), select = document.createElement("select");
+  label.htmlFor = axis; label.textContent = title; select.id = axis;
+  for (const [value, text] of [["", "未評価・該当しない"], ["0", "0 · 効果を感じない"], ["1", "1 · 弱い"], ["2", "2 · まちまち"], ["3", "3 · 効果的"], ["4", "4 · 非常に優れている"]]) {
+    const option = document.createElement("option"); option.value = value; option.textContent = text; select.append(option);
+  }
+  wrap.append(label, select); $("ratings").append(wrap);
+}
+function current() { return packet.items[position]; }
+function persist() {
+  try { localStorage.setItem(key, JSON.stringify(saved)); $("status").textContent = "このブラウザに記録済み"; }
+  catch (_) { $("status").textContent = "ブラウザ内の保存が利用できません。回答を書き出してください。"; }
+}
+function capture() {
+  const id = current().artifact_id, old = saved[id] || {};
+  const value = {artifact_id:id, recorded:!!old.recorded, reading_edited_after_critique:!!old.reading_edited_after_critique};
+  for (const f of fields) value[f] = $(f).value;
+  value.confidence = value.confidence === "" ? null : Number(value.confidence);
+  value.ratings = Object.fromEntries(Object.keys(axes).map(a => [a, $(a).value === "" ? null : Number($(a).value)]));
+  saved[id] = value; persist();
+}
+function render() {
+  const a = current(), value = saved[a.artifact_id] || {};
+  $("text").textContent = a.text; $("text").lang = a.language;
+  $("question").textContent = a.question; $("genre").textContent = a.genre;
+  $("progress").textContent = `${position + 1} / ${packet.items.length} · ${packet.participant_id}`;
+  for (const f of fields) $(f).value = value[f] ?? (f === "prior_exposure" ? "unsure" : "");
+  for (const a of Object.keys(axes)) $(a).value = value.ratings?.[a] ?? "";
+  for (const input of $("reading").querySelectorAll("textarea,select")) input.disabled = !!value.recorded;
+  $("criticism").hidden = !value.recorded; $("record").hidden = !!value.recorded; $("edit").hidden = !value.recorded;
+  $("prev").disabled = position === 0; $("next").disabled = position === packet.items.length - 1;
+  $("error").textContent = "";
+}
+document.querySelectorAll("textarea,select").forEach(e => e.addEventListener("input", capture));
+$("record").onclick = () => {
+  capture(); const v = saved[current().artifact_id];
+  if (!v.paraphrase.trim() || !v.answer || v.confidence === null) { $("error").textContent = "読み取り・結論・確信を記入してください。決められないという回答も残せます。"; return; }
+  v.recorded = true; persist(); render();
+};
+$("edit").onclick = () => { capture(); const v = saved[current().artifact_id]; v.recorded = false; v.reading_edited_after_critique = true; persist(); render(); };
+function move(delta) { capture(); position += delta; render(); window.scrollTo(0,0); }
+$("prev").onclick = () => move(-1); $("next").onclick = () => move(1);
+$("download").onclick = () => {
+  capture();
+  const responses = packet.items.map(a => saved[a.artifact_id]).filter(v => v?.recorded).map(({recorded, ...v}) => v);
+  const result = {version:packet.version, participant_id:packet.participant_id, packet_sha256:packet.packet_sha256, responses};
+  const url = URL.createObjectURL(new Blob([JSON.stringify(result,null,2)], {type:"application/json"}));
+  const link = document.createElement("a"); link.href = url; link.download = packet.participant_id + "_responses.json"; link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  $("status").textContent = `${responses.length}件の記録を回答ファイルに書き出しました。`;
+};
+$("restore").onchange = async event => {
+  try {
+    const file = event.target.files[0]; if (!file) return;
+    const value = JSON.parse(await file.text());
+    if (value.packet_sha256 !== packet.packet_sha256 || value.participant_id !== packet.participant_id || value.version !== packet.version || !Array.isArray(value.responses)) throw Error();
+    const allowed = new Set(packet.items.map(a => a.artifact_id)), found = new Set();
+    for (const v of value.responses) {
+      if (!allowed.has(v.artifact_id) || found.has(v.artifact_id) || typeof v.paraphrase !== "string" || !v.paraphrase.trim() || !Number.isInteger(v.confidence) || v.confidence < 0 || v.confidence > 4 || !["yes","no","conflict","underdetermined","not_applicable"].includes(v.answer) || !v.ratings) throw Error();
+      found.add(v.artifact_id);
+    }
+    for (const v of value.responses) saved[v.artifact_id] = {...v, recorded:true};
+    persist(); render();
+  } catch (_) { $("error").textContent = "このパケット用の回答ファイルを確認してください。"; }
+};
+render();
+</script></body></html>

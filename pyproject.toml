@@ -45,7 +45,14 @@ et-rule-z-revision-ear-semantic-diagnostics = "expression_tomography.tasks.rule_
 et-rule-z-revision-decoder = "expression_tomography.tasks.rule_z.revision_decoder_task:main"
 et-rule-z-revision-decoder-manifest = "expression_tomography.tasks.rule_z.revision_decoder_manifest:main"
 et-metaphor-transfer = "expression_tomography.tasks.metaphor_transfer.task:main"
+et-intermediate-audit = "expression_tomography.tasks.intermediate_audit.task:main"
+et-text-boundary-calibration = "expression_tomography.tasks.text_boundary.task:main"
+et-text-boundary-targets = "expression_tomography.tasks.text_boundary_targets.task:main"
+et-carrier-calibration = "expression_tomography.tasks.carrier_calibration.task:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["expression_tomography*"]
+
+[tool.setuptools.package-data]
+"expression_tomography.tasks.intermediate_audit" = ["*.json", "*.html"]

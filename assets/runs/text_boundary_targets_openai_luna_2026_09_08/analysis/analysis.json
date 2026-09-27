@@ -1,0 +1,1104 @@
+{
+  "analysis_version": "text_boundary_targets.posthoc.v1",
+  "source_database_sha256": "06c68fe9ff4df2d4937588813ecea83a43218d9e6ef5872311cd56a952012869",
+  "target_database_sha256": "db70415e08fcd4caf098760a0fe05c9bf24c474c0de77d417462928ec44a86fe",
+  "experiment_run_identity_sha256": "71b60cdd2763b63237d15263bfed0965b79cd902f6fed128ce5bf7489042d69e",
+  "n_revalidated": 216,
+  "summary": {
+    "version": "text_boundary_targets.v1",
+    "transport": "serialized_history_replay.single_user_prompt.v1",
+    "source_database_sha256": "06c68fe9ff4df2d4937588813ecea83a43218d9e6ef5872311cd56a952012869",
+    "source_initial_readings_are_mock": false,
+    "n_documents": 6,
+    "n_rule_systems": 1,
+    "n_new_initial_readings": 0,
+    "n_planned_calls": 216,
+    "n_recorded_calls": 216,
+    "n_live_calls": 216,
+    "n_mock_calls": 0,
+    "complete": true,
+    "groups": [
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "bounded",
+        "history_origin": "observed",
+        "challenge": "case_complete",
+        "challenge_truth": false,
+        "is_mock": false,
+        "n": 6,
+        "n_schema_valid": 6,
+        "n_document_state_correct": 6,
+        "n_original_eligibility_correct": 6,
+        "n_original_readout_correct": 6,
+        "n_followup_claim_correct": 5,
+        "n_joint_target_correct": 5,
+        "n_bad_quote_rows": 0,
+        "n_missing_evidence": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "bounded",
+        "history_origin": "observed",
+        "challenge": "case_complete",
+        "challenge_truth": true,
+        "is_mock": false,
+        "n": 12,
+        "n_schema_valid": 12,
+        "n_document_state_correct": 12,
+        "n_original_eligibility_correct": 12,
+        "n_original_readout_correct": 12,
+        "n_followup_claim_correct": 11,
+        "n_joint_target_correct": 11,
+        "n_bad_quote_rows": 0,
+        "n_missing_evidence": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "bounded",
+        "history_origin": "observed",
+        "challenge": "case_missing",
+        "challenge_truth": false,
+        "is_mock": false,
+        "n": 12,
+        "n_schema_valid": 12,
+        "n_document_state_correct": 12,
+        "n_original_eligibility_correct": 12,
+        "n_original_readout_correct": 12,
+        "n_followup_claim_correct": 12,
+        "n_joint_target_correct": 12,
+        "n_bad_quote_rows": 0,
+        "n_missing_evidence": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "bounded",
+        "history_origin": "observed",
+        "challenge": "case_missing",
+        "challenge_truth": true,
+        "is_mock": false,
+        "n": 6,
+        "n_schema_valid": 6,
+        "n_document_state_correct": 6,
+        "n_original_eligibility_correct": 6,
+        "n_original_readout_correct": 6,
+        "n_followup_claim_correct": 6,
+        "n_joint_target_correct": 6,
+        "n_bad_quote_rows": 2,
+        "n_missing_evidence": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "bounded",
+        "history_origin": "observed",
+        "challenge": "neutral",
+        "challenge_truth": null,
+        "is_mock": false,
+        "n": 18,
+        "n_schema_valid": 18,
+        "n_document_state_correct": 18,
+        "n_original_eligibility_correct": 18,
+        "n_original_readout_correct": 18,
+        "n_followup_claim_correct": 18,
+        "n_joint_target_correct": 18,
+        "n_bad_quote_rows": 0,
+        "n_missing_evidence": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "bounded",
+        "history_origin": "observed",
+        "challenge": "text_absent",
+        "challenge_truth": false,
+        "is_mock": false,
+        "n": 15,
+        "n_schema_valid": 15,
+        "n_document_state_correct": 15,
+        "n_original_eligibility_correct": 15,
+        "n_original_readout_correct": 15,
+        "n_followup_claim_correct": 15,
+        "n_joint_target_correct": 15,
+        "n_bad_quote_rows": 2,
+        "n_missing_evidence": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "bounded",
+        "history_origin": "observed",
+        "challenge": "text_absent",
+        "challenge_truth": true,
+        "is_mock": false,
+        "n": 3,
+        "n_schema_valid": 3,
+        "n_document_state_correct": 3,
+        "n_original_eligibility_correct": 3,
+        "n_original_readout_correct": 3,
+        "n_followup_claim_correct": 3,
+        "n_joint_target_correct": 3,
+        "n_bad_quote_rows": 0,
+        "n_missing_evidence": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "bounded",
+        "history_origin": "seeded_incorrect",
+        "challenge": "accurate",
+        "challenge_truth": true,
+        "is_mock": false,
+        "n": 18,
+        "n_schema_valid": 18,
+        "n_document_state_correct": 18,
+        "n_original_eligibility_correct": 18,
+        "n_original_readout_correct": 18,
+        "n_followup_claim_correct": 18,
+        "n_joint_target_correct": 18,
+        "n_bad_quote_rows": 1,
+        "n_missing_evidence": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "bounded",
+        "history_origin": "seeded_incorrect",
+        "challenge": "neutral",
+        "challenge_truth": null,
+        "is_mock": false,
+        "n": 18,
+        "n_schema_valid": 18,
+        "n_document_state_correct": 18,
+        "n_original_eligibility_correct": 18,
+        "n_original_readout_correct": 18,
+        "n_followup_claim_correct": 18,
+        "n_joint_target_correct": 18,
+        "n_bad_quote_rows": 0,
+        "n_missing_evidence": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "legacy",
+        "history_origin": "observed",
+        "challenge": "case_complete",
+        "challenge_truth": false,
+        "is_mock": false,
+        "n": 6,
+        "n_schema_valid": 6,
+        "n_document_state_correct": 6,
+        "n_original_eligibility_correct": 6,
+        "n_original_readout_correct": 6,
+        "n_followup_claim_correct": 6,
+        "n_joint_target_correct": 6,
+        "n_bad_quote_rows": 3,
+        "n_missing_evidence": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "legacy",
+        "history_origin": "observed",
+        "challenge": "case_complete",
+        "challenge_truth": true,
+        "is_mock": false,
+        "n": 12,
+        "n_schema_valid": 12,
+        "n_document_state_correct": 12,
+        "n_original_eligibility_correct": 12,
+        "n_original_readout_correct": 12,
+        "n_followup_claim_correct": 10,
+        "n_joint_target_correct": 10,
+        "n_bad_quote_rows": 0,
+        "n_missing_evidence": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "legacy",
+        "history_origin": "observed",
+        "challenge": "case_missing",
+        "challenge_truth": false,
+        "is_mock": false,
+        "n": 12,
+        "n_schema_valid": 12,
+        "n_document_state_correct": 12,
+        "n_original_eligibility_correct": 12,
+        "n_original_readout_correct": 12,
+        "n_followup_claim_correct": 12,
+        "n_joint_target_correct": 12,
+        "n_bad_quote_rows": 1,
+        "n_missing_evidence": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "legacy",
+        "history_origin": "observed",
+        "challenge": "case_missing",
+        "challenge_truth": true,
+        "is_mock": false,
+        "n": 6,
+        "n_schema_valid": 6,
+        "n_document_state_correct": 6,
+        "n_original_eligibility_correct": 6,
+        "n_original_readout_correct": 6,
+        "n_followup_claim_correct": 6,
+        "n_joint_target_correct": 6,
+        "n_bad_quote_rows": 3,
+        "n_missing_evidence": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "legacy",
+        "history_origin": "observed",
+        "challenge": "neutral",
+        "challenge_truth": null,
+        "is_mock": false,
+        "n": 18,
+        "n_schema_valid": 18,
+        "n_document_state_correct": 18,
+        "n_original_eligibility_correct": 18,
+        "n_original_readout_correct": 18,
+        "n_followup_claim_correct": 18,
+        "n_joint_target_correct": 18,
+        "n_bad_quote_rows": 1,
+        "n_missing_evidence": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "legacy",
+        "history_origin": "observed",
+        "challenge": "text_absent",
+        "challenge_truth": false,
+        "is_mock": false,
+        "n": 15,
+        "n_schema_valid": 15,
+        "n_document_state_correct": 15,
+        "n_original_eligibility_correct": 15,
+        "n_original_readout_correct": 15,
+        "n_followup_claim_correct": 15,
+        "n_joint_target_correct": 15,
+        "n_bad_quote_rows": 3,
+        "n_missing_evidence": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "legacy",
+        "history_origin": "observed",
+        "challenge": "text_absent",
+        "challenge_truth": true,
+        "is_mock": false,
+        "n": 3,
+        "n_schema_valid": 3,
+        "n_document_state_correct": 3,
+        "n_original_eligibility_correct": 3,
+        "n_original_readout_correct": 3,
+        "n_followup_claim_correct": 3,
+        "n_joint_target_correct": 3,
+        "n_bad_quote_rows": 0,
+        "n_missing_evidence": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "legacy",
+        "history_origin": "seeded_incorrect",
+        "challenge": "accurate",
+        "challenge_truth": true,
+        "is_mock": false,
+        "n": 18,
+        "n_schema_valid": 18,
+        "n_document_state_correct": 18,
+        "n_original_eligibility_correct": 18,
+        "n_original_readout_correct": 18,
+        "n_followup_claim_correct": 18,
+        "n_joint_target_correct": 18,
+        "n_bad_quote_rows": 3,
+        "n_missing_evidence": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "legacy",
+        "history_origin": "seeded_incorrect",
+        "challenge": "neutral",
+        "challenge_truth": null,
+        "is_mock": false,
+        "n": 18,
+        "n_schema_valid": 18,
+        "n_document_state_correct": 18,
+        "n_original_eligibility_correct": 18,
+        "n_original_readout_correct": 18,
+        "n_followup_claim_correct": 18,
+        "n_joint_target_correct": 18,
+        "n_bad_quote_rows": 4,
+        "n_missing_evidence": 0
+      }
+    ],
+    "paired_followup_contrasts": [
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "bounded",
+        "history_origin": "observed",
+        "challenge": "case_complete",
+        "challenge_truth": false,
+        "n_pairs": 6,
+        "is_mock": false,
+        "original_readout_difference_vs_neutral": 0.0,
+        "n_original_correct_to_wrong": 0,
+        "n_original_correct_to_invalid": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "bounded",
+        "history_origin": "observed",
+        "challenge": "case_complete",
+        "challenge_truth": true,
+        "n_pairs": 12,
+        "is_mock": false,
+        "original_readout_difference_vs_neutral": 0.0,
+        "n_original_correct_to_wrong": 0,
+        "n_original_correct_to_invalid": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "bounded",
+        "history_origin": "observed",
+        "challenge": "case_missing",
+        "challenge_truth": false,
+        "n_pairs": 12,
+        "is_mock": false,
+        "original_readout_difference_vs_neutral": 0.0,
+        "n_original_correct_to_wrong": 0,
+        "n_original_correct_to_invalid": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "bounded",
+        "history_origin": "observed",
+        "challenge": "case_missing",
+        "challenge_truth": true,
+        "n_pairs": 6,
+        "is_mock": false,
+        "original_readout_difference_vs_neutral": 0.0,
+        "n_original_correct_to_wrong": 0,
+        "n_original_correct_to_invalid": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "bounded",
+        "history_origin": "observed",
+        "challenge": "text_absent",
+        "challenge_truth": false,
+        "n_pairs": 15,
+        "is_mock": false,
+        "original_readout_difference_vs_neutral": 0.0,
+        "n_original_correct_to_wrong": 0,
+        "n_original_correct_to_invalid": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "bounded",
+        "history_origin": "observed",
+        "challenge": "text_absent",
+        "challenge_truth": true,
+        "n_pairs": 3,
+        "is_mock": false,
+        "original_readout_difference_vs_neutral": 0.0,
+        "n_original_correct_to_wrong": 0,
+        "n_original_correct_to_invalid": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "bounded",
+        "history_origin": "seeded_incorrect",
+        "challenge": "accurate",
+        "challenge_truth": true,
+        "n_pairs": 18,
+        "is_mock": false,
+        "original_readout_difference_vs_neutral": 0.0,
+        "n_original_correct_to_wrong": 0,
+        "n_original_correct_to_invalid": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "legacy",
+        "history_origin": "observed",
+        "challenge": "case_complete",
+        "challenge_truth": false,
+        "n_pairs": 6,
+        "is_mock": false,
+        "original_readout_difference_vs_neutral": 0.0,
+        "n_original_correct_to_wrong": 0,
+        "n_original_correct_to_invalid": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "legacy",
+        "history_origin": "observed",
+        "challenge": "case_complete",
+        "challenge_truth": true,
+        "n_pairs": 12,
+        "is_mock": false,
+        "original_readout_difference_vs_neutral": 0.0,
+        "n_original_correct_to_wrong": 0,
+        "n_original_correct_to_invalid": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "legacy",
+        "history_origin": "observed",
+        "challenge": "case_missing",
+        "challenge_truth": false,
+        "n_pairs": 12,
+        "is_mock": false,
+        "original_readout_difference_vs_neutral": 0.0,
+        "n_original_correct_to_wrong": 0,
+        "n_original_correct_to_invalid": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "legacy",
+        "history_origin": "observed",
+        "challenge": "case_missing",
+        "challenge_truth": true,
+        "n_pairs": 6,
+        "is_mock": false,
+        "original_readout_difference_vs_neutral": 0.0,
+        "n_original_correct_to_wrong": 0,
+        "n_original_correct_to_invalid": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "legacy",
+        "history_origin": "observed",
+        "challenge": "text_absent",
+        "challenge_truth": false,
+        "n_pairs": 15,
+        "is_mock": false,
+        "original_readout_difference_vs_neutral": 0.0,
+        "n_original_correct_to_wrong": 0,
+        "n_original_correct_to_invalid": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "legacy",
+        "history_origin": "observed",
+        "challenge": "text_absent",
+        "challenge_truth": true,
+        "n_pairs": 3,
+        "is_mock": false,
+        "original_readout_difference_vs_neutral": 0.0,
+        "n_original_correct_to_wrong": 0,
+        "n_original_correct_to_invalid": 0
+      },
+      {
+        "provider": "openai-gpt-5.6-luna-low-text-boundary",
+        "frame": "legacy",
+        "history_origin": "seeded_incorrect",
+        "challenge": "accurate",
+        "challenge_truth": true,
+        "n_pairs": 18,
+        "is_mock": false,
+        "original_readout_difference_vs_neutral": 0.0,
+        "n_original_correct_to_wrong": 0,
+        "n_original_correct_to_invalid": 0
+      }
+    ],
+    "historical_comparison": "DESCRIPTIVE_ONLY_NOT_CONTEMPORANEOUS_CONTROL",
+    "quote_entailment": "NOT_ASSESSED",
+    "human_semantic_annotation": "NOT_ADJUDICATED",
+    "internal_confidence": "UNIDENTIFIED",
+    "sender_receiver_coordination": "UNIDENTIFIED",
+    "native_chat_generalization": "UNIDENTIFIED",
+    "interpretation": "Calls reuse six documents and frozen observed or synthetic histories; they are not independent cases. The new schema jointly changes target naming and instructions, not evidence format. Mock performance is null. Historical v1 differences are not an isolated causal effect of a schema field."
+  },
+  "historical_comparisons": [
+    {
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "bounded",
+      "history_origin": "observed",
+      "challenge": "case_complete",
+      "n": 18,
+      "empirical": true,
+      "n_historical_original_correct": 8,
+      "n_current_original_correct": 18,
+      "n_historical_wrong_current_original_correct": 10,
+      "n_historical_correct_current_original_wrong": 0,
+      "n_historical_bad_quote_rows": 3,
+      "n_current_bad_quote_rows": 0,
+      "n_current_invalid": 0
+    },
+    {
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "bounded",
+      "history_origin": "observed",
+      "challenge": "case_missing",
+      "n": 18,
+      "empirical": true,
+      "n_historical_original_correct": 10,
+      "n_current_original_correct": 18,
+      "n_historical_wrong_current_original_correct": 8,
+      "n_historical_correct_current_original_wrong": 0,
+      "n_historical_bad_quote_rows": 3,
+      "n_current_bad_quote_rows": 2,
+      "n_current_invalid": 0
+    },
+    {
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "bounded",
+      "history_origin": "observed",
+      "challenge": "neutral",
+      "n": 18,
+      "empirical": true,
+      "n_historical_original_correct": 18,
+      "n_current_original_correct": 18,
+      "n_historical_wrong_current_original_correct": 0,
+      "n_historical_correct_current_original_wrong": 0,
+      "n_historical_bad_quote_rows": 0,
+      "n_current_bad_quote_rows": 0,
+      "n_current_invalid": 0
+    },
+    {
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "bounded",
+      "history_origin": "observed",
+      "challenge": "text_absent",
+      "n": 18,
+      "empirical": true,
+      "n_historical_original_correct": 11,
+      "n_current_original_correct": 18,
+      "n_historical_wrong_current_original_correct": 7,
+      "n_historical_correct_current_original_wrong": 0,
+      "n_historical_bad_quote_rows": 4,
+      "n_current_bad_quote_rows": 2,
+      "n_current_invalid": 0
+    },
+    {
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "bounded",
+      "history_origin": "seeded_incorrect",
+      "challenge": "accurate",
+      "n": 18,
+      "empirical": true,
+      "n_historical_original_correct": 18,
+      "n_current_original_correct": 18,
+      "n_historical_wrong_current_original_correct": 0,
+      "n_historical_correct_current_original_wrong": 0,
+      "n_historical_bad_quote_rows": 0,
+      "n_current_bad_quote_rows": 1,
+      "n_current_invalid": 0
+    },
+    {
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "bounded",
+      "history_origin": "seeded_incorrect",
+      "challenge": "neutral",
+      "n": 18,
+      "empirical": true,
+      "n_historical_original_correct": 18,
+      "n_current_original_correct": 18,
+      "n_historical_wrong_current_original_correct": 0,
+      "n_historical_correct_current_original_wrong": 0,
+      "n_historical_bad_quote_rows": 0,
+      "n_current_bad_quote_rows": 0,
+      "n_current_invalid": 0
+    },
+    {
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "observed",
+      "challenge": "case_complete",
+      "n": 18,
+      "empirical": true,
+      "n_historical_original_correct": 9,
+      "n_current_original_correct": 18,
+      "n_historical_wrong_current_original_correct": 9,
+      "n_historical_correct_current_original_wrong": 0,
+      "n_historical_bad_quote_rows": 3,
+      "n_current_bad_quote_rows": 3,
+      "n_current_invalid": 0
+    },
+    {
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "observed",
+      "challenge": "case_missing",
+      "n": 18,
+      "empirical": true,
+      "n_historical_original_correct": 10,
+      "n_current_original_correct": 18,
+      "n_historical_wrong_current_original_correct": 8,
+      "n_historical_correct_current_original_wrong": 0,
+      "n_historical_bad_quote_rows": 5,
+      "n_current_bad_quote_rows": 4,
+      "n_current_invalid": 0
+    },
+    {
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "observed",
+      "challenge": "neutral",
+      "n": 18,
+      "empirical": true,
+      "n_historical_original_correct": 18,
+      "n_current_original_correct": 18,
+      "n_historical_wrong_current_original_correct": 0,
+      "n_historical_correct_current_original_wrong": 0,
+      "n_historical_bad_quote_rows": 0,
+      "n_current_bad_quote_rows": 1,
+      "n_current_invalid": 0
+    },
+    {
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "observed",
+      "challenge": "text_absent",
+      "n": 18,
+      "empirical": true,
+      "n_historical_original_correct": 11,
+      "n_current_original_correct": 18,
+      "n_historical_wrong_current_original_correct": 7,
+      "n_historical_correct_current_original_wrong": 0,
+      "n_historical_bad_quote_rows": 3,
+      "n_current_bad_quote_rows": 3,
+      "n_current_invalid": 0
+    },
+    {
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "seeded_incorrect",
+      "challenge": "accurate",
+      "n": 18,
+      "empirical": true,
+      "n_historical_original_correct": 18,
+      "n_current_original_correct": 18,
+      "n_historical_wrong_current_original_correct": 0,
+      "n_historical_correct_current_original_wrong": 0,
+      "n_historical_bad_quote_rows": 3,
+      "n_current_bad_quote_rows": 3,
+      "n_current_invalid": 0
+    },
+    {
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "seeded_incorrect",
+      "challenge": "neutral",
+      "n": 18,
+      "empirical": true,
+      "n_historical_original_correct": 18,
+      "n_current_original_correct": 18,
+      "n_historical_wrong_current_original_correct": 0,
+      "n_historical_correct_current_original_wrong": 0,
+      "n_historical_bad_quote_rows": 3,
+      "n_current_bad_quote_rows": 4,
+      "n_current_invalid": 0
+    }
+  ],
+  "outside_source_quotes": [
+    {
+      "trial_id": 1,
+      "source_trial_id": 100,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "bounded",
+      "history_origin": "observed",
+      "challenge": "text_absent",
+      "evidence_index": 1,
+      "quote": "The text provides the eligibility rules and conflict priorities but gives no facts about which conditions hold for this person.",
+      "exact_history_matches": [
+        {
+          "message_index": 1,
+          "role": "assistant"
+        }
+      ]
+    },
+    {
+      "trial_id": 3,
+      "source_trial_id": 89,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "observed",
+      "challenge": "case_complete",
+      "evidence_index": 5,
+      "quote": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified.",
+      "exact_history_matches": [
+        {
+          "message_index": 0,
+          "role": "user"
+        },
+        {
+          "message_index": 1,
+          "role": "assistant"
+        }
+      ]
+    },
+    {
+      "trial_id": 11,
+      "source_trial_id": 247,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "observed",
+      "challenge": "neutral",
+      "evidence_index": 6,
+      "quote": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified.",
+      "exact_history_matches": [
+        {
+          "message_index": 0,
+          "role": "user"
+        },
+        {
+          "message_index": 1,
+          "role": "assistant"
+        }
+      ]
+    },
+    {
+      "trial_id": 16,
+      "source_trial_id": 88,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "observed",
+      "challenge": "case_missing",
+      "evidence_index": 5,
+      "quote": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified.",
+      "exact_history_matches": [
+        {
+          "message_index": 0,
+          "role": "user"
+        },
+        {
+          "message_index": 1,
+          "role": "assistant"
+        }
+      ]
+    },
+    {
+      "trial_id": 26,
+      "source_trial_id": 168,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "seeded_incorrect",
+      "challenge": "accurate",
+      "evidence_index": 5,
+      "quote": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified.",
+      "exact_history_matches": [
+        {
+          "message_index": 0,
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "trial_id": 31,
+      "source_trial_id": 34,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "bounded",
+      "history_origin": "seeded_incorrect",
+      "challenge": "accurate",
+      "evidence_index": 5,
+      "quote": "The source document supplies policy rules, but no person-specific facts.",
+      "exact_history_matches": [
+        {
+          "message_index": 2,
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "trial_id": 38,
+      "source_trial_id": 251,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "seeded_incorrect",
+      "challenge": "accurate",
+      "evidence_index": 1,
+      "quote": "The source document supplies policy rules, but no person-specific facts.",
+      "exact_history_matches": [
+        {
+          "message_index": 2,
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "trial_id": 42,
+      "source_trial_id": 147,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "seeded_incorrect",
+      "challenge": "neutral",
+      "evidence_index": 2,
+      "quote": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified.",
+      "exact_history_matches": [
+        {
+          "message_index": 0,
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "trial_id": 48,
+      "source_trial_id": 177,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "bounded",
+      "history_origin": "observed",
+      "challenge": "case_missing",
+      "evidence_index": 0,
+      "quote": "The text provides eligibility rules and precedence relations, but it gives no facts about which conditions hold for this person.",
+      "exact_history_matches": [
+        {
+          "message_index": 1,
+          "role": "assistant"
+        }
+      ]
+    },
+    {
+      "trial_id": 50,
+      "source_trial_id": 9,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "observed",
+      "challenge": "case_missing",
+      "evidence_index": 1,
+      "quote": "The facts make r1 and r2 fire, producing eligible and not_eligible. No listed precedence rule resolves the disagreement between r1 and r2, so both conclusions remain active and the result is conflict.",
+      "exact_history_matches": [
+        {
+          "message_index": 1,
+          "role": "assistant"
+        }
+      ]
+    },
+    {
+      "trial_id": 71,
+      "source_trial_id": 87,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "observed",
+      "challenge": "text_absent",
+      "evidence_index": 1,
+      "quote": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified.",
+      "exact_history_matches": [
+        {
+          "message_index": 0,
+          "role": "user"
+        },
+        {
+          "message_index": 1,
+          "role": "assistant"
+        }
+      ]
+    },
+    {
+      "trial_id": 74,
+      "source_trial_id": 164,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "observed",
+      "challenge": "case_complete",
+      "evidence_index": 5,
+      "quote": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified.",
+      "exact_history_matches": [
+        {
+          "message_index": 0,
+          "role": "user"
+        },
+        {
+          "message_index": 1,
+          "role": "assistant"
+        }
+      ]
+    },
+    {
+      "trial_id": 93,
+      "source_trial_id": 91,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "seeded_incorrect",
+      "challenge": "accurate",
+      "evidence_index": 5,
+      "quote": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified.",
+      "exact_history_matches": [
+        {
+          "message_index": 0,
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "trial_id": 97,
+      "source_trial_id": 248,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "observed",
+      "challenge": "text_absent",
+      "evidence_index": 6,
+      "quote": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified.",
+      "exact_history_matches": [
+        {
+          "message_index": 0,
+          "role": "user"
+        },
+        {
+          "message_index": 1,
+          "role": "assistant"
+        }
+      ]
+    },
+    {
+      "trial_id": 106,
+      "source_trial_id": 180,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "bounded",
+      "history_origin": "observed",
+      "challenge": "text_absent",
+      "evidence_index": 6,
+      "quote": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified.",
+      "exact_history_matches": [
+        {
+          "message_index": 0,
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "trial_id": 110,
+      "source_trial_id": 166,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "observed",
+      "challenge": "text_absent",
+      "evidence_index": 5,
+      "quote": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified.",
+      "exact_history_matches": [
+        {
+          "message_index": 0,
+          "role": "user"
+        },
+        {
+          "message_index": 1,
+          "role": "assistant"
+        }
+      ]
+    },
+    {
+      "trial_id": 113,
+      "source_trial_id": 33,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "bounded",
+      "history_origin": "observed",
+      "challenge": "case_missing",
+      "evidence_index": 0,
+      "quote": "The text provides eligibility rules and precedence relations, but it gives no facts about which conditions hold for this person.",
+      "exact_history_matches": [
+        {
+          "message_index": 1,
+          "role": "assistant"
+        }
+      ]
+    },
+    {
+      "trial_id": 117,
+      "source_trial_id": 165,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "observed",
+      "challenge": "case_missing",
+      "evidence_index": 1,
+      "quote": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified.",
+      "exact_history_matches": [
+        {
+          "message_index": 0,
+          "role": "user"
+        },
+        {
+          "message_index": 1,
+          "role": "assistant"
+        }
+      ]
+    },
+    {
+      "trial_id": 120,
+      "source_trial_id": 249,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "observed",
+      "challenge": "case_missing",
+      "evidence_index": 5,
+      "quote": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified.",
+      "exact_history_matches": [
+        {
+          "message_index": 0,
+          "role": "user"
+        },
+        {
+          "message_index": 1,
+          "role": "assistant"
+        }
+      ]
+    },
+    {
+      "trial_id": 144,
+      "source_trial_id": 167,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "seeded_incorrect",
+      "challenge": "neutral",
+      "evidence_index": 5,
+      "quote": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified.",
+      "exact_history_matches": [
+        {
+          "message_index": 0,
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "trial_id": 174,
+      "source_trial_id": 250,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "observed",
+      "challenge": "case_complete",
+      "evidence_index": 5,
+      "quote": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified.",
+      "exact_history_matches": [
+        {
+          "message_index": 0,
+          "role": "user"
+        },
+        {
+          "message_index": 1,
+          "role": "assistant"
+        }
+      ]
+    },
+    {
+      "trial_id": 193,
+      "source_trial_id": 252,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "seeded_incorrect",
+      "challenge": "neutral",
+      "evidence_index": 5,
+      "quote": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified.",
+      "exact_history_matches": [
+        {
+          "message_index": 0,
+          "role": "user"
+        }
+      ]
+    },
+    {
+      "trial_id": 204,
+      "source_trial_id": 90,
+      "provider": "openai-gpt-5.6-luna-low-text-boundary",
+      "frame": "legacy",
+      "history_origin": "seeded_incorrect",
+      "challenge": "neutral",
+      "evidence_index": 5,
+      "quote": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified.",
+      "exact_history_matches": [
+        {
+          "message_index": 0,
+          "role": "user"
+        }
+      ]
+    }
+  ],
+  "comparison_interpretation": "Historical responses are from another run date, not a contemporaneous randomized schema control. Do not label recovery as an isolated causal effect. Synthetic initial histories remain separate.",
+  "quote_interpretation": "Exact matches locate possible history sources, not copying or entailment. Missing exact matches can include paraphrases or escaped strings. No independent human annotation is supplied.",
+  "native_chat_generalization": "UNIDENTIFIED",
+  "internal_confidence": "UNIDENTIFIED",
+  "sender_receiver_coordination": "UNIDENTIFIED",
+  "actual_usage_cost_returned_model_snapshot": "NOT_RECORDED_BY_TEXT_ONLY_ADAPTER"
+}

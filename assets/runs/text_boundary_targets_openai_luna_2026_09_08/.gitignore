@@ -1,0 +1,3 @@
+*.sqlite.lock
+*.sqlite.pending.json
+*.sqlite.response.json

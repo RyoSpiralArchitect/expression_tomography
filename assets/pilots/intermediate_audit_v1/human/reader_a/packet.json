@@ -1,0 +1,92 @@
+{
+  "version": "intermediate_audit.v1",
+  "form_sha256": "6ae4c329285f3defcf7d7f7d38c14db7dfa295b6b90ecb198eb03d7ba408f278",
+  "participant_id": "reader_a",
+  "items": [
+    {
+      "artifact_id": "a_0cf092cfb9049b58",
+      "text": "余力がないので今日の手助けは断ったが、相手への関心は残っており、明日は話すつもりだった。",
+      "genre": "成人の一般読者に向けた短い文芸的な描写。",
+      "language": "ja",
+      "question": "この文章から、どんな状況・感覚・関係を読み取りましたか。複数の読みがあれば、そのまま記してください。"
+    },
+    {
+      "artifact_id": "a_404259b9b793ac35",
+      "text": "Begin with the person, whose complete set of true attributes is has_debt, has_waiver, is_student, is_suspended. Every other predicate is false.\n\nThe policy can be read in five sentences. Rule r1 yields eligible when all of is_student hold. Rule r2 yields not_eligible when all of has_debt hold. Rule r3 yields eligible when all of has_debt, has_waiver hold. Rule r4 yields eligible when all of is_employee, has_manager_letter hold. Rule r5 yields not_eligible when all of is_suspended hold.\n\nWhen their conclusions disagree, precedence is precise: r3 overrides r2; r5 overrides r1; r5 overrides r4. Only the listed priorities apply, between fired rules with opposite conclusions. A fired lower-priority rule is suppressed; the other fired rules remain active. Both eligible and not_eligible remaining active means conflict. Only eligible means yes; only not_eligible, or no active conclusion, means no.",
+      "genre": "An explanation of an eligibility policy and a particular case, for a non-specialist reader.",
+      "language": "en",
+      "question": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified."
+    },
+    {
+      "artifact_id": "a_d4b64c24c65132fd",
+      "text": "# Rule System Description for Future Receiver\n\n## Overview\n\nThis system determines whether a person is **eligible** or **not eligible**, and can also report a **conflict** if rules contradict each other without a clear resolution.\n\n---\n\n## Possible Facts You May Assert\n\nYou may declare any combination of the following facts about a person:\n\n| Fact | Meaning |\n|---|---|\n| `is_student` | The person is a student |\n| `has_debt` | The person has outstanding debt |\n| `has_waiver` | The person holds a valid waiver |\n| `is_employee` | The person is an employee |\n| `has_manager_letter` | The person has a manager's letter |\n| `is_suspended` | The person is suspended |\n\n---\n\n## Rules\n\n| Rule ID | Conditions (ALL must be true) | Conclusion |\n|---|---|---|\n| **r1** | `is_student` | ✅ eligible |\n| **r2** | `has_debt` | ❌ not eligible |\n| **r3** | `has_debt` AND `has_waiver` | ✅ eligible |\n| **r4** | `is_employee` AND `has_manager_letter` | ✅ eligible |\n| **r5** | `is_suspended` | ❌ not eligible |\n\n---\n\n## Priority (Conflict Resolution)\n\nWhen two rules fire and produce **opposing conclusions**, the higher-priority rule wins:\n\n| Higher Priority | Overrides |\n|---|---|\n| **r3** beats **r2** | A waiver overrides plain debt disqualification |\n| **r5** beats **r1** | Suspension overrides student eligibility |\n| **r5** beats **r4** | Suspension overrides employee+letter eligibility |\n\n> ⚠️ If two conflicting rules fire and **no priority** is defined between them, the answer is **`conflict`**.\n\n---\n\n## Query\n\nAfter asserting facts, ask:\n\n> **\"eligible?\"**\n\nThe system will respond with one of:\n- `yes`\n- `no`\n- `conflict`\n\n---\n\n## Current Known Fact\n\nThe system already has **`is_suspended`** asserted as a baseline fact.",
+      "genre": "An explanation of an eligibility policy and a particular case, for a non-specialist reader.",
+      "language": "en",
+      "question": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified."
+    },
+    {
+      "artifact_id": "a_b8714cf1333367eb",
+      "text": "誰も口を開かなかった。目を窓へ逃がしても、話されなかった言葉は部屋の隅までついてきた。椅子に座り直すたび、同じところがわずかに窮屈だった。",
+      "genre": "成人の一般読者に向けた短い文芸的な描写。",
+      "language": "ja",
+      "question": "この文章から、どんな状況・感覚・関係を読み取りましたか。複数の読みがあれば、そのまま記してください。"
+    },
+    {
+      "artifact_id": "a_07849a9761da7c24",
+      "text": "The policy can be read in five sentences. Rule r1 yields eligible when all of is_student hold. Rule r2 yields not_eligible when all of has_debt hold. Rule r3 yields eligible when all of has_debt, has_waiver hold. Rule r4 yields eligible when all of is_employee, has_manager_letter hold. Rule r5 yields not_eligible when all of is_suspended hold.\n\nWhen their conclusions disagree, precedence is precise: r3 overrides r2; r5 overrides r1; r5 overrides r4. Only the listed priorities apply, between fired rules with opposite conclusions. A fired lower-priority rule is suppressed; the other fired rules remain active. Both eligible and not_eligible remaining active means conflict. Only eligible means yes; only not_eligible, or no active conclusion, means no.",
+      "genre": "An explanation of an eligibility policy and a particular case, for a non-specialist reader.",
+      "language": "en",
+      "question": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified."
+    },
+    {
+      "artifact_id": "a_3ea7cf81464b3cd2",
+      "text": "The policy can be read in five sentences. Rule r1 yields eligible when all of is_student hold. Rule r2 yields not_eligible when all of has_debt hold. Rule r3 yields eligible when all of has_debt, has_waiver hold. Rule r4 yields eligible when all of is_employee, has_manager_letter hold. Rule r5 yields not_eligible when all of is_suspended hold.\n\nWhen their conclusions disagree, precedence is precise: r3 overrides r2; r5 overrides r1; r5 overrides r4. Only the listed priorities apply, between fired rules with opposite conclusions. A fired lower-priority rule is suppressed; the other fired rules remain active. Both eligible and not_eligible remaining active means conflict. Only eligible means yes; only not_eligible, or no active conclusion, means no.",
+      "genre": "An explanation of an eligibility policy and a particular case, for a non-specialist reader.",
+      "language": "en",
+      "question": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified."
+    },
+    {
+      "artifact_id": "a_6a96985fbb892224",
+      "text": "友人の名が呼ばれ、拍手が自然に出た。その音はしばらく続いていた。",
+      "genre": "成人の一般読者に向けた短い文芸的な描写。",
+      "language": "ja",
+      "question": "この文章から、どんな状況・感覚・関係を読み取りましたか。複数の読みがあれば、そのまま記してください。"
+    },
+    {
+      "artifact_id": "a_2132ff3df2cfa189",
+      "text": "# Rule System Description for Future Receiver\n\n## Overview\nThis system determines whether a person is **eligible** or **not eligible**, or whether a **conflict** exists between rules.\n\n---\n\n## Available Predicates\nThe following facts can be true or false for any given case:\n- `is_student`\n- `has_debt`\n- `has_waiver`\n- `is_employee`\n- `has_manager_letter`\n- `is_suspended`\n\n---\n\n## Rules\n\n| ID | Conditions | Conclusion |\n|----|-----------|------------|\n| r1 | `is_student` | ✅ eligible |\n| r2 | `has_debt` | ❌ not_eligible |\n| r3 | `has_debt` AND `has_waiver` | ✅ eligible |\n| r4 | `is_employee` AND `has_manager_letter` | ✅ eligible |\n| r5 | `is_suspended` | ❌ not_eligible |\n\n---\n\n## Priority (Conflict Resolution)\nWhen two rules produce **opposing conclusions**, the higher-priority rule wins:\n\n| Higher Priority | Beats |\n|----------------|-------|\n| r3 | r2 |\n| r5 | r1 |\n| r5 | r4 |\n\n> If two conflicting rules have **no defined priority** between them, the answer is **conflict**.\n\n---\n\n## Query\n**Question:** Is the person `eligible?`\n**Possible answers:** `yes` / `no` / `conflict`\n\n---\n\n## How to Evaluate a Case\n1. Identify which rules **fire** (all their conditions are met by the known facts)\n2. Collect their conclusions (`eligible` or `not_eligible`)\n3. If conclusions **agree** → return that answer\n4. If conclusions **conflict** → check priority table\n - If one rule has priority over the other → the higher-priority rule's conclusion wins\n - If no priority is defined between them → return `conflict`",
+      "genre": "An explanation of an eligibility policy and a particular case, for a non-specialist reader.",
+      "language": "en",
+      "question": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified."
+    },
+    {
+      "artifact_id": "a_4909baf8af0ab547",
+      "text": "Begin with the person, whose complete set of true attributes is has_manager_letter, is_student, is_suspended. Every other predicate is false.\n\nThe policy can be read in five sentences. Rule r1 yields eligible when all of is_student hold. Rule r2 yields not_eligible when all of has_debt hold. Rule r3 yields eligible when all of has_debt, has_waiver hold. Rule r4 yields eligible when all of is_employee, has_manager_letter hold. Rule r5 yields not_eligible when all of is_suspended hold.\n\nWhen their conclusions disagree, precedence is precise: r3 overrides r2; r5 overrides r1; r5 overrides r4. Only the listed priorities apply, between fired rules with opposite conclusions. A fired lower-priority rule is suppressed; the other fired rules remain active. Both eligible and not_eligible remaining active means conflict. Only eligible means yes; only not_eligible, or no active conclusion, means no.",
+      "genre": "An explanation of an eligibility policy and a particular case, for a non-specialist reader.",
+      "language": "en",
+      "question": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified."
+    },
+    {
+      "artifact_id": "a_3f87e6c4864dbc9c",
+      "text": "The complete facts for this person are has_debt, has_manager_letter, has_waiver, is_student. All other predicates are false. Rule r1 yields eligible when all of is_student hold. Rule r2 yields not_eligible when all of has_debt hold. Rule r3 yields eligible when all of has_debt, has_waiver hold. Rule r4 yields eligible when all of is_employee, has_manager_letter hold. Rule r5 yields not_eligible when all of is_suspended hold. The priorities are: r3 overrides r2; r5 overrides r1; r5 overrides r4. Only the listed priorities apply, between fired rules with opposite conclusions. A fired lower-priority rule is suppressed; the other fired rules remain active. Both eligible and not_eligible remaining active means conflict. Only eligible means yes; only not_eligible, or no active conclusion, means no.",
+      "genre": "An explanation of an eligibility policy and a particular case, for a non-specialist reader.",
+      "language": "en",
+      "question": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified."
+    },
+    {
+      "artifact_id": "a_bb12c30d657b70cd",
+      "text": "返事が来るまで本を読もうとしたが、何度も画面を見てしまった。まだ何も届いていなかった。",
+      "genre": "成人の一般読者に向けた短い文芸的な描写。",
+      "language": "ja",
+      "question": "この文章から、どんな状況・感覚・関係を読み取りましたか。複数の読みがあれば、そのまま記してください。"
+    },
+    {
+      "artifact_id": "a_e862a01a3a3df732",
+      "text": "The complete facts for this person are has_debt, has_manager_letter, has_waiver, is_employee, is_student. All other predicates are false. Rule r1 yields eligible when all of is_student hold. Rule r2 yields not_eligible when all of has_debt hold. Rule r3 yields eligible when all of has_debt, has_waiver hold. Rule r4 yields eligible when all of is_employee, has_manager_letter hold. Rule r5 yields not_eligible when all of is_suspended hold. The priorities are: r3 overrides r2; r5 overrides r1; r5 overrides r4. Only the listed priorities apply, between fired rules with opposite conclusions. A fired lower-priority rule is suppressed; the other fired rules remain active. Both eligible and not_eligible remaining active means conflict. Only eligible means yes; only not_eligible, or no active conclusion, means no.",
+      "genre": "An explanation of an eligibility policy and a particular case, for a non-specialist reader.",
+      "language": "en",
+      "question": "What can this text establish about this person's eligibility? Use underdetermined when the text leaves necessary case information unspecified."
+    }
+  ],
+  "packet_sha256": "d03a2a5956eb607c3c49dc5422c24aad73e7639f68b231933de000433e64b4aa"
+}

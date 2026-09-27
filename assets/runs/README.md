@@ -3,6 +3,22 @@
 This directory contains fixed artifacts copied from ignored local `results/`
 runs so PRs and notes can reference the underlying data.
 
+The complete [September 4 evidence ledger](../../docs/all_run_evidence_ledger_2026_09_04.md)
+covers all directories, including revision/interface/ear studies and historical
+diagnostics. Its [audit bundle](../analyses/all_run_synthesis_2026_09_04/README.md)
+also inventories the old local results tree and records four byte-identical
+historical recoveries: `rule_z_free_prompt_ladder_anthropic_seed29_30`,
+`rule_z_free_prompt_ladder_openai_seed29_30`,
+`rule_z_iterative_repair_anthropic_seed29_30`, and
+`rule_z_contract_perturbation_anthropic_seed29_30`. These are not new model runs.
+
+The [September 27 known-carrier run](carrier_calibration_openai_luna_2026_09_27/README.md)
+adds 108 frozen Luna responses with source snapshots, a byte-bound database,
+and replay receipts. The separate
+[deep audit](../analyses/carrier_deep_audit_2026_09_27/README.md) preserves the
+original scores while testing known-code residue, public recoverability, and
+fixture shortcuts without additional model calls.
+
 Each run directory may include:
 
 ```text
@@ -218,6 +234,22 @@ rule_z_revision_decoder_luna_seed101_36x2
   Includes raw SQLite, all physical trials, paired/stratified/repetition
   exports, bound operator receipts, read-only revalidation, zero-call resume,
   and prospective/completed-run manifests. The earlier evidence stays frozen.
+
+text_boundary_openai_luna_2026_09_07
+  Completed 252-call Luna text-boundary and follow-up calibration over six
+  controlled documents and two frames. Preserves 36 actual initial readings,
+  144 observed-history branches, and 72 synthetic-error branches, the original
+  endpoint scores, source-state readouts, exact quote checks, and post-hoc
+  answer-target/quote-location diagnostics. This is serialized-history replay,
+  not native chat or evidence of sender/receiver coordination.
+
+text_boundary_targets_openai_luna_2026_09_08
+  Completed 216-call Luna answer-target split over the exact saved v1 histories.
+  No new initial responses. Original eligibility is correct on all 216 calls;
+  four follow-up applicability mismatches and 23 out-of-source quote responses
+  are kept separate. Includes the prospective contract, raw SQLite, zero-call
+  replay, case packets, and descriptive historical comparison, not a pooled
+  native-chat or contemporaneous schema-treatment result.
 
 metaphor_transfer_openai_live
   First OpenAI live metaphor-transfer smoke run.

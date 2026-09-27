@@ -4,6 +4,10 @@ This note records the next research map after the equalized Rule-Z Ear Red Team.
 The working shift is from broad provider comparison to tomography of where
 typed distinctions are lost or preserved during expression.
 
+> Current cross-run interpretation is in the
+> [2026-09-04 synthesis](all_run_hypothesis_synthesis_2026_09_04.md).
+> This map preserves the historical sequence of questions and interventions.
+
 ## Current Position
 
 The equalized ear run showed:

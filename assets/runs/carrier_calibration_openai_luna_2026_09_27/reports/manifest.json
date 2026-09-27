@@ -1,0 +1,33 @@
+{
+  "files_sha256": {
+    "case_results.csv": "b90426af1f65a02cd382321aabca5373d9706330e3d089c557b6f3ebf42fadd6",
+    "plan.json": "0790f634da53964f5456c981b097efe71d2a2648935168a6b1ad8fdff9ddc24e",
+    "private_artifacts.jsonl": "2d947c3a52596a6f44531fd0d107bc1c26bbabe3c62f2a6631d5aa2de9ce2079",
+    "public_readings.jsonl": "766f4f74ff0bd9bd79d9fc572fe3817f804e3501179d6d43d5515b5202df7928",
+    "raw_trials.jsonl": "68e8002f4e570b7fff75f4aa0fafa8d0e0545b15a80a04ef6c453fc5dd639efe",
+    "source/expression_tomography/__init__.py": "8a3237b7faa4d0f40b3875109362b97042ac53b452d284fe31d2da260cb3096d",
+    "source/expression_tomography/core/__init__.py": "07a103828addf3ba580ecad587d7cb73f5764bfbb558bbf9bdaeb43093fa99dc",
+    "source/expression_tomography/core/providers.py": "8fffc9bacb9608df6b76a8b65af2e21a00940552f7a43b9ded445890afd1b048",
+    "source/expression_tomography/core/report.py": "34085829fcf04e404d82b3f3c65b81e881c9b1d221a333280fa0beae3b6b5deb",
+    "source/expression_tomography/core/schema.py": "676827df7757edbeef971d5aaf685ea4e5a36363241add8356143b7e6fef29b2",
+    "source/expression_tomography/core/store.py": "86dd31cbe5c0420fb2d6aac075670bc40ab0b479750dfbfb654ed2b4e4e09bea",
+    "source/expression_tomography/tasks/__init__.py": "81a06a4709f20f33d47ee7e1e7cb911325389d61d4ce95f22e326d1996ce7c90",
+    "source/expression_tomography/tasks/carrier_calibration/__init__.py": "424dbe001af3084fa1ffa7a1b65771a64fe04d2ec532c110dc4c91b15a5b23fd",
+    "source/expression_tomography/tasks/carrier_calibration/corpus.py": "adc0affee58771967b2ee6321507c58e0101c235466a01ac54f9fa84ff3e45d3",
+    "source/expression_tomography/tasks/carrier_calibration/mock_provider.py": "eb3d907e5bbf57ddefdb4660c7d1cab505f9020624095bfda4c93c41645f7ed7",
+    "source/expression_tomography/tasks/carrier_calibration/protocol.py": "d32d45ec8ccce97bde25d1942713aadd255d06d7cbd17c07d05fc7e95abb6039",
+    "source/expression_tomography/tasks/carrier_calibration/report.py": "4bef685f3a97383278a78189815d6d8af5566a719d06844e24b04179f5623e51",
+    "source/expression_tomography/tasks/carrier_calibration/task.py": "8458265b9070c15083278d15d40146ce069efc7ffd94dd68576c39eb000b1ecb",
+    "source/expression_tomography/tasks/rule_z/__init__.py": "21b0e6700e512357385162eef1f6a62da497a3c555a741b2b08ec36bcc431ce9",
+    "source/expression_tomography/tasks/rule_z/oracle.py": "9fd79829cfb241e9a02043e21280525a17e0eb8206a745b1c5469306b2f6eec2",
+    "source/expression_tomography/tasks/text_boundary/__init__.py": "2e922b945fd1c80e67c4164d82b19c01fad84067393c166e138d9b82565dfa18",
+    "source/expression_tomography/tasks/text_boundary/fixtures.py": "898ab03392fa96a63e2d85a780cc059324437625e0873ed60160bc3da8f1fdde",
+    "source/expression_tomography/tasks/text_boundary/mock_provider.py": "51b31945ff09f34dd9a720b4d2bce9f8143dcf43d93a052d6b87bd06fa47134b",
+    "source/expression_tomography/tasks/text_boundary/protocol.py": "3ba6e4be1e4bb5e11880650df5f18a462b46a8719c0e626a2cdefc19f3432f0b",
+    "source/expression_tomography/tasks/text_boundary/report.py": "afb4075717a93c1c47ea274f48a8e3f484eb91ef159d552106cf67ae6124c400",
+    "source/expression_tomography/tasks/text_boundary/task.py": "a5f98f35931bb235af0097f86f390391db271b27aac0aa52043b089f56c4d996",
+    "summary.json": "d594a2dab015dc147242b65a17e4c983823db4b53fa62ee573a13b9f32e4cf05",
+    "summary.md": "bfd6c756e95db28d3019af772a7f088c874f0233a5a3f31ca0fbd5a1fe921e44"
+  },
+  "run_identity": "592e63c1f2a20a268d73870aa8783afc6a2dd7138128c16b394fa2a94f310baa"
+}

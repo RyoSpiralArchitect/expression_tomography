@@ -1,0 +1,137 @@
+{
+  "manifest_version": "text_boundary.live_bundle.v1",
+  "generated_at_utc": "2026-09-07T12:20:28.634356+00:00",
+  "git_head_at_freeze": "0fff75b15ed0f204c1825e3260f64386b685fec4",
+  "task_code_committed_at_execution": false,
+  "experiment_run_identity_sha256": "2b8701e3dff6c9dcdaeed9fd7bfd1ac61019b059b40ac09be1210e238e464fc8",
+  "python_version": "3.12.6 (v3.12.6:a4a2d2b0d85, Sep  6 2024, 16:08:03) [Clang 13.0.0 (clang-1300.0.29.30)]",
+  "copy_byte_identity_verified": [
+    "plan.json",
+    "trials.sqlite",
+    "summary.json",
+    "preflight_summary.json",
+    "revalidation.json",
+    "execution.md",
+    "analysis/review_packets.jsonl",
+    "analysis/analysis.json",
+    "analysis/case_results.csv",
+    "analysis_initial/review_packets.jsonl",
+    "analysis_initial/analysis.json",
+    "analysis_initial/case_results.csv"
+  ],
+  "database_sha256": "06c68fe9ff4df2d4937588813ecea83a43218d9e6ef5872311cd56a952012869",
+  "sqlite_integrity_check": "ok",
+  "all_source_snapshots_match_plan": true,
+  "revalidated_rows": 252,
+  "revalidation_new_calls": 0,
+  "archived_analysis_reproduced_exactly": true,
+  "new_response_phases": [
+    7,
+    245
+  ],
+  "recorded_responses": 252,
+  "n_documents": 6,
+  "n_rule_systems": 1,
+  "n_schema_valid": 252,
+  "n_document_state_correct": 252,
+  "n_endpoint_wrong": 49,
+  "n_wrong_endpoint_matches_followup_boolean_candidates": 49,
+  "n_bad_quote_rows": 30,
+  "n_outside_source_quote_entries": 33,
+  "independent_human_semantic_adjudication": "NOT_COLLECTED",
+  "transport": "serialized_history_replay.single_user_prompt.v1",
+  "native_chat_generalization": "UNIDENTIFIED",
+  "actual_token_usage_and_cost": "NOT_RECORDED_BY_TEXT_ONLY_ADAPTER",
+  "provider_returned_model_snapshot": "NOT_RECORDED_BY_TEXT_ONLY_ADAPTER",
+  "interpretation": "Frozen endpoint mismatches and post-hoc Boolean compatibility are separate; quote location is not proof of generation origin. Repeated calls are not independent cases. No human pilot data is included.",
+  "files": {
+    ".gitignore": {
+      "sha256": "436d75a7770316fe20dd20959f4904ec43c26ce972dfc05644d9c5854519b712",
+      "size_bytes": 59
+    },
+    "README.md": {
+      "sha256": "525bc9d561b034f66e45ea72cc0a90172acf5606ff5deae58dfc08400fec5481",
+      "size_bytes": 3536
+    },
+    "analysis/analysis.json": {
+      "sha256": "1c7a8616675aa1b4f90191e06cf2fbaf88e2312ac42e943dfa3934807ee35968",
+      "size_bytes": 51001
+    },
+    "analysis/case_results.csv": {
+      "sha256": "e9e8a0a9b067251eea5ff5cd59bae8d5c3a32ab873b84166a5d9475c97c680da",
+      "size_bytes": 75544
+    },
+    "analysis/review_packets.jsonl": {
+      "sha256": "d5de1d0f366678953f015b69f549b5ea15aefacf450127cc9db8dedc018345ea",
+      "size_bytes": 380777
+    },
+    "analysis_initial/analysis.json": {
+      "sha256": "46d46da6ecde0c4627a38875f6b1c5521a3c8e38b85b3190d7cbd4aa4df80d46",
+      "size_bytes": 33777
+    },
+    "analysis_initial/case_results.csv": {
+      "sha256": "e9e8a0a9b067251eea5ff5cd59bae8d5c3a32ab873b84166a5d9475c97c680da",
+      "size_bytes": 75544
+    },
+    "analysis_initial/review_packets.jsonl": {
+      "sha256": "7348ca2933a2ff8d614d22cff7bc4f8f60d985263c1a9c2e8f77d611cb1aa5d7",
+      "size_bytes": 371147
+    },
+    "execution.md": {
+      "sha256": "d3f34bb4fddac963bd26250f165a3bdc0e7e5be870bb63adf65e73b5de0d53be",
+      "size_bytes": 3096
+    },
+    "plan.json": {
+      "sha256": "87a914d8c37c35a8f07a97bf28ea2ea683c5f4b02fd077dc3d021538918dd0f7",
+      "size_bytes": 15986
+    },
+    "preflight_summary.json": {
+      "sha256": "2a4288f4034b3e013bf959022fe19d219c595a77e788062bb7ef7aff92d0e966",
+      "size_bytes": 7922
+    },
+    "providers.openai_gpt_5_6_luna_text_boundary.json": {
+      "sha256": "9d5751566abe87e66a68d02df15f559a10cf16cb5e888d38e45742745c1c39b8",
+      "size_bytes": 353
+    },
+    "revalidation.json": {
+      "sha256": "86683af39a58656cc41a0b7ea60aff850b24c599aef29045527f8b14041d58d4",
+      "size_bytes": 25237
+    },
+    "source/analyze_text_boundary_run.py": {
+      "sha256": "f24fad4ec8bdbc5d9125c5983bec21978943c94d7ca19df22e11e3d92ac36ba9",
+      "size_bytes": 11257
+    },
+    "source/text_boundary/__init__.py": {
+      "sha256": "2e922b945fd1c80e67c4164d82b19c01fad84067393c166e138d9b82565dfa18",
+      "size_bytes": 83
+    },
+    "source/text_boundary/fixtures.py": {
+      "sha256": "898ab03392fa96a63e2d85a780cc059324437625e0873ed60160bc3da8f1fdde",
+      "size_bytes": 5041
+    },
+    "source/text_boundary/mock_provider.py": {
+      "sha256": "51b31945ff09f34dd9a720b4d2bce9f8143dcf43d93a052d6b87bd06fa47134b",
+      "size_bytes": 1400
+    },
+    "source/text_boundary/protocol.py": {
+      "sha256": "3ba6e4be1e4bb5e11880650df5f18a462b46a8719c0e626a2cdefc19f3432f0b",
+      "size_bytes": 5296
+    },
+    "source/text_boundary/report.py": {
+      "sha256": "afb4075717a93c1c47ea274f48a8e3f484eb91ef159d552106cf67ae6124c400",
+      "size_bytes": 7504
+    },
+    "source/text_boundary/task.py": {
+      "sha256": "a5f98f35931bb235af0097f86f390391db271b27aac0aa52043b089f56c4d996",
+      "size_bytes": 14940
+    },
+    "summary.json": {
+      "sha256": "551367649e6e4ed6b5dc97ad66dd8c9e8f3e88d3484220e8bb68a1d34c219844",
+      "size_bytes": 25237
+    },
+    "trials.sqlite": {
+      "sha256": "06c68fe9ff4df2d4937588813ecea83a43218d9e6ef5872311cd56a952012869",
+      "size_bytes": 1548288
+    }
+  }
+}

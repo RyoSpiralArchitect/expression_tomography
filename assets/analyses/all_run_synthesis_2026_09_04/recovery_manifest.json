@@ -1,0 +1,38 @@
+[
+  {
+    "source": "/Users/ryospiralarchitect/expression_tomography/results/rule_z_free_prompt_ladder_anthropic_seed29_30.sqlite",
+    "destination": "assets/runs/rule_z_free_prompt_ladder_anthropic_seed29_30/trials.sqlite",
+    "sha256": "457145f454455f3cb87fc8f55dd1c810e729e6352f3d4e7b6adfb1fe36edfc2b",
+    "rows": 240,
+    "recovered_at": "2026-09-04",
+    "status": "retrospective_unmodified_snapshot",
+    "limits": "No reconstructed preregistration or wire provenance; stored scores retained unchanged."
+  },
+  {
+    "source": "/Users/ryospiralarchitect/expression_tomography/results/rule_z_free_prompt_ladder_openai_seed29_30.sqlite",
+    "destination": "assets/runs/rule_z_free_prompt_ladder_openai_seed29_30/trials.sqlite",
+    "sha256": "2e75ce5e3a0f9f7b42dfa440180e9f34efc50f69c1040e512893be04c7b35c0c",
+    "rows": 240,
+    "recovered_at": "2026-09-04",
+    "status": "retrospective_unmodified_snapshot",
+    "limits": "No reconstructed preregistration or wire provenance; stored scores retained unchanged."
+  },
+  {
+    "source": "/Users/ryospiralarchitect/expression_tomography/results/rule_z_iterative_repair_anthropic_seed29_30.sqlite",
+    "destination": "assets/runs/rule_z_iterative_repair_anthropic_seed29_30/trials.sqlite",
+    "sha256": "050f753a69a0c95ed2eb507d4dab6caf501994e40b2f924cfee33cc7ce036865",
+    "rows": 240,
+    "recovered_at": "2026-09-04",
+    "status": "retrospective_unmodified_snapshot",
+    "limits": "No reconstructed preregistration or wire provenance; stored scores retained unchanged."
+  },
+  {
+    "source": "/Users/ryospiralarchitect/expression_tomography/results/rule_z_contract_perturbation_anthropic_seed29_30.sqlite",
+    "destination": "assets/runs/rule_z_contract_perturbation_anthropic_seed29_30/trials.sqlite",
+    "sha256": "b3e7c75716aaa1acf05e9afd344195ace91df27d29d8edf7d8d9e3753c9f634a",
+    "rows": 390,
+    "recovered_at": "2026-09-04",
+    "status": "retrospective_unmodified_snapshot",
+    "limits": "No reconstructed preregistration or wire provenance; stored scores retained unchanged."
+  }
+]

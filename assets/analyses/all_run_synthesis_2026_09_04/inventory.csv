@@ -1,0 +1,121 @@
+path,status,cases,rows,providers,integrity,duplicate_logical_excess,generation_identity_rows,duplicate_generation_excess,sha256
+assets/runs/metaphor_transfer_anthropic_live/trials.sqlite,audited,1,3,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,20c35efdb6b24a9bc97aa2ad0cd377b93c7a4752b2d9e5b84e6a0d5767f1a6c7
+assets/runs/metaphor_transfer_openai_live/trials.sqlite,audited,1,3,"[""openai_gpt_4_1_mini""]","[""ok""]",0,0,0,b042b6b23e1ba77788ea9489d009059d70a3aebbd62a39fe804017ce05099379
+assets/runs/rule_z_audit_reader_calibration_luna_seed53_120/invariants/trials.sqlite,audited,120,120,"[""openai-gpt-5.6-luna-low""]","[""ok""]",0,0,0,dbadb4c01423295a6c66336c28ff6b355605b26132a9d2cea69b48c09041377a
+assets/runs/rule_z_audit_reader_calibration_luna_seed53_120/legacy/trials.sqlite,audited,120,240,"[""openai-gpt-5.6-luna-low""]","[""ok""]",0,0,0,aacd0c2e72f461a24fb2233cce2e15a41d51e03b2fca50feca10478b5cc709be
+assets/runs/rule_z_binding_stress_anthropic_seed41/trials.sqlite,audited,24,600,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,9d4cd5d1c9c973f2811ccca5c05a34e6c464304209441e429353b0da6709de03
+assets/runs/rule_z_contract_binding_anthropic_seed29_30/trials.sqlite,audited,30,270,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce
+assets/runs/rule_z_contract_perturbation_anthropic_seed29_30/trials.sqlite,audited,30,390,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,b3e7c75716aaa1acf05e9afd344195ace91df27d29d8edf7d8d9e3753c9f634a
+assets/runs/rule_z_ear_redteam_anthropic_rerun_seed29_30/trials.sqlite,audited,30,210,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,cb21c25b2940c36585f81ff4470110b03466c56a0c5d6f32746f44903e3b5f68
+assets/runs/rule_z_ear_redteam_anthropic_seed29_30/trials.sqlite,audited,30,210,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,6f3ace8e5b8a0487b5080655255035d66ccf53268f95e67b589a271a2b09e8fc
+assets/runs/rule_z_ear_redteam_gpt55_seed29_30/trials.sqlite,audited,30,210,"[""openai_gpt_5_5""]","[""ok""]",0,0,0,37c22196a688c23f9e631639c48e8cf7f5d90942f46b70ce51daba4264b2036d
+assets/runs/rule_z_ear_redteam_openai_seed29_30/trials.sqlite,audited,30,210,"[""openai_gpt_4_1_mini""]","[""ok""]",0,0,0,e1613893199be4e9d1258a5db02b5b7f6cd7f79ac08460b734e1131fb2c04421
+assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/diagnostics/score_v1.sqlite,audited,16,704,"[""openai-gpt-5.6-luna-low""]","[""ok""]",0,0,0,58b2fe08b9e80ab12aaacf8153c34d600f064f0ab47e890a4c5a0d50c7b9e6de
+assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/diagnostics/score_v2.sqlite,audited,16,704,"[""openai-gpt-5.6-luna-low""]","[""ok""]",0,0,0,9741c8bc88b2306b4c0c094409909df14ef9defb7612d2da07bce3c5120ae772
+assets/runs/rule_z_extraction_intervention_luna_seed67_4x2/trials.sqlite,audited,16,704,"[""openai-gpt-5.6-luna-low""]","[""ok""]",0,0,0,6213fb1cb99cbac2bb25b1eeab52060bbb411fe3a00b723c33bbd47e1eea23a2
+assets/runs/rule_z_extraction_intervention_luna_seed68_16x2/trials.sqlite,audited,64,2816,"[""openai-gpt-5.6-luna-low""]","[""ok""]",0,2816,0,f1cfb931367d81d643ebb4fac748cf303ec1d280fc482b5f1a8a48a8d9fc89e3
+assets/runs/rule_z_extraction_intervention_luna_seed68_target_null_16x2/trials.sqlite,audited,64,2816,"[""openai-gpt-5.6-luna-low""]","[""ok""]",0,2816,0,ad93ec8f27ec57f5916e61a339b5f541414dcdc1fcba7f296a17c61f8aac6097
+assets/runs/rule_z_free_prompt_ladder_anthropic_seed29_30/trials.sqlite,audited,30,240,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,457145f454455f3cb87fc8f55dd1c810e729e6352f3d4e7b6adfb1fe36edfc2b
+assets/runs/rule_z_free_prompt_ladder_openai_seed29_30/trials.sqlite,audited,30,240,"[""openai_gpt_4_1_mini""]","[""ok""]",0,0,0,2e75ce5e3a0f9f7b42dfa440180e9f34efc50f69c1040e512893be04c7b35c0c
+assets/runs/rule_z_initial_anthropic_seed29_30/trials.sqlite,audited,30,120,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,5fdf0a857117e7f1e4b2bdc8ccddd6049b397efdf5e3bea4154c04f24dd939af
+assets/runs/rule_z_initial_openai_seed29_30/trials.sqlite,audited,30,120,"[""openai_gpt_4_1_mini""]","[""ok""]",0,0,0,38637b1d01889351043af9477cbe486df6978ae837718b96070ad4a3fac076fd
+assets/runs/rule_z_intermediate_factorial_anthropic_sonnet46_seed41/trials.sqlite,audited,12,204,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,cd9fd6e9156ebba798558cac9675a605ba04fcb49f336911bbedca1953d75eef
+assets/runs/rule_z_iterative_repair_anthropic_seed29_30/trials.sqlite,audited,30,240,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,050f753a69a0c95ed2eb507d4dab6caf501994e40b2f924cfee33cc7ce036865
+assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/calibration_trials.sqlite,audited,12,72,"[""anthropic_sonnet_4_6"", ""openai_gpt_5_5""]","[""ok""]",0,0,0,77cc9047c833c405b4033f42879d6a3c5c20ae23246ee0c4e18292f640016170
+assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/budget4000_default_chunks/compact_free.sqlite,audited,8,22,"[""openai_gpt_5_5""]","[""ok""]",0,0,0,6937cbc9e3417907b885c1f5969ef1ca13231f31fc4a347670ff91f05c83b636
+assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/budget4000_default_chunks/compact_generic.sqlite,audited,12,33,"[""openai_gpt_5_5""]","[""ok""]",0,0,0,0010d904340e0615b19ae5a45adc430d060dc1c747b95cedf63ec3476ac1713b
+assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/budget4000_default_chunks/explicit_free.sqlite,audited,12,33,"[""openai_gpt_5_5""]","[""ok""]",0,0,0,d2a9eba3bea90009ca002df1c72b0d2eab9a40ee3792878452c54e6f25bcadb5
+assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/budget4000_default_chunks/explicit_generic.sqlite,audited,11,30,"[""openai_gpt_5_5""]","[""ok""]",0,0,0,0321cb1d754d42ca632a9a66bac5dd14d86022a8667b085d3949c3fa45e39d0f
+assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/calibration_budget2000_default.sqlite,audited,2,12,"[""anthropic_sonnet_4_6"", ""openai_gpt_5_5""]","[""ok""]",0,0,0,d2c776218c302692f7a48a4250c6a9810a918658840509ded07dfb5cf8f60020
+assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/calibration_budget4000_default.sqlite,audited,2,12,"[""anthropic_sonnet_4_6"", ""openai_gpt_5_5""]","[""ok""]",0,0,0,4e8bac5b95cdd208297c2eb2cd8d6832eb20444aead2ad2896629c22588d5201
+assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/full_budget2000_default.sqlite,audited,1,0,[],"[""ok""]",0,0,0,1357020ff08af49ccb281612f2887650d677352cc4885e081d7a2a5c10e6d7d5
+assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/diagnostics/full_budget4000_default.sqlite,audited,2,4,"[""openai_gpt_5_5""]","[""ok""]",0,0,0,e1194efc90fe704ef918e0dcb45dd26168f83f3db43f3aced52ad6cb2f693d71
+assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low/trials.sqlite,audited,96,465,"[""anthropic_sonnet_4_6"", ""openai_gpt_5_5""]","[""ok""]",0,0,0,f97628639a121338b4fe6a2d203e3e17630c0817eeff4647e306c3e39953ac69
+assets/runs/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low_complete/trials.sqlite,audited,96,768,"[""anthropic_sonnet_4_6"", ""openai_gpt_5_5""]","[""ok""]",0,0,0,c2381200da3fd81fb408a311317ed19095e3b7472d460e05a2a3d79d856bc058
+assets/runs/rule_z_priority_binding_openai_gpt55_seed41_budget2000/trials.sqlite,audited,12,192,"[""openai_gpt_5_5""]","[""ok""]",0,0,0,9e74ac1318395e22ab3a9694ba98b70164b503054ee06857ceb7d5146cb8c6f3
+assets/runs/rule_z_priority_compute_anthropic_sonnet46_seed41_budget2000/trials.sqlite,audited,12,312,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,927caa324b8922c0b4ac72d0094985a6d50941b4aef1edf4c99503de42ada7d1
+assets/runs/rule_z_priority_compute_openai_gpt55_seed41_budget900_diagnostic/trials.sqlite,audited,12,300,"[""openai_gpt_5_5""]","[""ok""]",0,0,0,8c35e0e3553a111efe82d26410b51182877351530d37c05044a377dfb9cfc1e9
+assets/runs/rule_z_revision_decoder_luna_seed101_36x2/trials.sqlite,audited,36,288,"[""openai-gpt-5.6-luna-low-revision-decoder""]","[""ok""]",0,288,0,62acca41d55c2abf5428c157b7f0044fc9b987304a6bd6c3607ccd6f2ffc61a0
+assets/runs/rule_z_revision_ear_ladder_luna_seed101_108x2/trials.sqlite,audited,108,2808,"[""openai-gpt-5.6-luna-low-revision-ear-ladder""]","[""ok""]",0,2808,0,1395e7136c46b1f5dcbbdf4ce3013b774e7d01ad2323694e5b5266104fbd60cd
+assets/runs/rule_z_revision_interface_luna_seed101_108x2/trials.sqlite,audited,108,3024,"[""openai-gpt-5.6-luna-low-revision-interface""]","[""ok""]",0,3024,0,42f87904d857cbcfc1da06434566f9e7c7e54fa87df6a324206662e440320c70
+assets/runs/rule_z_rule_revision_leakage_luna_seed83_288x2/trials.sqlite,audited,288,4032,"[""openai-gpt-5.6-luna-low-rule-revision""]","[""ok""]",0,4032,0,415f9f62812764b74a547299761840ad2bd520f976fdaa5a2960d64dace49165
+assets/runs/rule_z_sender_anthropic_seed29_30/trials.sqlite,audited,30,210,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,8971d972670305eaa861f9678b96ee496e4add59dc96aa018dd50399e757a55f
+assets/runs/rule_z_sender_gpt55_seed29_30/trials.sqlite,audited,30,210,"[""openai_gpt_5_5""]","[""ok""]",0,0,0,f687ea9a36c964e44de9dbd03446809e7f021967d5a15bd31c5b3227a235f06f
+assets/runs/rule_z_transmission_openai_seed29_30/trials.sqlite,audited,30,180,"[""openai_gpt_4_1_mini""]","[""ok""]",0,0,0,392f9c08d45813ec16a7f6047d818ea3a4fbd936fd07878a67cd1441ac1095b2
+local_results/expression_tomography/rule_z_audit_calibration_luna_invariants_seed53_120.sqlite,audited,120,120,"[""openai-gpt-5.6-luna-low""]","[""ok""]",0,0,0,f05320fc1761d22ceb87e85f70bcf0d4af12f80276f9cae4b2b29bf4db3b1715
+local_results/expression_tomography/rule_z_audit_calibration_luna_invariants_seed53_smoke12.sqlite,audited,12,12,"[""openai-gpt-5.6-luna-low""]","[""ok""]",0,0,0,3394dbee79adfb2c338a600d7eb8d1528e846a51a8ac0948c71b4905dd7b4aed
+local_results/expression_tomography/rule_z_audit_calibration_luna_opaque_v2_request_v2_seed53_120_legacy.sqlite,audited,1,0,[],"[""ok""]",0,0,0,4614725826a31a2a493f68a1047c09d66076861b89212212b2769d972c0bc53e
+local_results/expression_tomography/rule_z_audit_calibration_luna_opaque_v2_request_v3_seed53_120_invariants.sqlite,audited,120,120,"[""openai-gpt-5.6-luna-low""]","[""ok""]",0,0,0,dbadb4c01423295a6c66336c28ff6b355605b26132a9d2cea69b48c09041377a
+local_results/expression_tomography/rule_z_audit_calibration_luna_opaque_v2_request_v3_seed53_120_legacy.sqlite,audited,120,240,"[""openai-gpt-5.6-luna-low""]","[""ok""]",0,0,0,aacd0c2e72f461a24fb2233cce2e15a41d51e03b2fca50feca10478b5cc709be
+local_results/expression_tomography/rule_z_audit_calibration_luna_opaque_v2_seed53_120_invariants.sqlite,audited,120,120,"[""openai-gpt-5.6-luna-low""]","[""ok""]",0,0,0,727d0c9757a4a489bc28d1df4bba33908003e81fec7f85683135eade8821b42a
+local_results/expression_tomography/rule_z_audit_calibration_luna_opaque_v2_seed53_120_legacy.sqlite,audited,120,240,"[""openai-gpt-5.6-luna-low""]","[""ok""]",0,0,0,1b673afdc5e1ffb33feeb649ebcb9c93e8edaedba4fb75ea9f382d7131190be7
+local_results/expression_tomography/rule_z_audit_calibration_luna_seed53_120.sqlite,audited,120,240,"[""openai-gpt-5.6-luna-low""]","[""ok""]",0,0,0,fcd6eccc29afb81dce1df9a99167844762da6e222218368fa2f50306149a6e2b
+local_results/expression_tomography/rule_z_audit_calibration_luna_seed53_smoke12.sqlite,audited,12,24,"[""openai-gpt-5.6-luna-low""]","[""ok""]",0,0,0,b220976399f0408c8fd4f2952d15b15dc9a100c4b4a281447ca7304ec8b25c3c
+local_results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2.sqlite,audited,16,704,"[""openai-gpt-5.6-luna-low""]","[""ok""]",0,0,0,58b2fe08b9e80ab12aaacf8153c34d600f064f0ab47e890a4c5a0d50c7b9e6de
+local_results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2_score_v2.sqlite,audited,16,704,"[""openai-gpt-5.6-luna-low""]","[""ok""]",0,0,0,9741c8bc88b2306b4c0c094409909df14ef9defb7612d2da07bce3c5120ae772
+local_results/expression_tomography/rule_z_extraction_intervention_luna_seed67_4x2_score_v3.sqlite,audited,16,704,"[""openai-gpt-5.6-luna-low""]","[""ok""]",0,0,0,6213fb1cb99cbac2bb25b1eeab52060bbb411fe3a00b723c33bbd47e1eea23a2
+local_results/expression_tomography/rule_z_extraction_intervention_luna_seed68_16x2/trials.sqlite,audited,64,2816,"[""openai-gpt-5.6-luna-low""]","[""ok""]",0,2816,0,f1cfb931367d81d643ebb4fac748cf303ec1d280fc482b5f1a8a48a8d9fc89e3
+local_results/expression_tomography/rule_z_posthoc_live_readers_gpt55_sonnet46_seed41_budget4000_low_complete.sqlite,audited,96,768,"[""anthropic_sonnet_4_6"", ""openai_gpt_5_5""]","[""ok""]",0,0,0,c2381200da3fd81fb408a311317ed19095e3b7472d460e05a2a3d79d856bc058
+local_results/live_metaphor_anthropic.sqlite,audited,1,3,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,20c35efdb6b24a9bc97aa2ad0cd377b93c7a4752b2d9e5b84e6a0d5767f1a6c7
+local_results/live_metaphor_openai.sqlite,audited,1,3,"[""openai_gpt_4_1_mini""]","[""ok""]",0,0,0,b042b6b23e1ba77788ea9489d009059d70a3aebbd62a39fe804017ce05099379
+local_results/live_rule_z_anthropic.sqlite,audited,4,16,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,795b4b34036489a31b8d1def8ecbf77b853d270711b4bc95954aedefdf98c3c5
+local_results/live_rule_z_anthropic_30.sqlite,audited,30,120,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,5fdf0a857117e7f1e4b2bdc8ccddd6049b397efdf5e3bea4154c04f24dd939af
+local_results/live_rule_z_anthropic_v2.sqlite,audited,4,16,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,d80fca9be081a3c7bc6ff6d30596b0783bee61147a953fb17ce1caedcdb04286
+local_results/live_rule_z_anthropic_v3.sqlite,audited,2,8,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,4a884fa4909c4704ec2c583253603cba95fa2753c29d5a5b459e491bcd68819d
+local_results/live_rule_z_diagnostics_seed29_30.sqlite,audited,30,180,"[""openai_gpt_4_1_mini""]","[""ok""]",0,0,0,392f9c08d45813ec16a7f6047d818ea3a4fbd936fd07878a67cd1441ac1095b2
+local_results/live_rule_z_ear_redteam_anthropic_rerun_seed29_30.sqlite,audited,30,210,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,cb21c25b2940c36585f81ff4470110b03466c56a0c5d6f32746f44903e3b5f68
+local_results/live_rule_z_ear_redteam_anthropic_seed29_30.sqlite,audited,30,210,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,6f3ace8e5b8a0487b5080655255035d66ccf53268f95e67b589a271a2b09e8fc
+local_results/live_rule_z_ear_redteam_gpt55_seed29_30.sqlite,audited,30,210,"[""openai_gpt_5_5""]","[""ok""]",0,0,0,37c22196a688c23f9e631639c48e8cf7f5d90942f46b70ce51daba4264b2036d
+local_results/live_rule_z_ear_redteam_openai_seed29_30.sqlite,audited,30,210,"[""openai_gpt_4_1_mini""]","[""ok""]",0,0,0,e1613893199be4e9d1258a5db02b5b7f6cd7f79ac08460b734e1131fb2c04421
+local_results/live_rule_z_openai.sqlite,audited,4,16,"[""openai_gpt_4_1_mini""]","[""ok""]",0,0,0,9a677003b784b25d3e21b316ea9e25128e90253f5c00c19780613744efa78a8a
+local_results/live_rule_z_openai_30.sqlite,audited,30,120,"[""openai_gpt_4_1_mini""]","[""ok""]",0,0,0,38637b1d01889351043af9477cbe486df6978ae837718b96070ad4a3fac076fd
+local_results/live_rule_z_sender_anthropic_seed29_30.sqlite,audited,30,210,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,8971d972670305eaa861f9678b96ee496e4add59dc96aa018dd50399e757a55f
+local_results/live_rule_z_sender_gpt55_seed29_30.sqlite,audited,30,210,"[""openai_gpt_5_5""]","[""ok""]",0,0,0,f687ea9a36c964e44de9dbd03446809e7f021967d5a15bd31c5b3227a235f06f
+local_results/metaphor_transfer.sqlite,audited,1,3,"[""mock""]","[""ok""]",0,0,0,29afd216c8ca0bf508650eff1de89b0d70afe30a4f90d7d9f5a3f75afa6d2d63
+local_results/rule_revision_luna_seed83_288x2_score_v2.sqlite,audited,288,4032,"[""openai-gpt-5.6-luna-low-rule-revision""]","[""ok""]",0,4032,0,415f9f62812764b74a547299761840ad2bd520f976fdaa5a2960d64dace49165
+local_results/rule_revision_mock_seed83_288x2.sqlite,audited,288,4032,"[""rule-revision-mock""]","[""ok""]",0,4032,0,8d5b96df7b9852d1e9964239ebd1698eaa12314dd0cc703884175d2c59e6cf92
+local_results/rule_revision_mock_seed83_288x2_receiver_phase.sqlite,audited,288,4032,"[""rule-revision-mock""]","[""ok""]",0,4032,0,569413692c1cb4ebd064552101f8d6e6aea8c01015866492e3533edb5eb3527d
+local_results/rule_revision_mock_seed83_288x2_score_v2.sqlite,audited,288,4032,"[""rule-revision-mock""]","[""ok""]",0,4032,0,3c40a85e415d8413b863de7f80f74022c74c992f0f5bb68f4c9fff9732528ee5
+local_results/rule_revision_prereg_preflight_v1.sqlite,audited,0,0,[],"[""ok""]",0,0,0,7f852784ee57dc57d8032e404d2d0b1f922b7aed937477902c3f8a7ba4c82da1
+local_results/rule_z.sqlite,audited,8,32,"[""mock""]","[""ok""]",0,0,0,33dc8d4febc34bf5f494838525bdf145eea4b13b77d4129310082406c300a726
+local_results/rule_z_binding_stress_anthropic_seed41.sqlite,audited,24,600,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,9d4cd5d1c9c973f2811ccca5c05a34e6c464304209441e429353b0da6709de03
+local_results/rule_z_conflict_metrics_mock_smoke.sqlite,audited,6,42,"[""mock""]","[""ok""]",0,0,0,61bd954285ad0404511a2db0e8c634227508650d446ed909c2b2a3736de1b8eb
+local_results/rule_z_contract_binding_anthropic_seed29_30.sqlite,audited,30,531,"[""anthropic_sonnet_4_6""]","[""ok""]",261,0,0,41e7337439d22e76a6928585d61e60149abaaff963516554010728610074161e
+local_results/rule_z_contract_binding_anthropic_seed29_30_clean.sqlite,audited,30,270,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,80596af605e28773886c08b22361e5bd556a58e24024c2dba236a933a348cb47
+local_results/rule_z_contract_binding_anthropic_seed29_30_fixed.sqlite,audited,30,270,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,b6c8869635aa9b6c3f3c41a3074c35deef96f5c5da5273fc6a8313c9f35250ce
+local_results/rule_z_contract_binding_mock_smoke.sqlite,audited,6,54,"[""mock""]","[""ok""]",0,0,0,1a9c76fad1ae09ec711738350381687913c527b6d1d7182edf4bc7ae0855b832
+local_results/rule_z_contract_perturbation_anthropic_seed29_30.sqlite,audited,30,390,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,b3e7c75716aaa1acf05e9afd344195ace91df27d29d8edf7d8d9e3753c9f634a
+local_results/rule_z_contract_perturbation_mock.sqlite,audited,6,78,"[""mock""]","[""ok""]",0,0,0,20bf05506676a20df197aa17b7a0c254187cdc81fbb54acae2ccd2e644f05b44
+local_results/rule_z_diagnostics_mock_smoke.sqlite,audited,6,36,"[""mock""]","[""ok""]",0,0,0,bd0cc1dc50ba8a9e00ad7227531a17f2a456d2a6a23e58a822f2a25f80652802
+local_results/rule_z_diagnostics_v2_mock_smoke.sqlite,audited,6,48,"[""mock""]","[""ok""]",0,0,0,94ad16db92557dbf0166c9e9ca35eb51857b803722b15626858fdc813b4ef560
+local_results/rule_z_ear_redteam_mock_smoke.sqlite,audited,6,42,"[""mock""]","[""ok""]",0,0,0,dc874813ceacc1c0e3c4d8a02ad287aa47b16eeee3fa7e3b910e7708936950f6
+local_results/rule_z_extraction_intervention_luna_seed68_target_null_below_cap.sqlite,audited,0,0,[],"[""ok""]",0,0,0,7f852784ee57dc57d8032e404d2d0b1f922b7aed937477902c3f8a7ba4c82da1
+local_results/rule_z_extraction_intervention_luna_seed68_target_null_preflight.sqlite,audited,0,0,[],"[""ok""]",0,0,0,7f852784ee57dc57d8032e404d2d0b1f922b7aed937477902c3f8a7ba4c82da1
+local_results/rule_z_free_prompt_ladder_anthropic_seed29_30.sqlite,audited,30,240,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,457145f454455f3cb87fc8f55dd1c810e729e6352f3d4e7b6adfb1fe36edfc2b
+local_results/rule_z_free_prompt_ladder_mock_smoke.sqlite,audited,6,48,"[""mock""]","[""ok""]",0,0,0,06ba415678f41b5f19820276812339f5568bc65b8d600103278becfc3f17ec2b
+local_results/rule_z_free_prompt_ladder_openai_seed29_30.sqlite,audited,30,240,"[""openai_gpt_4_1_mini""]","[""ok""]",0,0,0,2e75ce5e3a0f9f7b42dfa440180e9f34efc50f69c1040e512893be04c7b35c0c
+local_results/rule_z_intermediate_factorial_anthropic_sonnet46_seed41.sqlite,audited,12,204,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,cd9fd6e9156ebba798558cac9675a605ba04fcb49f336911bbedca1953d75eef
+local_results/rule_z_intermediate_factorial_mock_seed41.sqlite,audited,12,216,"[""mock""]","[""ok""]",0,0,0,3c2fdc99616658e50c05f25a27f128ded0566d4e09334bc89f9b6e75ae502753
+local_results/rule_z_intermediate_probe_mock_seed41.sqlite,audited,4,12,"[""mock""]","[""ok""]",0,0,0,67a2af04caa63739b402b71fc83689917a27012b964c102091ae0b34ff77467a
+local_results/rule_z_intermediate_probe_v1_mock_seed41.sqlite,audited,4,12,"[""mock""]","[""ok""]",0,0,0,12f7accafc01d338ea9578205e9873ee92981bb701fd858ac9e4e03d52a79710
+local_results/rule_z_iterative_repair_anthropic_seed29_30.sqlite,audited,30,240,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,050f753a69a0c95ed2eb507d4dab6caf501994e40b2f924cfee33cc7ce036865
+local_results/rule_z_iterative_repair_mock_smoke.sqlite,audited,6,48,"[""mock""]","[""ok""]",0,0,0,27a4c2b1e75feb599ae931139ee3e9f2eec36fd420da740eab7604718a0f3e20
+local_results/rule_z_posthoc_live_reader_calibration_seed41/trials.sqlite,audited,2,12,"[""anthropic_sonnet_4_6"", ""openai_gpt_5_5""]","[""ok""]",0,0,0,d2c776218c302692f7a48a4250c6a9810a918658840509ded07dfb5cf8f60020
+local_results/rule_z_posthoc_live_reader_calibration_seed41_budget4000/trials.sqlite,audited,2,12,"[""anthropic_sonnet_4_6"", ""openai_gpt_5_5""]","[""ok""]",0,0,0,4e8bac5b95cdd208297c2eb2cd8d6832eb20444aead2ad2896629c22588d5201
+local_results/rule_z_posthoc_live_reader_calibration_seed41_budget4000_low/trials.sqlite,audited,12,72,"[""anthropic_sonnet_4_6"", ""openai_gpt_5_5""]","[""ok""]",0,0,0,77cc9047c833c405b4033f42879d6a3c5c20ae23246ee0c4e18292f640016170
+local_results/rule_z_posthoc_live_readers_seed41/trials.sqlite,audited,1,0,[],"[""ok""]",0,0,0,1357020ff08af49ccb281612f2887650d677352cc4885e081d7a2a5c10e6d7d5
+local_results/rule_z_posthoc_live_readers_seed41_budget4000/trials.sqlite,audited,2,4,"[""openai_gpt_5_5""]","[""ok""]",0,0,0,e1194efc90fe704ef918e0dcb45dd26168f83f3db43f3aced52ad6cb2f693d71
+local_results/rule_z_posthoc_live_readers_seed41_budget4000_chunks/compact_free.sqlite,audited,8,22,"[""openai_gpt_5_5""]","[""ok""]",0,0,0,6937cbc9e3417907b885c1f5969ef1ca13231f31fc4a347670ff91f05c83b636
+local_results/rule_z_posthoc_live_readers_seed41_budget4000_chunks/compact_generic.sqlite,audited,12,33,"[""openai_gpt_5_5""]","[""ok""]",0,0,0,0010d904340e0615b19ae5a45adc430d060dc1c747b95cedf63ec3476ac1713b
+local_results/rule_z_posthoc_live_readers_seed41_budget4000_chunks/explicit_free.sqlite,audited,12,33,"[""openai_gpt_5_5""]","[""ok""]",0,0,0,d2a9eba3bea90009ca002df1c72b0d2eab9a40ee3792878452c54e6f25bcadb5
+local_results/rule_z_posthoc_live_readers_seed41_budget4000_chunks/explicit_generic.sqlite,audited,11,30,"[""openai_gpt_5_5""]","[""ok""]",0,0,0,0321cb1d754d42ca632a9a66bac5dd14d86022a8667b085d3949c3fa45e39d0f
+local_results/rule_z_posthoc_live_readers_seed41_budget4000_low/trials.sqlite,audited,96,465,"[""anthropic_sonnet_4_6"", ""openai_gpt_5_5""]","[""ok""]",0,0,0,f97628639a121338b4fe6a2d203e3e17630c0817eeff4647e306c3e39953ac69
+local_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/compact_free.sqlite,audited,24,118,"[""anthropic_sonnet_4_6"", ""openai_gpt_5_5""]","[""ok""]",0,0,0,92c4f145986b8ecc3fc203fc0933187721d3fd20537703f5e1f68eecada74454
+local_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/compact_generic.sqlite,audited,24,114,"[""anthropic_sonnet_4_6"", ""openai_gpt_5_5""]","[""ok""]",0,0,0,08b34f26cab0a45a88362922dd0026ae847d912829919d93b5bb8f2a9cd2e74e
+local_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/explicit_free.sqlite,audited,24,118,"[""anthropic_sonnet_4_6"", ""openai_gpt_5_5""]","[""ok""]",0,0,0,83826fdf72ca8ce10c91f2b9ff34f280277de026a5e0d1cb98d3e65c47021e40
+local_results/rule_z_posthoc_live_readers_seed41_budget4000_low_chunks/explicit_generic.sqlite,audited,24,115,"[""anthropic_sonnet_4_6"", ""openai_gpt_5_5""]","[""ok""]",0,0,0,db1813f2ea6d7cc1cc25962894081383705a9a98d83b758b62522a891216a8bc
+local_results/rule_z_priority_binding_openai_gpt55_budget2000_seed41.sqlite,audited,12,192,"[""openai_gpt_5_5""]","[""ok""]",0,0,0,9e74ac1318395e22ab3a9694ba98b70164b503054ee06857ceb7d5146cb8c6f3
+local_results/rule_z_priority_compute_anthropic_sonnet46_budget2000_seed41.sqlite,audited,12,312,"[""anthropic_sonnet_4_6""]","[""ok""]",0,0,0,927caa324b8922c0b4ac72d0094985a6d50941b4aef1edf4c99503de42ada7d1
+local_results/rule_z_priority_compute_mock_seed41.sqlite,audited,12,168,"[""mock""]","[""ok""]",0,0,0,06ef4a2fe93bbc28db231b4bc1349d9c19d74d0a90b79cf5518027aaf2026ce2
+local_results/rule_z_priority_compute_openai_gpt55_seed41.sqlite,audited,12,300,"[""openai_gpt_5_5""]","[""ok""]",0,0,0,8c35e0e3553a111efe82d26410b51182877351530d37c05044a377dfb9cfc1e9
+local_results/rule_z_sender_modes_mock_smoke.sqlite,audited,6,42,"[""mock""]","[""ok""]",0,0,0,e8f3daf47e29a7f68c3355f607fa6907a02c8a906c3f0bb825c337b3b23950b4
