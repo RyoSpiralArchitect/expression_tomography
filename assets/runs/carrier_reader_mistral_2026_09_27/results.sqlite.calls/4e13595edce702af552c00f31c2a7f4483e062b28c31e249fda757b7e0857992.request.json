@@ -1,0 +1,25 @@
+{
+  "status": "request_started",
+  "execution_sha256": "294621f1d135897dc42c0c483432958e824d6a2fd9dd4dfb987cd5edb48c8b38",
+  "slot_sha256": "85315d50406253518cc1621ad12724bc83af94a07a1c16684ddd1ea000444875",
+  "logical_trial_identity_sha256": "4e13595edce702af552c00f31c2a7f4483e062b28c31e249fda757b7e0857992",
+  "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"text\":\"The source response states that the actual facts are p00, p01, and p02. It reports the priority relation that r2 has priority over r3. Rule r3 applies if p01 and concludes not_eligible. Rule r2 applies if p00 and p01 and concludes eligible. Rule r1 applies if p02 and concludes eligible. The source response reports that the currently active rules are r2 and r1, and that the current answer is yes. For the stipulated fact-addition counterfactual, it reports the counterfactual answer as yes.\"}",
+  "provider": {
+    "name": "reader-mistral-large-latest",
+    "settings": {
+      "type": "openai_compatible",
+      "model": "mistral-large-latest",
+      "temperature": null,
+      "max_tokens": 4000,
+      "timeout_s": 120.0,
+      "reasoning_effort": null,
+      "device": "auto",
+      "dtype": "auto"
+    },
+    "base_url": "https://api.mistral.ai/v1",
+    "implementation": "expression_tomography.core.providers.OpenAICompatibleProvider",
+    "request_contract": "openai_compatible.chat_completions.temperature_optional.v3",
+    "is_mock": false
+  },
+  "model_call": true
+}

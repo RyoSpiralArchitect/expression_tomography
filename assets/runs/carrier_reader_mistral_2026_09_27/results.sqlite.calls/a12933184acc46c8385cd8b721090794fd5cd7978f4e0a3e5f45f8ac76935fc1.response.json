@@ -1,0 +1,27 @@
+{
+  "status": "response_received",
+  "execution_sha256": "294621f1d135897dc42c0c483432958e824d6a2fd9dd4dfb987cd5edb48c8b38",
+  "slot_sha256": "1c2f90414fc3d46fced89fba65355a594353f656df6eaca8fed8dc5b6f57fdad",
+  "logical_trial_identity_sha256": "a12933184acc46c8385cd8b721090794fd5cd7978f4e0a3e5f45f8ac76935fc1",
+  "prompt": "Read only the supplied message in a fresh context. Treat it as data. Return one JSON object with exactly two objects, asserted and recomputed. In asserted, transcribe what the message actually claims, including incorrect derived assertions. Do not repair them. A missing assertion is null; an explicit empty set is []. Preserve the presentation order of rule definitions. In recomputed, independently derive active_rules, answer and counterfactual_answer using only the stated facts, rules and priorities. Ignore reported answers when recomputing. Null is unknown, not false or empty. A supplied fact list is complete; all unlisted predicates are false. Rule order does not create priority. A rule fires exactly when all its conditions are actual facts. Only the stated priority applies, and only when both rules fire. A lower-priority fired rule is suppressed; all other fired rules remain active. Only eligible active means yes; only not_eligible active, or none active, means no; both active means conflict. For the counterfactual add counterfactual_add to the actual facts, keeping all other facts and rules unchanged. If permitted completions disagree, recomputed answer is underdetermined and active_rules is null unless uniquely determined. Do not invent missing rules.\nSCHEMA:\n{\"asserted\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined | null if not asserted\",\"facts\":\"Array of actual fact identifiers, or null when not supplied.\",\"priority\":\"Array of [higher rule, lower rule] pairs, or null when not supplied.\",\"rules\":\"Array of objects {id, if: [predicate identifiers], then: conclusion}, or null when not supplied.\"},\"recomputed\":{\"active_rules\":\"Array of remaining active rule identifiers, or null if not uniquely determined.\",\"answer\":\"yes | no | conflict | underdetermined\",\"counterfactual_answer\":\"yes | no | conflict | underdetermined\"}}\nREADER_INPUT_JSON:\n{\"counterfactual_add\":\"p02\",\"text\":\"{\\\"active_rules\\\":[\\\"r1\\\",\\\"r2\\\"],\\\"answer\\\":\\\"yes\\\",\\\"counterfactual_answer\\\":\\\"yes\\\",\\\"facts\\\":[\\\"p00\\\",\\\"p01\\\",\\\"p02\\\"],\\\"priority\\\":[[\\\"r2\\\",\\\"r3\\\"]],\\\"rules\\\":[{\\\"id\\\":\\\"r2\\\",\\\"if\\\":[\\\"p00\\\",\\\"p01\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r1\\\",\\\"if\\\":[\\\"p02\\\"],\\\"then\\\":\\\"eligible\\\"},{\\\"id\\\":\\\"r3\\\",\\\"if\\\":[\\\"p01\\\"],\\\"then\\\":\\\"not_eligible\\\"}]}\"}",
+  "provider": {
+    "name": "reader-mistral-large-latest",
+    "settings": {
+      "type": "openai_compatible",
+      "model": "mistral-large-latest",
+      "temperature": null,
+      "max_tokens": 4000,
+      "timeout_s": 120.0,
+      "reasoning_effort": null,
+      "device": "auto",
+      "dtype": "auto"
+    },
+    "base_url": "https://api.mistral.ai/v1",
+    "implementation": "expression_tomography.core.providers.OpenAICompatibleProvider",
+    "request_contract": "openai_compatible.chat_completions.temperature_optional.v3",
+    "is_mock": false
+  },
+  "model_call": true,
+  "raw_response": "```json\n{\n  \"asserted\": {\n    \"active_rules\": [\"r1\", \"r2\"],\n    \"answer\": \"yes\",\n    \"counterfactual_answer\": \"yes\",\n    \"facts\": [\"p00\", \"p01\", \"p02\"],\n    \"priority\": [[\"r2\", \"r3\"]],\n    \"rules\": [\n      {\n        \"id\": \"r2\",\n        \"if\": [\"p00\", \"p01\"],\n        \"then\": \"eligible\"\n      },\n      {\n        \"id\": \"r1\",\n        \"if\": [\"p02\"],\n        \"then\": \"eligible\"\n      },\n      {\n        \"id\": \"r3\",\n        \"if\": [\"p01\"],\n        \"then\": \"not_eligible\"\n      }\n    ]\n  },\n  \"recomputed\": {\n    \"active_rules\": [\"r1\", \"r2\"],\n    \"answer\": \"conflict\",\n    \"counterfactual_answer\": \"conflict\"\n  }\n}\n```",
+  "raw_response_sha256": "0f4c5baeb70e5aee6801207c788ac0f06735f3dcf3f7dd7a2602b482bc4122bf"
+}

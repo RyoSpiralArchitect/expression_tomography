@@ -1,0 +1,9 @@
+{
+  "execution_sha256": "294621f1d135897dc42c0c483432958e824d6a2fd9dd4dfb987cd5edb48c8b38",
+  "files_sha256": {
+    "comparison.json": "52382a0e871210448801a59b66284cec4237118baf4c1993dae4de28fccd33e3",
+    "cross_reader_slots.json": "c3e601390f441e8766f30cdbafc81f6286ab485598914134deb17e0c429f4918",
+    "disagreement_packets.json": "2c4865660e62b08656346dc784841a801a5186893617e245c406226e645f5458",
+    "source_contradiction_packets.json": "a87fb028d1ae719226d100fa4548687ab57aad08ae061e7b07cceff280023526"
+  }
+}

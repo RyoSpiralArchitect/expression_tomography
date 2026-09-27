@@ -652,6 +652,27 @@ class RevisionDecoderTests(unittest.TestCase):
 class FrozenDecoderEvidenceTests(unittest.TestCase):
     asset_root = REPO_ROOT / "assets/runs/rule_z_revision_decoder_luna_seed101_36x2"
 
+    def test_historical_bridge_rejects_writable_resume_and_semantic_drift(self):
+        from expression_tomography.tasks.rule_z import revision_decoder_task as task
+        with tempfile.TemporaryDirectory() as temporary:
+            db = Path(temporary) / "copy.sqlite"
+            shutil.copyfile(self.asset_root / "trials.sqlite", db)
+            store = ExperimentStore(db)
+            try:
+                with self.assertRaisesRegex(RuntimeError, "source drift"):
+                    validate_decoder_store(store)
+            finally:
+                store.close()
+        store = ExperimentStore(self.asset_root / "trials.sqlite", read_only=True)
+        try:
+            changed = task.source_bindings()
+            changed["expression_tomography/tasks/rule_z/oracle.py"] = "0" * 64
+            with patch.object(task, "source_bindings", return_value=changed):
+                with self.assertRaisesRegex(RuntimeError, "source drift"):
+                    validate_decoder_store(store)
+        finally:
+            store.close()
+
     def test_live_artifacts_and_generation_sources_match_their_manifests(self) -> None:
         manifest = json.loads((self.asset_root / "run_manifest.json").read_text())
         prospective = json.loads(
@@ -680,7 +701,8 @@ class FrozenDecoderEvidenceTests(unittest.TestCase):
                 )
         for name, expected in prospective["frozen_file_sha256"].items():
             with self.subTest(source=name):
-                path = (REPO_ROOT / name).resolve()
+                archived = REPO_ROOT / "assets/compatibility/revision_decoder_readonly_v1/source" / name
+                path = (archived if archived.exists() else REPO_ROOT / name).resolve()
                 self.assertTrue(path.is_relative_to(REPO_ROOT))
                 self.assertEqual(
                     hashlib.sha256(path.read_bytes()).hexdigest(), expected

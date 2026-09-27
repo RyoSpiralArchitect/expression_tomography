@@ -1,0 +1,7 @@
+{
+  "analysis_kind": "POST_RUN_DESCRIPTIVE_NO_NEW_CODEBOOK",
+  "n_eligible_sorted_payload_pairs": 28,
+  "n_byte_identical": 18,
+  "n_active_rule_order_only": 10,
+  "interpretation": "Sorting only rules does not erase other order information. No codebook is fitted to active-rule order, and no usage is identified."
+}

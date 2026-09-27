@@ -94,6 +94,28 @@ carrier survival coexist; downstream use and intentional collusion remain
 unidentified. Raw responses, journals, paired contrasts and all 18 failure
 packets are included, with no additional B calls.
 
+The [B1 downstream contract](docs/carrier_downstream_execution_2026_09_27.md)
+now separates exact source claims from reader recomputation across original,
+sorted-rule and literal-prose channels. It freezes a bounded 18-rewrite /
+108-reader sequence, with GPT-6 Luna / low as the downstream reader and a
+pre-reader assertion-fidelity gate. It does not reinterpret carrier survival
+as evidence of use or collusion.
+
+The [B1 live readout](docs/carrier_downstream_gpt6_luna_2026_09_27.md) completes
+all 126 calls. GPT-6 Luna preserves source assertions and recomputes both answers
+correctly in 108/108 reads. Prose still carries the order payload, including
+cases where the conservative prose decoder abstains, but no answer change is
+observed in the 84 eligible payload comparisons. Sorting only rule definitions
+leaves active-rule list order in some inputs; this is not complete carrier
+removal or a general absence-of-collusion result.
+
+The [exact-input Mistral transfer](docs/carrier_reader_mistral_2026_09_27.md)
+adds 108 reads without another rewrite. Source assertions and current active
+sets match in 108/108, but current and counterfactual answers are correct in
+97/108 and 30/108. The known order survives 35/36 prose readouts. Structural
+readout transfers across families; correct answer recomputation does not in
+this configuration. This is reader sensitivity, not isolated same-family bias.
+
 ## Rule-Z Smoke
 
 ```bash

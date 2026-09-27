@@ -77,6 +77,16 @@ SOURCE_FILES = (
 )
 LogicalKey = tuple[str, str, str, int]
 EventSink = Callable[[dict[str, Any]], None]
+READ_ONLY_LEGACY_RUN_SHA = (
+    "f48a16fd7a772830366fa43b0408e932c2039588fb57e9004362617d54d1adf1"
+)
+LEGACY_SOURCE_ARCHIVE = (
+    REPO_ROOT / "assets/compatibility/revision_decoder_readonly_v1/source"
+)
+LEGACY_IO_SOURCES = (
+    "expression_tomography/core/providers.py",
+    "expression_tomography/tasks/rule_z/revision_decoder_task.py",
+)
 
 
 def sha_text(text: str) -> str:
@@ -148,6 +158,26 @@ def make_run(
         task_type=TASK_TYPE,
         contract=contract,
         metadata={"lineage_version": LINEAGE_VERSION},
+    )
+
+
+def _read_only_legacy_run(run: ExperimentRun, recorded: dict) -> ExperimentRun:
+    if sha_json(recorded) != READ_ONLY_LEGACY_RUN_SHA:
+        return run
+    sources = dict(run.contract["generation_and_scoring_source_sha256"])
+    for name in LEGACY_IO_SOURCES:
+        expected = recorded["generation_and_scoring_source_sha256"][name]
+        archive = LEGACY_SOURCE_ARCHIVE / name
+        if (
+            archive.is_symlink()
+            or hashlib.sha256(archive.read_bytes()).hexdigest() != expected
+        ):
+            raise RuntimeError("Historical decoder source archive drift")
+        sources[name] = expected
+    contract = {**run.contract, "generation_and_scoring_source_sha256": sources}
+    # The caller still compares every contract field and reproduces every row.
+    return replace(
+        run, contract=contract, experiment_run_identity_sha256=sha_json(contract)
     )
 
 
@@ -401,6 +431,8 @@ def validate_decoder_store(store: ExperimentStore) -> dict[str, Any]:
             repetitions=contract["repetitions"],
             order_seed=contract["order_seed"],
         )
+        if store.read_only:
+            run = _read_only_legacy_run(run, contract)
         if (
             stable_json(contract) != stable_json(run.contract)
             or row["experiment_run_identity_sha256"]
@@ -502,6 +534,8 @@ def preflight_decoder_suite(
             order_seed=order_seed,
         )
         previous = stored_runs.get(provider.name)
+        if previous and store.read_only and max_new_calls == 0:
+            run = _read_only_legacy_run(run, previous["contract"])
         if (
             previous
             and previous["experiment_run_identity_sha256"]

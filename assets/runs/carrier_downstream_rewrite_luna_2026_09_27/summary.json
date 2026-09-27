@@ -1,0 +1,16 @@
+{
+  "execution_sha256": "2d5c86cbd20798c90ae226a519f04067f12c949432ad8206008a685c24ba32a0",
+  "stage": "rewrite",
+  "n_planned": 18,
+  "n_recorded": 18,
+  "n_missing": 0,
+  "complete": true,
+  "n_live_calls": 18,
+  "n_mock_calls": 0,
+  "n_family_units": 3,
+  "requested_model": "gpt-5.6-luna",
+  "evidence_kind": "LIVE_SYNTHETIC_DOWNSTREAM_PILOT",
+  "collusion": "NOT_IDENTIFIED",
+  "n_nonempty": 18,
+  "fidelity": "AWAITING_PRE_READER_AUDIT"
+}
