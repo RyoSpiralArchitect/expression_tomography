@@ -337,7 +337,7 @@ def export(
 ) -> dict:
     from .task import file_sha, journal_dir, load_execution
 
-    load_execution(execution, sha(plan))
+    load_execution(execution, sha(plan), read_only=store.read_only)
     if directory.exists() or any(
         source.resolve() == directory.resolve()
         or source.resolve() in directory.resolve().parents

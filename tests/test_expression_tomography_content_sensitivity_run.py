@@ -1,5 +1,6 @@
 from copy import deepcopy
 from pathlib import Path
+import sys
 from unittest.mock import patch
 
 import pytest
@@ -395,3 +396,85 @@ def test_public_recomputation_rejects_invalid_edges_and_unbounded_completions():
     observed["facts"] = None
     observed["rules"][0]["if"] = [f"p{i}" for i in range(11)]
     assert recompute_public(observed, "p01")["reason"] == "completion_enumeration_limit"
+
+
+def test_readonly_cli_replay_and_export_never_write_source(tmp_path, monkeypatch):
+    execution = tmp_path / "execution"
+    frozen = task.freeze(CANDIDATE, execution, mock=True)
+    plan = task.load_execution(execution, frozen["execution_sha256"])
+    store = ExperimentStore(tmp_path / "run.sqlite")
+    bundle = tmp_path / "bundle"
+    try:
+        task.run(store, plan, task.make_provider(plan), max_new_calls=1)
+        export(store.fetch_trials(), plan, store, execution, bundle)
+    finally:
+        store.close()
+    before = task.verify_manifest(bundle)
+    paths = [bundle, *bundle.rglob("*")]
+    modes = {p: p.stat().st_mode for p in paths}
+    original_open = Path.open
+
+    def protected_open(path, mode="r", *args, **kwargs):
+        if bundle in path.parents and any(flag in mode for flag in "wax+"):
+            raise PermissionError("Source bundle is read only")
+        return original_open(path, mode, *args, **kwargs)
+
+    try:
+        for path in reversed(paths):
+            path.chmod(0o555 if path.is_dir() else 0o444)
+        # The guard also exercises the restriction when tests run as root.
+        monkeypatch.setattr(Path, "open", protected_open)
+        with patch.object(task.ContentMockProvider, "complete") as call:
+            for command, extra in (
+                ("run", ["--max-new-calls", "0"]),
+                ("export", ["--output", str(tmp_path / "second-export")]),
+            ):
+                monkeypatch.setattr(
+                    sys,
+                    "argv",
+                    [
+                        "content",
+                        command,
+                        "--execution",
+                        str(bundle / "execution"),
+                        "--execution-sha256",
+                        frozen["execution_sha256"],
+                        "--db",
+                        str(bundle / "results.sqlite"),
+                        *extra,
+                    ],
+                )
+                task.main()
+            call.assert_not_called()
+        assert task.verify_manifest(bundle) == before
+        task.verify_manifest(tmp_path / "second-export")
+    finally:
+        for path in paths:
+            path.chmod(modes[path])
+
+
+def test_readonly_lock_still_excludes_writers_and_rejects_aliases(tmp_path):
+    path = tmp_path / "run.sqlite"
+    ExperimentStore(path).close()
+    reader = ExperimentStore(path, read_only=True)
+    try:
+        with pytest.raises(ValueError, match="existing lock"):
+            with task.store_access(reader):
+                pass
+        assert not Path(str(path) + ".lock").exists()
+        with exclusive_writer(path):
+            with pytest.raises(RuntimeError, match="Another process"):
+                with task.store_access(reader):
+                    pass
+        with task.store_access(reader):
+            with pytest.raises(RuntimeError, match="Another process"):
+                with exclusive_writer(path):
+                    pass
+        lock = Path(str(path) + ".lock")
+        lock.unlink()
+        lock.symlink_to(path)
+        with pytest.raises(ValueError, match="Aliased lock"):
+            with task.store_access(reader):
+                pass
+    finally:
+        reader.close()

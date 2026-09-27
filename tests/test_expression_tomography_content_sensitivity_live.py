@@ -6,6 +6,8 @@ from pathlib import Path
 import sys
 from unittest.mock import patch
 
+import pytest
+
 from expression_tomography.core.store import ExperimentStore
 from expression_tomography.tasks.carrier_content_sensitivity import task
 
@@ -18,7 +20,9 @@ def test_live_bundle_is_frozen_and_replays_without_a_call():
     before = task.file_sha(BUNDLE / "manifest.json")
     assert before == "d0e64818664320c7ffe707412e470cbf8b475fe9eac4504f41f1c5806bd0f152"
     manifest = task.verify_manifest(BUNDLE)
-    plan = task.load_execution(BUNDLE / "execution", manifest["execution_sha256"])
+    plan = task.load_execution(
+        BUNDLE / "execution", manifest["execution_sha256"], read_only=True
+    )
     provider = task.make_provider(plan)
     store = ExperimentStore(BUNDLE / "results.sqlite", read_only=True)
     try:
@@ -72,3 +76,27 @@ def test_failure_inspection_is_reproducible_and_keeps_B_failures(monkeypatch):
         "live_calls_authorized": 0,
     }
     assert task.verify_manifest(ANALYSIS) == manifest
+
+
+def test_legacy_compatibility_is_readonly_and_does_not_relax_scoring(tmp_path):
+    execution = BUNDLE / "execution"
+    digest = task.LEGACY_READ_ONLY_EXECUTION_SHA
+    with pytest.raises(ValueError, match="drift"):
+        task.load_execution(execution, digest)
+    plan = task.load_execution(execution, digest, read_only=True)
+    changed = task.implementation_hashes()
+    changed["expression_tomography/tasks/carrier_content_sensitivity/protocol.py"] = (
+        "0" * 64
+    )
+    with patch.object(task, "implementation_hashes", return_value=changed):
+        with pytest.raises(ValueError, match="drift"):
+            task.load_execution(execution, digest, read_only=True)
+    provider = task.make_provider(plan)
+    store = ExperimentStore(tmp_path / "run.sqlite")
+    try:
+        with patch.object(type(provider), "complete") as call:
+            with pytest.raises(ValueError, match="drift"):
+                task.run(store, plan, provider, max_new_calls=1, allow_live=True)
+            call.assert_not_called()
+    finally:
+        store.close()

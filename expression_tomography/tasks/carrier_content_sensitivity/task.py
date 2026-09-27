@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
 from dataclasses import asdict
+import fcntl
 import hashlib
 import json
 import os
@@ -32,6 +34,13 @@ TASK = "carrier_content_sensitivity"
 VERSION = "carrier_content_sensitivity.run.v1"
 CANDIDATE_SHA = "d622f9cc1accb9e12d5678412bc2315ecd2e3e03cc9e2bb620d28e518131d234"
 ROOT = Path(__file__).resolve().parents[3]
+LEGACY_READ_ONLY_EXECUTION_SHA = (
+    "5f82a9345e317e090f07259c65dc0d56a57b3c894a41110e05d8d0be416de490"
+)
+READ_ONLY_BRIDGE_SOURCES = (
+    "expression_tomography/tasks/carrier_content_sensitivity/task.py",
+    "expression_tomography/tasks/carrier_content_sensitivity/report.py",
+)
 
 
 def read_json(path: Path):
@@ -227,18 +236,62 @@ def freeze(candidate: Path, directory: Path, *, mock: bool = False) -> dict:
     }
 
 
-def load_execution(directory: Path, expected_sha: str) -> dict:
+def require_current_plan(plan: dict, candidate: Path, *, read_only: bool = False):
+    current = make_plan(candidate, mock=plan["provider"]["is_mock"])
+    if read_only and sha(plan) == LEGACY_READ_ONLY_EXECUTION_SHA:
+        # Only the known historical runner may use this I/O-only replay bridge.
+        # Every other source hash and every experimental field must still match.
+        for source in READ_ONLY_BRIDGE_SOURCES:
+            current["implementation_sha256"][source] = plan["implementation_sha256"][
+                source
+            ]
+    require(
+        plan == current, "Execution implementation or contract drift; do not resume"
+    )
+
+
+def load_execution(
+    directory: Path, expected_sha: str, *, read_only: bool = False
+) -> dict:
     manifest = verify_manifest(directory)
     plan = read_json(directory / "execution_plan.json")
     require(
         sha(plan) == manifest["execution_sha256"] == expected_sha,
         "Execution identity mismatch",
     )
-    current = make_plan(directory / "candidate", mock=plan["provider"]["is_mock"])
-    require(
-        plan == current, "Execution implementation or contract drift; do not resume"
-    )
+    require_current_plan(plan, directory / "candidate", read_only=read_only)
     return plan
+
+
+@contextmanager
+def store_access(store: ExperimentStore):
+    if not store.read_only:
+        with exclusive_writer(store.path):
+            yield
+        return
+    canonical = store.path.resolve(strict=True)
+    require(
+        canonical == Path(os.path.abspath(store.path))
+        and canonical.stat().st_nlink == 1,
+        "Aliased database paths are not supported",
+    )
+    lock = Path(str(canonical) + ".lock")
+    require(lock.exists(), "Read-only replay requires an existing lock file")
+    require(
+        not lock.is_symlink() and lock.stat().st_nlink == 1,
+        "Aliased lock file is not supported",
+    )
+    with lock.open("rb") as handle:
+        try:
+            fcntl.flock(handle, fcntl.LOCK_SH | fcntl.LOCK_NB)
+        except BlockingIOError as exc:
+            raise RuntimeError(
+                "Another process is using this calibration output"
+            ) from exc
+        try:
+            yield
+        finally:
+            fcntl.flock(handle, fcntl.LOCK_UN)
 
 
 def identity(plan: dict, slot: dict) -> str:
@@ -442,16 +495,10 @@ def run(
         and plan["total_call_cap"] == len(plan["slots"]) == 304,
         "Invalid run contract",
     )
-    require(
-        plan["implementation_sha256"] == implementation_hashes(), "Implementation drift"
-    )
-    require(
-        plan
-        == make_plan(
-            ROOT / "assets/pilots/carrier_content_sensitivity_v1",
-            mock=plan["provider"]["is_mock"],
-        ),
-        "Frozen execution contract drift",
+    require_current_plan(
+        plan,
+        ROOT / "assets/pilots/carrier_content_sensitivity_v1",
+        read_only=store.read_only and max_new_calls == 0,
     )
     require(
         describe_provider(provider) == plan["provider"], "Provider configuration drift"
@@ -461,7 +508,7 @@ def run(
         not spec.pop("api_key") and spec == plan["provider_spec"],
         "Provider spec drift or inline credential",
     )
-    with exclusive_writer(store.path):
+    with store_access(store):
         directory = journal_dir(store)
         require(not directory.is_symlink(), "Aliased journal directory")
         lookup = validate_existing(store, plan)
@@ -506,6 +553,7 @@ def run(
         result.update(
             new_calls_this_invocation=len(lookup) - initial,
             existing_trials_revalidated=initial,
+            validation_implementation_sha256=implementation_hashes(),
         )
         return result
 
@@ -533,7 +581,10 @@ def main() -> None:
     else:
         if args.db is None or args.execution_sha256 is None:
             parser.error("run/export require --db and --execution-sha256")
-        plan = load_execution(args.execution, args.execution_sha256)
+        read_only = args.command == "export" or args.max_new_calls == 0
+        plan = load_execution(
+            args.execution, args.execution_sha256, read_only=read_only
+        )
         if args.command == "run" and args.max_new_calls is None:
             parser.error("run requires --max-new-calls")
         if args.command == "export" and args.output is None:
@@ -542,9 +593,7 @@ def main() -> None:
             args.execution.resolve() not in args.db.resolve().parents,
             "DB cannot be inside frozen execution",
         )
-        store = ExperimentStore(
-            args.db, read_only=args.command == "export" or args.max_new_calls == 0
-        )
+        store = ExperimentStore(args.db, read_only=read_only)
         try:
             if args.command == "run":
                 result = run(
@@ -558,7 +607,7 @@ def main() -> None:
             else:
                 from .report import export
 
-                with exclusive_writer(store.path):
+                with store_access(store):
                     rows = list(validate_existing(store, plan).values())
                     result = export(rows, plan, store, args.execution, args.output)
         finally:
