@@ -263,7 +263,11 @@ def write_new_json(path: Path, data: dict) -> None:
 
 @contextmanager
 def exclusive_writer(path: Path):
-    with Path(str(path) + ".lock").open("a") as handle:
+    canonical = path.resolve(strict=True)
+    # Journals also use the database basename; aliases must not bypass recovery.
+    if canonical != Path(os.path.abspath(path)) or canonical.stat().st_nlink != 1:
+        raise ValueError("Aliased database paths are not supported; use a canonical, singly linked output")
+    with Path(str(canonical) + ".lock").open("a") as handle:
         try:
             fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError as exc:

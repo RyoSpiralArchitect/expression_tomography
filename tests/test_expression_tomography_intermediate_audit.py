@@ -265,6 +265,52 @@ def test_concurrent_runner_locks_before_reading_existing_trials(bundle, tmp_path
         contender_store.close()
 
 
+@pytest.mark.parametrize("cap", [-1, True, 1.5])
+def test_audit_rejects_invalid_call_caps(bundle, tmp_path, cap):
+    provider = CountingMock()
+    store = ExperimentStore(tmp_path / "invalid-cap.sqlite")
+    try:
+        with pytest.raises(ValueError, match="nonnegative integer"):
+            run_audit(bundle, [provider], store, max_new_calls=cap)
+        assert provider.calls == 0
+    finally:
+        store.close()
+
+
+def test_live_audit_requires_permission_and_budget_and_resumes_partial_roles(bundle, tmp_path):
+    class OfflineLiveStandIn:
+        name = "offline_only"
+        calls = 0
+
+        def complete(self, prompt):
+            self.calls += 1
+            return AuditMockProvider().complete(prompt)
+
+    provider = OfflineLiveStandIn()
+    store = ExperimentStore(tmp_path / "bounded.sqlite")
+    try:
+        for kwargs in ({}, {"allow_live": True}, {"max_new_calls": 1}):
+            with pytest.raises(ValueError, match="Live execution requires"):
+                run_audit(bundle, [provider], store, **kwargs)
+        assert provider.calls == 0
+        assert not store.fetch_experiment_runs()
+        run_audit(bundle, [provider], store, max_new_calls=0)
+        assert provider.calls == 0
+        run_audit(bundle, [provider], store, allow_live=True, max_new_calls=1)
+        assert provider.calls == 1
+        assert [r["condition"] for r in store.fetch_trials()] == ["reader"]
+        run_audit(bundle, [provider], store, allow_live=True, max_new_calls=2)
+        assert provider.calls == 3
+        assert [r["condition"] for r in store.fetch_trials()] == ["reader", "critic", "auditor"]
+        assert not Path(str(store.path) + ".pending.json").exists()
+        result = run_audit(bundle, [provider], store, allow_live=True, max_new_calls=141)
+        assert result["n_trials"] == provider.calls == 144
+        run_audit(bundle, [provider], store)
+        assert provider.calls == 144
+    finally:
+        store.close()
+
+
 def test_invalid_reading_blocks_only_dependent_audit(bundle, tmp_path):
     class BrokenReader(CountingMock):
         def complete(self, prompt):

@@ -98,6 +98,11 @@ adapters. Each provider adds up to 144 live calls per repetition. Criticism and
 reading are separate calls; an invalid reading blocks its dependent audit and
 is retained as invalid. Bad supporting quotes remain visible even when the
 output schema is valid. No response is silently regenerated for a better score.
+Live calls require both `--allow-live` and an explicit nonnegative
+`--max-new-calls` ceiling. The ceiling counts new provider calls in this
+invocation, not already recorded rows or blocked audit placeholders. A partial
+run resumes at the next role with the same run contract; `--max-new-calls 0`
+makes no calls. Changing the call ceiling does not change the experiment.
 
 Exact same-contract reruns resume stored rows. A changed bundle, provider
 configuration, or repetition count requires a new database. Prompts, raw
@@ -106,6 +111,9 @@ retained. A `.pending.json` journal prevents automatic retries when a request
 may already have completed. It records a returned response before insertion
 into SQLite. If interrupted, inspect that journal and reconcile it with the
 database before manually continuing; do not erase it and assume no call ran.
+An exclusive writer lock covers preflight and execution. Use a canonical,
+singly linked database path: file/directory symlink paths and hard-linked
+databases are rejected so alternate names cannot bypass locks or journals.
 Blocked audits receive an explicitly marked `blocked_without_call` placeholder
 identity to satisfy the shared store's complete-lineage contract. They never
 count as model calls. Content hashes use SHA-256 of canonical JSON; file hashes

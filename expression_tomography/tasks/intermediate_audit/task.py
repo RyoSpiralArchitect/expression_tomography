@@ -48,14 +48,22 @@ def provider_config(provider) -> dict:
 
 
 def run_audit(
-    bundle: Path, providers, store: ExperimentStore, repetitions: int = 1
+    bundle: Path, providers, store: ExperimentStore, repetitions: int = 1,
+    *, max_new_calls: int | None = None, allow_live: bool = False,
 ) -> dict:
+    if max_new_calls is not None and (
+        type(max_new_calls) is not int or max_new_calls < 0
+    ):
+        raise ValueError("max_new_calls must be a nonnegative integer")
     with exclusive_writer(store.path):
-        return _run_audit_locked(bundle, providers, store, repetitions)
+        return _run_audit_locked(
+            bundle, providers, store, repetitions, max_new_calls, allow_live
+        )
 
 
 def _run_audit_locked(
-    bundle: Path, providers, store: ExperimentStore, repetitions: int
+    bundle: Path, providers, store: ExperimentStore, repetitions: int,
+    max_new_calls: int | None, allow_live: bool,
 ) -> dict:
     if type(repetitions) is not int or repetitions < 1:
         raise ValueError("repetitions must be a positive integer")
@@ -85,21 +93,34 @@ def _run_audit_locked(
         raise RuntimeError(
             f"A prior request may have completed. Inspect the retained request/response journal before retrying: {pending}"
         )
-    store.register_experiment_run(ExperimentRun(run_id, TASK, contract))
     lookup = {r["logical_trial_identity_sha256"]: r for r in existing}
     if len(lookup) != len(existing):
         raise ValueError("Duplicate stored trial identities")
+    cases = [
+        Case(a["artifact_id"], TASK, {"public": a, "private": private[a["artifact_id"]]}, manifest["seed"])
+        for a in artifacts
+    ]
+    expected_ids = {
+        sha([run_id, case.case_hash, provider.name, role, replicate])
+        for replicate in range(repetitions)
+        for case in cases
+        for provider in providers
+        for role in ROLES
+    }
+    if set(lookup) - expected_ids:
+        raise ValueError("Stored trials are outside the current schedule")
+    if expected_ids - set(lookup) and max_new_calls != 0 and any(
+        not isinstance(p, AuditMockProvider) for p in providers
+    ) and (not allow_live or max_new_calls is None):
+        raise ValueError("Live execution requires allow_live and an explicit max_new_calls cap")
+    store.register_experiment_run(ExperimentRun(run_id, TASK, contract))
+    new_calls = 0
     visited = set()
     for replicate in range(repetitions):
-        for artifact in artifacts:
+        for case in cases:
+            artifact = case.payload["public"]
             aid = artifact["artifact_id"]
             intent = private[aid]["intent"]
-            case = Case(
-                aid,
-                TASK,
-                {"public": artifact, "private": private[aid]},
-                manifest["seed"],
-            )
             store.upsert_case(case)
             for provider in providers:
                 readout = None
@@ -162,6 +183,8 @@ def _run_audit_locked(
                     else:
                         raw = ""
                         if not blocked:
+                            if max_new_calls is not None and new_calls >= max_new_calls:
+                                return summarize(store, manifest)
                             write_json(
                                 pending,
                                 {
@@ -173,6 +196,7 @@ def _run_audit_locked(
                                 },
                             )
                             raw = provider.complete(prompt)
+                            new_calls += 1
                             # Retain the raw response before SQLite work, including during interrupted runs.
                             pending.write_text(
                                 json.dumps(
@@ -312,6 +336,8 @@ def main() -> None:
     run.add_argument("--db", type=Path, required=True)
     run.add_argument("--provider-config", type=Path)
     run.add_argument("--repetitions", type=int, default=1)
+    run.add_argument("--max-new-calls", type=int)
+    run.add_argument("--allow-live", action="store_true")
     run.add_argument("--summary", type=Path)
     human = sub.add_parser("import-human")
     human.add_argument("--bundle", type=Path, required=True)
@@ -334,7 +360,10 @@ def main() -> None:
         )
         store = ExperimentStore(args.db)
         try:
-            result = run_audit(args.bundle, providers, store, args.repetitions)
+            result = run_audit(
+                args.bundle, providers, store, args.repetitions,
+                max_new_calls=args.max_new_calls, allow_live=args.allow_live,
+            )
         finally:
             store.close()
         if args.summary:

@@ -4,6 +4,7 @@ import copy
 import fcntl
 import hashlib
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -32,6 +33,7 @@ from expression_tomography.tasks.text_boundary.protocol import (
     score_transition,
 )
 from expression_tomography.tasks.text_boundary.task import (
+    exclusive_writer,
     make_plan,
     run_calibration,
     schedule,
@@ -295,6 +297,36 @@ def test_concurrent_writer_is_rejected(store):
         with pytest.raises(RuntimeError, match="Another process"):
             run_calibration(store, [provider], repetitions=1)
     assert provider.calls == 0
+
+
+@pytest.mark.parametrize("alias_kind", ["symlink", "directory_symlink", "hardlink"])
+def test_aliased_database_cannot_bypass_lock_or_journals(store, tmp_path, alias_kind):
+    alias = tmp_path / "alias.sqlite"
+    if alias_kind == "directory_symlink":
+        directory = tmp_path / "directory_alias"
+        directory.symlink_to(store.path.parent, target_is_directory=True)
+        alias = directory / store.path.name
+    elif alias_kind == "symlink":
+        alias.symlink_to(store.path)
+    else:
+        os.link(store.path, alias)
+    provider = CountingMock()
+    other = ExperimentStore(alias)
+    try:
+        with pytest.raises(ValueError, match="Aliased database"):
+            run_calibration(other, [provider], repetitions=1)
+        assert provider.calls == 0
+        if alias_kind == "hardlink":
+            with pytest.raises(ValueError, match="Aliased database"):
+                with exclusive_writer(store.path):
+                    pytest.fail("Hard-linked original must also be rejected")
+        else:
+            with exclusive_writer(store.path):
+                with pytest.raises(ValueError, match="Aliased database"):
+                    with exclusive_writer(alias):
+                        pytest.fail("Alias bypassed the active writer")
+    finally:
+        other.close()
 
 
 def test_live_calls_need_flag_and_cap_and_replay_needs_neither(store):
