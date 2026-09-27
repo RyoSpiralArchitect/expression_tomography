@@ -1,0 +1,38 @@
+{
+  "source_bundle_manifest_sha256": "d0e64818664320c7ffe707412e470cbf8b475fe9eac4504f41f1c5806bd0f152",
+  "status": "POST_RUN_DESCRIPTIVE_INSPECTION_NOT_NEW_SCORE_OR_CAUSAL_DIAGNOSIS",
+  "n_rows": 304,
+  "n_failure_packets": 18,
+  "failures_by_field": {
+    "counterfactual_answer": 16,
+    "priority": 1,
+    "answer": 2,
+    "active_rules": 1
+  },
+  "counterfactual_error_labels": {
+    "conflict": 12,
+    "no": 3,
+    "underdetermined": 1
+  },
+  "complete_future_two_active_same_polarity": {
+    "n_planned": 144,
+    "n_incorrect_conflict": 11
+  },
+  "current_error_slots": [
+    "3d6187b104f3b616e12b1c96a3f7d995dcafad0f339549a6b7e524181c5b1c7d",
+    "5011d679545a6f20c819ddd4ca883dbe08b9530583984958200384aca20d2ffb"
+  ],
+  "n_current_errors_matching_payload": 2,
+  "public_recomputation_unavailable": {
+    "missing_policy": 9
+  },
+  "B_sources": {
+    "n_selected": 18,
+    "n_missing": 0,
+    "n_full_readout_errors": 2,
+    "live_calls_authorized": 0
+  },
+  "first_recorded_utc": "2026-09-27 09:10:15",
+  "last_recorded_utc": "2026-09-27 09:24:19",
+  "limitations": "No future-active field was requested, so firing reconstruction and final-category errors remain confounded. Payload-aligned errors do not identify code use; pairs share rows and repeated inputs also vary."
+}

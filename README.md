@@ -86,6 +86,14 @@ adds the bounded runner, durable request/response journals, literal-versus-
 recomputed scoring, raw-order decoding, paired summaries and a prospective
 18-source selector for B. B is not authorized by A's 304-slot call cap.
 
+The [304-call Luna readout](docs/carrier_content_sensitivity_luna_2026_09_27.md)
+is now frozen: current answers are correct in 302/304 calls, counterfactuals in
+288/304, and the known order payload survives in 216/216 coded outputs. Both
+current answers are correct in 142/144 fact pairs. Content sensitivity and
+carrier survival coexist; downstream use and intentional collusion remain
+unidentified. Raw responses, journals, paired contrasts and all 18 failure
+packets are included, with no additional B calls.
+
 ## Rule-Z Smoke
 
 ```bash
