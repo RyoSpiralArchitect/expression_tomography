@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import copy
+from concurrent.futures import ThreadPoolExecutor
 import json
 from pathlib import Path
+from threading import Event
 
 import pytest
 
@@ -221,6 +223,46 @@ def test_runner_end_to_end_resume_and_drift(bundle, tmp_path):
         assert provider.calls == 144
     finally:
         store.close()
+
+
+def test_concurrent_runner_locks_before_reading_existing_trials(bundle, tmp_path):
+    path = tmp_path / "concurrent.sqlite"
+    contender_store = ExperimentStore(path)
+    first_provider, contender_provider = CountingMock(), CountingMock()
+    reading_existing, release = Event(), Event()
+
+    def first_run():
+        store = ExperimentStore(path)
+        fetch_runs = store.fetch_experiment_runs
+
+        def paused_fetch():
+            reading_existing.set()
+            assert release.wait(20), "Timed out waiting for concurrent lock probe"
+            return fetch_runs()
+
+        store.fetch_experiment_runs = paused_fetch
+        try:
+            return run_audit(bundle, [first_provider], store)
+        finally:
+            store.close()
+
+    try:
+        with ThreadPoolExecutor(max_workers=1) as executor:
+            future = executor.submit(first_run)
+            try:
+                assert reading_existing.wait(20)
+                assert not Path(str(path) + ".pending.json").exists()
+                with pytest.raises(RuntimeError, match="Another process"):
+                    run_audit(bundle, [contender_provider], contender_store)
+                assert contender_provider.calls == 0
+            finally:
+                release.set()
+            assert future.result(timeout=20)["n_trials"] == 144
+        result = run_audit(bundle, [contender_provider], contender_store)
+        assert result["n_trials"] == first_provider.calls == 144
+        assert contender_provider.calls == 0
+    finally:
+        contender_store.close()
 
 
 def test_invalid_reading_blocks_only_dependent_audit(bundle, tmp_path):

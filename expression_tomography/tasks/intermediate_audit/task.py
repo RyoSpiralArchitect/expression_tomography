@@ -12,6 +12,7 @@ from expression_tomography.core.providers import (
 )
 from expression_tomography.core.schema import Case, ExperimentRun, TrialResult
 from expression_tomography.core.store import ExperimentStore
+from expression_tomography.tasks.text_boundary.task import exclusive_writer
 
 from .corpus import VERSION, load_bundle, prepare_bundle, sha, write_json
 from .human import import_human
@@ -48,6 +49,13 @@ def provider_config(provider) -> dict:
 
 def run_audit(
     bundle: Path, providers, store: ExperimentStore, repetitions: int = 1
+) -> dict:
+    with exclusive_writer(store.path):
+        return _run_audit_locked(bundle, providers, store, repetitions)
+
+
+def _run_audit_locked(
+    bundle: Path, providers, store: ExperimentStore, repetitions: int
 ) -> dict:
     if type(repetitions) is not int or repetitions < 1:
         raise ValueError("repetitions must be a positive integer")

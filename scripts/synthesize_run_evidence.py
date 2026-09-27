@@ -14,6 +14,13 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "assets/analyses/all_run_synthesis_2026_09_04"
 FIELDS = ("fired_rules", "fired_priority_edges", "suppressed_rules",
           "active_rules", "active_conclusions")
+# Preserve the frozen description, independent of interpreter docstring dedenting.
+WORLD_OVERLAP_METHOD = (
+    "Undo this generator's name substitution, not general graph isomorphism.\n\n"
+    "    _rename_candidate preserves available-predicate and rule list order. Bind\n"
+    "    identifiers to those slots, retaining facts, topology, and intervention.\n"
+    "    "
+)
 
 
 def load(name: str) -> tuple[dict, list, dict]:
@@ -73,7 +80,7 @@ def world_overlap() -> dict:
     left, right = surfaces.values()
     matches = [{"seed67_pair": a, "seed68_pair": b, "world_intervention_sha256": x}
                for a, x in left.items() for b, y in right.items() if x == y]
-    return {"sources": sources, "method": canonical_world.__doc__,
+    return {"sources": sources, "method": WORLD_OVERLAP_METHOD,
             "surfaces": surfaces, "matches": matches,
             "limit": "Disjoint case hashes are not proof of disjoint logical worlds."}
 

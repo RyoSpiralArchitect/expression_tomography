@@ -27,6 +27,16 @@ def make_db(path: Path) -> None:
             ))
 
 
+@pytest.mark.parametrize("size", [0, 1, 1024 * 1024 + 17])
+def test_file_digest_without_python_311_api(tmp_path, monkeypatch, size):
+    monkeypatch.delattr(hashlib, "file_digest", raising=False)
+    payload = (b"\x00\xffsnapshot\n" * (size // 11 + 1))[:size]
+    path = tmp_path / "payload.bin"
+    path.write_bytes(payload)
+    assert file_digest(path) == hashlib.sha256(payload).hexdigest()
+    assert path.read_bytes() == payload
+
+
 def test_inventory_preserves_bytes_and_field_denominators(tmp_path):
     path = tmp_path / "test.sqlite"
     make_db(path)
@@ -115,10 +125,11 @@ def test_frozen_recovery_receipts_and_inventory_coverage():
         assert name in ledger
 
 
-def test_focused_diagnostics_reproduce_without_provider_calls():
+def test_focused_diagnostics_reproduce_without_provider_calls(monkeypatch):
     frozen = json.loads((ROOT / "assets/analyses/all_run_synthesis_2026_09_04/focused_reanalysis.json").read_text())
     assert repair_pairing() == frozen["repair_pairing"]
     assert revision_fields() == frozen["revision_field_diagnostics"]
+    monkeypatch.setattr(canonical_world, "__doc__", "Interpreter-dependent docstring")
     assert world_overlap() == frozen["world_overlap"]
     assert frozen["repair_pairing"]["initial_equals_free_message"] == 0
     assert len(frozen["world_overlap"]["matches"]) == 1
