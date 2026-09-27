@@ -16,8 +16,14 @@ from .prepare import load_packet, normalized_quote, reader_prompt, sender_prompt
 
 
 ROOT = Path(__file__).resolve().parents[2]
-VERSION = "pg_letters.live.v1"
+VERSION = "pg_letters.live.v2"
 PARSER = "pg_letters.strict_json_or_single_whole_fence.v1"
+LEGACY_IMPLEMENTATION = {
+    "expression_tomography/core/providers.py": "d9210d5d0a234721a62924aaa50e97cec0c7a73655a174b629b8883f98f41435",
+    "expression_tomography/tasks/pg_letters/__init__.py": "381fb8e1921ab87797103e6a6ec7f684d32ae73baab39d1d58a6470bd030571e",
+    "expression_tomography/tasks/pg_letters/live.py": "10a78deb14fe85b33a4f5ca26df8aec58ba27ef589d1a31a52972171a3e0f3f7",
+    "expression_tomography/tasks/pg_letters/prepare.py": "94ce40766a4c307ff8ee7261897817a86af5ba766ffa585143e79d30fdf91871",
+}
 
 
 def encoded(value):
@@ -117,9 +123,16 @@ def freeze(packet, output, mock=False):
 
 def load_execution(execution, expected_sha):
     plan = read(execution / "plan.json")
-    if plan["version"] != VERSION or digest(plan) != expected_sha:
+    if plan["version"] not in {VERSION, "pg_letters.live.v1"} or digest(plan) != expected_sha:
         raise ValueError("Execution plan identity mismatch")
-    if implementation() != plan["implementation_sha256"]:
+    current = implementation()
+    if plan["version"] == "pg_letters.live.v1":
+        unchanged = set(LEGACY_IMPLEMENTATION) - {"expression_tomography/tasks/pg_letters/live.py"}
+        if (plan["implementation_sha256"] != LEGACY_IMPLEMENTATION
+                or set(current) != set(LEGACY_IMPLEMENTATION)
+                or any(current[p] != LEGACY_IMPLEMENTATION[p] for p in unchanged)):
+            raise ValueError("Unapproved legacy implementation; use the frozen source")
+    elif current != plan["implementation_sha256"]:
         raise ValueError("Implementation drift; use the frozen source")
     for relative, expected in plan["implementation_sha256"].items():
         if sha256((execution / "source" / relative).read_bytes()) != expected:
@@ -129,6 +142,32 @@ def load_execution(execution, expected_sha):
         raise ValueError("Packet manifest drift")
     load_packet(packet)
     return plan
+
+
+def validate_response(response, request, slot, *, legacy=False):
+    if not isinstance(response, dict) or response.get("status") not in ("ok", "provider_error"):
+        raise ValueError("Invalid terminal response status")
+    common = {"slot", "request_sha256", "recorded_at", "status"}
+    success = response["status"] == "ok"
+    fields = {"raw_response", "raw_sha256"} if success else {"error_type", "error"}
+    if legacy and not success:
+        raise ValueError("Unsealed legacy error record requires explicit recovery")
+    expected = common | fields | (set() if legacy else {"record_sha256"})
+    if set(response) != expected or not isinstance(response["recorded_at"], str) or not response["recorded_at"]:
+        raise ValueError("Invalid terminal response schema")
+    if response["request_sha256"] != digest(request) or response["slot"] != slot:
+        raise ValueError("Response lineage mismatch")
+    if success:
+        raw = response["raw_response"]
+        if not isinstance(raw, str) or not raw.strip() or sha256(raw.encode()) != response["raw_sha256"]:
+            raise ValueError("Raw response identity mismatch")
+    elif (not isinstance(response["error_type"], str) or not response["error_type"]
+          or not isinstance(response["error"], str)):
+        raise ValueError("Invalid terminal error fields")
+    if not legacy:
+        payload = {k: v for k, v in response.items() if k != "record_sha256"}
+        if response["record_sha256"] != digest(payload):
+            raise ValueError("Terminal record integrity mismatch")
 
 
 def parse_reader(raw, text, questions):
@@ -216,6 +255,8 @@ def run(execution, expected_sha, journal, *, max_new_calls=0, allow_live=False, 
     plan = load_execution(execution, expected_sha)
     if type(max_new_calls) is not int or not 0 <= max_new_calls <= plan["call_cap"]:
         raise ValueError("Invalid call cap")
+    if plan["version"] == "pg_letters.live.v1" and max_new_calls:
+        raise ValueError("Legacy execution is zero-call replay only; freeze a new execution")
     if max_new_calls and not plan["is_mock"] and not allow_live:
         raise ValueError("Live calls require explicit opt-in")
     journal.mkdir(parents=True, exist_ok=True)
@@ -268,10 +309,7 @@ def _run_locked(plan, journal, max_new_calls, progress):
             if not resp_path.exists():
                 raise ValueError("Unresolved attempt: do not retry automatically")
             response = read(resp_path)
-            if response["request_sha256"] != digest(request) or response["slot"] != slot:
-                raise ValueError("Response lineage mismatch")
-            if response["status"] == "ok" and sha256(response["raw_response"].encode()) != response["raw_sha256"]:
-                raise ValueError("Raw response identity mismatch")
+            validate_response(response, request, slot, legacy=plan["version"] == "pg_letters.live.v1")
         else:
             if resp_path.exists():
                 raise ValueError("Response without request")
@@ -298,6 +336,8 @@ def _run_locked(plan, journal, max_new_calls, progress):
                     if secret:
                         message = message.replace(secret, "[REDACTED]")
                 response.update(status="provider_error", error_type=type(exc).__name__, error=message[:2000])
+            response["record_sha256"] = digest(response)
+            validate_response(response, request, slot)
             write_new(resp_path, response)
             if progress:
                 progress({"new_calls": new_calls, "slot_id": slot["slot_id"], "status": response["status"]})
@@ -312,7 +352,7 @@ def _run_locked(plan, journal, max_new_calls, progress):
                 case = next(c for c in plan["cases"] if c["case_id"] == slot["case_id"])
                 record["format"] = parse_reader(response["raw_response"], request["text"], case["questions"])
         records.append(record)
-    return {"version": VERSION, "execution_sha256": digest(plan), "is_mock": plan["is_mock"],
+    return {"version": plan["version"], "execution_sha256": digest(plan), "is_mock": plan["is_mock"],
             "new_calls": new_calls, "attempts": len(list(journal.glob("*.request.json"))),
             "planned_slots": len(plan["slots"]), "terminal_slots": len(records),
             "status": "complete" if len(records) == len(plan["slots"]) else "partial", "records": records}

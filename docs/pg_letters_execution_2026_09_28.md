@@ -99,3 +99,19 @@ python3 -m expression_tomography.tasks.pg_letters.live run \
 
 Use a new report filename; reports and individual journal files do not overwrite.
 The archived plan's provider limits and attempt cap remain authoritative.
+
+## Post-Review Journal Validation
+
+PR #27 review identified that v1 accepted unknown terminal status strings and
+did not validate error payloads. New executions use `pg_letters.live.v2` with
+an exact response schema, an `ok`/`provider_error` allowlist, and a checksum of
+the complete terminal record, including errors. This detects accidental record
+corruption; it is not a signature against an actor who can rewrite both data
+and checksum. Errors remain terminal and never trigger automatic retries.
+
+The original 15-call v1 archive is unchanged. The current runner permits only
+zero-call compatibility replay of its exact pinned implementation manifest;
+successful responses still require their original raw-text hashes. Unsealed
+legacy error records are refused and require explicit recovery using archived
+evidence. Starting new calls from a v1 plan is prohibited. Freeze a new v2 plan
+for a new experiment rather than altering historical journal files.

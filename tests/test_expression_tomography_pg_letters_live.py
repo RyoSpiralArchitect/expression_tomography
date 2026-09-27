@@ -134,6 +134,65 @@ class RunnerTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Raw response identity"):
             self.run_calls(0)
 
+    def test_terminal_status_schema_and_envelope_tamper_rejected(self):
+        self.run_calls()
+        path = next(self.journal.glob("*.response.json"))
+        original = live.read(path)
+        changes = (
+            {"status": "unknown"},
+            {"status": "provider_error"},
+            {"recorded_at": "changed"},
+            {"recorded_at": None},
+            {"record_sha256": "0" * 64},
+        )
+        for change in changes:
+            with self.subTest(change=change):
+                path.write_text(json.dumps(dict(original, **change)))
+                with self.assertRaises(ValueError):
+                    self.run_calls(0)
+
+    def test_error_records_are_validated_before_replay(self):
+        with patch.object(live.FixtureProvider, "complete", side_effect=RuntimeError("transport failure")):
+            self.run_calls(1)
+        path = next(self.journal.glob("*.response.json"))
+        original = live.read(path)
+        with patch.object(live, "build_provider", side_effect=AssertionError("no call")):
+            self.assertEqual(self.run_calls(0)["records"][0]["status"], "provider_error")
+        for change in ({"error": "changed"}, {"error": None}, {"error_type": ""},
+                       {"status": "ok"}):
+            with self.subTest(change=change):
+                path.write_text(json.dumps(dict(original, **change)))
+                with self.assertRaises(ValueError):
+                    self.run_calls(0)
+        missing = dict(original)
+        del missing["error_type"]
+        path.write_text(json.dumps(missing))
+        with self.assertRaisesRegex(ValueError, "schema"):
+            self.run_calls(0)
+
+    def test_legacy_success_only_and_no_new_calls(self):
+        self.run_calls(1)
+        path = next(self.journal.glob("*.response.json"))
+        response = live.read(path)
+        request = live.read(path.with_name(path.name.replace(".response.", ".request.")))
+        del response["record_sha256"]
+        live.validate_response(response, request, response["slot"], legacy=True)
+        response["status"] = "provider_error"
+        with self.assertRaisesRegex(ValueError, "Unsealed legacy error"):
+            live.validate_response(response, request, response["slot"], legacy=True)
+        plan = live.read(self.execution / "plan.json")
+        plan["version"] = "pg_letters.live.v1"
+        with patch.object(live, "load_execution", return_value=plan):
+            with self.assertRaisesRegex(ValueError, "zero-call replay only"):
+                self.run_calls(1)
+
+    def test_unpinned_legacy_implementation_rejected(self):
+        plan = live.read(self.execution / "plan.json")
+        plan["version"] = "pg_letters.live.v1"
+        (self.execution / "plan.json").write_text(json.dumps(plan))
+        with self.assertRaisesRegex(ValueError, "Unapproved legacy implementation"):
+            live.load_execution(self.execution, live.digest(plan))
+
     def test_live_requires_opt_in_even_with_keys(self):
         execution = self.root / "live_execution"
         identity = live.freeze(self.packet, execution, mock=False)
