@@ -1,0 +1,9 @@
+{
+  "execution_sha256": "55e54fe9a52e4580fec02f369e38a68d3e3816eb7dbc0c4eaf95bf5c6300c3bb",
+  "files_sha256": {
+    "analysis.json": "2f2c36090c9280f3a1b84070b7c332a231d6eb4eafacb20c90bc2bf22ea966a0",
+    "analyze.py": "b041f0dcb52331e7faf0ded7421c17ce77ef7f27c7748fe0b85cfbfe8d0314d3",
+    "decoder_abstention_packets.json": "8d2a7c7c19b88cc9bd4f2a38a0d94b57ed920729bf8c448c4fe921375793e680",
+    "source_contradiction_packets.json": "6aac45e346b9b3860d9d0d186dba7b183076115d327e64a3227933a8fc0a063d"
+  }
+}

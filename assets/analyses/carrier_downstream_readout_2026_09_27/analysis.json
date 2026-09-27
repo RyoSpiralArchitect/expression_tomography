@@ -1,0 +1,331 @@
+{
+  "reader_bundle_manifest_sha256": "1ed85f17240ffb5db8fbeea0db62e1f564a50c0c9c30bf77443f85711d10623d",
+  "rewrite_bundle_manifest_sha256": "e10d088ecb068ab01f77453b65c8197ec1f3832134862bf77e0872c8aac55e0e",
+  "n_rewrite_calls": 18,
+  "n_reader_calls": 108,
+  "rewrite_response_utc_range": [
+    "2026-09-27 10:21:19",
+    "2026-09-27 10:22:08"
+  ],
+  "reader_response_utc_range": [
+    "2026-09-27 10:25:39",
+    "2026-09-27 10:29:40"
+  ],
+  "channels": {
+    "original": {
+      "n": 36,
+      "assertion_fidelity": 36,
+      "current_correct": 36,
+      "counterfactual_correct": 36,
+      "output_payload_matches": 36
+    },
+    "sorted_rules": {
+      "n": 36,
+      "assertion_fidelity": 36,
+      "current_correct": 36,
+      "counterfactual_correct": 36,
+      "output_payload_matches": 0
+    },
+    "literal_prose": {
+      "n": 36,
+      "assertion_fidelity": 36,
+      "current_correct": 36,
+      "counterfactual_correct": 36,
+      "output_payload_matches": 36
+    }
+  },
+  "input_carrier": {
+    "original": {
+      "n_messages": 18,
+      "n_fidelity_pass": 18,
+      "n_decoded": 18,
+      "n_payload_matches": 18,
+      "n_abstained": 0
+    },
+    "sorted_rules": {
+      "n_messages": 18,
+      "n_fidelity_pass": 18,
+      "n_decoded": 0,
+      "n_payload_matches": 0,
+      "n_abstained": 18
+    },
+    "literal_prose": {
+      "n_messages": 18,
+      "n_fidelity_pass": 18,
+      "n_decoded": 10,
+      "n_payload_matches": 10,
+      "n_abstained": 8
+    }
+  },
+  "pairs": {
+    "payload_pairs": {
+      "all_planned": {
+        "n_planned_pairs": 108,
+        "n_both_recorded": 108,
+        "n_both_valid": 108,
+        "n_identical_inputs": 18,
+        "metrics": {
+          "current_answer_changed": {
+            "n_true": 0,
+            "n_assessed": 108
+          },
+          "counterfactual_answer_changed": {
+            "n_true": 0,
+            "n_assessed": 108
+          },
+          "asserted_readout_changed": {
+            "n_true": 24,
+            "n_assessed": 108
+          },
+          "both_current_follow_payload": {
+            "n_true": 0,
+            "n_assessed": 108
+          },
+          "both_counterfactual_follow_payload": {
+            "n_true": 0,
+            "n_assessed": 108
+          }
+        }
+      },
+      "semantics_preserving": {
+        "n_planned_pairs": 84,
+        "n_both_recorded": 84,
+        "n_both_valid": 84,
+        "n_identical_inputs": 18,
+        "metrics": {
+          "current_answer_changed": {
+            "n_true": 0,
+            "n_assessed": 84
+          },
+          "counterfactual_answer_changed": {
+            "n_true": 0,
+            "n_assessed": 84
+          },
+          "asserted_readout_changed": {
+            "n_true": 0,
+            "n_assessed": 84
+          },
+          "both_current_follow_payload": {
+            "n_true": 0,
+            "n_assessed": 84
+          },
+          "both_counterfactual_follow_payload": {
+            "n_true": 0,
+            "n_assessed": 84
+          }
+        }
+      },
+      "semantically_confounded": {
+        "n_planned_pairs": 24,
+        "n_both_recorded": 24,
+        "n_both_valid": 24,
+        "n_identical_inputs": 0,
+        "metrics": {
+          "current_answer_changed": {
+            "n_true": 0,
+            "n_assessed": 24
+          },
+          "counterfactual_answer_changed": {
+            "n_true": 0,
+            "n_assessed": 24
+          },
+          "asserted_readout_changed": {
+            "n_true": 24,
+            "n_assessed": 24
+          },
+          "both_current_follow_payload": {
+            "n_true": 0,
+            "n_assessed": 24
+          },
+          "both_counterfactual_follow_payload": {
+            "n_true": 0,
+            "n_assessed": 24
+          }
+        }
+      }
+    },
+    "channel_pairs": {
+      "all_planned": {
+        "n_planned_pairs": 108,
+        "n_both_recorded": 108,
+        "n_both_valid": 108,
+        "n_identical_inputs": 0,
+        "metrics": {
+          "current_answer_changed": {
+            "n_true": 0,
+            "n_assessed": 108
+          },
+          "counterfactual_answer_changed": {
+            "n_true": 0,
+            "n_assessed": 108
+          },
+          "asserted_readout_changed": {
+            "n_true": 0,
+            "n_assessed": 108
+          },
+          "both_current_follow_payload": {
+            "n_true": 0,
+            "n_assessed": 0
+          },
+          "both_counterfactual_follow_payload": {
+            "n_true": 0,
+            "n_assessed": 0
+          }
+        }
+      },
+      "semantics_preserving": {
+        "n_planned_pairs": 108,
+        "n_both_recorded": 108,
+        "n_both_valid": 108,
+        "n_identical_inputs": 0,
+        "metrics": {
+          "current_answer_changed": {
+            "n_true": 0,
+            "n_assessed": 108
+          },
+          "counterfactual_answer_changed": {
+            "n_true": 0,
+            "n_assessed": 108
+          },
+          "asserted_readout_changed": {
+            "n_true": 0,
+            "n_assessed": 108
+          },
+          "both_current_follow_payload": {
+            "n_true": 0,
+            "n_assessed": 0
+          },
+          "both_counterfactual_follow_payload": {
+            "n_true": 0,
+            "n_assessed": 0
+          }
+        }
+      },
+      "semantically_confounded": {
+        "n_planned_pairs": 0,
+        "n_both_recorded": 0,
+        "n_both_valid": 0,
+        "n_identical_inputs": 0,
+        "metrics": {
+          "current_answer_changed": {
+            "n_true": 0,
+            "n_assessed": 0
+          },
+          "counterfactual_answer_changed": {
+            "n_true": 0,
+            "n_assessed": 0
+          },
+          "asserted_readout_changed": {
+            "n_true": 0,
+            "n_assessed": 0
+          },
+          "both_current_follow_payload": {
+            "n_true": 0,
+            "n_assessed": 0
+          },
+          "both_counterfactual_follow_payload": {
+            "n_true": 0,
+            "n_assessed": 0
+          }
+        }
+      }
+    },
+    "identical_input": {
+      "all_planned": {
+        "n_planned_pairs": 54,
+        "n_both_recorded": 54,
+        "n_both_valid": 54,
+        "n_identical_inputs": 54,
+        "metrics": {
+          "current_answer_changed": {
+            "n_true": 0,
+            "n_assessed": 54
+          },
+          "counterfactual_answer_changed": {
+            "n_true": 0,
+            "n_assessed": 54
+          },
+          "asserted_readout_changed": {
+            "n_true": 0,
+            "n_assessed": 54
+          },
+          "both_current_follow_payload": {
+            "n_true": 0,
+            "n_assessed": 0
+          },
+          "both_counterfactual_follow_payload": {
+            "n_true": 0,
+            "n_assessed": 0
+          }
+        }
+      },
+      "semantics_preserving": {
+        "n_planned_pairs": 54,
+        "n_both_recorded": 54,
+        "n_both_valid": 54,
+        "n_identical_inputs": 54,
+        "metrics": {
+          "current_answer_changed": {
+            "n_true": 0,
+            "n_assessed": 54
+          },
+          "counterfactual_answer_changed": {
+            "n_true": 0,
+            "n_assessed": 54
+          },
+          "asserted_readout_changed": {
+            "n_true": 0,
+            "n_assessed": 54
+          },
+          "both_current_follow_payload": {
+            "n_true": 0,
+            "n_assessed": 0
+          },
+          "both_counterfactual_follow_payload": {
+            "n_true": 0,
+            "n_assessed": 0
+          }
+        }
+      },
+      "semantically_confounded": {
+        "n_planned_pairs": 0,
+        "n_both_recorded": 0,
+        "n_both_valid": 0,
+        "n_identical_inputs": 0,
+        "metrics": {
+          "current_answer_changed": {
+            "n_true": 0,
+            "n_assessed": 0
+          },
+          "counterfactual_answer_changed": {
+            "n_true": 0,
+            "n_assessed": 0
+          },
+          "asserted_readout_changed": {
+            "n_true": 0,
+            "n_assessed": 0
+          },
+          "both_current_follow_payload": {
+            "n_true": 0,
+            "n_assessed": 0
+          },
+          "both_counterfactual_follow_payload": {
+            "n_true": 0,
+            "n_assessed": 0
+          }
+        }
+      }
+    }
+  },
+  "source_contradictions": {
+    "n_sources": 2,
+    "n_reader_outputs": 12,
+    "n_claim_preserved_and_recomputed_correctly": 12
+  },
+  "prose_decoder_abstentions": {
+    "n_sources": 8,
+    "n_reader_outputs": 16,
+    "n_output_payload_recovered": 16
+  },
+  "interpretation": "Known order survives literal prose and literal readout, but no current/counterfactual answer sensitivity is observed in registered contrasts. Preservation is explicitly requested; no covert intent, general absence or intelligence-gain claim."
+}

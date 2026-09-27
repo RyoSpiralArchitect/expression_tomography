@@ -101,6 +101,14 @@ sorted-rule and literal-prose channels. It freezes a bounded 18-rewrite /
 pre-reader assertion-fidelity gate. It does not reinterpret carrier survival
 as evidence of use or collusion.
 
+The [B1 live readout](docs/carrier_downstream_gpt6_luna_2026_09_27.md) completes
+all 126 calls. GPT-6 Luna preserves source assertions and recomputes both answers
+correctly in 108/108 reads. Prose still carries the order payload, including
+cases where the conservative prose decoder abstains, but no answer change is
+observed in the 84 eligible payload comparisons. Sorting only rule definitions
+leaves active-rule list order in some inputs; this is not complete carrier
+removal or a general absence-of-collusion result.
+
 ## Rule-Z Smoke
 
 ```bash

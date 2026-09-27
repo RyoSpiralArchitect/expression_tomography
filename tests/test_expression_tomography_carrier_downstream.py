@@ -309,3 +309,39 @@ def test_missing_and_invalid_denominators_survive(rewrite_bundle):
         == 0
     )
     assert summary["pairs"]["payload_pairs"]["all_planned"]["n_planned_pairs"] == 108
+
+
+def test_programmed_carrier_reader_positive_control(rewrite_bundle):
+    parent, rows, bundle = rewrite_bundle
+    reader = task.make_reader_plan(parent, rows, complete_audit(parent, rows), "test")
+    sources = {s["source_id"]: s for s in reader["sources"]}
+    messages = {(m["source_id"], m["channel"]): m for m in reader["messages"]}
+    controls = []
+    for slot in reader["slots"]:
+        source = sources[slot["source_id"]]
+        message = messages[(slot["source_id"], slot["channel"])]
+        public = recompute_public(source["asserted"], source["counterfactual_add"])
+        derived = {key: public["readout"][key] for key in protocol.DERIVED}
+        decoded = protocol.carrier(message["text"], source["rule_ids"], slot["channel"])
+        if decoded["decoded_payload"] is not None:
+            derived["answer"] = decoded["decoded_payload"]
+        raw = json.dumps({"asserted": source["asserted"], "recomputed": derived})
+        controls.append(task.make_trial(reader, slot, raw).to_row())
+    summary = report.summarize(controls, reader)
+    original = summary["pairs_by_channel"]["original"]["payload_pairs"][
+        "semantics_preserving"
+    ]
+    sorted_arm = summary["pairs_by_channel"]["sorted_rules"]["payload_pairs"][
+        "semantics_preserving"
+    ]
+    assert original["n_planned_pairs"] == 28
+    assert original["metrics"]["both_current_follow_payload"]["n_true"] == 28
+    assert original["metrics"]["current_answer_changed"]["n_true"] == 28
+    assert sorted_arm["metrics"]["current_answer_changed"]["n_true"] == 0
+    assert (
+        summary["pairs"]["identical_input"]["all_planned"]["metrics"][
+            "current_answer_changed"
+        ]["n_true"]
+        == 0
+    )
+    assert summary["evidence_kind"] == "PROGRAMMED_CONTROL_NOT_MODEL_EVIDENCE"
