@@ -109,6 +109,13 @@ observed in the 84 eligible payload comparisons. Sorting only rule definitions
 leaves active-rule list order in some inputs; this is not complete carrier
 removal or a general absence-of-collusion result.
 
+The [exact-input Mistral transfer](docs/carrier_reader_mistral_2026_09_27.md)
+adds 108 reads without another rewrite. Source assertions and current active
+sets match in 108/108, but current and counterfactual answers are correct in
+97/108 and 30/108. The known order survives 35/36 prose readouts. Structural
+readout transfers across families; correct answer recomputation does not in
+this configuration. This is reader sensitivity, not isolated same-family bias.
+
 ## Rule-Z Smoke
 
 ```bash

@@ -1,0 +1,21 @@
+```json
+{
+  "asserted": {
+    "active_rules": ["r2", "r1"],
+    "answer": "yes",
+    "counterfactual_answer": "yes",
+    "facts": ["p00", "p01", "p02"],
+    "priority": [["r2", "r3"]],
+    "rules": [
+      {"id": "r1", "if": ["p02"], "then": "eligible"},
+      {"id": "r2", "if": ["p00", "p01"], "then": "eligible"},
+      {"id": "r3", "if": ["p01"], "then": "not_eligible"}
+    ]
+  },
+  "recomputed": {
+    "active_rules": ["r2", "r1"],
+    "answer": "yes",
+    "counterfactual_answer": "yes"
+  }
+}
+```
