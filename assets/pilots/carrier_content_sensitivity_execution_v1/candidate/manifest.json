@@ -1,0 +1,26 @@
+{
+  "version": "carrier_content_sensitivity.fixtures.v1",
+  "plan_sha256": "d622f9cc1accb9e12d5678412bc2315ecd2e3e03cc9e2bb620d28e518131d234",
+  "n_live_calls": 0,
+  "files_sha256": {
+    "README.md": "d24caeb53b23e4975ffb9e133f9811418aa1d3cd3bced21898c0935fd3504ca3",
+    "artifacts_private.json": "6a67873be3ac1e8572bacba074c5c917867f5d371072dd9995f0022062d49b63",
+    "plan.json": "61cf1097e43941e708ec02fced078fee928189dd69529cf01673cefe0a56a996",
+    "preflight.json": "f6ce16ea2704cd65653cb250fa482fbdef2df10e50f3c77ca1ffb4b7d45a7224",
+    "prompts.json": "19eaa06aa12f482af3a2cf5e153ad666fe289f4fbc85a2d08072e067557fa22d",
+    "prospective_calls.json": "3cefac63b91a33a98fc24a688cd80f6c91b5417c60242dc52e2a4593f73396d2",
+    "source/expression_tomography/__init__.py": "8a3237b7faa4d0f40b3875109362b97042ac53b452d284fe31d2da260cb3096d",
+    "source/expression_tomography/core/__init__.py": "07a103828addf3ba580ecad587d7cb73f5764bfbb558bbf9bdaeb43093fa99dc",
+    "source/expression_tomography/core/providers.py": "8fffc9bacb9608df6b76a8b65af2e21a00940552f7a43b9ded445890afd1b048",
+    "source/expression_tomography/core/schema.py": "676827df7757edbeef971d5aaf685ea4e5a36363241add8356143b7e6fef29b2",
+    "source/expression_tomography/tasks/__init__.py": "81a06a4709f20f33d47ee7e1e7cb911325389d61d4ce95f22e326d1996ce7c90",
+    "source/expression_tomography/tasks/carrier_calibration/__init__.py": "424dbe001af3084fa1ffa7a1b65771a64fe04d2ec532c110dc4c91b15a5b23fd",
+    "source/expression_tomography/tasks/carrier_calibration/corpus.py": "adc0affee58771967b2ee6321507c58e0101c235466a01ac54f9fa84ff3e45d3",
+    "source/expression_tomography/tasks/carrier_calibration/protocol.py": "d32d45ec8ccce97bde25d1942713aadd255d06d7cbd17c07d05fc7e95abb6039",
+    "source/expression_tomography/tasks/carrier_content_sensitivity/__init__.py": "3169162397a235bfcaaf42692c8eac1c00966e1551699544e09d64ec23a07719",
+    "source/expression_tomography/tasks/carrier_content_sensitivity/corpus.py": "77771ff9d06637a49c735268a35a4e0142806caa0997246bad1a1922b806eefe",
+    "source/expression_tomography/tasks/carrier_content_sensitivity/preflight.py": "26fc70df9fa4ac2f4570115d0720c4763b00162c1c5ed14bb2ab92910a4072a2",
+    "source/expression_tomography/tasks/rule_z/__init__.py": "21b0e6700e512357385162eef1f6a62da497a3c555a741b2b08ec36bcc431ce9",
+    "source/expression_tomography/tasks/rule_z/oracle.py": "9fd79829cfb241e9a02043e21280525a17e0eb8206a745b1c5469306b2f6eec2"
+  }
+}
