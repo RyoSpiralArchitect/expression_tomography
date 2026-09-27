@@ -128,7 +128,12 @@ def freeze(packet, output, mock=False):
     return digest(plan)
 
 
-def load_execution(execution, expected_sha):
+def require_compatibility_runner(expected_sha):
+    if expected_sha != sha256(Path(__file__).read_bytes()):
+        raise ValueError("Pin the approved compatibility runner externally, or use the frozen runner")
+
+
+def load_execution(execution, expected_sha, expected_compatibility_sha256=None):
     plan = read(execution / "plan.json")
     if plan["version"] not in {VERSION, "pg_letters.live.v1"} or digest(plan) != expected_sha:
         raise ValueError("Execution plan identity mismatch")
@@ -139,6 +144,7 @@ def load_execution(execution, expected_sha):
                 or set(current) != set(LEGACY_IMPLEMENTATION)
                 or any(current[p] != LEGACY_IMPLEMENTATION[p] for p in unchanged)):
             raise ValueError("Unapproved legacy implementation; use the frozen source")
+        require_compatibility_runner(expected_compatibility_sha256)
     elif current != plan["implementation_sha256"]:
         raise ValueError("Implementation drift; use the frozen source")
     for relative, expected in plan["implementation_sha256"].items():
@@ -258,8 +264,9 @@ def request_for(plan, slot, sender_outputs):
             "prompt": prompt, "prompt_sha256": sha256(prompt.encode())}
 
 
-def run(execution, expected_sha, journal, *, max_new_calls=0, allow_live=False, progress=None):
-    plan = load_execution(execution, expected_sha)
+def run(execution, expected_sha, journal, *, max_new_calls=0, allow_live=False,
+        progress=None, expected_compatibility_sha256=None):
+    plan = load_execution(execution, expected_sha, expected_compatibility_sha256)
     if type(max_new_calls) is not int or not 0 <= max_new_calls <= plan["call_cap"]:
         raise ValueError("Invalid call cap")
     if plan["version"] == "pg_letters.live.v1" and max_new_calls:
@@ -378,6 +385,8 @@ def main():
     runner.add_argument("--journal", type=Path, required=True)
     runner.add_argument("--max-new-calls", type=int, default=0)
     runner.add_argument("--allow-live", action="store_true")
+    runner.add_argument("--expected-compatibility-sha256",
+                        help="Externally pinned approved runner hash, required for legacy v1 replay")
     runner.add_argument("--report", type=Path, required=True)
     args = parser.parse_args()
     if args.command == "freeze":
@@ -387,6 +396,7 @@ def main():
             raise FileExistsError("Use a new report path before attempting calls")
         report = run(args.execution, args.expected_sha, args.journal,
                      max_new_calls=args.max_new_calls, allow_live=args.allow_live,
+                     expected_compatibility_sha256=args.expected_compatibility_sha256,
                      progress=lambda event: print(json.dumps(event), flush=True))
         write_new(args.report, report)
         print(json.dumps({k: v for k, v in report.items() if k != "records"}))

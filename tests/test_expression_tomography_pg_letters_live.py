@@ -195,6 +195,16 @@ class RunnerTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Unapproved legacy implementation"):
             live.load_execution(self.execution, live.digest(plan))
 
+    def test_compatibility_runner_requires_an_external_pin_and_rejects_drift(self):
+        approved = sha256(Path(live.__file__).read_bytes())
+        live.require_compatibility_runner(approved)
+        for wrong in (None, "0" * 64):
+            with self.assertRaisesRegex(ValueError, "Pin the approved"):
+                live.require_compatibility_runner(wrong)
+        with patch.object(live.Path, "read_bytes", return_value=b"modified replay code"):
+            with self.assertRaisesRegex(ValueError, "Pin the approved"):
+                live.require_compatibility_runner(approved)
+
     def test_request_entry_and_directory_synced_before_provider(self):
         events = []
         original_sync = os.fsync
