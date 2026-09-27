@@ -75,6 +75,12 @@ order and explicit review questions for this accumulated work. The
 separates varied-fact sensitivity, carrier survival through rewriting, and
 downstream use. It is a design for review, not an approved or launched run.
 
+The [content-sensitivity fixture preflight](docs/carrier_content_sensitivity_preflight_2026_09_27.md)
+now implements experiment A's offline inputs: nine distinct policies, eighteen
+fact-paired worlds, identifier twins, known-order codes and missing-information
+controls. Its 304-slot prospective ledger is not executed; structured shortcut
+checks and frozen prompts precede a separately reviewed live runner.
+
 ## Rule-Z Smoke
 
 ```bash
