@@ -40,6 +40,13 @@ def write_new(path, value):
         stream.write(encoded(value))
         stream.flush()
         os.fsync(stream.fileno())
+    # Persist both the entry and a newly created journal directory before calls.
+    for directory in (path.parent, path.parent.parent):
+        descriptor = os.open(directory, os.O_RDONLY)
+        try:
+            os.fsync(descriptor)
+        finally:
+            os.close(descriptor)
 
 
 def read(path):
