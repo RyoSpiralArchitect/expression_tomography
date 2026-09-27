@@ -92,6 +92,7 @@ From the repository root, with unchanged implementation or its frozen copy:
 python3 -m expression_tomography.tasks.pg_letters.live run \
   --execution results/pg_letters_live_2026_09_28/execution \
   --expected-sha db963ae45956f2ddac9c5f0db2f92b25ce81d02d1d726610dee3677d43ae6bd3 \
+  --expected-compatibility-sha256 95b43028dbe1cd9baef0a121a9d37fc289fd770833e9f7341784490073992dde \
   --journal results/pg_letters_live_2026_09_28/journal \
   --max-new-calls 0 \
   --report results/pg_letters_live_2026_09_28/replay_report.json
@@ -110,7 +111,8 @@ corruption; it is not a signature against an actor who can rewrite both data
 and checksum. Errors remain terminal and never trigger automatic retries.
 
 The original 15-call v1 archive is unchanged. The current runner permits only
-zero-call compatibility replay of its exact pinned implementation manifest;
+zero-call compatibility replay of its exact pinned implementation manifest,
+with the compatibility runner separately pinned by the caller;
 successful responses still require their original raw-text hashes. Unsealed
 legacy error records are refused and require explicit recovery using archived
 evidence. Starting new calls from a v1 plan is prohibited. Freeze a new v2 plan
@@ -123,3 +125,11 @@ leaves the attempt unresolved, never automatically retried. Historical runs
 retain their original implementation hashes and do not retroactively acquire
 this stronger durability property; replay them from their frozen source when
 implementation identity differs.
+
+The third review required pinning the code that actually performs compatibility
+replay, not only the archived v1 source. The CLI command above and
+`scripts/pg_letters_readout.py` pin the approved runner hash externally. Missing
+or stale pins reject v1 replay; a future local edit is not automatically approved.
+Do not compute a replacement pin from arbitrary current code to bypass this
+check. Re-review a compatibility change or use the exact frozen v1 runner
+(whose older CLI does not accept the compatibility flag).

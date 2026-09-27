@@ -8,9 +8,13 @@ from expression_tomography.tasks.pg_letters.live import read, run, write_new
 from expression_tomography.tasks.pg_letters.prepare import normalized_quote, sha256
 
 
+APPROVED_COMPATIBILITY_RUNNER_SHA256 = "95b43028dbe1cd9baef0a121a9d37fc289fd770833e9f7341784490073992dde"
+
+
 def summarize(run_dir, audit_path, summary_path, packet_path):
     original = read(run_dir / "raw_report.json")
-    replay = run(run_dir / "execution", original["execution_sha256"], run_dir / "journal")
+    replay = run(run_dir / "execution", original["execution_sha256"], run_dir / "journal",
+                 expected_compatibility_sha256=APPROVED_COMPATIBILITY_RUNNER_SHA256)
     if replay["records"] != original["records"] or replay["new_calls"] != 0:
         raise ValueError("Zero-call replay mismatch")
     plan = read(run_dir / "execution/plan.json")
