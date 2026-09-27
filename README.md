@@ -156,6 +156,10 @@ news. It requires source provenance, reuse/privacy checks, a source-grounded
 ambiguity-aware ledger and a direct-original baseline before a telephone chain.
 Human readability, literary quality, message fidelity and reader recovery stay
 separate. No documents or additional live calls are admitted by this proposal.
+The follow-on [source shortlist](docs/natural_document_selection_2026_09_28.md)
+records three historical letters and three newspaper passages, exact proposed
+locators and unresolved scan/rights checks. It excludes automatically generated
+catalog blurbs and remains metadata-only, not an execution-ready corpus.
 
 ## Rule-Z Smoke
 

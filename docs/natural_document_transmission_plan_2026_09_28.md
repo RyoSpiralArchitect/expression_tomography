@@ -23,10 +23,12 @@ This is still narrower than the forward hypothesis that improving expression
 increases independently measured intelligence. No training or general-capability
 claim follows from a successful document pilot.
 
-Status: **design only**. No sources have been selected, downloaded, transmitted
-to providers, or admitted as a corpus under this plan. The B3 call cap does not
-cover it. Exact sources, source language and a new live budget must be frozen
-before execution.
+Status: **design plus provisional source shortlist**. After PR #26 merged,
+[six English candidates](natural_document_selection_2026_09_28.md) were scouted;
+their source versions, excerpt bytes, rights gates and human review are not
+frozen. No source-text archive, admitted corpus or experimental provider calls
+exist under this plan. The B3 call cap does not cover it. Exact sources, source
+language and a new live budget must be frozen before execution.
 
 ## First Source Gate
 
