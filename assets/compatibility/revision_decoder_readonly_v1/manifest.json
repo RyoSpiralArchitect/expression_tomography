@@ -1,0 +1,8 @@
+{
+  "execution_sha256": "f48a16fd7a772830366fa43b0408e932c2039588fb57e9004362617d54d1adf1",
+  "files_sha256": {
+    "README.md": "a2045154cce6606b01d1f643afdee13fff093308cc38059e1b54dc183391207b",
+    "source/expression_tomography/core/providers.py": "8fffc9bacb9608df6b76a8b65af2e21a00940552f7a43b9ded445890afd1b048",
+    "source/expression_tomography/tasks/rule_z/revision_decoder_task.py": "64e03dac8ddde516d5ca1f4f5c50926fff697e3a898470634d43acf30383bd41"
+  }
+}
