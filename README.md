@@ -8,6 +8,17 @@ the same provider/store/report plumbing.
 
 ## Current Research Synthesis
 
+The [September 28 measurement reassessment](docs/measurement_reassessment_2026_09_28.md)
+revisits the corpus after the human-origin letters pilot. Its
+[success/failure text contrasts](docs/transmission_success_failure_contrasts_2026_09_28.md)
+separate public answer-equivalent prose, incorrect traces with correct endpoints,
+and source alterations faithfully propagated by readers. The five historical
+binding recoveries survive, but their failures do not all have the same cause.
+The [offline evidence bundle](assets/analyses/measurement_reassessment_2026_09_28/README.md)
+indexes 40 run directories and 142 SQLite files without pooling copies or
+changing primary scores. Fidelity-blind evaluation and covert coded coordination
+are distinct hypotheses; no new model calls or training were performed.
+
 The [September 4 all-run synthesis](docs/all_run_hypothesis_synthesis_2026_09_04.md)
 revisits the complete accumulated corpus, including negative results, failed
 calibration gates, reused cases, and recovered historical runs. The
@@ -156,6 +167,21 @@ news. It requires source provenance, reuse/privacy checks, a source-grounded
 ambiguity-aware ledger and a direct-original baseline before a telephone chain.
 Human readability, literary quality, message fidelity and reader recovery stay
 separate. No documents or additional live calls are admitted by this proposal.
+The follow-on [source shortlist](docs/natural_document_selection_2026_09_28.md)
+records three historical letters and three newspaper passages, exact proposed
+locators and unresolved scan/rights checks. It excludes automatically generated
+catalog blurbs and remains metadata-only, not an execution-ready corpus.
+
+The narrower [PG letters pilot](docs/pg_letters_pilot_2026_09_28.md) selects three
+communicative letter excerpts from the existing Furnace archive: contingent
+travel, publishing terms and a considerate visit discussion. Exact source hashes,
+byte boundaries and query-blind sender inputs are prepared offline. The proposed
+original-versus-one-hop comparison is now followed by the
+[first 15-call live readout](docs/pg_letters_live_note_2026_09_28.md): GPT-6 Luna
+sender, Mistral and Claude readers. Broad intentions survive, while finer
+restrictions and attribution can change and propagate across readers. Format
+and semantic evidence remain separate; source texts stay local and semantic
+annotations are provisional assistant review, not validated human gold.
 
 ## Rule-Z Smoke
 

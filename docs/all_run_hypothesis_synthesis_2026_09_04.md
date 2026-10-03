@@ -1,5 +1,10 @@
 # All-Run Synthesis And Hypothesis Update - 2026-09-04
 
+> Later interpretation: the [September 28 reassessment](measurement_reassessment_2026_09_28.md)
+> adds the human-origin pilot and a success/failure text audit. In particular,
+> five paired contract recoveries must not be read as five identical binding
+> failures. This historical synthesis and its frozen scores are retained.
+
 ## Position
 
 The user's September 4 reframing changes the primary forward question:

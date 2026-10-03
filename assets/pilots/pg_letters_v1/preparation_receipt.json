@@ -1,0 +1,84 @@
+{
+  "draft_probes": 15,
+  "evidence_anchor_check": "all 15 draft probe evidence lists found under whitespace folding; relevance/human review not established",
+  "excerpts": [
+    {
+      "byte_end_exclusive": 28652,
+      "byte_start_inclusive": 27146,
+      "case_id": "austen_v_travel",
+      "normalization": "CRLF/CR to LF only; preserve wording, punctuation and layout",
+      "pg_id": 42078,
+      "raw_excerpt_sha256": "e078b8effc5b0807e415db3d986e219e393a651c1e9304cba79f46919227bf34",
+      "source_bytes": 458158,
+      "source_sha256": "bab2307f14c376144efb1169537d2bb70d47a2c1fd774ef2dc3dfb12e51808b3",
+      "working_text_sha256": "69f4a854a0f5af1a7464bc805720fbac6db0a4616f959377767e91819a1d596f",
+      "working_words_whitespace_split": 277
+    },
+    {
+      "byte_end_exclusive": 851071,
+      "byte_start_inclusive": 849582,
+      "case_id": "darwin_murray_publication",
+      "normalization": "CRLF/CR to LF only; preserve wording, punctuation and layout",
+      "pg_id": 2088,
+      "raw_excerpt_sha256": "6cbc4081b26bddb293d34a3ac0027d9b25bcc2945df04c395760543e1e0dcd1d",
+      "source_bytes": 1095484,
+      "source_sha256": "86011cb297293e535ae529594487d7a04b22b7ceb412988d74cc06d6cde71b36",
+      "working_text_sha256": "361b38c0eab1ee782cd367b327df9d9215635e1bac0e65d865bc9c616bf78a68",
+      "working_words_whitespace_split": 272
+    },
+    {
+      "byte_end_exclusive": 193863,
+      "byte_start_inclusive": 192153,
+      "case_id": "stevenson_colvin_visit",
+      "normalization": "CRLF/CR to LF only; preserve wording, punctuation and layout",
+      "pg_id": 622,
+      "raw_excerpt_sha256": "32eacb1ca8306ca7dda21608ef12b4d4fd1d6afc2aafcb3f95eb2103b15503aa",
+      "source_bytes": 682864,
+      "source_sha256": "2ab25ddbfa9bad880062f0577c716631b6654b1ee51fa040106880165ebf04f9",
+      "working_text_sha256": "cbcbd1af03c77b3fc9180d6933d2749caf482d08a02010204cd9f5376087f956",
+      "working_words_whitespace_split": 298
+    }
+  ],
+  "human_ledger_review": "pending",
+  "implementation_sha256": {
+    "expression_tomography/tasks/pg_letters/__init__.py": "381fb8e1921ab87797103e6a6ec7f684d32ae73baab39d1d58a6470bd030571e",
+    "expression_tomography/tasks/pg_letters/prepare.py": "94ce40766a4c307ff8ee7261897817a86af5ba766ffa585143e79d30fdf91871"
+  },
+  "new_experimental_model_calls": 0,
+  "origin": "existing_furnace_official_pg_mirror_20260829_cold_archive",
+  "packet_manifest_sha256": "eae2c776ecbc2f2993c8787541dbc49b4918af3e6c50fcb71b02907bd803f359",
+  "proposed_matrix": {
+    "calls": 15,
+    "conditions": [
+      "direct_original",
+      "one_hop"
+    ],
+    "documents": 3,
+    "reader_configurations": 2,
+    "repeats": 1,
+    "sender_configurations": 1
+  },
+  "provider_processing_and_publication_review": "pending",
+  "selection_sha256": "318860162cd2c3b8c1ace5c94bfc7244320553b87d5daa1804ea342426886462",
+  "source_texts_published": false,
+  "status": "local_preparation_only_not_a_model_result",
+  "training_eligible": false,
+  "verified_source_members": [
+    {
+      "member": "42078/pg42078.txt",
+      "source_bytes": 458158,
+      "source_sha256": "bab2307f14c376144efb1169537d2bb70d47a2c1fd774ef2dc3dfb12e51808b3"
+    },
+    {
+      "member": "2088/pg2088.txt",
+      "source_bytes": 1095484,
+      "source_sha256": "86011cb297293e535ae529594487d7a04b22b7ceb412988d74cc06d6cde71b36"
+    },
+    {
+      "member": "622/pg622.txt",
+      "source_bytes": 682864,
+      "source_sha256": "2ab25ddbfa9bad880062f0577c716631b6654b1ee51fa040106880165ebf04f9"
+    }
+  ],
+  "version": "pg_letters.preparation_receipt.v1"
+}

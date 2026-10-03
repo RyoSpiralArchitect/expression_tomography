@@ -1,0 +1,107 @@
+{
+  "version": "pg_letters.assistant_audit.v1",
+  "execution_sha256": "db963ae45956f2ddac9c5f0db2f92b25ce81d02d1d726610dee3677d43ae6bd3",
+  "reviewer": "Codex source-aware assistant; aware of model and condition",
+  "status": "provisional_not_independent_human_gold",
+  "scope": "Read all three source/message pairs and all twelve reader responses. Primary questions were frozen before calls; the qualitative categories below and out-of-probe observations are post-run analysis, not preregistered binary scores.",
+  "experimental_judge_calls": 0,
+  "aggregate_semantic_accuracy": null,
+  "primary_probe_message_audit": [
+    {"case_id": "austen_v_travel", "question_id": "q1", "verdict": "retained", "note": "Wednesday and delay for the writer preserved."},
+    {"case_id": "austen_v_travel", "question_id": "q2", "verdict": "retained", "note": "Reply request, expected Tuesday knowledge, and unresolved Wednesday reception preserved."},
+    {"case_id": "austen_v_travel", "question_id": "q3", "verdict": "qualified", "note": "Two conditions and Monday alternative preserved; promised becomes offered, potentially weakening commitment. Do not automatically equate these speech acts."},
+    {"case_id": "austen_v_travel", "question_id": "q4", "verdict": "retained", "note": "No reply leads to an assumption and waiting, not a known absence or immediate departure."},
+    {"case_id": "austen_v_travel", "question_id": "q5", "verdict": "retained", "note": "Actual availability remains unknown."},
+    {"case_id": "darwin_murray_publication", "question_id": "q1", "verdict": "retained", "note": "Candid advice on separate publication, rather than a command or completed decision, preserved."},
+    {"case_id": "darwin_murray_publication", "question_id": "q2", "verdict": "partial", "note": "Sole-risk refusal preserved, but the explicit half-risk/half-profit example is generalized to sharing. Both reader answers preserve the refusal but do not recover the numerical example."},
+    {"case_id": "darwin_murray_publication", "question_id": "q3", "verdict": "partial", "note": "Natural-history audience remains, but the explicit exclusion of other readers is omitted. Neither downstream answer restores that exclusion; Mistral also juxtaposes nonexpert accessibility as an audience category."},
+    {"case_id": "darwin_murray_publication", "question_id": "q4", "verdict": "qualified", "note": "Uncertainty and possible self-overvaluation remain. The separate short-book objection is reassigned from an attributed recipient opinion to the writer's worry; see finding F2."},
+    {"case_id": "darwin_murray_publication", "question_id": "q5", "verdict": "retained", "note": "No agreement is established in the message."},
+    {"case_id": "stevenson_colvin_visit", "question_id": "q1", "verdict": "partial", "note": "Money constraint remains; end of March becomes March, while an unspecified session is made parliamentary. Both readers repeat the added type."},
+    {"case_id": "stevenson_colvin_visit", "question_id": "q2", "verdict": "retained", "note": "Desire for company and refusal to impose remain together; neither reader simply treats it as a rejection or an unconditional invitation."},
+    {"case_id": "stevenson_colvin_visit", "question_id": "q3", "verdict": "qualified", "note": "Uncertainty about the father's fitness remains, but absence of real fear is weakened to being less concerned. Both readers follow the weakened reassurance."},
+    {"case_id": "stevenson_colvin_visit", "question_id": "q4", "verdict": "retained", "note": "Appleton has not replied; not recast as acceptance or rejection."},
+    {"case_id": "stevenson_colvin_visit", "question_id": "q5", "verdict": "retained", "note": "No exact visit date is introduced; both readers distinguish it from the proposed trip south."}
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "case_id": "stevenson_colvin_visit",
+      "stage": "sender_addition_then_reader_propagation",
+      "primary_question": "q1",
+      "source_fragment": "until the session is over (end of March)",
+      "message_fragment": "until the parliamentary session ends in March",
+      "reader_slots": ["08_stevenson_colvin_visit_claude_one_hop", "10_stevenson_colvin_visit_mistral_one_hop"],
+      "observation": "Both downstream answers use parliamentary; both original-direct answers keep session without specifying its type. The message also loses the end-of-month precision.",
+      "interpretation": "Unsupported specificity introduced by the sender and publicly propagated across two families. The real historical session type was not independently established here. This does not require a hidden code or intentional collusion."
+    },
+    {
+      "id": "F2",
+      "case_id": "darwin_murray_publication",
+      "stage": "sender_attribution_shift_then_reader_propagation",
+      "primary_question": null,
+      "source_fragment": "I believe you think very little books objectionable",
+      "message_fragment": "worries that short books may not be worthwhile",
+      "reader_slots": ["09_darwin_murray_publication_mistral_one_hop", "12_darwin_murray_publication_claude_one_hop"],
+      "observation": "The source attributes an objection to the recipient, with the writer's uncertainty about that attribution. The message frames it as the writer's concern about worth; both downstream q4 answers repeat this framing.",
+      "interpretation": "Exploratory distinction outside the exact frozen question target. The writer also expresses personal doubts in the original, so this is not loss of all uncertainty, but loss of who is said to hold this specific objection."
+    },
+    {
+      "id": "F3",
+      "case_id": "darwin_murray_publication",
+      "stage": "sender_omission_not_recovered",
+      "primary_question": "q2",
+      "source_fragment": "half risk and half profit",
+      "message_fragment": "sharing both the risk and the profits",
+      "reader_slots": ["09_darwin_murray_publication_mistral_one_hop", "12_darwin_murray_publication_claude_one_hop"],
+      "observation": "Original-direct answers include half/equal sharing; one-hop answers only mention sharing. Both preserve refusal of sole risk.",
+      "interpretation": "Partial retention: the important refusal survives while the specific example is generalized. Not an agreed contract in either source or message."
+    },
+    {
+      "id": "F4",
+      "case_id": "darwin_murray_publication",
+      "stage": "sender_omission_not_recovered",
+      "primary_question": "q3",
+      "source_fragment": "who care for Natural History, but no others",
+      "message_fragment": "general readers who enjoy natural history",
+      "reader_slots": ["09_darwin_murray_publication_mistral_one_hop", "12_darwin_murray_publication_claude_one_hop"],
+      "observation": "Direct answers retain the exclusion; one-hop answers identify a positive audience without the explicit negative boundary.",
+      "interpretation": "Readable positive description is not equivalent to the source's explicit restriction. Do not assume absence of the exclusion proves an opposite claim."
+    },
+    {
+      "id": "F5",
+      "case_id": "stevenson_colvin_visit",
+      "stage": "reader_temporal_gloss",
+      "primary_question": "q1",
+      "source_fragment": "I think I shall hold out jolly",
+      "message_fragment": "though he expects to manage until then",
+      "reader_slots": ["08_stevenson_colvin_visit_claude_one_hop"],
+      "observation": "Claude's answer says at which point he expects to be able to manage. Its evidence field still refers to managing until then.",
+      "interpretation": "A reader-side temporal shift relative to the assigned message, in addition to the inherited session-type addition. Treat as a provisional close-reading finding, not evidence about hidden reasoning."
+    },
+    {
+      "id": "F6",
+      "case_id": "austen_v_travel",
+      "stage": "reader_condition_gloss",
+      "primary_question": "q3",
+      "source_fragment": "If they cannot",
+      "message_fragment": "if that is more convenient for them",
+      "reader_slots": ["11_austen_v_travel_mistral_one_hop", "13_austen_v_travel_mistral_direct_original"],
+      "observation": "Mistral one-hop uses an or parenthesis for absence versus convenience, where two contingencies should be preserved. Its direct answer separately has an awkward the day before originally fixed gloss.",
+      "interpretation": "Potential conditional weakening and temporal ambiguity require human review. Not counted as a clean direct-correct to transmitted-wrong pair because the direct wording also has a concern. Claude preserves the two contingencies."
+    }
+  ],
+  "out_of_probe_changes_to_retain": [
+    "Austen's date heading disappears, leaving relative weekdays without the original dated heading; no frozen question asks for the heading.",
+    "Darwin's bracketed editorial year becomes an unqualified year in the message; historical date certainty is not a primary probe.",
+    "Darwin's historical gendered accessibility statement is generalized to lack of scientific training. This may be a plausible modern interpretation but is not identical wording or framing.",
+    "Stevenson's final imagery and tentativeness about the poets' label are flattened. No literary-quality score is assigned."
+  ],
+  "limitations": [
+    "Three purposively selected sources, one generation each; not a loss rate estimate for letters or model families.",
+    "No compression was required, but messages voluntarily became 23-26 percent shorter; brevity remains an observed mediator.",
+    "All 60 answer/source-status pairs were inspected, but no single binary accuracy is defensible without resolving partial and ambiguous readings.",
+    "No evidence-removal, human relay, alternative sender or repeated-run control yet; shared priors and question cues remain possible.",
+    "No finding here establishes a secret channel, intentional coordination, or the general expression/intelligence bottleneck hypothesis."
+  ]
+}
