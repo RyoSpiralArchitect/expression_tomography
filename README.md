@@ -183,6 +183,18 @@ restrictions and attribution can change and propagate across readers. Format
 and semantic evidence remain separate; source texts stay local and semantic
 annotations are provisional assistant review, not validated human gold.
 
+An offline [reverse-audit sampler](scripts/reverse_audit_sample.py) now draws a
+seeded, outcome-stratified trial set into a blinded annotation packet and a
+separately sealed outcome key, so statements, missing distinctions, evidence
+support, derived-state availability and endpoint agreement can be recorded
+before stored scores are revealed. It reads stores read-only and makes no
+model calls. The [minimal-repair follow-up plan](docs/pg_letters_minimal_repair_plan_2026_11_05.md)
+freezes four input variants per letter -- frozen relay, clause-level
+restoration, certified neutral edit and direct source -- with a declared
+probe battery and a 24-call cap. Its `pg_letters_repair` preparation builds
+the inspectable packet without provider calls; live execution still requires
+a separate execution contract and explicit approval.
+
 ## Rule-Z Smoke
 
 ```bash
