@@ -100,5 +100,13 @@ assistant audit unless independently collected human gold is declared.
 - No credentials, local paths, or corpus records enter prompts.
 - This document authorizes no calls, no training, no corpus expansion, and no
   reinterpretation of frozen pilot results.
-- A `pg_letters_repair.live.v1`-style execution contract with an execution
+- A `pg_letters_repair.live.v1` execution contract with an execution
   hash, journal directory and explicit approval is required before any call.
+- Implemented plumbing: `expression_tomography/tasks/pg_letters_repair/prepare.py`
+  freezes the four variants and the 24-request matrix behind the certification
+  gate, and `live.py` freezes a durable, no-retry v2-style journal plan.
+- The draft spec at `assets/pilots/pg_letters_repair_v1/spec.draft.json` carries
+  provisional anchors quoted from `assistant_audit.json`; its certification
+  block is intentionally incomplete. The operator must verify each anchor
+  against the archived one-hop message bytes and author the neutral edits
+  before the spec is accepted by `prepare()`.

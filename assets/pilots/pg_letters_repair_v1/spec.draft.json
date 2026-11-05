@@ -1,0 +1,104 @@
+{
+  "version": "pg_letters_repair.spec.v1",
+  "status": "draft_pending_operator_verification",
+  "notes": [
+    "Anchors are taken from the published assistant_audit.json message fragments and MUST be verified against the archived one-hop message bytes before certification.",
+    "neutral_edits are left empty in this draft: without the archived message text a meaning-preserving control edit cannot be authored. The operator adds them during verification; an empty list makes neutral_edit byte-identical to relay_frozen, which prepare accepts but reviewers should treat as an uncertified placeholder.",
+    "austen_v_travel carries no sender-side restoration: its recorded concern was reader-side (F6), so minimal_repair intentionally equals relay_frozen and serves as a within-run identity control.",
+    "human_certification is deliberately incomplete; prepare() refuses the spec until the operator affirms the checklist after verifying anchors against archived messages."
+  ],
+  "human_certification": {
+    "certifier": "pending_operator",
+    "certified_at": null,
+    "completed_before_calls": false,
+    "checklist": {
+      "restorations_supported_by_source": false,
+      "neutral_edits_meaning_preserving": false,
+      "ambiguous_distinctions_excluded": false
+    }
+  },
+  "cases": [
+    {
+      "case_id": "stevenson_colvin_visit",
+      "restorations": [
+        {
+          "id": "stevenson_session_temporal",
+          "distinction": "unspecified session type and end-of-March precision",
+          "find": "until the parliamentary session ends in March",
+          "replace": "until the session is over (end of March)"
+        }
+      ],
+      "neutral_edits": [],
+      "probes": [
+        {
+          "id": "t1",
+          "kind": "temporal",
+          "question": "Until when does the writer expect to manage, and how is the session described?"
+        },
+        {
+          "id": "e1",
+          "kind": "exclusion",
+          "question": "Does the writer impose a visit or attach any condition to Colvin's company?"
+        }
+      ]
+    },
+    {
+      "case_id": "darwin_murray_publication",
+      "restorations": [
+        {
+          "id": "darwin_equal_sharing",
+          "distinction": "equal half-risk half-profit example",
+          "find": "sharing both the risk and the profits",
+          "replace": "half risk and half profit"
+        },
+        {
+          "id": "darwin_audience_exclusion",
+          "distinction": "explicit audience exclusion",
+          "find": "general readers who enjoy natural history",
+          "replace": "readers who care for Natural History, but no others"
+        },
+        {
+          "id": "darwin_short_book_attribution",
+          "distinction": "recipient attribution of the short-book objection",
+          "find": "worries that short books may not be worthwhile",
+          "replace": "believes the recipient thinks very little books objectionable"
+        }
+      ],
+      "neutral_edits": [],
+      "probes": [
+        {
+          "id": "a1",
+          "kind": "attribution",
+          "question": "Who is described as objecting to very short books?"
+        },
+        {
+          "id": "e1",
+          "kind": "exclusion",
+          "question": "Which readers, if any, are explicitly excluded from the intended audience?"
+        },
+        {
+          "id": "t1",
+          "kind": "temporal",
+          "question": "What date or editorial year, if any, qualifies the described edition or agreement?"
+        }
+      ]
+    },
+    {
+      "case_id": "austen_v_travel",
+      "restorations": [],
+      "neutral_edits": [],
+      "probes": [
+        {
+          "id": "t1",
+          "kind": "temporal",
+          "question": "On which day is the visit planned, and what dated alternatives or deadlines are stated?"
+        },
+        {
+          "id": "e1",
+          "kind": "exclusion",
+          "question": "Under what stated condition would the writer not visit?"
+        }
+      ]
+    }
+  ]
+}
