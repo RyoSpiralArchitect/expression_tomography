@@ -2,7 +2,9 @@
   "version": "pg_letters_repair.spec.v1",
   "status": "draft_pending_operator_verification",
   "notes": [
-    "Anchors are taken from the published assistant_audit.json message fragments and MUST be verified against the archived one-hop message bytes before certification.",
+    "2026-11-05 verification: all three PG source files were re-acquired byte-identical to preparation_receipt hashes (pg2088 and pg42078 from the Furnace mirror / gutenberg.org cache; pg622 from the Furnace mirror), and the pilot packet texts reproduce the recorded working_text_sha256 exactly.",
+    "2026-11-05 verification: every `replace` string below is whitespace-folded contained in the corresponding source excerpt, so the restoration side is mechanically source-supported.",
+    "Each `find` anchor still MUST be verified against the archived one-hop message bytes (results/pg_letters_live_2026_09_28/, not yet re-located) before certification.",
     "neutral_edits are left empty in this draft: without the archived message text a meaning-preserving control edit cannot be authored. The operator adds them during verification; an empty list makes neutral_edit byte-identical to relay_frozen, which prepare accepts but reviewers should treat as an uncertified placeholder.",
     "austen_v_travel carries no sender-side restoration: its recorded concern was reader-side (F6), so minimal_repair intentionally equals relay_frozen and serves as a within-run identity control.",
     "human_certification is deliberately incomplete; prepare() refuses the spec until the operator affirms the checklist after verifying anchors against archived messages."
